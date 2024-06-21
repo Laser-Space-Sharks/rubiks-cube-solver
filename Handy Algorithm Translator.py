@@ -124,4 +124,4 @@ def simplify_FURDLB_MOVES(MOVES) -> list[str]:
 inp_string = input("Input confusing algorithm here: ")
 string = ' '.join([j.strip('"') for j in inp_string.strip().split()])
 better = ' '.join(simplify_FURDLB_MOVES(translate_algorithm_to_FURDLB(string)))
-print('"'+better+'"')
+print(better)
