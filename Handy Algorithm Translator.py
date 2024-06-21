@@ -94,7 +94,7 @@ def simplify_FURDLB_MOVES(MOVES) -> list[str]:
             v1, v2 = MOVES[i:i+2]
             if v1[0] == v2[0]:
                 modified = True
-                sum_of_modifiers = nums_to_mods[(mods_to_nums.get([v1[-1]], 1) + mods_to_nums.get([v2[-1]], 1))%4]
+                sum_of_modifiers = nums_to_mods[(mods_to_nums.get(v1[-1], 1) + mods_to_nums.get(v2[-1], 1))%4]
                 if sum_of_modifiers != "0": new.append(f"{v1[0]}{sum_of_modifiers}")
                 i += 2
             else: 
@@ -111,7 +111,7 @@ def simplify_FURDLB_MOVES(MOVES) -> list[str]:
             v1, v2, v3 = MOVES[i:i+3]
             if v1[0] == v3[0] and (v1[0], v2[0]) in {('U', 'D'), ('D', 'U'), ('F', 'B'), ('B', 'F'), ('R', 'L'), ('L', 'R')}:
                 modified = True
-                sum_of_modifiers = nums_to_mods[(mods_to_nums.get([v1[-1]], 1) + mods_to_nums.get([v3[-1]], 1))%4]
+                sum_of_modifiers = nums_to_mods[(mods_to_nums.get(v1[-1], 1) + mods_to_nums.get(v3[-1], 1))%4]
                 if sum_of_modifiers != "0": new.append(f"{v1[0]}{sum_of_modifiers}")
                 new.append(v2)
                 i += 3
