@@ -58,19 +58,19 @@ def translate_algorithm_to_FURDLB(algorithm: str):
         elif root == 'x':
             if MODIFIER == "'":
                 thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['U']+perspective[1])%4]
-                perspective = (thing[0], (perspective[1] + thing[1])%4)
+                perspective = [thing[0], (perspective[1] + thing[1])%4]
             else:
                 for _ in range(1 + (MODIFIER == "2")):
                     thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['D']+perspective[1])%4]
-                    perspective = (thing[0], (perspective[1] + thing[1])%4)
+                    perspective = [thing[0], (perspective[1] + thing[1])%4]
         elif root == 'y':
             if MODIFIER == "'":
                 thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['L']+perspective[1])%4]
-                perspective = (thing[0], (perspective[1] + thing[1])%4)
+                perspective = [thing[0], (perspective[1] + thing[1])%4]
             else:
                 for _ in range(1 + (MODIFIER == "2")):
                     thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['R']+perspective[1])%4]
-                    perspective = (thing[0], (perspective[1] + thing[1])%4)
+                    perspective = [thing[0], (perspective[1] + thing[1])%4]
         elif root == 'z':
             if MODIFIER == "'":
                 perspective[1] = (perspective[1]+1)%4
