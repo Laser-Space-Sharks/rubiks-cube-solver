@@ -5,147 +5,123 @@ opposites = {'F': 'B',
              'L': 'R',
              'B': 'F'}
 
-ROT_TRAINS = {'F': [('U', 0), ('R', 0), ('D', 2), ('L', 0)],
-              'U': [('B', 2), ('R', 1), ('F', 0), ('L', 3)],
-              'R': [('U', 3), ('B', 0), ('D', 3), ('F', 0)],
-              'D': [('B', 0), ('L', 3), ('F', 2), ('R', 1)],
-              'L': [('U', 1), ('F', 0), ('D', 1), ('B', 0)],
-              'B': [('U', 2), ('L', 0), ('D', 0), ('R', 0)]}
+ROT_TRAINS = {'F': (('U', 0), ('R', 0), ('D', 2), ('L', 0)),
+              'U': (('B', 2), ('R', 1), ('F', 0), ('L', 3)),
+              'R': (('U', 3), ('B', 0), ('D', 3), ('F', 0)),
+              'D': (('B', 0), ('L', 3), ('F', 2), ('R', 1)),
+              'L': (('U', 1), ('F', 0), ('D', 1), ('B', 0)),
+              'B': (('U', 2), ('L', 0), ('D', 0), ('R', 0))}
 
 def translate_algorithm_to_FURDLB(algorithm: str):
-    ALG1: list[str] = [(i.strip('()'))[0:2] for i in algorithm.split()]
-    ALG2 = []
-
+    '''
+    As of the 6/21/24 update, this function handles ALL 18 instructions properly.
+    '''
+    # THERE EXISTS MOVES WE DO NOT LIKE
+    # PARTICULARLY: x, y, z, f, u, r, d, l, b, M, E, S
+    # f = B, z
+    # u = D, y
+    # r = L, x
+    # d = U, y'
+    # l = R, x'
+    # b = F, z'
+    # M = L', R, x'
+    # E = U, D', y'
+    # S = F', B, z
+    algorithm = algorithm\
+        .replace("'2", "2").replace("2'", "2")\
+        .replace("Fw", "f").replace("Uw", 'u').replace("Rw", "r")\
+        .replace("Dw", 'd').replace("Lw", 'l').replace("Bw", 'b')\
+        .replace("f'", "B' z'").replace("f2", "B2 z2").replace("f", "B z")\
+        .replace("u'", "D' y'").replace("u2", "D2 y2").replace("u", "D y")\
+        .replace("r'", "L' x'").replace("r2", "L2 x2").replace("r", "L x")\
+        .replace("d'", "U' y").replace("d2", "U2 y2").replace("d", "U y'")\
+        .replace("l'", "R' x").replace("l2", "R2 x2").replace("l", "R x'")\
+        .replace("b'", "F' z").replace("b2", "F2 z2").replace("b", "F z'")\
+        .replace("M'", "L R' x").replace("M2", "L2 R2 x2").replace("M", "L' R x'")\
+        .replace("E'", "U' D y").replace("E2", "U2 D2 y2").replace("E", "U D' y'")\
+        .replace("S'", "F B' z'").replace("S2", "F2 B2 z2").replace("S", "F' B z")\
+        .replace("(", "").replace(")", "")
+    
+    ALG: list[str] = []
+    
     #  [front face, rotational shift]
     perspective = ['F', 0]
-    ADJ_TRAIN = ['U', 'R', 'D', 'L']
+    AdjFacesToNums = {'U': 0, 'R': 1, 'D': 2, 'L': 3}
+    for move1 in algorithm.split():
+        if len(move1)==1: root, MODIFIER = move1, ""
+        else: root, MODIFIER = move1[:-1], move1[-1]
 
-    # THERE EXISTS MOVES WE DO NOT LIKE
-    # PARTICULARLY: y, y', y2, r, r', l, l', u, u', f, f'
-    # the f move is equivalent to B, and then making a relative perspective change of ('F', 'L')
-    # the u move is equivalent to D, and then making a relative perspective change of ('R', 'U')
-    # the l move is equivalent to R, and then making a relative perspective change of ('U', 'B')
-    # the r move is equivalent to L, and then making a relative perspective change of ('D', 'F')
-
-    for move1 in ALG1:
-        if move1[0] in {'F', 'U', 'R', 'D', 'L', 'B'}:
-            if len(move1)==1: MODIFIER = ""
-            else: MODIFIER = move1[1]
-
-            if move1[0] == 'F': ALG2.append(f"{perspective[0]}{MODIFIER}")
-            elif move1[0] == 'B': ALG2.append(f"{opposites[perspective[0]]}{MODIFIER}")
+        if root in {'F', 'U', 'R', 'D', 'L', 'B'}:
+            if root == 'F': ALG.append(f"{perspective[0]}{MODIFIER}")
+            elif root == 'B': ALG.append(f"{opposites[perspective[0]]}{MODIFIER}")
+            else: ALG.append(f"{ROT_TRAINS[perspective[0]][(AdjFacesToNums[root]+perspective[1])%4][0]}{MODIFIER}")
+        elif root == 'x':
+            if MODIFIER == "'":
+                thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['U']+perspective[1])%4]
+                perspective = (thing[0], (perspective[1] + thing[1])%4)
             else:
-                ALG2.append(f"{ROT_TRAINS[perspective[0]][(ADJ_TRAIN.index(move1[0])+perspective[1])%4][0]}{MODIFIER}")
-        elif move1[0] == 'y':
-            if move1 == "y'":
-                thing = ROT_TRAINS[perspective[0]][(3+perspective[1])%4]
-                perspective[0] = thing[0]
-                perspective[1] = (perspective[1] + thing[1])%4
+                for _ in range(1 + (MODIFIER == "2")):
+                    thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['D']+perspective[1])%4]
+                    perspective = (thing[0], (perspective[1] + thing[1])%4)
+        elif root == 'y':
+            if MODIFIER == "'":
+                thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['L']+perspective[1])%4]
+                perspective = (thing[0], (perspective[1] + thing[1])%4)
             else:
-                thing = ROT_TRAINS[perspective[0]][(1+perspective[1])%4]
-                perspective[0] = thing[0]
-                perspective[1] = (perspective[1] + thing[1])%4
-                if move1[-1]=='2':
-                    thing = ROT_TRAINS[perspective[0]][(1+perspective[1])%4]
-                    perspective[0] = thing[0]
-                    perspective[1] = (perspective[1] + thing[1])%4
-        elif move1=='f':
-            ALG2.append(opposites[perspective[0]])
-            perspective[1] = (perspective[1]-1)%4
-        elif move1=="f'":
-            ALG2.append(f"{opposites[perspective[0]]}'")
-            perspective[1] = (perspective[1]+1)%4
-        elif move1=='u':
-            ALG2.append(ROT_TRAINS[perspective[0]][(2+perspective[1])%4][0])
-            thing = ROT_TRAINS[perspective[0]][(1+perspective[1])%4]
-            perspective[0] = thing[0]
-            perspective[1] = (perspective[1] + thing[1])%4
-        elif move1=="u'":
-            ALG2.append(f"{ROT_TRAINS[perspective[0]][(2+perspective[1])%4][0]}'")
-            thing = ROT_TRAINS[perspective[0]][(3+perspective[1])%4]
-            perspective[0] = thing[0]
-            perspective[1] = (perspective[1] + thing[1])%4
-        elif move1=='l':
-            ALG2.append(ROT_TRAINS[perspective[0]][(1+perspective[1])%4][0])
-            thing = ROT_TRAINS[perspective[0]][perspective[1]]
-            perspective[0] = thing[0]
-            perspective[1] = (perspective[1] + thing[1])%4
-        elif move1=="l'":
-            ALG2.append(f"{ROT_TRAINS[perspective[0]][(2+perspective[1])%4][0]}'")
-            thing = ROT_TRAINS[perspective[0]][(2+perspective[1])%4]
-            perspective[0] = thing[0]
-            perspective[1] = (perspective[1] + thing[1])%4
-        elif move1=='r':
-            ALG2.append(ROT_TRAINS[perspective[0]][(3+perspective[1])%4][0])
-            thing = ROT_TRAINS[perspective[0]][(2+perspective[1])%4]
-            perspective[0] = thing[0]
-            perspective[1] = (perspective[1] + thing[1])%4
-        elif move1=="r'":
-            ALG2.append(f"{ROT_TRAINS[perspective[0]][(3+perspective[1])%4][0]}'")
-            thing = ROT_TRAINS[perspective[0]][perspective[1]]
-            perspective[0] = thing[0]
-            perspective[1] = (perspective[1] + thing[1])%4
-    return ALG2
-def simplify_F_MOVES(F_MOVES) -> list[str]:
+                for _ in range(1 + (MODIFIER == "2")):
+                    thing = ROT_TRAINS[perspective[0]][(AdjFacesToNums['R']+perspective[1])%4]
+                    perspective = (thing[0], (perspective[1] + thing[1])%4)
+        elif root == 'z':
+            if MODIFIER == "'":
+                perspective[1] = (perspective[1]+1)%4
+            else:
+                for _ in range(1 + (MODIFIER == "2")):
+                    perspective[1] = (perspective[1]-1)%4
+    return ALG
+def simplify_FURDLB_MOVES(MOVES) -> list[str]:
+    mods_to_nums = {"'": -1,
+                    "2": 2}
+    nums_to_mods = ["0", "", "2", "'"]
     while True:
         new = []
         modified = False
         i = 0
-        while i < len(F_MOVES):
-            if i >= len(F_MOVES)-1: 
-                new.append(F_MOVES[i])
+        while i < len(MOVES):
+            if i >= len(MOVES)-1: 
+                new.append(MOVES[i])
                 i += 1
                 continue
-            v1 = F_MOVES[i]
-            v2 = F_MOVES[i+1]
+            v1, v2 = MOVES[i:i+2]
             if v1[0] == v2[0]:
                 modified = True
-                count = 0
-                if v1[-1] == "'": count -= 1
-                if v1[-1] == "2": count += 2
-                if v2[-1] == "'": count -= 1
-                if v2[-1] == "2": count += 2
-                if count == -2: new.append(f"{v1[0]}2")
-                if count == -1: new.append(f"{v1[0]}'")
-                if count == 1: new.append(f"{v1[0]}")
-                if count == 2: new.append(f"{v1[0]}2")
-                if count == 3: new.append(f"{v1[0]}'")
+                sum_of_modifiers = nums_to_mods[(mods_to_nums[v1[-1]] + mods_to_nums[v2[-1]])%4]
+                if sum_of_modifiers != 0: new.append(f"{v1[0]}{sum_of_modifiers}")
                 i += 2
             else: 
                 new.append(v1)
                 i += 1
-        F_MOVES = new[:]
+        MOVES = new[:]
         new = []
         i = 0
-        while i < len(F_MOVES):
-            if i >= len(F_MOVES)-2: 
-                new.append(F_MOVES[i])
+        while i < len(MOVES):
+            if i >= len(MOVES)-2: 
+                new.append(MOVES[i])
                 i += 1
                 continue
-            v1 = F_MOVES[i]
-            v2 = F_MOVES[i+1]
-            v3 = F_MOVES[i+2]
+            v1, v2, v3 = MOVES[i:i+3]
             if v1[0] == v3[0] and (v1[0], v2[0]) in {('U', 'D'), ('D', 'U'), ('F', 'B'), ('B', 'F'), ('R', 'L'), ('L', 'R')}:
                 modified = True
-                count = 0
-                if v1[-1] == "'": count -= 1
-                if v1[-1] == "2": count += 2
-                if v3[-1] == "'": count -= 1
-                if v3[-1] == "2": count += 2
-                if count == -2: new.append(f"{v1[0]}2")
-                if count == -1: new.append(f"{v1[0]}'")
-                if count == 1: new.append(f"{v1[0]}")
-                if count == 2: new.append(f"{v1[0]}2")
-                if count == 3: new.append(f"{v1[0]}'")
+                sum_of_modifiers = nums_to_mods[(mods_to_nums[v1[-1]] + mods_to_nums[v3[-1]])%4]
+                if sum_of_modifiers != 0: new.append(f"{v1[0]}{sum_of_modifiers}")
                 new.append(v2)
                 i += 3
             else: 
                 new.append(v1)
                 i += 1
-        F_MOVES = new[:]
-        if not modified: return F_MOVES
+        MOVES = new[:]
+        if not modified: return MOVES
 
 inp_string = input("Input confusing algorithm here: ")
 string = ' '.join([j.strip('"') for j in inp_string.strip().split()])
-better = ' '.join(simplify_F_MOVES(translate_algorithm_to_FURDLB(string)))
+better = ' '.join(simplify_FURDLB_MOVES(translate_algorithm_to_FURDLB(string)))
 print('"'+better+'"')
