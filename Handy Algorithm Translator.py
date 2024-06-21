@@ -56,32 +56,32 @@ def translate_algorithm_to_FURDLB(algorithm: str):
             ALG2.append(f"{opposites[perspective[0]]}'")
             perspective[1] = (perspective[1]+1)%4
         elif move1=='u':
-            ALG2.append(ROT_TRAINS[perspective[0]][2+perspective[1]][0])
+            ALG2.append(ROT_TRAINS[perspective[0]][(2+perspective[1])%4][0])
             thing = ROT_TRAINS[perspective[0]][(1+perspective[1])%4]
             perspective[0] = thing[0]
             perspective[1] = (perspective[1] + thing[1])%4
         elif move1=="u'":
-            ALG2.append(f"{ROT_TRAINS[perspective[0]][2+perspective[1]][0]}'")
+            ALG2.append(f"{ROT_TRAINS[perspective[0]][(2+perspective[1])%4][0]}'")
             thing = ROT_TRAINS[perspective[0]][(3+perspective[1])%4]
             perspective[0] = thing[0]
             perspective[1] = (perspective[1] + thing[1])%4
         elif move1=='l':
-            ALG2.append(ROT_TRAINS[perspective[0]][1+perspective[1]][0])
+            ALG2.append(ROT_TRAINS[perspective[0]][(1+perspective[1])%4][0])
             thing = ROT_TRAINS[perspective[0]][perspective[1]]
             perspective[0] = thing[0]
             perspective[1] = (perspective[1] + thing[1])%4
         elif move1=="l'":
-            ALG2.append(f"{ROT_TRAINS[perspective[0]][2+perspective[1]][0]}'")
-            thing = ROT_TRAINS[perspective[0]][2+perspective[1]]
+            ALG2.append(f"{ROT_TRAINS[perspective[0]][(2+perspective[1])%4][0]}'")
+            thing = ROT_TRAINS[perspective[0]][(2+perspective[1])%4]
             perspective[0] = thing[0]
             perspective[1] = (perspective[1] + thing[1])%4
         elif move1=='r':
-            ALG2.append(ROT_TRAINS[perspective[0]][3+perspective[1]][0])
-            thing = ROT_TRAINS[perspective[0]][2+perspective[1]]
+            ALG2.append(ROT_TRAINS[perspective[0]][(3+perspective[1])%4][0])
+            thing = ROT_TRAINS[perspective[0]][(2+perspective[1])%4]
             perspective[0] = thing[0]
             perspective[1] = (perspective[1] + thing[1])%4
         elif move1=="r'":
-            ALG2.append(f"{ROT_TRAINS[perspective[0]][3+perspective[1]][0]}'")
+            ALG2.append(f"{ROT_TRAINS[perspective[0]][(3+perspective[1])%4][0]}'")
             thing = ROT_TRAINS[perspective[0]][perspective[1]]
             perspective[0] = thing[0]
             perspective[1] = (perspective[1] + thing[1])%4
