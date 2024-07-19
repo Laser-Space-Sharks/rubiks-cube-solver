@@ -383,35 +383,41 @@ def get_PLL_algorithm(cube3d):
                   + (int(cube3d[2, 3, 0])-1)*4
                   + (int(cube3d[0, 3, 2])-1)].split()
 ########################### Recursive Search for optimal CFOP
-def OP(F_moves, cube3d): # At the end of Recursive_F, OP is called, thereby completing the recursive CFOP
+def OP(F_moves, cube3d, shortest_length): # At the end of Recursive_F, OP is called, thereby completing the recursive CFOP
     cube3dnew = np.copy(cube3d)
     algorithmOLL = get_OLL_algorithm(cube3dnew)
+    if len(simplify_FURDLB_MOVES(F_moves + algorithmOLL)) - 1 >= shortest_length[0]: return False
     for move in algorithmOLL: update_cube_with_F_move(cube3dnew, move)
-    return (simplify_FURDLB_MOVES(F_moves + algorithmOLL + get_PLL_algorithm(cube3dnew)), cube3dnew)
-def Recursive_F(F_moves, cube3d): # At the end of Recursive_C, Recursive_F is called
+    SOLVE_SEQUENCE = simplify_FURDLB_MOVES(F_moves + algorithmOLL + get_PLL_algorithm(cube3dnew))
+    if len(SOLVE_SEQUENCE) < shortest_length[0]: shortest_length[0] = len(SOLVE_SEQUENCE)
+    return SOLVE_SEQUENCE
+def Recursive_F(F_moves, cube3d, shortest_length): # At the end of Recursive_C, Recursive_F is called
     algorithms = get_algs_for_f2l_pairs(cube3d)
     best = None
     if not algorithms: 
         #print(simplify_FURDLB_MOVES(F_moves))
-        return OP(F_moves, cube3d)
+        return OP(F_moves, cube3d, shortest_length)
     for alg in algorithms:
+        if len(simplify_FURDLB_MOVES(F_moves + alg)) - 1 >= shortest_length[0]: continue
         cube3dnew = np.copy(cube3d)
         for move in alg: update_cube_with_F_move(cube3dnew, move)
-        candidate = Recursive_F(F_moves + alg, cube3dnew)
-        if best is None or len(candidate[0]) < len(best[0]):
-            best = candidate
+        candidate = Recursive_F(F_moves + alg, cube3dnew, shortest_length)
+        if candidate is not None and candidate != False:
+            if best is None or len(candidate) < len(best):
+                best = candidate
     return best
-def Recursive_C(F_moves, cube3d):
+def Recursive_C(F_moves, cube3d, shortest_length):
     algorithms = get_algs_for_bottom_edges(cube3d)
     best = None
     if not algorithms: 
         #print(simplify_FURDLB_MOVES(F_moves))
-        return Recursive_F(F_moves, cube3d)
+        return Recursive_F(F_moves, cube3d, shortest_length)
     for alg in algorithms:
+        if len(simplify_FURDLB_MOVES(F_moves + alg)) - 1 >= shortest_length[0]: continue
         cube3dnew = np.copy(cube3d)
         for move in alg: update_cube_with_F_move(cube3dnew, move)
-        candidate = Recursive_C(F_moves + alg, cube3dnew)
-        if best is None or len(candidate[0]) < len(best[0]):
+        candidate = Recursive_C(F_moves + alg, cube3dnew, shortest_length)
+        if best is None or (candidate is not None and len(candidate) < len(best)):
             best = candidate
     return best
 #######################################################################################################################
@@ -504,9 +510,29 @@ for scramble in scrambles:
     start = time.perf_counter()
     CUBE3D = CUBE3D_from_scramble(scramble)
     #printcube(CUBE3D)
-    F_MOVES, _ = Recursive_C([], CUBE3D)
-    #for move in F_MOVES: update_cube_with_F_move(CUBE3D, move)
-    #printcube(CUBE3D)
+    F_MOVES = Recursive_C([], CUBE3D, [np.inf])
+    for move in F_MOVES: update_cube_with_F_move(CUBE3D, move)
+    if not np.array_equal(CUBE3D, cube3d_from_cube2ds({'U': np.array([['U', 'U', 'U'], 
+                                                ['U', 'U', 'U'], 
+                                                ['U', 'U', 'U']]),
+                                'R': np.array([['R', 'R', 'R'], 
+                                                ['R', 'R', 'R'], 
+                                                ['R', 'R', 'R']]),
+                                'F': np.array([['F', 'F', 'F'], 
+                                                ['F', 'F', 'F'], 
+                                                ['F', 'F', 'F']]),
+                                'L': np.array([['L', 'L', 'L'], 
+                                                ['L', 'L', 'L'], 
+                                                ['L', 'L', 'L']]),  
+                                'B': np.array([['B', 'B', 'B'], 
+                                                ['B', 'B', 'B'], 
+                                                ['B', 'B', 'B']]),
+                                'D': np.array([['D', 'D', 'D'], 
+                                                ['D', 'D', 'D'], 
+                                                ['D', 'D', 'D']])})):
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAA")
+        printcube(CUBE3D)
+    print(scramble)
     print(' '.join(F_MOVES))
     print(f'move count: {len(F_MOVES)}')
     move_counts.append(len(F_MOVES))
