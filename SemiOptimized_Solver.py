@@ -20,32 +20,6 @@ faces_to_nums = {'U': 0,
                  'B': 4,
                  'D': 5}
 
-
-#####################################  CUBE DATA STRUCTURE(S)  ##########################################
-# But first, lets get our 2nd data structure type. 
-CUBE = {'U': np.array([['L', 'L', 'L'], 
-                      ['F', 'U', 'R'], 
-                      ['R', 'R', 'D']]),
-
-        'R': np.array([['L', 'U', 'F'], 
-                      ['F', 'R', 'L'], 
-                      ['B', 'F', 'B']]),
-
-        'F': np.array([['D', 'D', 'F'], 
-                      ['D', 'F', 'R'], 
-                      ['B', 'F', 'R']]),
-
-        'L': np.array([['B', 'L', 'F'], 
-                      ['B', 'L', 'B'], 
-                      ['R', 'U', 'D']]),  
-
-        'B': np.array([['U', 'B', 'U'], 
-                      ['D', 'B', 'D'], 
-                      ['R', 'B', 'U']]),
-
-        'D': np.array([['U', 'U', 'F'], 
-                      ['U', 'D', 'L'], 
-                      ['D', 'D', 'L']])}
 #################################  GENERIC OPERATION CORRESPONDANCES  #######################################
                                     # U  R  F  L  B  D
 move_from_Fs_perspective = np.array([[4, 1, 0, 3, 5, 2],  # U
@@ -58,6 +32,14 @@ move_from_Fs_perspective = np.array([[4, 1, 0, 3, 5, 2],  # U
 
 
 ######################################  ALGORITHMS  ###############################################
+# This is for case identification. 
+# For cross, if the edge is at (x, y, z) (the coordinate of a certain sticker on the edge per say),
+#   then the index of the solution for that edge can be found using piece_indexes[x+2, y+2, z+2].
+# For F2L, if the edge (again, the sticker) is at (x1, y1, z1) and the corner (yes, again the sticker) is at (x2, y2, z2),
+#   then the solution for that f2l pair is in the piece_indexes[x2+2, y2+2, z2+2]'th row and piece_indexes[x1+2, y1+2, z1+2]'th column.
+# You may have noticed that there are more edge states for the cross than there are for F2L, 
+#   and that is why we pull a trick from two's complement and say the F2L states hold the first 16 indices for edges. 
+#       Indices 17-23 are cross states not shared by F2L.
 piece_indexes = np.array([[[ 0,  0,  0,  0,  0],
                             [ 0, 21, 22, 13,  0],
                             [ 0, 15,  0,  9,  0],
@@ -114,6 +96,107 @@ FULL_F2L = [[["R2 U2 R' U' R U' R2", "F' L' U' L2 F' L' F2"], ["F2 U2 R' F' R U2
 [["R' F' R2 U R2 F R", "U L' U' R U L R'", "U L' U L R U' R'", "R U L' U L U' R'", "U L' U' L R U R'"], ["F U F' U2 F' U' F", "F U' F' U2 F' U F", "F U' F' U F' U2 F"], ["L' U L R U' R'", "L' U' L R U R'", "L' U' R U L R'"], ["R D2 B U B' D2 R'"], ["U' L' U' R U L R'", "U' L' U L R U' R'", "R U' L' U L U' R'", "U' L' U' L R U R'"], ["L F L' F L F' L'", "F U2 F' U F' U' F", "F U F U' F U F2"], ["U2 L' U' R U L R'", "U2 L' U L R U' R'", "R U2 L' U L U' R'", "L' U2 L U R U R'", "U2 L' U' L R U R'", "L F2 L' U' F2 U F2"], ["L' U L F2 U' F' U F2", "F2 R U R' U2 F' U F2", "U' F U F U' F U F2", "U2 R D2 B U B' D2 R'", "U' L F L' F L F' L'", "L' U' B' R U R' B L", "U' F U2 F' U F' U' F", "U F U F' U2 F' U' F", "F U' R U R' F2 U' F", "F' D' L' U L D U' F", "F2 R' F2 R U2 F' U F", "U F U' F' U2 F' U F", "F2 L' U2 L U2 F U F", "F' D' F U2 F' D U F", "F2 R' F2 R U F' U2 F", "U F U' F' U F' U2 F", "F' D' F U F' D U2 F"], ["R2 D' B2 D R2 U' L2", "L' F' L2 F' L F2 L", "L' F' L F' L2 F2 L", "R D' L U2 L' D R'", "L2 F2 L2 U' F2 U F2", "L2 U' L2 U F2 L2 F2", "L F2 L' D' L2 D F2"], ["L F2 U' F L' F2 U F2", "L' U' L B' R U R' B", "L' U' B L B' R U R'", "L U' F L' F L F' L'", "F2 U2 L U2 F U F L'", "F2 U2 L U2 L' F U F", "F2 U2 L U2 F L' U F", "F U' L U L' F2 U2 F", "F2 U2 L U2 F U L' F"], ["F2 R2 U R2 U' F2 R2", "F2 D R2 D' R2 F2 R2", "L' U' L B' R2 B R2", "R2 U' L2 D B2 D' L2", "F2 D R2 D' R' F2 R", "B F U B' F2 U F", "L' B' U' R2 B L R2", "L' U' B' R2 B L R2", "L' R' U L R2 U' R'"], ["D2 B U2 B' D2 R U' R'", "R F U' R U F' U' R'", "R F2 R F' R2 U' F' R'", "L' U' F D R D' F' L", "L' U' B R U R' B' L", "R' F' U R F R' F R", "F R U' R' D R D' F'", "L' U' L F D R D' F'", "F L F' L' D R D' F'", "D R2 U R D' F U F", "D2 R' U' R D2 F' U2 F", "L F' L' R' F' U R F", "D F' U2 R' U R F D'", "D B R U R' U2 B' D'", "L' U' L B R U R' B'"], ["L' R U L U' R'"], ["F U' L F L' F2 U' F", "L F' L' U' R' F' R F"], ["F2 U2 F2 U' F2 U' R' F2 R", "F2 U' F2 U2 F2 U' R' F2 R", "F2 R' F2 D' R U' R' D R", "F2 U2 R2 U' F2 U' F2 U2 R2", "R2 U2 F2 D R2 D' F2 U2 R2", "R2 U' L2 D' B2 D L2 U2 R2", "R2 D2 B2 D L2 D' B2 D2 R2", "L2 U2 R2 D B2 D' R2 U' L2", "R2 D2 L2 D B2 D R2 U' L2", 'F2 U2 L2 U F2 U F2 U2 L2', "L2 U2 F2 D' L2 D F2 U2 L2", "R2 U' L2 D B2 D R2 D2 L2", "L2 D2 B2 D' R2 D B2 D2 L2", "F L B2 R' F2 R B2 L' F'", "L' F' U2 F U L R U' R'", "F L F' L' U F' R U R'", "L' F' U2 F U' L R U R'", "F2 R' F2 R2 F U' F' U R'", "F2 R' F2 R2 F U2 F' U2 R'", "L' U L R U' F U2 F' R'", "L' R U L U' F U2 F' R'", "L' U' L R U F U2 F' R'", "F2 R' F2 R2 U2 B U2 B' R'", "F U' F2 U2 R' F R U' F", "F U F U2 F2 U2 F U' F", "F U' R U R' U2 F2 U' F", "F U2 F' U F U2 F2 U' F", "F U F' U2 F U2 F2 U' F", "F U' L F L' U2 F2 U' F", "F U' F2 U2 L' U L U' F", "F U' F2 U2 F U2 F' U F", "F2 U2 F2 U' F U' F U F", "F2 U' F2 U2 F U' F U F", "F U' F U2 F2 U2 F U F", "F U' F2 U2 F U F' U2 F", "L' U L F' U R' F' R F", "F2 U F U' F R' F R F", "F' R' B2 L F2 L' B2 R F", "F U F U' F U2 F2 U' F2", "L F2 L' U' F2 U2 F2 U' F2", "F L F L' F U' F U F2", "F2 L' U2 L F U F U F2", "F2 U2 L F L' U F U F2", "F2 U F U R' F R U2 F2", 'R2 U2 F2 U F2 U R2 U2 F2', "F U F U' F U' F2 U2 F2", "L F2 L' U' F2 U' F2 U2 F2", "L2 U2 F2 U' F2 U' L2 U2 F2", "F2 U F U F R U2 R' F2", "D F' U F D' L F2 L' F2", "L' B' U2 B U2 L2 F2 L' F2", "L' U F' U' F L2 F2 L' F2", "L' U2 F' U2 F L2 F2 L' F2", "L D L' U' L D' F2 L' F2", "L' F' U2 F U' R U L R'", "F2 R' F2 R D' F U F' D"], ["R F U2 F' U R'", "F U F' R U2 R'", "R F U F' U2 R'", "L' U2 F' U F L", "L' U F' U2 F L", "F R U' R2 F' R", "L' U2 L F' U F", "R' F2 R F U F", "L F' L2 U' L F", "F U F L F2 L'"]],
 [["U2 L' R U' L R'", "R U2 L' U' L R'", "L' U' L2 F2 L' F2"], ["L' U' F' U' F L"], ["U L' R U' L R'"], ["U' L' U' F' U' F L", "F U' F' U' F' U' F", "U2 L' U' L F' U' F"], ["L' R U' L R'"], ["L F2 D F' D' F' L'", "U2 L' U' F' U' F L", "L F2 L' F' R' F' R", "U L' U' L F' U' F", "F U F2 L F' L' F2"], ["U' L' R U' L R'", "R U' L' U' L R'"], ["L' U' L F' U' F"], ["L' U' F2 L' F2 L", "L' F L' F' L F'"], ["L' U' L2 F' U' F L'", "F U F2 L U' F L'", "L' U' L2 F' U' L' F", "F U F2 L U' L' F"], ["B' F2 R2 B F2 R2"], ["F D R2 U' R' D' F'", "R F R U' F' U' R'"], ["R U L' U' L R'"], ["R' F R U' F' R U' R'", "L D F' D' L' R U' R'", "R U2 F' L F L' U' R'", "F U2 F2 U2 F R U R'", "R F U2 F' R' F' U' F", "L D F2 D' L' F' U' F", "F U' F2 U' R' F' R F"], ["L2 U' F L2 F' U L2 F'", "L2 U2 F L2 F' U2 L2 F'", "F' R2 U F' R2 F U' R2", "F' R2 U2 F' R2 F U2 R2"], ["F L F' L' F2 U' F", "F U' F2 R' F' R F"]],
 [["L' U' R U' L U' R'", "L' U L U' R U R'", "L F2 L2 U' L U F2"], ["U' F U2 F2 U F", "U' F U F2 U2 F"], ["F2 U2 L' U2 L2 F2 L'", "R2 U2 F2 R' F2 U2 R2", "L2 D2 B2 R' B2 D2 L2", "F U' R U R2 F' R", "F2 U R U' R2 F2 R", 'F2 U2 R U2 R2 F2 R', "F2 R2 D R D' F2 R", "F U2 F' U R U R'", "R' F2 R2 U2 R' U2 F2", 'L F2 L2 U2 L U2 F2'], ['U2 F U2 F2 U F', 'U2 F U F2 U2 F'], ["L F' L2 U L U' F", "F U F' U2 R U R'", "L F' D F' D' L' F2", "L F2 D' L D L2 F2"], ['U F U2 F2 U F', 'U F U F2 U2 F'], ["R2 D2 B2 L' B2 D2 R2", "L2 U2 F2 L' F2 U2 L2"], ['F U2 F2 U F', 'F U F2 U2 F'], ["F2 R' D2 L' D2 F2 R", "F2 R' D2 L2 D2 R F2", "F2 L' F2 L2 F2 L F2"], ["F2 L F' U2 F2 U F L'", "F' L F2 U2 F2 U F L'", "F2 L F' U F2 U2 F L'", "F' L F2 U F2 U2 F L'", "L U L2 F' L2 U2 F L", "L2 U2 L' F' U' F U' L2", "L F2 U' L' U F U' F", "L F2 U2 L' U2 F U' F", "F2 L F' U2 F2 L' U F", "F' L F2 U2 F2 L' U F", "L2 U2 L' F' U2 L2 U F", "F L U F L' F2 U2 F", "L' U2 L2 U F' L' U2 F", "F' D' L U L D U2 F", "F' D' L' D R' F2 R F", "F2 L F' U2 F2 U L' F", "F' L F2 U2 F2 U L' F", "F2 L F' U F2 U2 L' F", "F' L F2 U F2 U2 L' F"], ["R F U2 R2 F' R'"], ["F2 R2 F2 R D' F' D R", "L R2 F2 L' R2 F U' F", "R' U2 F R U2 F2 U F", "R' U2 R F U2 F2 U F", "R' U2 F R U F2 U2 F", "R' U2 R F U F2 U2 F", "R' U2 F U R F2 U2 F", "F U2 F2 U R' U R F", "F U F2 U2 R' U R F", "F U2 F2 R' F U R F"], ["R2 U' F U' F' U2 R2", "F' U F2 U2 F2 U F", "F' U F2 U F2 U2 F"], ["L F2 L' F U' F"], ["L B2 R' F2 R B2 L' F2", "F2 R' B2 L F2 L' B2 R"], ["R2 B L2 U' L U L2 B' R2", "F U' F' R U B' R B R2", "L2 B' R2 U R U' R2 B L2", "F U' F' R U2 R2 F R F'", "F L F L' F' U2 R U R'", "F2 R' F2 R2 U2 R' F' U' F", "L2 B L B' U L F' U' F", "F' L F L2 U2 L F' U' F", "F2 L F2 L2 U2 L F' U' F", "L' U L U2 F' R' F R F", "F U' F' R U2 R2 F2 R F2", "F U' F' L' U2 L2 F2 L' F2"]]]
+
+# For the const hardcoded lookup tables named FULL_OLL and FULL_PLL, we handcrafted our own hash functions, 
+#   so that we didn't have to deal with these dictionaries later:
+'''
+FULL_OLL = {0b010100011010110001010: "R U2 R2 F R F' U2 R' F R F'",
+            0b111000001010110001010: "L F L' U2 L F2 R' F2 R F' L'",
+            0b110000011010101000011: "L' R2 B R' B L U2 L' B L R'",
+            0b011100001010100010110: "L' R B' L U2 L' B' R B' R2 L",
+            0b000011010110110000011: "R' F2 L F L' F R",
+            0b000101101011000001110: "L F2 R' F' R F' L'",
+            0b100001010110101000011: "L F R' F R F2 L'",
+            0b001101001011000010110: "R' F' L F' L' F2 R",
+            0b001101000110100010110: "R U R' U' R' F R2 U R' U' F'",
+            0b110000100110110100001: "R U R' U R' F R F' R U2 R'",
+            0b100001100110110000011: "L F R' F R' D R D' R F2 L'",
+            0b001011001011000001110: "L R2 F' R F' R' F2 R F' R L'",
+            0b110000010111001000011: "L F' L' U' L F L' F' U F",
+            0b011100000111000010110: "R' F R U R' F' R F U' F'",
+            0b010010010111010000011: "R' F' R L' U' L U R' F R",
+            0b010100100111000001110: "L F L' R U R' U' L F' L'",
+            0b010010011010100010110: "F R' F' R2 L' B R B' R' B' L R'",
+            0b010010101010100000111: "L F R' F R F2 L2 B' R B' R' B2 L",
+            0b010010101010110001010: "L' R B R B R' B' L R2 F R F'",
+            0b010010101010101010010: "L F R' F' L2 R2 B R B' R' B' L R'",
+            0b101001000111000100101: "R U2 R' U' R U R' U' R U' R'",
+            0b001101000111010100001: "R U2 R2 U' R2 U' R2 U2 R",
+            0b101001000111001110000: "R2 D' R U2 R' D R U2 R",
+            0b100001100111000110100: "L F R' F' L' F R F'",
+            0b000101100111001100001: "F' L F R' F' L' F R",
+            0b000101100111000101100: "R U2 R' U' R U' R'",
+            0b100001010111001100001: "R U R' U R U2 R'",
+            0b000011100110101010010: "L F R' F' L' R U R U' R'",
+            0b100001100110100010110: "R U R' U' R U' R' F' U' F R U R'",
+            0b000101010110101010010: "F R' F R2 U' R' U' R U R' F2",
+            0b100001101011000010110: "R' U' F U R U' R' F' R",
+            0b001011000110101000011: "L U F' U' L' U L F L'",
+            0b110000100111000010110: "R U R' U' R' F R F'",
+            0b010100010111001010010: "R U R' U' B' R' F R F' B",
+            0b010010011011000110100: "R U2 R2 F R F' R U2 R'",
+            0b001011001011010010010: "L' U' L U' L' U L U L F' L' F",
+            0b000011010110100010110: "F R' F' R U R U' R'",
+            0b100001100110101001010: "R U R' U R U' R' U' R' F R F'",
+            0b110000100111001001010: "L F' L' U' L U F U' L'",
+            0b011010000111010010010: "R' F R U R' U' F' U R",
+            0b101001000110101010010: "R U R' U R U2 R' F R U R' U' F'",
+            0b010010100110100100101: "R' U' R U' R' U2 R F R U R' U' F'",
+            0b000101101011010010010: "F' U' L' U L F",
+            0b000011010110101001010: "F U R U' R' F'",
+            0b010100100111010010010: "F R U R' U' F'",
+            0b000011011010101101000: "R' U' R' F R F' U R",
+            0b100001011011000001110: "F' L' U' L U L' U' L U F",
+            0b001101000110110000011: "F R U R' U' R U R' U' F'",
+            0b001101001011010000011: "L F' L2 B L2 F L2 B' L",
+            0b011100001011010100001: "L' B L2 F' L2 B' L2 F L'",
+            0b110000010111000001110: "F U R U' R' U R U' R' F'",
+            0b100001011010100101100: "R U R' U R U' B U' B' R'",
+            0b101001001011000000111: "R' F2 L F L' F' L F L' F R",
+            0b101001000110100000111: "L F2 R' F' R F R' F' R F' L'",
+            0b000101011010110101000: "R U2 R2 U' R U' R' U2 F R F'",
+            0b010100010111010001010: "L' B' L U' R' U R U' R' U R L' B L",
+            0b010010100111001010010: "R U R' U' L R' F R F' L'",
+            0b000011100111001110000: ""}
+FULL_PLL = {"RLRFBFLRLBFB": "L2 R2 D L2 R2 U2 L2 R2 D L2 R2",                 # good
+            "RLRFRFLFLBBB": "R U' R U R U R U' R' U' R2",                     # good
+            "RFRFLFLRLBBB": "R2 U R U R' U' R' U' R' U R'",                   # good
+            "FRFLBLBLBRFR": "L R' F L2 R2 B L2 R2 F L R' D2 L2 R2",           # good
+            "FRBRFLBLFLBR": "R B' R' F R B R' F' R B R' F R B' R' F'",        # good
+            "FFBRRLBBFLLR": "F U' B U2 F' U B' F U' B U2 F' U B'",            # good
+            "BFFLRRFBBRLL": "L' U R' U2 L U' R L' U R' U2 L U' R",            # good
+            "RBLBFFLLRFRB": "R' U R' U' B' R' B2 U' B' U B' R B R",           # good
+            "RRLBFFLBRFLB": "F R' F R2 U' R' U' R U R' F' R U R' U' F'",      # good
+            "LRRFFLBLBRBF": "L2 B2 L' F' L B2 L' F L'",                       # good
+            "LRBRFRFLLBBF": "R B' R F2 R' B R F2 R2",                         # good
+            "FRBRBFLLLBFR": "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", # good
+            "RRFLBLBFRFLB": "B2 D L' U L' U' L D' B2 R' U R",                 # good
+            "BLRFFBRBFLRL": "F' U' F R2 D B' U B U' B D' R2",                 # good
+            "BRRFLBRBFLFL": "F2 D' L U' L U L' D F2 R U' R'",                 # good
+            "RLFLRLBFRFBB": "B U B' R2 D' F U' F' U F' D R2",                 # good
+            "FBBRFFLLLBRR": "R2 D R D' R F2 L' U L F2",                       # good
+            "LLRFFLBBBRRF": "R U R' F' R U R' U' R' F R2 U' R'",              # good
+            "BRBRBFLFRFLL": "F U2 F' U2 F R' F' U' F U F R F2",               # good
+            "RBLBFRFRFLLB": "R2 F R U R U' R' F' R U2 R' U2 R",               # good
+            "FLBRFFLRLBBR": "R U R' U' R' F R2 U' R' U' R U R' F'",           # good
+            "RRRFFFLLLBBB": ""}                                               # good
+'''
+# Handcrafting worked like this: 
+#  1. generate all possible cases by inverting the solutions stored in your dictionaries, 
+#           (plus some extra stuff like turning the top face once or twice before applying the inverted solution, 
+#             and applying the inverted solution facing each of the four sides but looking at them all from the front face).
+#  2. find some simple way of representing the case as a number based on what you can immediately read.
+#  3. fill up a set() with all the number representations, using the cases you generated.
+#  4. play around with your representation, deleting as much data from that representation as you can 
+#        while making absolutely sure that the size of your set() stays the same 
+#         (you are finding what information wasn't critical in order to decrease the maximum number in your set as much as possible).
+#  5. Find the minimal algorithm to solve that case, but automate this process.
+#  6. move away from the set() and create a dict() with your number representations to the minimal algorithms you found.
+#  7. initialize a list with length [the maximumum number that was in your set] + 1, move everything from your dict() into the list, 
+#        print it, and paste the result right into your python script.
+#  8. declare a new 'get_alg' function (with the body being the construction of your number representation) 
+#        that interacts entirely with the list you just pasted, and test your program with the new 'get_alg' swapped in just to expel any doubts you have.
+#  9. delete your old 'get_alg' function and its associated dictionary, and all of the mess that you wrote during steps 1-7, and enjoy the faster lookup times + lighter function.
 
 FULL_OLL = ('', "R2 D' R U2 R' D R U2 R", "B2 D' B U2 B' D B U2 B", "L' B L F' L' B' L F", "L F R' F' L' F R F'", "F U2 F' U' F U' F'", '', '', "F' L F R' F' L' F R", "R B L' B' R' B L B'", "L U L' U L U2 L'", "R U2 R2 U' R2 U' R2 U2 R", "L2 D' L U2 L' D L U2 L", "R U2 R' U' R U R' U' R U' R'", '', '', "B' R B L' B' R' B L", "L U2 L' U' L U' L'", "F R B' R' F' R B R'", 
             "F U2 F2 U' F2 U' F2 U2 F", "R U2 R' U' R U' R'", "B U2 B' U' B U' B'", '', '', '', '', '', '', '', '', '', '', "B L F' L' B' L F L'", '', "B U B' U B U2 B'", '', "R' F R B' R' F' R B", '', '', '', "R U R' U R U2 R'", '', "F U F' U F U2 F'", '', "B U2 B2 U' B2 U' B2 U2 B", '', '', '', "F2 D' F U2 F' D F U2 F", '', "F U2 F' U' F U F' U' F U' F'", '', "L U2 L2 U' L2 U' L2 U2 L", 
@@ -258,7 +341,7 @@ def cube2ds_from_cube3d(cube3d):
             cube2ds['B'][(1-j, 1-i)] = faces[cube3d[i+2, j+2, 4]]
             cube2ds['D'][(1-j, 1-i)] = faces[cube3d[i+2, 0, j+2]]
     return cube2ds
-def printcube(cube3d):
+def printcube(cube3d) -> None:
     cube = cube2ds_from_cube3d(cube3d)
     for key, value in cube.items():
         print(f'{key}: ')
@@ -267,41 +350,45 @@ def printcube(cube3d):
 ######################################### CUBE MANIPULATION
 def update_cube_with_F_move(cube3d, F_move: str) -> None:
     Fmove = F_move[0]
-    c = {"'": -1, "2": 2}.get(F_move[-1], 1)
+    c = {"'": -1, "2": 2}.get(F_move[-1], 1)        # (axis1, axis2) means that after the rotation, 
+                                                    # anything facing axis 1 will now be facing axis 2
     if Fmove == 'U': cube3d[:,3:,:] = np.rot90(cube3d, k=c, axes=(2, 0))[:,3:,:]
     if Fmove == 'R': cube3d[3:,:,:] = np.rot90(cube3d, k=c, axes=(1, 2))[3:,:,:]
     if Fmove == 'F': cube3d[:,:,:2] = np.rot90(cube3d, k=c, axes=(1, 0))[:,:,:2]
     if Fmove == 'L': cube3d[:2,:,:] = np.rot90(cube3d, k=c, axes=(2, 1))[:2,:,:]
     if Fmove == 'B': cube3d[:,:,3:] = np.rot90(cube3d, k=c, axes=(0, 1))[:,:,3:]
     if Fmove == 'D': cube3d[:,:2,:] = np.rot90(cube3d, k=c, axes=(0, 2))[:,:2,:]
-def algorithm_from_Fs_perspective(face, algorithm):
+def algorithm_from_Fs_perspective(face: str, algorithm: str) -> list[str]:
+                                                                                               # reapply the modifer (ie. "'", "2")
     return [f'{faces[move_from_Fs_perspective[(faces_to_nums[face], faces_to_nums[move[0]])]]}{(move[-1]*(len(move)==2))}'
             for move in algorithm.split()]
 ######################################### CUBE SOLVING
 ################# C
-def get_algs_for_bottom_edges(cube3d) -> tuple[str, int, int]:
+def get_algs_for_bottom_edges(cube3d) -> list[list[str]]:
     algorithms = []
     for x0, y0, z0 in ((-1, -1, 0), (-1, 1, 0), (1, -1, 0), (1, 1, 0),
-               (-1, 0, -1), (-1, 0, 1), (1, 0, -1), (1, 0, 1),
-               (0, -1, -1), (0, -1, 1), (0, 1, -1), (0, 1, 1)):
+                        (-1, 0, -1), (-1, 0, 1), (1, 0, -1), (1, 0, 1),
+                        (0, -1, -1), (0, -1, 1), (0, 1, -1), (0, 1, 1)):
         if x0==0: xyzs = ((0, 2*y0, z0), (0, y0, 2*z0))
         if y0==0: xyzs = ((2*x0, 0, z0), (x0, 0, 2*z0))
         if z0==0: xyzs = ((2*x0, y0, 0), (x0, 2*y0, 0))
         for x, y, z in xyzs:
-            if cube3d[x+2, y+2, z+2] != faces_to_nums['D']: continue # make sure it is a bottom edge
+            if cube3d[x+2, y+2, z+2] != faces_to_nums['D']: continue # make sure it is a *bottom* edge
             if y == -2:
                 destination = int_to_CI(cube3d[x+2, 1, z+2])
-                if destination == (x, -1, z): continue               # make sure it is wrong
-            if y == 2: destination = int_to_CI(cube3d[x+2, 3, z+2])
-            if abs(x) == 2: destination = int_to_CI(cube3d[x//2 + 2, y+2, z+2])
-            if abs(z) == 2: destination = int_to_CI(cube3d[x+2, y+2, z//2 + 2])
+                if destination == (x, -1, z): continue               # make sure it is *wrong*
+            elif y == 2: destination = int_to_CI(cube3d[x+2, 3, z+2])
+            elif x == 2: destination = int_to_CI(cube3d[3, y+2, z+2])
+            elif x == -2: destination = int_to_CI(cube3d[1, y+2, z+2])
+            elif z == 2: destination = int_to_CI(cube3d[x+2, y+2, 3])
+            elif z == -2: destination = int_to_CI(cube3d[x+2, y+2, 1])
             if destination == (1, -1, 0): algorithms.append(algorithm_from_Fs_perspective('R', FULL_CROSS[piece_indexes[(z+2, y+2, -x+2)]]))
-            if destination == (0, -1, -1): algorithms.append(algorithm_from_Fs_perspective('F', FULL_CROSS[piece_indexes[(x+2, y+2, z+2)]]))
-            if destination == (-1, -1, 0): algorithms.append(algorithm_from_Fs_perspective('L', FULL_CROSS[piece_indexes[(-z+2, y+2, x+2)]]))
-            if destination == (0, -1, 1): algorithms.append(algorithm_from_Fs_perspective('B', FULL_CROSS[piece_indexes[(-x+2, y+2, -z+2)]]))
+            elif destination == (0, -1, -1): algorithms.append(algorithm_from_Fs_perspective('F', FULL_CROSS[piece_indexes[(x+2, y+2, z+2)]]))
+            elif destination == (-1, -1, 0): algorithms.append(algorithm_from_Fs_perspective('L', FULL_CROSS[piece_indexes[(-z+2, y+2, x+2)]]))
+            elif destination == (0, -1, 1): algorithms.append(algorithm_from_Fs_perspective('B', FULL_CROSS[piece_indexes[(-x+2, y+2, -z+2)]]))
     return algorithms
 ################# F
-def get_algs_for_f2l_pairs(cube3d):
+def get_algs_for_f2l_pairs(cube3d) -> list[list[str]]:
     cornerFR = None
     cornerLF = None
     cornerBL = None
@@ -369,29 +456,29 @@ def get_algs_for_f2l_pairs(cube3d):
     return algorithms
     #'''
 ################# O
-def get_OLL_algorithm(cube3d):
+def get_OLL_algorithm(cube3d) -> list[str]:
     top_layer_num = 0
     for x, y, z in ((2, 1, 0), (0, 1, -2), (-2, 1, 0), (2, 1, 1),(2, 1, -1),
                     (1, 1, -2),(-1, 1, -2), (-2, 1, -1),(1, 1, 2)):
         top_layer_num = (top_layer_num*2)|(cube3d[x+2, y+2, z+2]==0)
     return FULL_OLL[top_layer_num].split()
 ################# P
-def get_PLL_algorithm(cube3d):
+def get_PLL_algorithm(cube3d) -> list[str]:
     return FULL_PLL[(int(cube3d[4, 3, 3])-1)*256
                   + (int(cube3d[3, 3, 0])-1)*64
                   + (int(cube3d[4, 3, 2])-1)*16
                   + (int(cube3d[2, 3, 0])-1)*4
                   + (int(cube3d[0, 3, 2])-1)].split()
 ########################### Recursive Search for optimal CFOP
-def OP(F_moves, cube3d, shortest_length): # At the end of Recursive_F, OP is called, thereby completing the recursive CFOP
+def OP(F_moves, cube3d, shortest_length) -> list[str] | None: # At the end of Recursive_F, OP is called, thereby completing the recursive CFOP
     cube3dnew = np.copy(cube3d)
     algorithmOLL = get_OLL_algorithm(cube3dnew)
-    if len(simplify_FURDLB_MOVES(F_moves + algorithmOLL)) - 1 >= shortest_length[0]: return False
+    if len(simplify_FURDLB_MOVES(F_moves + algorithmOLL)) - 1 >= shortest_length[0]: return
     for move in algorithmOLL: update_cube_with_F_move(cube3dnew, move)
     SOLVE_SEQUENCE = simplify_FURDLB_MOVES(F_moves + algorithmOLL + get_PLL_algorithm(cube3dnew))
     if len(SOLVE_SEQUENCE) < shortest_length[0]: shortest_length[0] = len(SOLVE_SEQUENCE)
     return SOLVE_SEQUENCE
-def Recursive_F(F_moves, cube3d, shortest_length): # At the end of Recursive_C, Recursive_F is called
+def Recursive_F(F_moves, cube3d, shortest_length) -> list[str] | None: # At the end of Recursive_C, Recursive_F is called
     algorithms = get_algs_for_f2l_pairs(cube3d)
     best = None
     if not algorithms: 
@@ -402,11 +489,11 @@ def Recursive_F(F_moves, cube3d, shortest_length): # At the end of Recursive_C, 
         cube3dnew = np.copy(cube3d)
         for move in alg: update_cube_with_F_move(cube3dnew, move)
         candidate = Recursive_F(F_moves + alg, cube3dnew, shortest_length)
-        if candidate is not None and candidate != False:
-            if best is None or len(candidate) < len(best):
-                best = candidate
+        if candidate is None: continue
+        if best is None or len(candidate) < len(best):
+            best = candidate
     return best
-def Recursive_C(F_moves, cube3d, shortest_length):
+def Recursive_C(F_moves, cube3d, shortest_length) -> list[str]:
     algorithms = get_algs_for_bottom_edges(cube3d)
     best = None
     if not algorithms: 
@@ -426,6 +513,8 @@ def simplify_FURDLB_MOVES(MOVES) -> list[str]:
                     "2": 2}
     nums_to_mods = ["0", "", "2", "'"]
     while True:
+        ########################################################################################################
+        # Combine repeated moves
         new = []
         modified = False
         i = 0
@@ -444,6 +533,8 @@ def simplify_FURDLB_MOVES(MOVES) -> list[str]:
                 new.append(v1)
                 i += 1
         MOVES = new[:]
+        ###########################################################################################################
+        # Combine repeated moves through opposites
         new = []
         i = 0
         while i < len(MOVES):
@@ -462,6 +553,7 @@ def simplify_FURDLB_MOVES(MOVES) -> list[str]:
                 new.append(v1)
                 i += 1
         MOVES = new[:]
+        ###########################################################################################################
         if not modified: return MOVES
 ######################################### RUN #########################################################################
 def CUBE3D_from_scramble(scramble):
@@ -486,15 +578,7 @@ def CUBE3D_from_scramble(scramble):
     for move in algorithm_from_Fs_perspective('F', scramble):
         update_cube_with_F_move(cube3d, move)
     return cube3d
-def algorithm_inverter(algorithm: str):
-    alg = algorithm.split()
-    inverse = []
-    for move in alg[::-1]:
-        mv = move[0]
-        if move[-1] == "2":inverse.append(f'{mv}2')
-        elif move[-1] == "'":inverse.append(f'{mv}')
-        else: inverse.append(f"{mv}'")
-    return ' '.join(inverse)
+
 scrambles = ["F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2",
              "L' B R2 F2 L' B L' D' F' L' D2 R' B' R F R' F R F U L B L U' R'",
              "D F L U B' U' L2 B' L' B' U' R' D F' D' L2 D F L U L' D2 L U L'",
@@ -509,8 +593,8 @@ move_counts = []
 for scramble in scrambles:
     start = time.perf_counter()
     CUBE3D = CUBE3D_from_scramble(scramble)
-    #printcube(CUBE3D)
-    F_MOVES = Recursive_C([], CUBE3D, [np.inf])
+    #                     max cross + max f2l + max oll + max pll = 85 moves
+    F_MOVES = Recursive_C([], CUBE3D, [85])
     for move in F_MOVES: update_cube_with_F_move(CUBE3D, move)
     if not np.array_equal(CUBE3D, cube3d_from_cube2ds({'U': np.array([['U', 'U', 'U'], 
                                                 ['U', 'U', 'U'], 
