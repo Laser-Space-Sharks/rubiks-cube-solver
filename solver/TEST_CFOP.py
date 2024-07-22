@@ -18,7 +18,6 @@ if __name__ == '__main__':
     for scramble in scrambles:
         start = time.perf_counter()
         CUBE3D = CUBE3D_from_scramble(scramble)
-        #                     max cross + max f2l + max oll + max pll = 85 moves
         F_MOVES = full_recursive_CFOP(CUBE3D)
         for move in F_MOVES: update_cube_with_F_move(CUBE3D, move)
         if not np.array_equal(CUBE3D, SOLVED_CUBE):
