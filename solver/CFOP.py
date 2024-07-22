@@ -113,7 +113,7 @@ def get_PLL_algorithm(cube3d) -> list[str]:
 def OP(F_moves, cube3d, shortest_length) -> list[str] | None: # At the end of Recursive_F, OP is called, thereby completing the recursive CFOP
     cube3dnew = np.copy(cube3d)
     algorithmOLL = get_OLL_algorithm(cube3dnew)
-    if len(simplify_FURDLB_MOVES(F_moves + algorithmOLL)) - 1 >= shortest_length[0]: return
+    if len(simplify_FURDLB_MOVES(F_moves + algorithmOLL)) >= shortest_length[0]: return
     for move in algorithmOLL: update_cube_with_F_move(cube3dnew, move)
     SOLVE_SEQUENCE = simplify_FURDLB_MOVES(F_moves + algorithmOLL + get_PLL_algorithm(cube3dnew))
     if len(SOLVE_SEQUENCE) < shortest_length[0]: shortest_length[0] = len(SOLVE_SEQUENCE)
@@ -125,7 +125,7 @@ def Recursive_F(F_moves, cube3d, shortest_length) -> list[str] | None: # At the 
         #print(simplify_FURDLB_MOVES(F_moves))
         return OP(F_moves, cube3d, shortest_length)
     for alg in algorithms:
-        if len(simplify_FURDLB_MOVES(F_moves + alg)) - 1 >= shortest_length[0]: continue
+        if len(simplify_FURDLB_MOVES(F_moves + alg)) >= shortest_length[0]: continue
         cube3dnew = np.copy(cube3d)
         for move in alg: update_cube_with_F_move(cube3dnew, move)
         candidate = Recursive_F(F_moves + alg, cube3dnew, shortest_length)
@@ -140,7 +140,7 @@ def Recursive_C(F_moves, cube3d, shortest_length) -> list[str]:
         #print(simplify_FURDLB_MOVES(F_moves))
         return Recursive_F(F_moves, cube3d, shortest_length)
     for alg in algorithms:
-        if len(simplify_FURDLB_MOVES(F_moves + alg)) - 1 >= shortest_length[0]: continue
+        if len(simplify_FURDLB_MOVES(F_moves + alg)) >= shortest_length[0]: continue
         cube3dnew = np.copy(cube3d)
         for move in alg: update_cube_with_F_move(cube3dnew, move)
         candidate = Recursive_C(F_moves + alg, cube3dnew, shortest_length)
