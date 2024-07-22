@@ -24,8 +24,8 @@ if __name__ == '__main__':
         if not np.array_equal(CUBE3D, SOLVED_CUBE):
             print("AAAAAAAAAAAAAAAAAAAAAAAAAA")
             printcube(CUBE3D)
-        print(scramble)
-        print(' '.join(F_MOVES))
+        print(f'scramble: {scramble}')
+        print(f"CFOP solution: {' '.join(F_MOVES)}")
         print(f'move count: {len(F_MOVES)}')
         move_counts.append(len(F_MOVES))
         t = time.perf_counter() - start
