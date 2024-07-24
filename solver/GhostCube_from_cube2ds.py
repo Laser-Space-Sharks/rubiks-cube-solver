@@ -1,4 +1,7 @@
 import numpy as np
+'''
+IMPORTANT NOTICE: THIS GHOSTCUBE DOES NOT USE THE LAST TWO BITS AND IS NON_RELATIVE
+'''
 faces = "URFLBD"
 faces_to_nums = {'U': 0,
                  'R': 1,
