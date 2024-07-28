@@ -20,33 +20,6 @@ faces_to_nums = {'U': 0,
                  'B': 4,
                  'D': 5}
 
-
-#####################################  CUBE DATA STRUCTURE(S)  ##########################################
-# But first, lets get our 2nd data structure type. 
-CUBE = {'U': np.array([['L', 'L', 'L'], 
-                      ['F', 'U', 'R'], 
-                      ['R', 'R', 'D']]),
-
-        'R': np.array([['L', 'U', 'F'], 
-                      ['F', 'R', 'L'], 
-                      ['B', 'F', 'B']]),
-
-        'F': np.array([['D', 'D', 'F'], 
-                      ['D', 'F', 'R'], 
-                      ['B', 'F', 'R']]),
-
-        'L': np.array([['B', 'L', 'F'], 
-                      ['B', 'L', 'B'], 
-                      ['R', 'U', 'D']]),  
-
-        'B': np.array([['U', 'B', 'U'], 
-                      ['D', 'B', 'D'], 
-                      ['R', 'B', 'U']]),
-
-        'D': np.array([['U', 'U', 'F'], 
-                      ['U', 'D', 'L'], 
-                      ['D', 'D', 'L']])}
-
 F_MOVES = []
     
 #################################  GENERIC OPERATION CORRESPONDANCES  #######################################
@@ -171,6 +144,7 @@ def int_to_CI(INT: np.uint8) -> tuple[int, int, int]:
     mask = INT - 0b11000000
     x, y, z = int((mask&0b11))-1, int((mask&0b1111)>>2)-1, int((mask&0b111111)>>4)-1
     return (x, y, z)
+######################################## CREATE CUBE
 def cube3d_from_cube2ds(cube):
     # x, y, z point right, up, and back, respectively.
     cube3d = np.zeros(shape=(5, 5, 5), dtype=np.uint8)
@@ -239,6 +213,30 @@ def cube3d_from_cube2ds(cube):
     for CI in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
         cube3d[npind(CI)] = CI_to_int(CI)
     return cube3d
+def CUBE3D_from_scramble(scramble):
+    cube2ds =   {'U': np.array([['U', 'U', 'U'], 
+                                ['U', 'U', 'U'], 
+                                ['U', 'U', 'U']]),
+                 'R': np.array([['R', 'R', 'R'], 
+                                ['R', 'R', 'R'], 
+                                ['R', 'R', 'R']]),
+                 'F': np.array([['F', 'F', 'F'], 
+                                ['F', 'F', 'F'], 
+                                ['F', 'F', 'F']]),
+                 'L': np.array([['L', 'L', 'L'], 
+                                ['L', 'L', 'L'], 
+                                ['L', 'L', 'L']]),  
+                 'B': np.array([['B', 'B', 'B'], 
+                                ['B', 'B', 'B'], 
+                                ['B', 'B', 'B']]),
+                 'D': np.array([['D', 'D', 'D'], 
+                                ['D', 'D', 'D'], 
+                                ['D', 'D', 'D']])}
+    cube3d = cube3d_from_cube2ds(cube2ds)
+    for move in scramble.split():
+        update_cube_with_F_move(cube3d, move)
+    return cube3d
+######################################## DEBUGGING
 def cube2ds_from_cube3d(cube3d):
     cube2ds = {'U': np.array([['N', 'N', 'N'], 
                         ['N', 'N', 'N'], 
@@ -284,7 +282,7 @@ def printcube(cube3d):
         print(f'{key}: ')
         print(value)
     print('-------------------------------------')
-######################################### CUBE and ALG MANIPULATION
+######################################## CUBE and ALG MANIPULATION
 def update_cube_with_F_move(cube3d, F_move: str) -> None:
     Fmove = F_move[0]
     mod = (F_move[-1]*(len(F_move)==2))
@@ -353,8 +351,8 @@ def simplify_FURDLB_MOVES(MOVES) -> list[str]:
                 i += 1
         MOVES = new[:]
         if not modified: return MOVES
-######################################### CUBE SOLVING
-################# PART 1
+######################################## CUBE SOLVING
+################# C
 def find_misplaced_bottom_edges(cube3d) -> tuple[str, int, int]:
     lost_souls = []
     for x in (-2, -1, 0, 1, 2):
@@ -376,7 +374,7 @@ def get_alg_for_bottom_edge(cube3d, coords: tuple[int, int, int]) -> None:
     if destination == (-1, -1, 0): newxyz, dest_face = (-z, y, x), 'L'
     if destination == (0, -1, 1): newxyz, dest_face = (-x, y, -z), 'B'
     return algorithm_from_Fs_perspective(dest_face, bottom_cross_algorithms[newxyz])
-################# PART 2
+################# F
 def Find_misplaced_f2l_pairs(cube3d):
     # All f2l_pairs: ('F', 'R'), ('L', 'F'), ('B', 'L'), ('R', 'B')
     corners = {('F', 'R'): (), 
@@ -417,7 +415,7 @@ def get_alg_for_f2l_pair(f2l_pair):
     newxyzC = transformation(corner[0], corner[1], corner[2])
     newxyzE = transformation(edge[0], edge[1], edge[2])
     return algorithm_from_Fs_perspective(face, F2L_ALGORITHMS[corners_to_indices[newxyzC]][edges_to_indices[newxyzE]])
-################# PART 3
+################# O
 def get_OLL_algorithm(cube3d):
     FULL_OLL = {0b010100011010110001010: "R U2 R2 F R F' U2 R' F R F'",
                 0b111000001010110001010: "L F L' U2 L F2 R' F2 R F' L'",
@@ -507,7 +505,7 @@ def get_OLL_algorithm(cube3d):
         return algorithm_from_Fs_perspective('L', FULL_OLL[top_layer_num2])
     if top_layer_num3 in FULL_OLL:
         return algorithm_from_Fs_perspective('B', FULL_OLL[top_layer_num3])
-################# PART 4
+################# P
 def get_PLL_algorithm(cube3d):
     #printcube(cube3d)
     FULL_PLL = {"RLRFBFLRLBFB": "L2 R2 D L2 R2 U2 L2 R2 D L2 R2",                 # good
@@ -547,26 +545,15 @@ def get_PLL_algorithm(cube3d):
         if pllB in FULL_PLL: return v + algorithm_from_Fs_perspective('B', FULL_PLL[pllB])
         if pllR in FULL_PLL: return v + algorithm_from_Fs_perspective('R', FULL_PLL[pllR])
         update_cube_with_F_move(cube3dnew, 'U')
-def Finish_Top(cube3d, algorithm):
-    U_count = (cube3d[npind((0, 1, -2))]-2)%4
-    if U_count == 1:
-        algorithm.append("U")
-        update_cube_with_F_move(cube3d, "U")
-    if U_count == 2:
-        algorithm.append("U2")
-        update_cube_with_F_move(cube3d, "U2")
-    if U_count == 3:
-        algorithm.append("U'")
-        update_cube_with_F_move(cube3d, "U'")
+######################################## RECURSIVE SOLVING
 def OP(F_moves, cube3d): # At the end of Recursive_F, OP is called, thereby completing the recursive CFOP
     cube3dnew = np.copy(cube3d)
     algorithmOLL = get_OLL_algorithm(cube3dnew)
     for move in algorithmOLL: update_cube_with_F_move(cube3dnew, move)
     algorithmPLL = get_PLL_algorithm(cube3dnew)
     for move in algorithmPLL: update_cube_with_F_move(cube3dnew, move)
-    new_F_moves = F_moves + algorithmOLL + algorithmPLL
-    #Finish_Top(cube3dnew, new_F_moves)
-    return (simplify_FURDLB_MOVES(new_F_moves), cube3dnew)
+    new_F_moves = simplify_FURDLB_MOVES(F_moves + algorithmOLL + algorithmPLL)
+    return (new_F_moves, cube3dnew)
 def Recursive_F(F_moves, cube3d): # At the end of Recursive_C, Recursive_F is called
     lost_pairs = Find_misplaced_f2l_pairs(cube3d)
     best = None
@@ -596,29 +583,6 @@ def Recursive_C(F_moves, cube3d):
             best = candidate
     return best
 ######################################### RUN #########################################################################
-def CUBE3D_from_scramble(scramble):
-    cube2ds =   {'U': np.array([['U', 'U', 'U'], 
-                                ['U', 'U', 'U'], 
-                                ['U', 'U', 'U']]),
-                 'R': np.array([['R', 'R', 'R'], 
-                                ['R', 'R', 'R'], 
-                                ['R', 'R', 'R']]),
-                 'F': np.array([['F', 'F', 'F'], 
-                                ['F', 'F', 'F'], 
-                                ['F', 'F', 'F']]),
-                 'L': np.array([['L', 'L', 'L'], 
-                                ['L', 'L', 'L'], 
-                                ['L', 'L', 'L']]),  
-                 'B': np.array([['B', 'B', 'B'], 
-                                ['B', 'B', 'B'], 
-                                ['B', 'B', 'B']]),
-                 'D': np.array([['D', 'D', 'D'], 
-                                ['D', 'D', 'D'], 
-                                ['D', 'D', 'D']])}
-    cube3d = cube3d_from_cube2ds(cube2ds)
-    for move in algorithm_from_Fs_perspective('F', scramble):
-        update_cube_with_F_move(cube3d, move)
-    return cube3d
 scrambles = ["F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2",
              "L' B R2 F2 L' B L' D' F' L' D2 R' B' R F R' F R F U L B L U' R'",
              "D F L U B' U' L2 B' L' B' U' R' D F' D' L2 D F L U L' D2 L U L'",
