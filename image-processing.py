@@ -12,8 +12,23 @@
 
 ####### IMPORTS #######
 import cv2
+import time
+import picamera
 import numpy as np
 import matplotlib as plt
+
+####### CAPTURE IMAGE #######
+# vars
+imgSize = 60 # for resolution
+
+def captureImg():
+    camera = PiCamera()
+    camera.resolution = (imgSize, imgSize)
+    time.sleep(2) # give camera time to wake
+    imageArray = np.empty(((imgSize^2) * 3), dtype=np.uint8)
+    camera.capture(imageArray, 'bgr')
+    return imageArray.reshape(imgSize, imgSize, 3)
+
 
 ####### NORMALIZE #######
 def normalizeImg(image):
@@ -26,6 +41,11 @@ def normalizeImg(image):
     rNorm = cv2.normalize(r, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
     
     # merge
-    normalizedImage = cv2.merge([rNorm, gNorm, bNorm])
+    mergedImage = cv2.merge([rNorm, gNorm, bNorm])
+
+    # changing colorspaces
+    normalizedImage = cv2.cvtColor(mergedImage, cv2.COLOR_RGB2HSV)
+    # Here we are using hue saturation value (HSV) in order to easily define 
+    # a range of values that we can the colors of a given cube to fall between
 
     return normalizedImage
