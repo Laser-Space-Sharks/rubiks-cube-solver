@@ -49,3 +49,5 @@ def normalizeImg(image):
     # a range of values that we can the colors of a given cube to fall between
 
     return normalizedImage
+
+####### Color Analysis #######
