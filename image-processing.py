@@ -16,6 +16,13 @@ import time
 import picamera
 import numpy as np
 import matplotlib as plt
+import os
+
+####### SAVE AN IMAGE #######
+def saveImg(image, directory, filename):
+    os.chdir(directory)
+    cv2.imwrite(filename, image)
+    print(filename + " successfully saved!")
 
 ####### CAPTURE IMAGE #######
 # vars
@@ -51,3 +58,10 @@ def normalizeImg(image):
     return normalizedImage
 
 ####### Color Analysis #######
+
+####### Testing #######
+def test():
+    image = normalizeImg(captureImg())
+    saveImg(image, "/home/pi/", "test.jpg")
+
+test()
