@@ -17,6 +17,7 @@ from picamera2 import Picamera2
 import numpy as np
 import matplotlib as plt
 import os
+import io
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
