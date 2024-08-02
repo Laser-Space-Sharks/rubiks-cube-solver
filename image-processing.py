@@ -29,7 +29,7 @@ def saveImg(image, directory, filename):
 imgSize = 60 # for resolution
 
 def captureImg():
-    camera = camera()
+    camera = picamera2()
     camera.resolution = (imgSize, imgSize)
     time.sleep(2) # give camera time to wake
     imageArray = np.empty(((imgSize^2) * 3), dtype=np.uint8)
