@@ -1,7 +1,4 @@
 import numpy as np
-'''
-IMPORTANT NOTICE: THIS GHOSTCUBE DOES NOT USE THE LAST TWO BITS AND IS NON_RELATIVE
-'''
 faces = "URFLBD"
 faces_to_nums = {'U': 0,
                  'R': 1,
@@ -105,12 +102,26 @@ def update_GhostCube_with_move(GhostCube, move):
                                 [2, 9, 5, 9, 0, 4],  # L
                                 [3, 0, 9, 5, 9, 1],  # B
                                 [9, 4, 1, 2, 3, 9]]) # D
-    cycles = [[1, 2, 3, 4]
-            [2, 0, 4, 5],
-            [0, 1, 5, 3],
-            [0, 2, 5, 4],
-            [1, 0, 3, 5],
-            [2, 1, 4, 3]]
+    next_faces = [[[9, 2, 3, 4, 1, 9],
+                    [4, 9, 0, 9, 5, 2],
+                    [1, 5, 9, 0, 9, 3],
+                    [2, 9, 5, 9, 0, 4],
+                    [3, 0, 9, 5, 9, 1],
+                    [9, 4, 1, 2, 3, 9]],
+
+                    [[9, 3, 4, 1, 2, 9],
+                    [5, 9, 4, 9, 2, 0],
+                    [5, 3, 9, 1, 9, 0],
+                    [5, 9, 4, 9, 2, 0],
+                    [5, 3, 9, 1, 9, 0],
+                    [9, 3, 4, 1, 2, 9]],
+
+                    [[9, 4, 1, 2, 3, 9],
+                    [2, 9, 5, 9, 0, 4],
+                    [3, 0, 9, 5, 9, 1],
+                    [4, 9, 0, 9, 5, 2],
+                    [1, 5, 9, 0, 9, 3],
+                    [9, 2, 3, 4, 1, 9]]]
     count = {"'": 3, "2": 2}.get(move[-1], 1)
     npind = lambda x, y, z: (x+1, y+1, z+1)
     # Edges
@@ -120,24 +131,37 @@ def update_GhostCube_with_move(GhostCube, move):
         a0 = GhostCube[npind(x, y, z)]
         b1 = a0>>3
         b2 = a0&7
-        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
-        if b2 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|b2
+        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|next_faces[count-1][move[0]][b2]
+        if b2 == move[0]: GhostCube[npind(x, y, z)] = (next_faces[count-1][move[0]][b1]<<3)|b2
     # Up corners
     for x, y, z in ((-1, -1, 1), (-1, 1, 1), (1, -1, 1), (1, 1, 1)):
         a0 = GhostCube[npind(x, y, z)]
         b1 = a0>>3
         b2 = a0&7
         b3 = UpCornerTable[b1][b2]
-        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
-        if b2 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|b2
-        if b3 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
+        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|next_faces[count-1][move[0]][b2]
+        if b2 == move[0]: GhostCube[npind(x, y, z)] = (next_faces[count-1][move[0]][b1]<<3)|b2
+        if b3 == move[0]: GhostCube[npind(x, y, z)] = (next_faces[count-1][move[0]][b1]<<3)|next_faces[count-1][move[0]][b2]
     # Down corners
     for x, y, z in ((-1, -1, -1), (-1, 1, -1), (1, -1, -1), (1, 1, -1)):
         a0 = GhostCube[npind(x, y, z)]
         b1 = a0>>3
         b2 = a0&7
         b3 = DownCornerTable[b1][b2]
-        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
-        if b2 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|b2
-        if b3 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
-
+        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|next_faces[count-1][move[0]][b2]
+        if b2 == move[0]: GhostCube[npind(x, y, z)] = (next_faces[count-1][move[0]][b1]<<3)|b2
+        if b3 == move[0]: GhostCube[npind(x, y, z)] = (next_faces[count-1][move[0]][b1]<<3)|next_faces[count-1][move[0]][b2]
+'''
+cycles = [[1, 2, 3, 4],
+        [2, 0, 4, 5],
+        [0, 1, 5, 3],
+        [0, 2, 5, 4],
+        [1, 0, 3, 5],
+        [2, 1, 4, 3]]
+next_face = np.ones(shape=(3, 6, 6))*9
+for count in (1, 2, 3):
+    for move in range(6):
+        for face in cycles[move]:
+            next_face[count-1][move][face] = cycles[move][(cycles[move].index(face)+count)%4]
+print(next_face)
+'''
