@@ -14,7 +14,7 @@
 import cv2
 from time import sleep
 from picamera2 import Picamera2
-import numpy as np
+# import numpy as np
 # import matplotlib as plt
 from os import chdir
 from io import BytesIO
