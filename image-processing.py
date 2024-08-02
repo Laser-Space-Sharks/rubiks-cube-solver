@@ -13,7 +13,7 @@
 ####### IMPORTS #######
 import cv2
 import time
-import picamera
+import picamera2 as picamera
 import numpy as np
 import matplotlib as plt
 import os
