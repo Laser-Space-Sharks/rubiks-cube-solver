@@ -90,3 +90,54 @@ def GhostCube_from_cube2ds(cube2ds):
         if set(edge2) == {3, 5}: GhostCube[npind2(0, -1, -1)] = bitmask((edge3[edge2.index(3)], edge3[edge2.index(5)]))
         if set(edge2) == {4, 5}: GhostCube[npind2(-1, 0, -1)] = bitmask((edge3[edge2.index(4)], edge3[edge2.index(5)]))
     return GhostCube
+def update_GhostCube_with_move(GhostCube, move):
+                             # U  R  F  L  B  D
+    UpCornerTable = np.array([[9, 4, 1, 2, 3, 9],  # U
+                              [2, 9, 5, 9, 0, 4],  # R
+                              [3, 0, 9, 5, 9, 1],  # F
+                              [4, 9, 0, 9, 5, 2],  # L
+                              [1, 5, 9, 0, 9, 3],  # B
+                              [9, 2, 3, 4, 1, 9]]) # D
+                               # U  R  F  L  B  D
+    DownCornerTable = np.array([[9, 2, 3, 4, 1, 9],  # U
+                                [4, 9, 0, 9, 5, 2],  # R
+                                [1, 5, 9, 0, 9, 3],  # F
+                                [2, 9, 5, 9, 0, 4],  # L
+                                [3, 0, 9, 5, 9, 1],  # B
+                                [9, 4, 1, 2, 3, 9]]) # D
+    cycles = [[1, 2, 3, 4]
+            [2, 0, 4, 5],
+            [0, 1, 5, 3],
+            [0, 2, 5, 4],
+            [1, 0, 3, 5],
+            [2, 1, 4, 3]]
+    count = {"'": 3, "2": 2}.get(move[-1], 1)
+    npind = lambda x, y, z: (x+1, y+1, z+1)
+    # Edges
+    for x, y, z in ((-1, 0, 1), (1, 0, 1), (0, -1, 1), (0, 1, 1),
+                    (-1, -1, 0), (-1, 1, 0), (1, -1, 0), (1, 1, 0),
+                    (-1, 0, -1), (1, 0, -1), (0, -1, -1), (0, 1, -1)):
+        a0 = GhostCube[npind(x, y, z)]
+        b1 = a0>>3
+        b2 = a0&7
+        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
+        if b2 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|b2
+    # Up corners
+    for x, y, z in ((-1, -1, 1), (-1, 1, 1), (1, -1, 1), (1, 1, 1)):
+        a0 = GhostCube[npind(x, y, z)]
+        b1 = a0>>3
+        b2 = a0&7
+        b3 = UpCornerTable[b1][b2]
+        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
+        if b2 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|b2
+        if b3 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
+    # Down corners
+    for x, y, z in ((-1, -1, -1), (-1, 1, -1), (1, -1, -1), (1, 1, -1)):
+        a0 = GhostCube[npind(x, y, z)]
+        b1 = a0>>3
+        b2 = a0&7
+        b3 = DownCornerTable[b1][b2]
+        if b1 == move[0]: GhostCube[npind(x, y, z)] = (b1<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
+        if b2 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|b2
+        if b3 == move[0]: GhostCube[npind(x, y, z)] = (cycles[move[0]][(cycles[move[0]].index(b1)+count)%4]<<3)|cycles[move[0]][(cycles[move[0]].index(b2)+count)%4]
+
