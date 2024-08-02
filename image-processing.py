@@ -34,7 +34,7 @@ def captureImg():
     camera.resolution = (imgSize, imgSize)
     time.sleep(2) # give camera time to wake
     image = io.BytesIO()
-    camera.capture_file(image, format='jpeg')
+    camera.capture_file(image, format='bmp')
     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
 
