@@ -13,7 +13,7 @@
 ####### IMPORTS #######
 import cv2
 import time
-from picamera import PiCamera
+from picamera2 import Picamera2
 import numpy as np
 import matplotlib as plt
 import os
@@ -33,7 +33,7 @@ def captureImg():
     camera.resolution = (imgSize, imgSize)
     time.sleep(2) # give camera time to wake
     imageArray = np.empty(((imgSize^2) * 3), dtype=np.uint8)
-    camera.capture(imageArray, 'bgr')
+    camera.capture_file(imageArray, format='bgr')
     return imageArray.reshape(imgSize, imgSize, 3)
 
 
