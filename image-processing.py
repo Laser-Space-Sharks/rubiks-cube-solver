@@ -21,7 +21,7 @@ from io import BytesIO
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
-    os.chdir(directory)
+    chdir(directory)
     cv2.imwrite(filename, image)
     print(filename + " successfully saved!")
 
@@ -33,7 +33,7 @@ def captureImg():
     camera = Picamera2()
     camera.resolution = (imgSize, imgSize)
     sleep(2) # give camera time to wake
-    image = io.BytesIO()
+    image = BytesIO()
     camera.capture_file(image, format='bmp')
     print("got past the long bit")
     return cv2.imdecode(image, cv2.IMREAD_COLOR)
