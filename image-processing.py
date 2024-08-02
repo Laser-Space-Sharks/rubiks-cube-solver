@@ -19,7 +19,7 @@ from picamera2 import Picamera2
 from os import chdir
 from io import BytesIO
 
-startTime = time()
+startTime = perf_counter()
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
