@@ -12,7 +12,7 @@
 
 ####### IMPORTS #######
 import cv2
-from time import sleep
+from time import sleep, time
 from picamera2 import Picamera2
 # import numpy as np
 # import matplotlib as plt
@@ -21,6 +21,7 @@ from io import BytesIO
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
+    print("saving an image at " + (time() - startTime))
     chdir(directory)
     cv2.imwrite(filename, image)
     print(filename + " successfully saved!")
@@ -30,19 +31,20 @@ def saveImg(image, directory, filename):
 imgSize = 60 # for resolution
 
 def captureImg():
-    print("start img capture!")
+    print("start img capture at " + (time() - startTime))
     camera = Picamera2()
     camera.resolution = (imgSize, imgSize)
     sleep(5) # give camera time to wake
     image = BytesIO()
-    print("about to hit the long bit :(")
+    print("about to hit the long bit :( at " + (time() - startTime))
     camera.capture_file(image, format='bmp')
-    print("got past the long bit!!")
+    print("got past the long bit!! at " (time() - startTime))
     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
 
 ####### NORMALIZE #######
 def normalizeImg(image):
+    print("statring normalization at " + (time() - startTime))
     # split into color channels
     b, g, r = cv2.split(image)
 
@@ -65,6 +67,7 @@ def normalizeImg(image):
 
 ####### Testing #######
 def test():
+    startTime = time()
     image = normalizeImg(captureImg())
     saveImg(image, "/home/pi/", "test.jpg")
 
