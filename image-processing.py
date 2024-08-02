@@ -19,6 +19,8 @@ from picamera2 import Picamera2
 from os import chdir
 from io import BytesIO
 
+startTime = time()
+
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
     print("saving an image at " + (time() - startTime))
@@ -67,7 +69,6 @@ def normalizeImg(image):
 
 ####### Testing #######
 def test():
-    startTime = time()
     image = normalizeImg(captureImg())
     saveImg(image, "/home/pi/", "test.jpg")
 
