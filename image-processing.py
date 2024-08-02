@@ -38,7 +38,7 @@ def captureImg():
     image = BytesIO()
     print("about to hit the long bit :( at " + (time() - startTime))
     camera.capture_file(image, format='bmp')
-    print("got past the long bit!! at " (time() - startTime))
+    print("got past the long bit!! at " + (time() - startTime))
     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
 
