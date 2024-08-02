@@ -33,7 +33,7 @@ def captureImg():
     camera.resolution = (imgSize, imgSize)
     time.sleep(2) # give camera time to wake
     imageArray = np.empty(((imgSize^2) * 3), dtype=np.uint8)
-    camera.capture(imageArray, 'bgr')
+    camera.start_and_capture_file(imageArray, 'bgr')
     return imageArray.reshape(imgSize, imgSize, 3)
 
 
