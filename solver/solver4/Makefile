@@ -13,7 +13,8 @@ SRC := $(foreach x, $(SRC_PATH), $(wildcard $(addprefix $(x)/*,.c*)))
 OBJ := $(addprefix $(OBJ_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 
 CLEANLIST := $(TARGET) \
-			 $(OBJ)
+			 $(OBJ) \
+			 $(OBJ_PATH)/
 
 # default rule
 default: makedir all
@@ -36,4 +37,4 @@ all: $(TARGET)
 .PHONY: clean
 clean: 
 	@echo Cleaning: $(CLEANLIST)
-	@rm -f $(CLEANLIST)
+	@rm -rf $(CLEANLIST)
