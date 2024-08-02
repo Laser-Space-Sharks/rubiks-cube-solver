@@ -32,9 +32,9 @@ def captureImg():
     camera = Picamera2()
     camera.resolution = (imgSize, imgSize)
     time.sleep(2) # give camera time to wake
-    imageArray = np.empty(((imgSize^2) * 3), dtype=np.uint8)
-    camera.capture_file(imageArray, format='bgr')
-    return imageArray.reshape(imgSize, imgSize, 3)
+    image = io.BytesIO()
+    camera.capture_file(image, format='jpeg')
+    return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
 
 ####### NORMALIZE #######
