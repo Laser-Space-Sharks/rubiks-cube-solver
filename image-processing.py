@@ -12,12 +12,12 @@
 
 ####### IMPORTS #######
 import cv2
-import time
+from time import sleep
 from picamera2 import Picamera2
 import numpy as np
-import matplotlib as plt
-import os
-import io
+# import matplotlib as plt
+from os import chdir
+from io import BytesIO
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
@@ -32,9 +32,10 @@ imgSize = 60 # for resolution
 def captureImg():
     camera = Picamera2()
     camera.resolution = (imgSize, imgSize)
-    time.sleep(2) # give camera time to wake
+    sleep(2) # give camera time to wake
     image = io.BytesIO()
     camera.capture_file(image, format='bmp')
+    print("got past the long bit")
     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
 
