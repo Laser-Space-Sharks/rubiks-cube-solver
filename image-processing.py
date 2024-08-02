@@ -30,9 +30,10 @@ def saveImg(image, directory, filename):
 imgSize = 60 # for resolution
 
 def captureImg():
+    print("start img capture!")
     camera = Picamera2()
     camera.resolution = (imgSize, imgSize)
-    sleep(2) # give camera time to wake
+    sleep(5) # give camera time to wake
     image = BytesIO()
     print("about to hit the long bit :(")
     camera.capture_file(image, format='bmp')
