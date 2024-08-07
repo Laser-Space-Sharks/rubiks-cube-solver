@@ -12,15 +12,19 @@
 
 ####### IMPORTS #######
 import cv2
-import time
-import picamera
-import numpy as np
-import matplotlib as plt
-import os
+from time import sleep, perf_counter
+from picamera2 import Picamera2
+# import numpy as np
+# import matplotlib as plt
+from os import chdir
+from io import BytesIO
+
+startTime = perf_counter()
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
-    os.chdir(directory)
+    print("saving an image at " + str((perf_counter() - startTime)))
+    chdir(directory)
     cv2.imwrite(filename, image)
     print(filename + " successfully saved!")
 
@@ -29,16 +33,20 @@ def saveImg(image, directory, filename):
 imgSize = 60 # for resolution
 
 def captureImg():
-    camera = PiCamera()
+    print("start img capture at " + str((perf_counter() - startTime)))
+    camera = Picamera2()
     camera.resolution = (imgSize, imgSize)
-    time.sleep(2) # give camera time to wake
-    imageArray = np.empty(((imgSize^2) * 3), dtype=np.uint8)
-    camera.capture(imageArray, 'bgr')
-    return imageArray.reshape(imgSize, imgSize, 3)
+    sleep(5) # give camera time to wake
+    image = BytesIO()
+    print("about to hit the long bit :( at " + str((perf_counter() - startTime)))
+    camera.capture_file(image, format='bmp')
+    print("got past the long bit!! at " + str((perf_counter() - startTime)))
+    return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
 
 ####### NORMALIZE #######
 def normalizeImg(image):
+    print("statring normalization at " + str((perf_counter() - startTime)))
     # split into color channels
     b, g, r = cv2.split(image)
 
@@ -61,6 +69,7 @@ def normalizeImg(image):
 
 ####### Testing #######
 def test():
+    print("starting the test at " + str((perf_counter() - startTime)))
     image = normalizeImg(captureImg())
     saveImg(image, "/home/pi/", "test.jpg")
 
