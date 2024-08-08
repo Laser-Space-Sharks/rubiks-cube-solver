@@ -1,11 +1,9 @@
 # Things that need to happen here
 # in not a lot of detail and probably wrong
 # 1. Normalize
-# 2. Find cube face using edge detection 
-# and it's cubeSize
-# 3. Cycle through the peices centers using 
-# info from cubeSize and take its color
-# 4. identify the color usng cv.inRange 
+# 2. Split image into 9 sections representing the peices
+# 3. Cycle through the peices centers 
+# 4. identify the color usng cv2.inRange 
 # 5. correct centers for white/logo error 
 # using opposing center rules
 # 6. store cube state 
