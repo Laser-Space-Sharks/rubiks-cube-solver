@@ -39,18 +39,7 @@ const side_e turn_sides_table[NUM_FACES][NUM_SIDES] = {
 	{SIDE_D, SIDE_D, SIDE_D, SIDE_D}  // FACE D
 };
 
-// fast rol instruction that simplifies to rolq (on x86)
-static inline uint64_t rolq(uint64_t n, uint8_t c) {
-	const uint64_t mask = CHAR_BIT*sizeof(n) - 1;
-
-	c &= mask;
-	return (n << c) | (n >> (-c & mask));
-}
-
-static inline uint64_t positive_mod(int64_t n, uint64_t m) {
-	return (n % m + m) % m;
-}
-
+// Apply a move to the cube using bitshifts
 void apply_move(cube_s *cube, move_s move) {
 	// make the turn count positive 
 	uint8_t turns_pos = positive_mod(move.turns, NUM_SIDES);
@@ -79,33 +68,6 @@ void apply_move(cube_s *cube, move_s move) {
 		cube->state[target_sface] |=  turn_mask_table[move.face][target_side] & 
 										rolq(og_sfaces[side], side_turns*16);
 	}
-}
-
-/*
- * ASCII print functions for pieces, faces, and cubes
- */
-
-char get_char(face_e face) {
-	switch (face) {
-		case FACE_U:
-		return CHAR_U;
-		case FACE_R:
-		return CHAR_R;
-		case FACE_F:
-		return CHAR_F;
-		case FACE_L:
-		return CHAR_L;
-		case FACE_B:
-		return CHAR_B;
-		case FACE_D:
-		return CHAR_D;
-		default:
-		return 'X';
-	}
-}
-
-char get_piece(uint64_t face, uint8_t index) {
-	return get_char((face >> (8 * index) & 0xFF));
 }
 
 void print_face(uint64_t face_bits) {

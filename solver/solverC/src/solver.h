@@ -41,21 +41,36 @@ typedef enum : uint8_t {
  * 7 3
  * 654
  *
- * The full cube with each piece index when unfolded looks like this:
- *     012
- *     7U3
- *     654
- * 012 012 012 012
- * 7L3 7F3 7R3 7B3
- * 654 654 654 654
- *     012
- *     7D3
- *     654
+ * The full cube when unfolded looks like this:
+ *     UUU
+ *     UUU
+ *     UUU
+ * LLL FFF RRR BBB
+ * LLL FFF RRR BBB
+ * LLL FFF RRR BBB
+ *     DDD
+ *     DDD
+ *     DDD
  *
  */
 
 typedef struct {
 	uint64_t state[NUM_FACES];
 } cube_s;
+
+// fast rol instruction that simplifies to rolq (on x86 and rol on arm64)
+static inline uint64_t rolq(uint64_t n, uint8_t c) {
+	const uint64_t mask = CHAR_BIT*sizeof(n) - 1;
+
+	c &= mask;
+	return (n << c) | (n >> (-c & mask));
+}
+
+// takes positive mod of integer parameter with unsigned divisor
+static inline uint64_t positive_mod(int64_t n, uint64_t m) {
+	return (n % m + m) % m;
+}
+
+
 
 #endif
