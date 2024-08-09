@@ -1,50 +1,68 @@
 # Things that need to happen here
 # in not a lot of detail and probably wrong
+# libcamera-still -o test.jpg --width 60 --height 60
 # 1. Normalize
 # 2. Split image into 9 sections representing the peices
 # 3. Cycle through the peices centers 
 # 4. identify the color usng cv2.inRange 
 # 5. correct centers for white/logo error 
 # using opposing center rules
-# 6. store cube state 
+# Then store the cube
 
 ####### IMPORTS #######
 import cv2
 from time import sleep, perf_counter
-from picamera2 import Picamera2
+# from picamera2 import Picamera2
 # import numpy as np
 # import matplotlib as plt
 from os import chdir
-from io import BytesIO
-
-startTime = perf_counter()
+# from io import BytesIO
+import subprocess
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
-    print("saving an image at " + str((perf_counter() - startTime)))
     chdir(directory)
     cv2.imwrite(filename, image)
-    print(filename + " successfully saved!")
+    print(f"{filename} successfully saved!")
 
-####### CAPTURE IMAGE #######
+####### DELETE IMAGE FILE #######
+def delImg(directory, filename):
+    print(f"deleting {filename} from {directory}")
+    chdir(directory)
+    subprocess.run(["rm", f"{filename}"])
+
+####### CAPTURE IMAGE WITH PICAMERA #######
 # vars
 imgSize = 60 # for resolution
 
-def captureImg():
-    print("start img capture at " + str((perf_counter() - startTime)))
-    camera = Picamera2()
-    camera.resolution = (imgSize, imgSize)
-    sleep(5) # give camera time to wake
-    image = BytesIO()
-    print("about to hit the long bit :( at " + str((perf_counter() - startTime)))
-    camera.capture_file(image, format='bmp')
-    print("got past the long bit!! at " + str((perf_counter() - startTime)))
-    return cv2.imdecode(image, cv2.IMREAD_COLOR)
+# def captureImgPiCam():
+#     camera = Picamera2()
+#     camera.resolution = (imgSize, imgSize)
+#     sleep(5) # give camera time to wake
+#     image = BytesIO()
+#     camera.capture_file(image, format='bmp')
+#     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
+####### CAPTURE IMAGE WITH LIBCAMERA #######
+def captureImg(directory, filename):
+    # capture image using libcamera with specified resolution
+    subprocess.run([
+        "libcamera-still", 
+        "-o", 
+        f"{filename}.jpg", 
+        "--width", 
+        f"{imgSize}",
+        "--height",
+        f"{imgSize}"])
+    
+    # read image into cv2
+    image = cv2.imread(f"{directory}{filename}.jpg")
+    # delete image from directory
+    delImg(directory, filename)
+    return image
 
 ####### NORMALIZE #######
 def normalizeImg(image):
-    print("statring normalization at " + str((perf_counter() - startTime)))
     # split into color channels
     b, g, r = cv2.split(image)
 
@@ -66,9 +84,8 @@ def normalizeImg(image):
 ####### Color Analysis #######
 
 ####### Testing #######
-def test():
-    print("starting the test at " + str((perf_counter() - startTime)))
-    image = normalizeImg(captureImg())
-    saveImg(image, "/home/pi/", "test.jpg")
+def test(directory):
+    image = normalizeImg(captureImg(directory, "test"))
+    saveImg(image, directory, "normal.jpg")
 
-test()
+test("/home/pi/cubeImgs/")
