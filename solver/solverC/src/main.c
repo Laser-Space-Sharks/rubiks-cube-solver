@@ -1,9 +1,10 @@
+#include <bits/time.h>
 #include <time.h>
 #include <unistd.h>
 
 #include "solver.h"
-#include "solver.h"
 #include "cube.h"
+#include "move.h"
 
 const cube_s SOLVED_BITCUBE = {
 	.state = {
@@ -33,77 +34,85 @@ const cube_s SOLVED_BITCUBE = {
 	}
 };
 
-struct timespec timer_start();
-long timer_end(struct timespec start_time);
-
 int main(int argc, char *argv[]) {
 	cube_s cube = SOLVED_BITCUBE;
-	move_s move_u = {
+	move_s u = {
 		.face  = FACE_U,
 		.turns = 1
 	};
 
-	move_s move_r = {
+	move_s r = {
 		.face = FACE_R,
 		.turns = 1
 	};
 
-	move_s move_f = {
+	move_s f = {
 		.face = FACE_F,
 		.turns = 1
 	};
 
-	move_s move_l = {
+	move_s l = {
 		.face = FACE_L,
 		.turns = 1
 	};
 
-	move_s move_b = {
+	move_s b = {
 		.face = FACE_B,
 		.turns = 1
 	};
 
-	move_s move_d = {
+	move_s d = {
 		.face = FACE_D,
 		.turns = 1
 	};
 
-	move_s move_fprime = {
+	move_s fprime = {
 		.face = FACE_F,
 		.turns = -1
 	};
 
-	move_s move_rprime = {
+	move_s rprime = {
 		.face = FACE_R,
 		.turns = -1
 	};
 
-	move_s move_uprime = {
+	move_s uprime = {
 		.face = FACE_U,
 		.turns = -1
 	};
 
-	uint32_t max_iters = 100000;
-	struct timespec timer = timer_start();
-	for (size_t iter = 0; iter < max_iters; iter++) {
-		apply_move(&cube, move_f);
-	}
-	long diffInNanos = timer_end(timer);
-	printf("Time to execute %d moves: %ldns\n", max_iters, diffInNanos);
-	printf("Average of %ldns per move\n", diffInNanos/max_iters);
+	move_s dprime = {
+		.face = FACE_D,
+		.turns = -1
+	};
+
+	move_list_s moves;
+	init_move_list(&moves, 10);
+	insert_move(&moves, f, moves.length);
+	insert_move(&moves, u, moves.length);
+	insert_move(&moves, d, moves.length);
+	insert_move(&moves, u, moves.length);
+	insert_move(&moves, u, moves.length);
+	insert_move(&moves, u, moves.length);
+	insert_move(&moves, dprime, moves.length);
+	insert_move(&moves, b, moves.length);
+	insert_move(&moves, b, moves.length);
+	insert_move(&moves, f, moves.length);
+
+	print_move_list(moves);
+
+	struct timespec start, stop;
+	uint64_t accum;
+
+	clock_gettime(CLOCK_REALTIME, &start);
+	simplify_move_list(&moves);
+	clock_gettime(CLOCK_REALTIME, &stop);
+	
+	accum = stop.tv_nsec - start.tv_nsec;
+	printf("Simplified move list in %ldns\n", accum);
+
+	print_move_list(moves);
+
+	free_move_list(&moves);
 	return 0;
 }
-
-struct timespec timer_start(){
-    struct timespec start_time;
-    clock_gettime(CLOCK_REALTIME, &start_time);
-    return start_time;
-}
-
-long timer_end(struct timespec start_time){
-    struct timespec end_time;
-    clock_gettime(CLOCK_REALTIME, &end_time);
-    long diffInNanos = (end_time.tv_sec - start_time.tv_sec) * (long)1e9 + (end_time.tv_nsec - start_time.tv_nsec);
-    return diffInNanos;
-}
-

@@ -8,10 +8,8 @@ void init_move_list(move_list_s* move_list, size_t size) {
 
 // return a new move_list_s with a distinct yet identical array of the moves from move_list
 void copy_move_list(move_list_s *cpy, move_list_s *src) {
-	if (cpy->list != NULL) {
-		free_move_list(cpy);
-		init_move_list(cpy, src->size);
-	}
+	free_move_list(cpy);
+	init_move_list(cpy, src->size);
 	
 	(void)memcpy(cpy->list, src->list, src->length * sizeof(move_s));
 
@@ -19,7 +17,12 @@ void copy_move_list(move_list_s *cpy, move_list_s *src) {
 	cpy->length = src->length;
 }
 
-void insert_move(move_list_s *move_list, move_s move, size_t index) {
+int insert_move(move_list_s *move_list, move_s move, size_t index) {
+	// don't try to insert if index is out of bounds
+	if (index > move_list->length) {
+		return 0;
+	}
+
 	// reallocate the move list if needed
 	if (move_list->length == move_list->size) {
 		move_list->size *= 2;
@@ -35,9 +38,17 @@ void insert_move(move_list_s *move_list, move_s move, size_t index) {
 
 	move_list->list[index] = move;
 	move_list->length++;
+
+	// insertion was successful
+	return 1;
 }
 
-void delete_move(move_list_s *move_list, size_t index) {
+int delete_move(move_list_s *move_list, size_t index) {
+	// don't try to delete if index is out of bounds
+	if (index >= move_list->length) {
+		return 0;
+	}
+
 	// if this isn't just a "pop", bring moves ahead of index one index down
 	// and if it is, there's no need to do anything besides decrement length
 	if (index != move_list->length - 1) {
@@ -52,10 +63,106 @@ void delete_move(move_list_s *move_list, size_t index) {
 		move_list->size *= 1/2;
 		move_list->list = (move_s*)realloc(move_list->list, sizeof(move_s) * move_list->size);
 	}
+
+	// deletion was successful
+	return 1;
 }
 
 void free_move_list(move_list_s *move_list) {
 	free(move_list->list);
 	move_list->list = NULL;
 	move_list->size = move_list->length = 0;
+}
+
+// opposite face lookup for the simplifier
+const face_e opposite_faces[NUM_FACES] = {
+	FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U
+};
+
+// simplify sequences in the move list
+void simplify_move_list(move_list_s* move_list) {
+	size_t idx = 0;
+	size_t idx2 = 1;
+	while (idx2 < move_list->length) {
+		while (move_list->list[idx2].face == opposite_faces[move_list->list[idx].face]
+				&& idx2 < move_list->length - 1) {
+			idx2++;
+		}
+
+		while (move_list->list[idx].face == move_list->list[idx2].face) {
+			move_list->list[idx].turns += move_list->list[idx2].turns;
+			delete_move(move_list, idx2);
+
+			// if we can't delete any more moves after this, stop
+			if (idx2 >= move_list->length) {
+				break;
+			}
+		}
+
+		// if our combined move consititutes zero moves, get rid of it
+		// and if we can, check the move before this deleted move for
+		// simplification
+		if (move_list->list[idx].turns % 4 == 0) {
+			delete_move(move_list, idx);
+			idx = (idx > 0) ? idx - 2 : idx - 1;
+		}
+		idx++;
+		idx2 = idx + 1;
+	}
+}
+
+void print_move(move_s move) {
+	char move_char = get_char(move.face);
+	char turn_char;
+
+	switch (positive_mod(move.turns, 4)) {
+		case 0:
+			turn_char = '0';
+			break;
+		case 1:
+			turn_char = ' ';
+			break;
+		case 2:
+			turn_char = '2';
+			break;
+		case 3:
+			turn_char = '\'';
+			break;
+	}
+
+	if (move.face >= NUM_FACES) {
+		printf("INVALID MOVE\n");
+	}
+
+	printf("%c%c\n", move_char, turn_char);
+}
+
+void print_move_list(move_list_s move_list) {
+	for (size_t idx = 0; idx < move_list.length; idx++) {
+		char move_char = get_char(move_list.list[idx].face);
+		char turn_char;
+
+		switch (positive_mod(move_list.list[idx].turns, 4)) {
+			case 0:
+				turn_char = '0';
+				break;
+			case 1:
+				turn_char = ' ';
+				break;
+			case 2:
+				turn_char = '2';
+				break;
+			case 3:
+				turn_char = '\'';
+				break;
+		}
+
+		if (move_list.list[idx].face >= NUM_FACES) {
+			printf("Invalid move in move list\n");
+			return;
+		}
+
+		printf("%c%c", move_char, turn_char);
+	}
+	printf("\n");
 }
