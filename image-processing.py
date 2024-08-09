@@ -86,7 +86,7 @@ def normalizeImg(image):
 
 ####### Testing #######
 def test(directory):
-    image = normalizeImg(captureImg(directory, "test"))
+    image = captureImg(directory, "test")
     saveImg(image, directory, "normal.jpg")
 
 test("/home/pi/cubeImgs/")
