@@ -29,7 +29,7 @@ def saveImg(image, directory, filename):
 def delImg(directory, filename):
     print(f"deleting {filename} from {directory}")
     chdir(directory)
-    subprocess.run(["rm", f"{filename}"])
+    subprocess.run(["rm", f"{filename}.jpg"])
 
 ####### CAPTURE IMAGE WITH PICAMERA #######
 # vars
@@ -45,6 +45,7 @@ imgSize = 60 # for resolution
 
 ####### CAPTURE IMAGE WITH LIBCAMERA #######
 def captureImg(directory, filename):
+    chdir(directory)
     # capture image using libcamera with specified resolution
     subprocess.run([
         "libcamera-still", 
