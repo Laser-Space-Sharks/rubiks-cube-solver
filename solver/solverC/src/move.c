@@ -102,18 +102,17 @@ void simplify_move_list(move_list_s* moves) {
 		// if our combined move consititutes zero moves, get rid of it
 		// and if we can, check the move before this deleted move for
 		// simplification. Additionally, if there's a sequence of 
-		// opposite face moves before this move, try to move the index
-		// back to an earlier move of the same face
+		// consequtive same/opposite face moves, keep moving idx back
+		// to account for new simplifications of earlier moves.
 		if (moves->list[idx].turns % 4 == 0) {
 			delete_move(moves, idx);
-			idx = (idx > 0) ? idx - 1 : idx;
-			while (idx > 0) {
+			while (--idx > 0) {
 				if (!(moves->list[idx].face == opposite_faces[moves->list[idx - 1].face] ||
 					  moves->list[idx].face == moves->list[idx-1].face)) {
 					break;
 				}
-				idx--;
 			}
+			printf("new idx: %ld\n", idx);
 			idx2 = idx + 1;
 			continue;
 		}
