@@ -60,7 +60,7 @@ int delete_move(move_list_s *move_list, size_t index) {
 	// for memory leak protection: decrease the size of the move list if length <= 1/4 size
 	// and the length is still greater than INIT_MOVE_LIST_SIZE
 	if (move_list->length >= MIN_LIST_RESIZE && move_list->length <= move_list->size/4) {
-		move_list->size *= 1/2;
+		move_list->size /= 2;
 		move_list->list = (move_s*)realloc(move_list->list, sizeof(move_s) * move_list->size);
 	}
 
@@ -80,32 +80,44 @@ const face_e opposite_faces[NUM_FACES] = {
 };
 
 // simplify sequences in the move list
-void simplify_move_list(move_list_s* move_list) {
+void simplify_move_list(move_list_s* moves) {
 	size_t idx = 0;
 	size_t idx2 = 1;
-	while (idx2 < move_list->length) {
-		while (move_list->list[idx2].face == opposite_faces[move_list->list[idx].face]
-				&& idx2 < move_list->length - 1) {
-			idx2++;
+	while (idx2 < moves->length) {
+		while (moves->list[idx2].face == opposite_faces[moves->list[idx].face]
+				&& idx2 < moves->length - 1 && idx2 > 0) {
+			idx2 += 1;
 		}
 
-		while (move_list->list[idx].face == move_list->list[idx2].face) {
-			move_list->list[idx].turns += move_list->list[idx2].turns;
-			delete_move(move_list, idx2);
+		while (moves->list[idx].face == moves->list[idx2].face) {
+			moves->list[idx].turns += moves->list[idx2].turns;
+			delete_move(moves, idx2);
 
 			// if we can't delete any more moves after this, stop
-			if (idx2 >= move_list->length) {
+			if (idx2 >= moves->length || idx >= moves->length) {
 				break;
 			}
 		}
 
 		// if our combined move consititutes zero moves, get rid of it
 		// and if we can, check the move before this deleted move for
-		// simplification
-		if (move_list->list[idx].turns % 4 == 0) {
-			delete_move(move_list, idx);
-			idx = (idx > 0) ? idx - 2 : idx - 1;
+		// simplification. Additionally, if there's a sequence of 
+		// opposite face moves before this move, try to move the index
+		// back to an earlier move of the same face
+		if (moves->list[idx].turns % 4 == 0) {
+			delete_move(moves, idx);
+			idx = (idx > 0) ? idx - 1 : idx;
+			while (idx > 0) {
+				if (!(moves->list[idx].face == opposite_faces[moves->list[idx - 1].face] ||
+					  moves->list[idx].face == moves->list[idx-1].face)) {
+					break;
+				}
+				idx--;
+			}
+			idx2 = idx + 1;
+			continue;
 		}
+
 		idx++;
 		idx2 = idx + 1;
 	}
