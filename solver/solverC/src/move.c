@@ -112,7 +112,6 @@ void simplify_move_list(move_list_s* moves) {
 					break;
 				}
 			}
-			printf("new idx: %ld\n", idx);
 			idx2 = idx + 1;
 			continue;
 		}
