@@ -86,15 +86,23 @@ int main(int argc, char *argv[]) {
 		.turns = -1
 	};
 
+	move_s lprime = {
+		.face = FACE_L,
+		.turns = -1
+	};
+
 	move_list_s moves;
 	init_move_list(&moves, 10);
 	insert_move(&moves, f, moves.length);
 	insert_move(&moves, u, moves.length);
 	insert_move(&moves, d, moves.length);
+	insert_move(&moves, d, moves.length);
+	insert_move(&moves, d, moves.length);
+	insert_move(&moves, d, moves.length);
+	insert_move(&moves, l, moves.length);
+	insert_move(&moves, lprime, moves.length);
 	insert_move(&moves, u, moves.length);
 	insert_move(&moves, u, moves.length);
-	insert_move(&moves, u, moves.length);
-	insert_move(&moves, dprime, moves.length);
 	insert_move(&moves, b, moves.length);
 	insert_move(&moves, b, moves.length);
 	insert_move(&moves, f, moves.length);
