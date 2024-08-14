@@ -2,11 +2,14 @@
 import RPi.GPIO as GPIO
 import time
 
+#Set GPIO numbering method
+GPIO.setmode(GPIO.BOARD)
+
 #Set pin 11 to output
-GPIO.setup(0, GPIO.OUT)
+GPIO.setup(11, GPIO.OUT)
 
 #Note: 11 is the pin, 50 is 50hz for servo
-servoOne = GPIO.PWM(0,50)
+servoOne = GPIO.PWM(11,50)
 
 #PWM with pulse of 0 means pulse off
 servoOne.start(0)
