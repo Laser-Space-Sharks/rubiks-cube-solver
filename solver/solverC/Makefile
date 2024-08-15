@@ -1,4 +1,5 @@
 CXX := clang
+
 CXXFLAGS  := -O2 -Wall -Wno-missing-braces -std=gnu23
 COBJFLAGS := $(CXXFLAGS) -c
 
@@ -35,6 +36,6 @@ makedir:
 all: $(TARGET)
 
 .PHONY: clean
-clean: 
+clean:
 	@echo Cleaning: $(CLEANLIST)
 	@rm -rf $(CLEANLIST)
