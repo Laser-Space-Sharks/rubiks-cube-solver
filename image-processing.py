@@ -9,6 +9,9 @@
 # using opposing center rules
 # Then store the cube
 
+# capture and normalize Image
+# image = normalizeImg(captureImg(CUBE_IMG_FOLDER, "cubeScan"))
+
 ####### IMPORTS #######
 import cv2
 from time import sleep, perf_counter
@@ -33,6 +36,24 @@ RIGHT_FACE_COLOR_ARRAY = [
     [4, 0, -1, 1, 3, -1] #green is face
 ]
 
+LOWER_BOUND_COLORS = [
+    [41, 60, 30], # yellow
+    [350, 60, 30], # red
+    [146, 60, 30], # blue
+    [0, 0, 50], # white
+    [21, 60, 30], # orange
+    [71, 60, 30], # green
+]
+
+UPPER_BOUND_COLORS = [
+    [70, 100, 100], # yellow
+    [20, 100, 100], # red
+    [260, 100, 100], # blue
+    [100, 100, 100], # white
+    [40, 100, 100], # orange
+    [260, 100, 100], # green
+]
+
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
     chdir(directory)
@@ -55,7 +76,7 @@ def delImg(directory, filename):
 #     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
 ####### CAPTURE IMAGE WITH LIBCAMERA #######
-def captureImg(directory, filename):
+def captureImg(directory, filename, delete=True):
     chdir(directory)
     # capture image using libcamera with specified resolution
     subprocess.run([
@@ -70,7 +91,8 @@ def captureImg(directory, filename):
     # read image into cv2
     image = cv2.imread(f"{directory}{filename}.jpg", cv2.IMREAD_COLOR)
     # delete image from directory
-    delImg(directory, filename)
+    if delete:
+        delImg(directory, filename)
     return image
 
 ####### NORMALIZE #######
@@ -94,18 +116,27 @@ def normalizeImg(image):
     return normalizedImage
 
 ####### Color Analysis #######
-def colorAnalysis(pixel):
-    # returns the color of the pixel as a number
+def colorAnalysis(peice):
+    # returns the color of the peice as a number
     # yellow=0, red=1, blue=2, white=3, orange=4 green=5
-    # to be implimented... sorry guys coming soon!
-    print("hello world")
+    for i in range(6):
+        # mask all colors except the color we are looking for right now
+        # turns into an array where everything that is a 1 is in that range, everything else is 0
+        mask = cv2.inRange(peice, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
+        # find the percentage of the piece that is in that color range
+        percent = (cv2.countNonZero(mask)/(IMG_SIZE^2)) * 100
+        # if more than 70% of the cube is that color, return the color
+        if percent >= 70:
+            return i
+    # if nothing hits you've got a problem 
+    return -1
 
 def genColorsArray(frontCenterColor, upCenterColor):
     # returns an array with elements representing cube faces
     # at an index that represents the color of that face
     # Elements up=0, right=1, front=2, left=3, back=4, down=5
     # Index [yellow, red, blue, white, orange, green]
-    colorsArray = np.zeros(shape=(6))
+    colorsArray = np.zeros(shape=(6)) # create array of zeros 
     colorsArray[upCenterColor] = 0 # redundant but keep for now
     colorsArray[frontCenterColor] = 2
     rightCenterColor = RIGHT_FACE_COLOR_ARRAY[frontCenterColor][upCenterColor]
@@ -127,13 +158,29 @@ def genColorsArray(frontCenterColor, upCenterColor):
 
 
 ####### Scan Cube #######
-def scanFace(colorsArray):
-    image = normalizeImg(captureImg(CUBE_IMG_FOLDER, "cubeScan"))
+def scanFace(image, colorsArray):
+    # split image into 9 sections
     imagePixels = [
-        [image[IMG_SIZE/6][IMG_SIZE/6], image[IMG_SIZE/2][IMG_SIZE/6], image[5*(IMG_SIZE/6)][IMG_SIZE/6]],
-        [image[IMG_SIZE/6][IMG_SIZE/2], image[IMG_SIZE/2][IMG_SIZE/2], image[5*(IMG_SIZE/6)][IMG_SIZE/2]],
-        [image[IMG_SIZE/6][5*(IMG_SIZE/6)], image[IMG_SIZE/2][5*(IMG_SIZE/6)], image[5*(IMG_SIZE/6)][5*(IMG_SIZE/6)]]
+        # First row of peices shiftcube->(1, 2, 3)
+        [
+            image[0:IMG_SIZE/3, 0:IMG_SIZE/3], 
+            image[0:IMG_SIZE/3, IMG_SIZE/3:2*(IMG_SIZE)/3], 
+            image[0:IMG_SIZE/3, 2*(IMG_SIZE)/3:IMG_SIZE]
+        ],
+        # second row of peices shiftcube->(8, center, 4)
+        [
+            image[IMG_SIZE/3:2*(IMG_SIZE)/3, 0:IMG_SIZE/3], 
+            image[IMG_SIZE/3:2*(IMG_SIZE)/3, IMG_SIZE/3:2*(IMG_SIZE)/3], 
+            image[IMG_SIZE/3:2*(IMG_SIZE)/3, 2*(IMG_SIZE)/3:IMG_SIZE]
+        ],
+        # third row of peices shiftcube->(7, 6, 5)
+        [
+            image[2*(IMG_SIZE)/3:IMG_SIZE, 0:IMG_SIZE/3], 
+            image[2*(IMG_SIZE)/3:IMG_SIZE, IMG_SIZE/3:2*(IMG_SIZE)/3], 
+            image[2*(IMG_SIZE)/3:IMG_SIZE, 2*(IMG_SIZE)/3:IMG_SIZE]
+        ]
     ]
+    # represent face as array 
     face = np.zeros(shape=(3,3))
     for i in range(3):
         for j in range(3):
@@ -141,10 +188,12 @@ def scanFace(colorsArray):
             face[i][j] = colorsArray[colorAnalysis(peice)]
 
 
-def getCenterColor():
-    image = normalizeImg(captureImg(CUBE_IMG_FOLDER, "cubeScan"))
-    centerPix = image[IMG_SIZE/2][IMG_SIZE/2]
-    return colorAnalysis(centerPix)
-
+def getCenterColor(image):
+    centerPiece = image[IMG_SIZE/3:2*(IMG_SIZE)/3, IMG_SIZE/3:2*(IMG_SIZE)/3]
+    return colorAnalysis(centerPiece)
     
 
+####### FORMAT TO SHIFTCUBE #######
+def convertToShiftCube(cubeArray):
+    shiftCube = np.zeros(shape=6, dtype=uint64)
+    return shiftCube
