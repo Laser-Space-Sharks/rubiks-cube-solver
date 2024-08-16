@@ -9,6 +9,13 @@ GPIO.setmode(GPIO.BOARD)
 
 #Set pin the 8 servo pins to output
 GPIO.setup(11, GPIO.OUT)
+GPIO.setup(12, GPIO.OUT)
+GPIO.setup(13, GPIO.OUT)
+GPIO.setup(15, GPIO.OUT)
+GPIO.setup(35, GPIO.OUT)
+GPIO.setup(36, GPIO.OUT)
+GPIO.setup(37, GPIO.OUT)
+GPIO.setup(38, GPIO.OUT)
 
 #Note: First is the pin, 50 is 50hz for servo. Direction is relative to the camera
 # Sets up 8 variables for the servos
@@ -22,6 +29,7 @@ toggleR = GPIO.PWM(36,50)
 toggleU = GPIO.PWM(37,50)
 toggleD = GPIO.PWM(38,50)
 
+referenceList[servoL, servoR, servoU, servoD, toggleL, toggleR, toggleU, toggleD][0*8]
 #PWM with pulse of 0 means pulse off
 
 #The String that is fed is made into an array split between each space
@@ -32,28 +40,40 @@ for cmd in commandList:
     for i in SyncedCmdList:
         match str(i): 	
             case "R":
-                print("One")
+                servoR.ChangeDutyCycle(duty)
             case "R'":
                 print("Two")
+            case "R2":
+                print("l")
             case "L":
                 print("Three")
             case "L'":
                 print("yo")
+            case "L2":
+                print("l")
             case "U":
                 print("l")
             case "U'":
+                print("l")
+            case "U2":
                 print("l")
             case "D":
                 print("l")
             case "D'":
                 print("l")
+            case "D2":
+                print("l")
             case "F":
                 print("l")
             case "F'":
                 print("l")
+            case "F2":
+                print("l")
             case "B":
                 print("l")
             case "B'":
+                print("l")
+            case "B2":
                 print("l")
             case "R:E":
                 print("l")
