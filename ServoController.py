@@ -60,12 +60,27 @@ def servo_full_turn(servoIndex):
         servoList[servoIndex].ChangeDutyCycle(referenceList[servoIndex]-10)
         referenceList[0] -= 10
 
+def servo_engage(servoIndex, b_clockwise):
+        if (b_clockwise):
+            servoList[servoIndex].ChangeDutyCycle(10)
+            referenceList[servoIndex] = 10
+        else:
+            servoList[servoIndex].ChangeDutyCycle(2)
+            referenceList[servoIndex] = 2
+def servo_disengage(servoIndex, b_clockwise):
+        if (b_clockwise):
+            servoList[servoIndex].ChangeDutyCycle(2)
+            referenceList[servoIndex] = 2
+        else:
+            servoList[servoIndex].ChangeDutyCycle(10)
+            referenceList[servoIndex] = 10
+
+
+
 #The String that is fed is made into an array split between each space
-commandList = testString.split()
-for cmd in commandList:
+for cmd in testString.split():
     #Splits commands at '.' for commands that happen together
-    SyncedCmdList = cmd.split('.')
-    for i in SyncedCmdList:
+    for i in cmd.split('.'):
         match str(i): 	
             case "R":
                 servo_single_turn(0, True)
@@ -92,43 +107,46 @@ for cmd in commandList:
             case "D2":
                 servo_full_turn(3)
             case "F":
-                print("bad")
+                print("Face bad")
             case "F'":
-                print("bad")
+                print("Face bad")
             case "F2":
-                print("bad")
+                print("Face bad")
             case "B":
-                print("bad")
+                print("Face bad")
             case "B'":
-                print("bad")
+                print("Face bad")
             case "B2":
-                print("bad")
+                print("Face bad")
             case "R:E":
-                print("bad")
+                servo_engage(4, False)
             case "R:E'":
-                print("bad")
+                servo_disengage(4, False)
             case "L:E":
-                print("bad")
+                servo_engage(5, True)
             case "L:E'":
-                print("bad")
+                servo_disengage(5, True)
             case "U:E":
-                print("bad")
+                servo_engage(6, False)
             case "U:E'":
-                print("bad")
+                servo_disengage(6, False)
             case "D:E":
-                print("bad")
+                servo_engage(7, True)
             case "D:E'":
-                print("bad")
+                servo_disengage(7, True)
             case _:
                 print("Invalid Command!" + str(i))
     time.sleep()
+    #Call on the servo that is moving after it reaches its destination to stop its jittering
+    #servo.ChangeDutyCycle(0)
 
 #Loop for duty values 2-12 (0-180 degrees respectively)
-for duty in range(2, 13):
+'''for duty in range(2, 13):
     servoOne.ChangeDutyCycle(duty)
     time.sleep(0.3)
     servoOne.ChangeDutyCycle(0)
     time.sleep(0.7)
+'''
 
 #Clean things up at the end
 servoOne.stop()
