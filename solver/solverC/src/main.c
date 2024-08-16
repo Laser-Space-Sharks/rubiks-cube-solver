@@ -98,7 +98,6 @@ int main(int argc, char *argv[]) {
     insert_move(&moves, d, moves.length);
     insert_move(&moves, d, moves.length);
     insert_move(&moves, d, moves.length);
-    insert_move(&moves, d, moves.length);
     insert_move(&moves, l, moves.length);
     insert_move(&moves, lprime, moves.length);
     insert_move(&moves, u, moves.length);
