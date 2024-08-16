@@ -75,6 +75,7 @@ def delImg(directory, filename):
 #     camera.capture_file(image, format='bmp')
 #     return cv2.imdecode(image, cv2.IMREAD_COLOR)
 
+# This one takes less time on our raspberrypi 1
 ####### CAPTURE IMAGE WITH LIBCAMERA #######
 def captureImg(directory, filename, delete=True):
     chdir(directory)
