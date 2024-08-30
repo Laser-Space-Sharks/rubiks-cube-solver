@@ -5,7 +5,7 @@ with open("scan.txt") as file:
         pattern = "Nmap scan report for "
         time.sleep(0.2)
         if line[:len(pattern)] == pattern:
-            ip_address = line[len(pattern):]
+            ip_address = line[len(pattern):].strip("()")
             command = f"ssh pi@{ip_address}"
             try:
                 os.system(command)
