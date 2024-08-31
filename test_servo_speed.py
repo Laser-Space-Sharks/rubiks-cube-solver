@@ -111,7 +111,7 @@ def test_Ds():
 def test_cube_rotations():
     '''
     This will pre-move the spin servos such that when the arms engage, they can execute cube rotations.
-    Make sure to first be holding the cube in the correct position before the R and L arms grab it from you.
+    Before running this function, you must be holding the cube in the correct position so that the R and L arms can grab it from you.
     These cube rotations will be executed in this order: X, X', Y, Y', Y2, Y2'
     At the end, the U and D arms will disengage, and the cube should follow the D arm downward.
     '''
