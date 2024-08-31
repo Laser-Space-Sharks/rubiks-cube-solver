@@ -25,6 +25,14 @@ servoList = [GPIO.PWM(12,50), # R
             GPIO.PWM(37,50), # Ue
             GPIO.PWM(38,50)] # De
 
+'''
+In order to run these tests, it is required that all claws are attached to the servos properly.
+These tests are designed to work most efficiently with the following setup:
+        An active slow motion recording of the robot, 
+        with the robot placed next to a separate stopwatch, 
+        such that the time on the stopwatch is readable in the recording at all frames.
+'''
+
 
 def reset():
     '''
