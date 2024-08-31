@@ -31,6 +31,9 @@ These tests are designed to work most efficiently with the following setup:
         An active slow motion recording of the robot, 
         with the robot placed next to a separate stopwatch, 
         such that the time on the stopwatch is readable in the recording at all frames.
+Only 1 test function should be called during the script at a time.
+Record time durations to this sheet:
+        https://docs.google.com/spreadsheets/d/1PuI8Q2aX0sLzlmPV-v4c8BlATaFTM2Tq02kpt9i3mWQ/edit?usp=sharing
 '''
 
 
