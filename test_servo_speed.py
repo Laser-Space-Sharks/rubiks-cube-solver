@@ -42,7 +42,7 @@ def reset():
     This will reset all the arms to be disengaged and at 0 degrees.
     If the claws are not attached or are not at 0 degrees after the reset(), fix the claw attachments.
     '''
-    referenceList = [2,2,2,2,10,2,10,2]
+    referenceList = [12,12,12,12,2,10,2,10]
     for i in range(4, 8): servoList[i].ChangeDutyCycle(referenceList[i])
     time.sleep(1)
     for i in range(4): servoList[i].ChangeDutyCycle(referenceList[i])
@@ -171,3 +171,6 @@ def test_cube_rotations():
     time.sleep(1)
     servoList[6].ChangeDutyCycle(0)
     servoList[7].ChangeDutyCycle(0)
+
+for servo in servoList: servo.stop()
+GPIO.cleanup()
