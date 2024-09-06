@@ -188,6 +188,8 @@ def scanFace(image, colorsArray):
             peice = imagePixels[i][j]
             face[i][j] = colorsArray[colorAnalysis(peice)]
 
+    return face
+
 
 def getCenterColor(image):
     centerPiece = image[IMG_SIZE/3:2*(IMG_SIZE)/3, IMG_SIZE/3:2*(IMG_SIZE)/3]
@@ -198,3 +200,15 @@ def getCenterColor(image):
 def convertToShiftCube(cubeArray):
     shiftCube = np.zeros(shape=6, dtype=uint64)
     return shiftCube
+
+####### TESTING #######
+def test():
+    print("Starting Test!")
+    image = captureImg("/home/pi/cubeImgs/", "testCube")
+    print("image captured!")
+    colorsArray = genColorsArray(2, 1)
+    print("starting face scan!")
+    cubeArray = scanFace(image, colorsArray)
+    print("face scanned!")
+    print(cubeArray)
+
