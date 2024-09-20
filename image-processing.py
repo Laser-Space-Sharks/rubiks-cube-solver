@@ -125,6 +125,7 @@ def colorAnalysis(peice):
         # mask all colors except the color we are looking for right now
         # turns into an array where everything that is a 1 is in that range, everything else is 0
         mask = cv2.inRange(peice, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
+        print(f"color is {i} \n {mask}")
         # find the percentage of the piece that is in that color range
         percent = (cv2.countNonZero(mask)//(PIECE_SIZE^2)) * 100
         # if more than 70% of the cube is that color, return the color
