@@ -206,9 +206,18 @@ def test():
     print("Starting Test!")
     image = captureImg("/home/pi/cubeImgs/", "testCube")
     print("image captured!")
+    image = normalizeImg(image)
     colorsArray = genColorsArray(2, 1)
     print("starting face scan!")
     cubeArray = scanFace(image, colorsArray)
     print("face scanned!")
     print(cubeArray)
+
+def testImgNormal():
+    print("Starting Test!")
+    image = captureImg("/home/pi/cubeImgs/", "testCube", delete=False)
+    print("image captured!")
+    normImg = normalizeImg(image)
+    saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm")
+
 
