@@ -37,21 +37,21 @@ RIGHT_FACE_COLOR_ARRAY = [
 ]
 
 LOWER_BOUND_COLORS = [
-    [41, 60, 30], # yellow
-    [350, 60, 30], # red
-    [146, 60, 30], # blue
-    [0, 0, 50], # white
-    [21, 60, 30], # orange
-    [71, 60, 30], # green
+    np.asarray([41, 60, 30]), # yellow
+    np.asarray([350, 60, 30]), # red
+    np.asarray([146, 60, 30]), # blue
+    np.asarray([0, 0, 50]), # white
+    np.asarray([21, 60, 30]), # orange
+    np.asarray([71, 60, 30]), # green
 ]
 
 UPPER_BOUND_COLORS = [
-    [70, 100, 100], # yellow
-    [20, 100, 100], # red
-    [260, 100, 100], # blue
-    [100, 100, 100], # white
-    [40, 100, 100], # orange
-    [260, 100, 100], # green
+    np.asarray([70, 100, 100]), # yellow
+    np.asarray([20, 100, 100]), # red
+    np.asarray([260, 100, 100]), # blue
+    np.asarray([100, 100, 100]), # white
+    np.asarray([40, 100, 100]), # orange
+    np.asarray([260, 100, 100]), # green
 ]
 
 ####### SAVE AN IMAGE #######
@@ -164,21 +164,21 @@ def scanFace(image, colorsArray):
     imagePixels = [
         # First row of peices shiftcube->(1, 2, 3)
         [
-            image[0:IMG_SIZE/3, 0:IMG_SIZE/3], 
-            image[0:IMG_SIZE/3, IMG_SIZE/3:2*(IMG_SIZE)/3], 
-            image[0:IMG_SIZE/3, 2*(IMG_SIZE)/3:IMG_SIZE]
+            image[0:IMG_SIZE//3, 0:IMG_SIZE//3], 
+            image[0:IMG_SIZE//3, IMG_SIZE//3:2*(IMG_SIZE)//3], 
+            image[0:IMG_SIZE//3, 2*(IMG_SIZE)//3:IMG_SIZE]
         ],
         # second row of peices shiftcube->(8, center, 4)
         [
-            image[IMG_SIZE/3:2*(IMG_SIZE)/3, 0:IMG_SIZE/3], 
-            image[IMG_SIZE/3:2*(IMG_SIZE)/3, IMG_SIZE/3:2*(IMG_SIZE)/3], 
-            image[IMG_SIZE/3:2*(IMG_SIZE)/3, 2*(IMG_SIZE)/3:IMG_SIZE]
+            image[IMG_SIZE//3:2*(IMG_SIZE)//3, 0:IMG_SIZE//3], 
+            image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3], 
+            image[IMG_SIZE//3:2*(IMG_SIZE)//3, 2*(IMG_SIZE)//3:IMG_SIZE]
         ],
         # third row of peices shiftcube->(7, 6, 5)
         [
-            image[2*(IMG_SIZE)/3:IMG_SIZE, 0:IMG_SIZE/3], 
-            image[2*(IMG_SIZE)/3:IMG_SIZE, IMG_SIZE/3:2*(IMG_SIZE)/3], 
-            image[2*(IMG_SIZE)/3:IMG_SIZE, 2*(IMG_SIZE)/3:IMG_SIZE]
+            image[2*(IMG_SIZE)//3:IMG_SIZE, 0:IMG_SIZE//3], 
+            image[2*(IMG_SIZE)//3:IMG_SIZE, IMG_SIZE//3:2*(IMG_SIZE)//3], 
+            image[2*(IMG_SIZE)//3:IMG_SIZE, 2*(IMG_SIZE)//3:IMG_SIZE]
         ]
     ]
     # represent face as array 
@@ -192,7 +192,7 @@ def scanFace(image, colorsArray):
 
 
 def getCenterColor(image):
-    centerPiece = image[IMG_SIZE/3:2*(IMG_SIZE)/3, IMG_SIZE/3:2*(IMG_SIZE)/3]
+    centerPiece = image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3]
     return colorAnalysis(centerPiece)
     
 
@@ -204,7 +204,7 @@ def convertToShiftCube(cubeArray):
 ####### TESTING #######
 def test():
     print("Starting Test!")
-    image = captureImg("/home/pi/cubeImgs/", "testCube")
+    image = captureImg("/home/pi/cubeImgs/", "testCube", delete=False)
     print("image captured!")
     colorsArray = genColorsArray(2, 1)
     print("starting face scan!")
@@ -212,3 +212,4 @@ def test():
     print("face scanned!")
     print(cubeArray)
 
+test()
