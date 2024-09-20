@@ -218,6 +218,6 @@ def testImgNormal():
     image = captureImg("/home/pi/cubeImgs/", "testCube", delete=False)
     print("image captured!")
     normImg = normalizeImg(image)
-    saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm")
+    saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm.jpg")
 
 testImgNormal()
