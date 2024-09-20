@@ -220,4 +220,4 @@ def testImgNormal():
     normImg = normalizeImg(image)
     saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm.jpg")
 
-testImgNormal()
+test()
