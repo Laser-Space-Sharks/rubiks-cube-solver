@@ -220,4 +220,5 @@ def testImgNormal():
     normImg = normalizeImg(image)
     saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm")
 
+testImgNormal()
 
