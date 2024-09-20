@@ -24,6 +24,7 @@ import subprocess
 
 ####### VARS #######
 IMG_SIZE = 60 # for resolution
+PIECE_SIZE = IMG_SIZE//3
 CUBE_IMG_FOLDER = "/home/pi/cubeImgs/"
 # rows are face, cols are up
 RIGHT_FACE_COLOR_ARRAY = [
@@ -125,7 +126,7 @@ def colorAnalysis(peice):
         # turns into an array where everything that is a 1 is in that range, everything else is 0
         mask = cv2.inRange(peice, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
         # find the percentage of the piece that is in that color range
-        percent = (cv2.countNonZero(mask)/(IMG_SIZE^2)) * 100
+        percent = (cv2.countNonZero(mask)//(PIECE_SIZE^2)) * 100
         # if more than 70% of the cube is that color, return the color
         if percent >= 70:
             return i
