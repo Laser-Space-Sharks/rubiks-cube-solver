@@ -16,7 +16,7 @@
 import cv2
 from time import sleep, perf_counter
 # from picamera2 import Picamera2
-import numpy as np
+from numpy import asarray, zeros
 # import matplotlib as plt
 from os import chdir
 # from io import BytesIO
@@ -38,21 +38,21 @@ RIGHT_FACE_COLOR_ARRAY = [
 ]
 
 LOWER_BOUND_COLORS = [
-    np.asarray([41, 60, 30]), # yellow
-    np.asarray([350, 60, 30]), # red
-    np.asarray([146, 60, 30]), # blue
-    np.asarray([0, 0, 50]), # white
-    np.asarray([21, 60, 30]), # orange
-    np.asarray([71, 60, 30]), # green
+    asarray([41, 60, 30]), # yellow
+    asarray([350, 60, 30]), # red
+    asarray([146, 60, 30]), # blue
+    asarray([0, 0, 50]), # white
+    asarray([21, 60, 30]), # orange
+    asarray([71, 60, 30]), # green
 ]
 
 UPPER_BOUND_COLORS = [
-    np.asarray([70, 100, 100]), # yellow
-    np.asarray([20, 100, 100]), # red
-    np.asarray([260, 100, 100]), # blue
-    np.asarray([100, 100, 100]), # white
-    np.asarray([40, 100, 100]), # orange
-    np.asarray([260, 100, 100]), # green
+    asarray([70, 100, 100]), # yellow
+    asarray([20, 100, 100]), # red
+    asarray([260, 100, 100]), # blue
+    asarray([100, 100, 100]), # white
+    asarray([40, 100, 100]), # orange
+    asarray([260, 100, 100]), # green
 ]
 
 ####### SAVE AN IMAGE #######
@@ -138,7 +138,7 @@ def genColorsArray(frontCenterColor, upCenterColor):
     # at an index that represents the color of that face
     # Elements up=0, right=1, front=2, left=3, back=4, down=5
     # Index [yellow, red, blue, white, orange, green]
-    colorsArray = np.zeros(shape=(6)) # create array of zeros 
+    colorsArray = zeros(shape=(6)) # create array of zeros 
     colorsArray[upCenterColor] = 0 # redundant but keep for now
     colorsArray[frontCenterColor] = 2
     rightCenterColor = RIGHT_FACE_COLOR_ARRAY[frontCenterColor][upCenterColor]
@@ -183,7 +183,7 @@ def scanFace(image, colorsArray):
         ]
     ]
     # represent face as array 
-    face = np.zeros(shape=(3,3))
+    face = zeros(shape=(3,3))
     for i in range(3):
         for j in range(3):
             peice = imagePixels[i][j]
@@ -199,7 +199,7 @@ def getCenterColor(image):
 
 ####### FORMAT TO SHIFTCUBE #######
 def convertToShiftCube(cubeArray):
-    shiftCube = np.zeros(shape=6, dtype=uint64)
+    shiftCube = zeros(shape=6, dtype=uint64)
     return shiftCube
 
 ####### TESTING #######
