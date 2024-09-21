@@ -1,6 +1,6 @@
 #include "move.h"
 
-int init_move_list(move_list_s* moves, size_t size) {
+int init_move_list(move_list_s *moves, size_t size) {
     moves->list = (move_s*)malloc(size * sizeof(move_s));
     moves->length = 0;
     moves->size = size;
@@ -11,7 +11,7 @@ int init_move_list(move_list_s* moves, size_t size) {
 int copy_move_list(move_list_s *cpy, move_list_s *src) {
     free_move_list(cpy);
     init_move_list(cpy, src->size);
-	
+
     (void)memcpy(cpy->list, src->list, src->length * sizeof(move_s));
 
     cpy->size = src->size;
@@ -28,13 +28,13 @@ int insert_move(move_list_s *moves, move_s move, size_t index) {
 	// reallocate the move list if needed
     if (moves->length == moves->size) {
         moves->size *= 2;
-        moves->list = (move_s*)realloc(moves->list, 
+        moves->list = (move_s*)realloc(moves->list,
                                        moves->size * sizeof(move_s));
     }
 
     // if this isn't an append, move everything after index one space upif
     if (index != moves->length) {
-        (void)memmove(moves->list + index + 1, moves->list + index, 
+        (void)memmove(moves->list + index + 1, moves->list + index,
                       (moves->length - (index + 1)) * sizeof(move_s));
     }
 
@@ -54,7 +54,7 @@ int delete_move(move_list_s *moves, size_t index) {
     // if this isn't just a "pop", bring moves ahead of index one index down
     // and if it is, there's no need to do anything besides decrement length
     if (index != moves->length - 1) {
-        (void)memmove(moves->list + index, moves->list + index + 1, 
+        (void)memmove(moves->list + index, moves->list + index + 1,
                       sizeof(move_s) * (moves->length - (index + 1)));
     }
     moves->length--;
@@ -82,7 +82,7 @@ const face_e opposite_faces[NUM_FACES] = {
 };
 
 // simplify move sequences in the move list
-void simplify_move_list(move_list_s* moves) {
+void simplify_move_list(move_list_s *moves) {
     size_t idx = 0;
     size_t idx2 = 1;
     while (idx2 < moves->length) {
@@ -103,7 +103,7 @@ void simplify_move_list(move_list_s* moves) {
 
         /* if our combined move consititutes zero moves, get rid of it
         * and if we can, check the move before this deleted move for
-        * simplification. Additionally, if there's a sequence of 
+        * simplification. Additionally, if there's a sequence of
         * consequtive same/opposite face moves, keep moving idx back
         * to account for new potential simplifications of earlier moves.
         */
@@ -124,6 +124,70 @@ void simplify_move_list(move_list_s* moves) {
     }
 }
 
+int move_list_from_move_str(move_list_s *moves, char *move_str) {
+    free_move_list(moves);
+
+    init_move_list(moves, 10);
+
+    move_s move = (move_s) {
+        .face = FACE_NULL,
+        .turns = 1
+    };
+
+    size_t idx;
+    for (idx = 0; move_str[idx] != '\0'; idx++) {
+        if (move_str[idx] == ' ') {
+            if (move.face != FACE_NULL && move.turns % 4 != 0) {
+                insert_move(moves, move, moves->length);
+
+                // reset the move to add
+                move.face = FACE_NULL;
+                move.turns = 1;
+            }
+            continue;
+        }
+
+        switch (move_str[idx]) {
+            case 'U':
+                move.face = FACE_U;
+                break;
+            case 'R':
+                move.face = FACE_R;
+                break;
+            case 'F':
+                move.face = FACE_F;
+                break;
+            case 'L':
+                move.face = FACE_L;
+                break;
+            case 'B':
+                move.face = FACE_B;
+                break;
+            case 'D':
+                move.face = FACE_D;
+                break;
+            case '\'': // ' (prime) move
+                move.turns = -1;
+                break;
+            default:
+                if (move_str[idx] >= '0' && move_str[idx] <= '9') {
+                    move.turns = (move_str[idx] - '0') % 4;
+                    break;
+                }
+                // if we're here we've hit an invalid character, moves
+                // will store the generated move list up until that character
+                return 0;
+        }
+    }
+
+    // if we've processed a clockwise quarter turn that comes at the end of
+    // the move string we need to add it to the moves
+    if (move.face != FACE_NULL) {
+        insert_move(moves, move, moves->length);
+    }
+    return 1;
+}
+
 void print_move(move_s move) {
 	char move_char = get_char(move.face);
 	char turn_char;
@@ -131,9 +195,6 @@ void print_move(move_s move) {
 	switch (positive_mod(move.turns, 4)) {
 		case 0:
 			turn_char = '0';
-			break;
-		case 1:
-			turn_char = ' ';
 			break;
 		case 2:
 			turn_char = '2';
@@ -147,20 +208,20 @@ void print_move(move_s move) {
 		printf("INVALID MOVE\n");
 	}
 
-	printf("%c%c\n", move_char, turn_char);
+	printf("%c", move_char);
+	if (move.turns != 1) {
+	   printf("%c\n", turn_char);
+	}
 }
 
 void print_move_list(move_list_s moves) {
 	for (size_t idx = 0; idx < moves.length; idx++) {
 		char move_char = get_char(moves.list[idx].face);
-		char turn_char;
+		char turn_char = '\0';
 
 		switch (positive_mod(moves.list[idx].turns, 4)) {
 			case 0:
 				turn_char = '0';
-				break;
-			case 1:
-				turn_char = ' ';
 				break;
 			case 2:
 				turn_char = '2';
@@ -175,7 +236,11 @@ void print_move_list(move_list_s moves) {
 			return;
 		}
 
-		printf("%c%c", move_char, turn_char);
+		printf("%c", move_char);
+		if (turn_char) {
+    		printf("%c", turn_char);
+		}
+		printf(" ");
 	}
 	printf("\n");
 }
