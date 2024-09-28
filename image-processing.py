@@ -197,12 +197,18 @@ def analyzeFace(image, colorsArray):
             image[2*(IMG_SIZE)//3:IMG_SIZE, 2*(IMG_SIZE)//3:IMG_SIZE]
         ]
     ]
+    peiceNamesRow = ["upper", "center", "lower"]
+    peiceNamesCol = ["left", "center", "right"]
     # represent face as array 
     face = zeros(shape=(3,3))
     for i in range(3):
         for j in range(3):
             peice = imagePixels[i][j]
-            face[i][j] = colorsArray[colorAnalysis(peice)]
+            print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
+            #face[i][j] = colorsArray[colorAnalysis(peice)]
+            peiceColor = colorAnalysis(peice)
+            face[i][j] = colorsArray[peiceColor]
+            print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
 
     return face
 
