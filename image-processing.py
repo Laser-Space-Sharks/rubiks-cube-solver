@@ -22,10 +22,15 @@ from os import chdir
 # from io import BytesIO
 import subprocess
 
-####### VARS #######
+####### CONST VARs #######
+## (Because hard coding is bad!) ##
 IMG_SIZE = 60 # for resolution
 PIECE_SIZE = IMG_SIZE//3
 CUBE_IMG_FOLDER = "/home/pi/cubeImgs/"
+# colors array good for translating numerical colors into english
+# does not work when cube translated into colorblind notation (obvi)
+# use translateToColors() with a colorsArray to translate colorblind notation
+COLORS = ["yellow", "red", "blue", "white", "orange", "green"]
 # rows are face, cols are up
 RIGHT_FACE_COLOR_ARRAY = [
     #[yellow, red, blue, white, orange, green]
@@ -37,6 +42,7 @@ RIGHT_FACE_COLOR_ARRAY = [
     [4, 0, -1, 1, 3, -1] #green is face
 ]
 
+# determines what colors are defined as in HSV
 LOWER_BOUND_COLORS = [
     asarray([41, 60, 30]), # yellow
     asarray([350, 60, 30]), # red
@@ -67,6 +73,7 @@ def delImg(directory, filename):
     chdir(directory)
     subprocess.run(["rm", f"{filename}.jpg"])
 
+# caution untested 
 ####### CAPTURE IMAGE WITH PICAMERA #######
 # def captureImgPiCam():
 #     camera = Picamera2()
@@ -90,7 +97,7 @@ def captureImg(directory, filename, delete=True):
         "--height",
         f"{IMG_SIZE}"])
     
-    # read image into cv2
+    # read image into cv2, which uses bgr by default
     image = cv2.imread(f"{directory}{filename}.jpg", cv2.IMREAD_COLOR)
     # delete image from directory
     if delete:
@@ -100,7 +107,7 @@ def captureImg(directory, filename, delete=True):
 ####### NORMALIZE #######
 def normalizeImg(image):
     # split into color channels
-    r, g, b = cv2.split(image)
+    b, g, r = cv2.split(image)
 
     # normalize channels
     bNorm = cv2.normalize(b, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
@@ -108,10 +115,10 @@ def normalizeImg(image):
     rNorm = cv2.normalize(r, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
     
     # merge
-    mergedImage = cv2.merge([rNorm, gNorm, bNorm])
+    mergedImage = cv2.merge([bNorm, gNorm, rNorm])
 
     # changing colorspaces
-    normalizedImage = cv2.cvtColor(mergedImage, cv2.COLOR_RGB2HSV)
+    normalizedImage = cv2.cvtColor(mergedImage, cv2.COLOR_BGR2HSV)
     # Here we are using hue saturation value (HSV) in order to easily define 
     # a range of values that we can the colors of a given cube to fall between
 
@@ -159,9 +166,16 @@ def genColorsArray(frontCenterColor, upCenterColor):
 
     return colorsArray
 
+def translateToColors(faceArray, colorsArray):
+    faceColors = zeros(shape=(3,3))
+    for i in range(3):
+        for j in range(3):
+            faceColors[i][j] = colorsArray.index(faceArray[i][j])
+    
+    return faceColors
 
 ####### Scan Cube #######
-def scanFace(image, colorsArray):
+def analyzeFace(image, colorsArray):
     # split image into 9 sections
     imagePixels = [
         # First row of peices shiftcube->(1, 2, 3)
@@ -192,6 +206,14 @@ def scanFace(image, colorsArray):
 
     return face
 
+def scanFace(colorsArray, readSavedImg=False, filename=""):
+    if readSavedImg:
+        image = cv2.imread(f"{CUBE_IMG_FOLDER}{filename}.jpg", cv2.IMREAD_COLOR)
+    else:
+        image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
+    
+    normalizedImg = normalizeImg(image)
+    return analyzeFace(normalizedImg, colorsArray)
 
 def getCenterColor(image):
     centerPiece = image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3]
@@ -204,16 +226,18 @@ def convertToShiftCube(cubeArray):
     return shiftCube
 
 ####### TESTING #######
-def test():
+def test(frontCenterColor, upCenterColor, testImgFilename):
+    print("------------------------------")
     print("Starting Test!")
-    image = captureImg("/home/pi/cubeImgs/", "testCube", delete=False)
-    print("image captured!")
-    image = normalizeImg(image)
-    colorsArray = genColorsArray(2, 1)
-    print("starting face scan!")
-    cubeArray = scanFace(image, colorsArray)
+    print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
+    colorsArray = genColorsArray(frontCenterColor, upCenterColor)
+    print("colors array generated")
+    print(f"Colors array: {colorsArray}")
+    print("Starting Face Scan!")
+    faceArray = scanFace(colorsArray, readSavedImg=True, filename=testImgFilename)
     print("face scanned!")
-    print(cubeArray)
+    print(faceArray)
+    print(translateToColors(faceArray, colorsArray))
 
 def testImgNormal():
     print("Starting Test!")
@@ -221,5 +245,10 @@ def testImgNormal():
     print("image captured!")
     normImg = normalizeImg(image)
     saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm.jpg")
+
+def testColorBoundries(imagePath):
+    image = cv2.imread(f"{imagePath}.jpg", cv2.IMREAD_COLOR)
+    color = colorAnalysis(image)
+    print(COLORS[color])
 
 test()
