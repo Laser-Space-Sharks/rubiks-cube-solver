@@ -130,7 +130,7 @@ def colorAnalysis(peice):
     # yellow=0, red=1, blue=2, white=3, orange=4 green=5
     for i in range(6):
         # mask all colors except the color we are looking for right now
-        # turns into an array where everything that is a 1 is in that range, everything else is 0
+        # turns into an array where everything that is set to 255 is in that range, everything else is 0
         mask = cv2.inRange(peice, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
         print(f"color is {COLORS[i]} \n {mask}")
         # find the percentage of the piece that is in that color range
