@@ -170,7 +170,7 @@ def translateToColors(faceArray, colorsArray):
     faceColors = zeros(shape=(3,3))
     for i in range(3):
         for j in range(3):
-            faceColors[i][j] = where(colorsArray == int(faceArray[i][j]))
+            faceColors[i][j] = where(colorsArray == int(faceArray[i][j]))[0]
     
     return faceColors
 
