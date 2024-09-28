@@ -1,6 +1,9 @@
 CXX := clang
 
 CXXFLAGS  := -O2 -Wall -Wno-missing-braces -std=gnu23
+CXXFLAGS  += --target=armv6-linux-gnueabihf --sysroot=/usr/arm-linux-gnueabihf/sysroot
+CXXFLAGS  += -march=armv6
+CXXFLAGS  += -fuse-ld=lld
 COBJFLAGS := $(CXXFLAGS) -c
 
 
