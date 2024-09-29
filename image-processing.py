@@ -170,7 +170,7 @@ def translateToColors(faceArray, colorsArray):
     faceColors = zeros(shape=(3,3))
     for i in range(3):
         for j in range(3):
-            faceColors[i][j] = where(colorsArray == int(faceArray[i][j]))[0]
+            faceColors[i][j] = COLORS[int(where(colorsArray == int(faceArray[i][j]))[0])]
     
     return faceColors
 
@@ -205,6 +205,7 @@ def analyzeFace(image, colorsArray):
         for j in range(3):
             peice = imagePixels[i][j]
             print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
+            print(peice)
             #face[i][j] = colorsArray[colorAnalysis(peice)]
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
@@ -218,7 +219,8 @@ def scanFace(colorsArray, readSavedImg=False, filename=""):
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     
-    normalizedImg = normalizeImg(image)
+    #normalizedImg = normalizeImg(image)
+    normalizedImage = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     return analyzeFace(normalizedImg, colorsArray)
 
 def getCenterColor(image):
