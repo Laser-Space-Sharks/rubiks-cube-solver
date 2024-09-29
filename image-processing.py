@@ -132,6 +132,8 @@ def colorAnalysis(peice):
         # mask all colors except the color we are looking for right now
         # turns into an array where everything that is set to 255 is in that range, everything else is 0
         mask = cv2.inRange(peice, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
+        cv2.imshow('Mask', mask)
+        cv2.waitKey(0)
         print(f"color is {COLORS[i]} \n {mask}")
         # find the percentage of the piece that is in that color range
         percent = (cv2.countNonZero(mask)//(PIECE_SIZE^2)) * 100
@@ -167,7 +169,7 @@ def genColorsArray(frontCenterColor, upCenterColor):
     return colorsArray
 
 def translateToColors(faceArray, colorsArray):
-    faceColors = zeros(shape=(3,3))
+    faceColors = [["", "", ""],["", "", ""],["", "", ""]]
     for i in range(3):
         for j in range(3):
             faceColors[i][j] = COLORS[int(where(colorsArray == int(faceArray[i][j]))[0])]
@@ -205,7 +207,8 @@ def analyzeFace(image, colorsArray):
         for j in range(3):
             peice = imagePixels[i][j]
             print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
-            print(peice)
+            cv.imshow("Display window", peice)
+            cv.waitKey(0)
             #face[i][j] = colorsArray[colorAnalysis(peice)]
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
