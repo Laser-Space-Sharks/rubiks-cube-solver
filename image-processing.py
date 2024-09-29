@@ -58,7 +58,7 @@ UPPER_BOUND_COLORS = [
     asarray([260, 100, 100]), # blue
     asarray([100, 100, 100]), # white
     asarray([40, 100, 100]), # orange
-    asarray([260, 100, 100]), # green
+    asarray([145, 100, 100]), # green
 ]
 
 ####### SAVE AN IMAGE #######
