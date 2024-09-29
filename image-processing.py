@@ -207,8 +207,8 @@ def analyzeFace(image, colorsArray):
         for j in range(3):
             peice = imagePixels[i][j]
             print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
-            cv.imshow("Display window", peice)
-            cv.waitKey(0)
+            cv2.imshow("Display window", peice)
+            cv2.waitKey(0)
             #face[i][j] = colorsArray[colorAnalysis(peice)]
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
