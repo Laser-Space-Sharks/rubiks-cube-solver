@@ -221,7 +221,7 @@ def scanFace(colorsArray, readSavedImg=False, filename=""):
     
     #normalizedImg = normalizeImg(image)
     normalizedImage = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    return analyzeFace(normalizedImg, colorsArray)
+    return analyzeFace(normalizedImage, colorsArray)
 
 def getCenterColor(image):
     centerPiece = image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3]
