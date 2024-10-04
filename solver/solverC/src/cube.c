@@ -11,51 +11,13 @@ int compare_cubes(cube_s a, cube_s b) {
     return 1;
 }
 
-// lookup table for the faces that connect to a given face
-const face_e side_faces[NUM_FACES][NUM_SIDES] = {
-    {FACE_B, FACE_R, FACE_F, FACE_L}, // FACE_U 
-    {FACE_U, FACE_B, FACE_D, FACE_F}, // FACE_R 
-    {FACE_U, FACE_R, FACE_D, FACE_L}, // FACE_F
-    {FACE_U, FACE_F, FACE_D, FACE_B}, // FACE_L
-    {FACE_U, FACE_L, FACE_D, FACE_R}, // FACE_B
-    {FACE_F, FACE_R, FACE_B, FACE_L}  // FACE_D
-};
-
-// bitmasks for masking a given side of a face
-const uint64_t side_masks[NUM_SIDES] = {
-    0x0000000000FFFFFF, // SIDE_U
-    0x000000FFFFFF0000, // SIDE_R
-    0x00FFFFFF00000000, // SIDE_D
-    0xFFFF0000000000FF  // SIDE_L
-};
-
-// lookup table for getting masks to the side pieces that a given face "sees"
-const uint64_t turn_mask_table[NUM_FACES][NUM_SIDES] = {
-    {side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U]}, // FACE_U
-    {side_masks[SIDE_R], side_masks[SIDE_L], side_masks[SIDE_R], side_masks[SIDE_R]}, // FACE_R
-    {side_masks[SIDE_D], side_masks[SIDE_L], side_masks[SIDE_U], side_masks[SIDE_R]}, // FACE F
-    {side_masks[SIDE_L], side_masks[SIDE_L], side_masks[SIDE_L], side_masks[SIDE_R]}, // FACE L
-    {side_masks[SIDE_U], side_masks[SIDE_L], side_masks[SIDE_D], side_masks[SIDE_R]}, // FACE B
-    {side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D]}  // FACE D
-};
-
-// lookup table for getting sides in a given face turn
-const side_e turn_sides_table[NUM_FACES][NUM_SIDES] = {
-    {SIDE_U, SIDE_U, SIDE_U, SIDE_U}, // FACE_U
-    {SIDE_R, SIDE_L, SIDE_R, SIDE_R}, // FACE_R
-    {SIDE_D, SIDE_L, SIDE_U, SIDE_R}, // FACE F
-    {SIDE_L, SIDE_L, SIDE_L, SIDE_R}, // FACE L
-    {SIDE_U, SIDE_L, SIDE_D, SIDE_R}, // FACE B
-    {SIDE_D, SIDE_D, SIDE_D, SIDE_D}  // FACE D
-};
-
 // Apply a move to the cube using bitshifts
 void apply_move(cube_s *cube, move_s move) {
     // make the turn count positive 
     uint8_t turns_pos = positive_mod(move.turns, NUM_SIDES);
 
     // copy current side faces for the loop
-    uint64_t og_sfaces[NUM_SIDES] = {
+    uint32_t og_sfaces[NUM_SIDES] = {
         cube->state[side_faces[move.face][SIDE_U]],
         cube->state[side_faces[move.face][SIDE_R]],
         cube->state[side_faces[move.face][SIDE_D]],
@@ -63,7 +25,7 @@ void apply_move(cube_s *cube, move_s move) {
     };
 
     // rotate the face to be turned
-    cube->state[move.face] = rolq(cube->state[move.face], 16 * turns_pos);
+    cube->state[move.face] = rolq(cube->state[move.face], 8 * turns_pos);
 
     // rotate the side pieces
     for (side_e side = SIDE_U; side < NUM_SIDES; side++) {
@@ -76,7 +38,7 @@ void apply_move(cube_s *cube, move_s move) {
         cube->state[target_sface] &= ~turn_mask_table[move.face][target_side];
         // set the bits of the side pieces 
         cube->state[target_sface] |=  turn_mask_table[move.face][target_side] & 
-                                      rolq(og_sfaces[side], side_turns*16);
+                                      rolq(og_sfaces[side], side_turns*8);
 	}
 }
 
@@ -87,7 +49,7 @@ void apply_move_list(cube_s *cube, move_list_s *moves) {
     }
 }
 
-void print_face(uint64_t face_bits) {
+void print_face(uint32_t face_bits) {
     printf("%c%c%c\n%c %c\n%c%c%c\n", 
            get_piece(face_bits, 0), get_piece(face_bits, 1), get_piece(face_bits, 2),
            get_piece(face_bits, 7),                          get_piece(face_bits, 3),
