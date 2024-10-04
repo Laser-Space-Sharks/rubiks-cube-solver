@@ -15,7 +15,6 @@ int stage_recursion(cube_s cube, cube_s mask, move_list_s *moves, uint8_t depth)
     if (depth == 0) {
         if (compare_cubes(mask_cube(cube, mask), mask_cube(SOLVED_SHIFTCUBE, mask))) {
             // holy crap, we did it!
-            printf("We found a solution!\n");
             return 1;
         }
 
