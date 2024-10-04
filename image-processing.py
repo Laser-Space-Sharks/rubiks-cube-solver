@@ -13,7 +13,7 @@
 # image = normalizeImg(captureImg(CUBE_IMG_FOLDER, "cubeScan"))
 
 ####### IMPORTS #######
-from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\ 
+from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\
 NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
 imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
