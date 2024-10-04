@@ -290,4 +290,4 @@ def testColorBoundries(imagePath):
     color = colorAnalysis(image)
     print(COLORS[color])
 
-test(1, 2)
+test(1, 2, "test666")
