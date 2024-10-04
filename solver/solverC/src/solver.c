@@ -1,47 +1,81 @@
 #include "solver.h"
 #include "cube.h"
+#include "main.h"
+#include "move.h"
 
-const cube_s cross_mask = {
-    .state[FACE_U] = 0x0000000000000000,
-    .state[FACE_R] = 0x0000FF0000000000,
-    .state[FACE_F] = 0x0000FF0000000000,
-    .state[FACE_L] = 0x0000FF0000000000,
-    .state[FACE_B] = 0x0000FF0000000000,
-    .state[FACE_D] = 0xFF00FF00FF00FF00
-};
 
-const cube_s f2l_mask = {
-    .state[FACE_U] = 0x0000000000000000,
-    .state[FACE_R] = 0xFFFF00FFFF000000,
-    .state[FACE_F] = 0xFFFF00FFFF000000,
-    .state[FACE_L] = 0xFFFF00FFFF000000,
-    .state[FACE_B] = 0xFFFF00FFFF000000,
-    .state[FACE_D] = 0x00FF00FF00FF00FF
-};
+cube_s mask_cube(cube_s cube, cube_s mask) {
+    for (face_e face = FACE_U; face < NUM_FACES; face++) {
+        cube.state[face] &= mask.state[face];
+    }
+    return cube;
+}
 
-const cube_s oll_mask = {
-    .state[FACE_U] = 0xFFFFFFFFFFFFFFFF,
-    .state[FACE_R] = 0x0000000000FFFFFF,
-    .state[FACE_F] = 0x0000000000FFFFFF,
-    .state[FACE_L] = 0x0000000000FFFFFF,
-    .state[FACE_B] = 0x0000000000FFFFFF,
-    .state[FACE_D] = 0x0000000000000000
-};
+int stage_recursion(cube_s cube, cube_s mask, move_list_s *moves, uint8_t depth) {
+    if (depth == 0) {
+        if (compare_cubes(mask_cube(cube, mask), mask_cube(SOLVED_SHIFTCUBE, mask))) {
+            // holy crap, we did it!
+            printf("We found a solution!\n");
+            return 1;
+        }
 
-const cube_s pll_mask = {
-    .state[FACE_U] = 0x0000000000000000,
-    .state[FACE_R] = 0x0000000000FFFFFF,
-    .state[FACE_F] = 0x0000000000FFFFFF,
-    .state[FACE_L] = 0x0000000000FFFFFF,
-    .state[FACE_B] = 0x0000000000FFFFFF,
-    .state[FACE_D] = 0x0000000000000000
-};
+        // no dice
+        return 0;
+    }
+
+    // depth > 0
+    move_s move = NULL_MOVE;
+    move_s prev_move = (moves->length > 1) ? moves->list[moves->length-1] : NULL_MOVE;
+    move_s prev_prev_move = (moves->length > 2) ? moves->list[moves->length - 2] : NULL_MOVE;
+
+    for (face_e face = FACE_U; face < NUM_FACES; face++) {
+        if (face == prev_move.face) {
+            continue;
+        }
+
+        if (prev_prev_move.face != FACE_NULL) {
+            if (face == opposite_faces[prev_move.face] &&
+                (face == prev_prev_move.face || face > prev_move.face)) {
+                continue;
+            }
+        }
+
+        move.face = face;
+        for (int8_t turns = 1; turns < 4; turns++) {
+            move.turns = turns;
+            insert_move(moves, move, moves->length);
+            apply_move(&cube, move);
+            if (stage_recursion(cube, mask, moves, depth - 1)) {
+                // we did it!
+                return 1;
+            }
+            delete_move(moves, moves->length-1);
+            move.turns = -turns;
+            apply_move(&cube, move); // undo move if it doesn't pan out
+        }
+    }
+
+    return 0;
+}
+
+// Iterative deepening depth-first search
+move_list_s solve_stage(cube_s cube, cube_s mask) {
+    move_list_s moves;
+    init_move_list(&moves, 8);
+
+    for (uint8_t depth = 1; depth <= 20; depth++) {
+        if (stage_recursion(cube, mask, &moves, depth)) {
+            break;
+        }
+    }
+    return moves;
+}
 
 void print_masks() {
     printf("Cross mask:\n");
     print_cube(cross_mask);
     printf("F2L mask:\n");
-    print_cube(f2l_mask);
+    print_cube(f2l_1mask);
     printf("OLL mask:\n");
     print_cube(oll_mask);
     printf("PLL mask:\n");
