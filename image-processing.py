@@ -13,14 +13,15 @@
 # image = normalizeImg(captureImg(CUBE_IMG_FOLDER, "cubeScan"))
 
 ####### IMPORTS #######
-import cv2
-from time import sleep, perf_counter
+from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\ 
+NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
+imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
 from numpy import asarray, zeros, where, copy
 # import matplotlib as plt
 from os import chdir
 # from io import BytesIO
-import subprocess
+from subprocess import run
 
 #######################################################
 ####### Constant Variables            #################
@@ -72,14 +73,14 @@ UPPER_BOUND_COLORS = [
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
     chdir(directory)
-    cv2.imwrite(filename, image)
+    imwrite(filename, image)
     print(f"{filename} successfully saved!")
 
 ####### DELETE IMAGE FILE #######
 def delImg(directory, filename):
     print(f"deleting {filename} from {directory}")
     chdir(directory)
-    subprocess.run(["rm", f"{filename}.jpg"])
+    run(["rm", f"{filename}.jpg"])
 
 # caution untested 
 ####### CAPTURE IMAGE WITH PICAMERA #######
@@ -89,14 +90,14 @@ def delImg(directory, filename):
 #     sleep(5) # give camera time to wake
 #     image = BytesIO()
 #     camera.capture_file(image, format='bmp')
-#     return cv2.imdecode(image, cv2.IMREAD_COLOR)
+#     return imdecode(image, IMREAD_COLOR)
 
 # This one takes less time on our raspberrypi 1
 ####### CAPTURE IMAGE WITH LIBCAMERA #######
 def captureImg(directory, filename, delete=True):
     chdir(directory)
     # capture image using libcamera with specified resolution
-    subprocess.run([
+    run([
         "libcamera-still", 
         "-o", 
         f"{filename}.jpg", 
@@ -106,7 +107,7 @@ def captureImg(directory, filename, delete=True):
         f"{IMG_SIZE}"])
     
     # read image into cv2, which uses bgr by default
-    image = cv2.imread(f"{directory}{filename}.jpg", cv2.IMREAD_COLOR)
+    image = imread(f"{directory}{filename}.jpg", IMREAD_COLOR)
     # delete image from directory
     if delete:
         delImg(directory, filename)
@@ -115,18 +116,18 @@ def captureImg(directory, filename, delete=True):
 ####### NORMALIZE #######
 def normalizeImg(image):
     # split into color channels
-    b, g, r = cv2.split(image)
+    b, g, r = split(image)
 
     # normalize channels
-    bNorm = cv2.normalize(b, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
-    gNorm = cv2.normalize(g, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
-    rNorm = cv2.normalize(r, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
+    bNorm = normalize(b, None, alpha=0, beta=255, norm_type=NORM_MINMAX)
+    gNorm = normalize(g, None, alpha=0, beta=255, norm_type=NORM_MINMAX)
+    rNorm = normalize(r, None, alpha=0, beta=255, norm_type=NORM_MINMAX)
     
     # merge
-    mergedImage = cv2.merge([bNorm, gNorm, rNorm])
+    mergedImage = merge([bNorm, gNorm, rNorm])
 
     # changing colorspaces
-    normalizedImage = cv2.cvtColor(mergedImage, cv2.COLOR_BGR2HSV)
+    normalizedImage = cvtColor(mergedImage, COLOR_BGR2HSV)
     # Here we are using hue saturation value (HSV) in order to easily define 
     # a range of values that we can the colors of a given cube to fall between
 
@@ -143,12 +144,12 @@ def colorAnalysis(peice):
         # mask all colors except the color we are looking for right now
         # turns into an array where everything that is set to 255 is in that range, everything else is 0
         peiceCopy = peice
-        mask = cv2.inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
+        mask = inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
         print(f"checking for {COLORS[i]}")
-        # cv2.imshow('Mask', mask)
-        # cv2.waitKey(0)
+        # imshow('Mask', mask)
+        # waitKey(0)
         # find the percentage of the piece that is in that color range
-        percent = (cv2.countNonZero(mask)/(PIECE_SIZE**2)) * 100
+        percent = (countNonZero(mask)/(PIECE_SIZE**2)) * 100
         # if more than 70% of the cube is that color, return the color
         if percent >= 60 or (i == 1 and redColorCheck(peiceCopy, mask) >= 60):
             return i
@@ -158,9 +159,9 @@ def colorAnalysis(peice):
 def redColorCheck(peiceCopy, mask1):
     red2Upper = asarray([6, 255, 255])
     red2Lower = asarray([0, 50, 70])
-    mask2 = cv2.inRange(peiceCopy, red2Lower, red2Upper)
-    result = cv2.bitwise_or(mask1, mask2)
-    return (cv2.countNonZero(result)/(PIECE_SIZE**2)) * 100
+    mask2 = inRange(peiceCopy, red2Lower, red2Upper)
+    result = bitwise_or(mask1, mask2)
+    return (countNonZero(result)/(PIECE_SIZE**2)) * 100
 
 def genColorsArray(frontCenterColor, upCenterColor):
     # returns an array with elements representing cube faces
@@ -230,8 +231,8 @@ def analyzeFace(image, colorsArray):
             peice = imagePixels[i][j].copy()
             peiceCopy = peice.copy()
             print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
-            # cv2.imshow("Display window", cv2.cvtColor(peiceCopy, cv2.COLOR_HSV2BGR))
-            # cv2.waitKey(0)
+            # imshow("Display window", cvtColor(peiceCopy, COLOR_HSV2BGR))
+            # waitKey(0)
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
             print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
@@ -240,12 +241,12 @@ def analyzeFace(image, colorsArray):
 
 def scanFace(colorsArray, readSavedImg=False, filename=""):
     if readSavedImg:
-        image = cv2.imread(f"{CUBE_IMG_FOLDER}{filename}.jpg", cv2.IMREAD_COLOR)
+        image = imread(f"{CUBE_IMG_FOLDER}{filename}.jpg", IMREAD_COLOR)
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     
     #normalizedImg = normalizeImg(image)
-    normalizedImage = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    normalizedImage = cvtColor(image, COLOR_BGR2HSV)
     return analyzeFace(normalizedImage, colorsArray)
 
 def getCenterColor(image):
@@ -285,7 +286,7 @@ def testImgNormal():
     saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm.jpg")
 
 def testColorBoundries(imagePath):
-    image = cv2.imread(f"{imagePath}.jpg", cv2.IMREAD_COLOR)
+    image = imread(f"{imagePath}.jpg", IMREAD_COLOR)
     color = colorAnalysis(image)
     print(COLORS[color])
 
