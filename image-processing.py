@@ -16,14 +16,18 @@
 import cv2
 from time import sleep, perf_counter
 # from picamera2 import Picamera2
-from numpy import asarray, zeros, where
+from numpy import asarray, zeros, where, copy
 # import matplotlib as plt
 from os import chdir
 # from io import BytesIO
 import subprocess
 
-####### CONST VARs #######
-## (Because hard coding is bad!) ##
+#######################################################
+####### Constant Variables            #################
+####### (Because hard coding is bad!) #################
+#######################################################
+
+# Abbie_img_folder = "/home/aagowl/Downloads/"
 IMG_SIZE = 60 # for resolution
 PIECE_SIZE = IMG_SIZE//3
 CUBE_IMG_FOLDER = "/home/pi/cubeImgs/"
@@ -44,22 +48,26 @@ RIGHT_FACE_COLOR_ARRAY = [
 
 # determines what colors are defined as in HSV
 LOWER_BOUND_COLORS = [
-    asarray([41, 60, 30]), # yellow
-    asarray([350, 60, 30]), # red
-    asarray([146, 60, 30]), # blue
-    asarray([0, 0, 50]), # white
-    asarray([21, 60, 30]), # orange
-    asarray([71, 60, 30]), # green
+    asarray([25, 50, 70]), # yellow
+    asarray([159, 50, 70]), # red
+    asarray([90, 50, 70]), # blue
+    asarray([0, 0, 231]), # white
+    asarray([10, 50, 70]), # orange
+    asarray([36, 50, 70]), # green
 ]
 
 UPPER_BOUND_COLORS = [
-    asarray([70, 100, 100]), # yellow
-    asarray([20, 100, 100]), # red
-    asarray([260, 100, 100]), # blue
-    asarray([100, 100, 100]), # white
-    asarray([40, 100, 100]), # orange
-    asarray([260, 100, 100]), # green
+    asarray([35, 255, 255]), # yellow
+    asarray([180, 255, 255]), # red
+    asarray([128, 255, 255]), # blue
+    asarray([180, 18, 255]), # white
+    asarray([24, 255, 255]), # orange
+    asarray([89, 255, 255]), # green
 ]
+
+#######################################################
+####### File Actions ##################################
+#######################################################
 
 ####### SAVE AN IMAGE #######
 def saveImg(image, directory, filename):
@@ -124,22 +132,35 @@ def normalizeImg(image):
 
     return normalizedImage
 
-####### Color Analysis #######
+#######################################################
+####### Color Analysis ################################
+#######################################################
+
 def colorAnalysis(peice):
     # returns the color of the peice as a number
     # yellow=0, red=1, blue=2, white=3, orange=4 green=5
     for i in range(6):
         # mask all colors except the color we are looking for right now
-        # turns into an array where everything that is a 1 is in that range, everything else is 0
-        mask = cv2.inRange(peice, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
-        print(f"color is {COLORS[i]} \n {mask}")
+        # turns into an array where everything that is set to 255 is in that range, everything else is 0
+        peiceCopy = peice
+        mask = cv2.inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
+        # print(f"checking for {COLORS[i]}")
+        # cv2.imshow('Mask', mask)
+        # cv2.waitKey(0)
         # find the percentage of the piece that is in that color range
-        percent = (cv2.countNonZero(mask)//(PIECE_SIZE^2)) * 100
+        percent = (cv2.countNonZero(mask)/(PIECE_SIZE**2)) * 100
         # if more than 70% of the cube is that color, return the color
-        if percent >= 70:
+        if percent >= 60 or (i == 1 and redColorCheck(peiceCopy, mask) >= 60):
             return i
     # if nothing hits you've got a problem 
     return -1
+
+def redColorCheck(peiceCopy, mask1):
+    red2Upper = asarray([9, 255, 255])
+    red2Lower = asarray([0, 50, 70])
+    mask2 = cv2.inRange(peiceCopy, red2Lower, red2Upper)
+    result = cv2.bitwise_or(mask1, mask2)
+    return (cv2.countNonZero(result)/(PIECE_SIZE**2)) * 100
 
 def genColorsArray(frontCenterColor, upCenterColor):
     # returns an array with elements representing cube faces
@@ -167,14 +188,17 @@ def genColorsArray(frontCenterColor, upCenterColor):
     return colorsArray
 
 def translateToColors(faceArray, colorsArray):
-    faceColors = zeros(shape=(3,3))
+    faceColors = [["", "", ""],["", "", ""],["", "", ""]]
     for i in range(3):
         for j in range(3):
-            faceColors[i][j] = where(colorsArray == faceArray[i][j])
+            faceColors[i][j] = COLORS[int(where(colorsArray == int(faceArray[i][j]))[0])]
     
     return faceColors
 
-####### Scan Cube #######
+#######################################################
+####### Scan Cube #####################################
+#######################################################
+
 def analyzeFace(image, colorsArray):
     # split image into 9 sections
     imagePixels = [
@@ -197,12 +221,19 @@ def analyzeFace(image, colorsArray):
             image[2*(IMG_SIZE)//3:IMG_SIZE, 2*(IMG_SIZE)//3:IMG_SIZE]
         ]
     ]
+    peiceNamesRow = ["upper", "center", "lower"]
+    peiceNamesCol = ["left", "center", "right"]
     # represent face as array 
     face = zeros(shape=(3,3))
     for i in range(3):
         for j in range(3):
-            peice = imagePixels[i][j]
+            peice = imagePixels[i][j].copy()
+            peiceCopy = peice.copy()
+            # print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
+            # cv2.imshow("Display window", cv2.cvtColor(peiceCopy, cv2.COLOR_HSV2BGR))
+            # cv2.waitKey(0)
             face[i][j] = colorsArray[colorAnalysis(peice)]
+            print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
 
     return face
 
@@ -212,20 +243,26 @@ def scanFace(colorsArray, readSavedImg=False, filename=""):
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     
-    normalizedImg = normalizeImg(image)
-    return analyzeFace(normalizedImg, colorsArray)
+    #normalizedImg = normalizeImg(image)
+    normalizedImage = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    return analyzeFace(normalizedImage, colorsArray)
 
 def getCenterColor(image):
     centerPiece = image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3]
     return colorAnalysis(centerPiece)
     
+#######################################################
+####### Format to ShiftCube ###########################
+#######################################################
 
-####### FORMAT TO SHIFTCUBE #######
 def convertToShiftCube(cubeArray):
     shiftCube = zeros(shape=6, dtype=uint64)
     return shiftCube
 
-####### TESTING #######
+#######################################################
+####### Testing #######################################
+#######################################################
+
 def test(frontCenterColor, upCenterColor, testImgFilename):
     print("------------------------------")
     print("Starting Test!")
@@ -251,4 +288,4 @@ def testColorBoundries(imagePath):
     color = colorAnalysis(image)
     print(COLORS[color])
 
-test(2, 0, "test")
+test(2, 0, "test9")
