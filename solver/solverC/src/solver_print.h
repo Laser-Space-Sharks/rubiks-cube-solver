@@ -5,7 +5,7 @@
 
 // ASCII display utilities
 char get_char(face_e face);
-char get_piece(uint64_t face, uint8_t index);
-void print_piece(uint64_t face, uint8_t index);
+char get_piece(uint32_t face, uint8_t index);
+void print_piece(uint32_t face, uint8_t index);
 
 #endif // SOLVER_PRINT_H
