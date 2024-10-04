@@ -1,7 +1,8 @@
 #include "move.h"
+#include "main.h"
 
 int init_move_list(move_list_s *moves, size_t size) {
-    moves->list = (move_s*)malloc(size * sizeof(move_s));
+    moves->list = calloc(size, sizeof(move_s));
     moves->length = 0;
     moves->size = size;
     return 1;
@@ -19,6 +20,12 @@ int copy_move_list(move_list_s *cpy, move_list_s *src) {
     return 1;
 }
 
+void free_move_list(move_list_s *moves) {
+    free(moves->list);
+    moves->list = NULL;
+    moves->size = moves->length = 0;
+}
+
 int insert_move(move_list_s *moves, move_s move, size_t index) {
     // don't try to insert if index is out of bounds
     if (index > moves->length) {
@@ -32,10 +39,10 @@ int insert_move(move_list_s *moves, move_s move, size_t index) {
                                        moves->size * sizeof(move_s));
     }
 
-    // if this isn't an append, move everything after index one space upif
+    // if this isn't an append, move everything after index one space up
     if (index != moves->length) {
         (void)memmove(moves->list + index + 1, moves->list + index,
-                      (moves->length - (index + 1)) * sizeof(move_s));
+                      (moves->length - index) * sizeof(move_s));
     }
 
     moves->list[index] = move;
@@ -70,16 +77,38 @@ int delete_move(move_list_s *moves, size_t index) {
     return 1;
 }
 
-void free_move_list(move_list_s *moves) {
-    free(moves->list);
-    moves->list = NULL;
-    moves->size = moves->length = 0;
+// reverse a move_list_s "moves" in place
+void invert_move_list(move_list_s *moves) {
+    for (size_t i = 0, j = moves->length-1; i <= j; i++, j--) {
+        move_s tmp  = moves->list[i];
+        move_s tmp2 = moves->list[j];
+
+        tmp.turns  = positive_mod(-tmp.turns,  4);
+        tmp2.turns = positive_mod(-tmp2.turns, 4);
+
+        moves->list[i] = tmp2;
+        moves->list[j] = tmp;
+    }
 }
 
-// opposite face lookup for the simplifier
-const face_e opposite_faces[NUM_FACES] = {
-    FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U
-};
+int in_move_list(move_list_s *moves, move_s move) {
+    for (size_t i = 0; i < moves->length; i++) {
+        if (moves->list[i].face == move.face &&
+            positive_mod(moves->list[i].turns, 4) == positive_mod(move.turns, 4)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int face_in_move_list(move_list_s *moves, face_e face) {
+    for (size_t i = 0; i < moves->length; i++) {
+        if (moves->list[i].face == face) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 // simplify move sequences in the move list
 void simplify_move_list(move_list_s *moves) {
