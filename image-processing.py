@@ -27,7 +27,7 @@ import subprocess
 ####### (Because hard coding is bad!) #################
 #######################################################
 
-# Abbie_img_folder = "/home/aagowl/Downloads/"
+Abbie_img_folder = "/home/aagowl/Downloads/"
 IMG_SIZE = 60 # for resolution
 PIECE_SIZE = IMG_SIZE//3
 CUBE_IMG_FOLDER = "/home/pi/cubeImgs/"
@@ -51,8 +51,8 @@ LOWER_BOUND_COLORS = [
     asarray([25, 50, 70]), # yellow
     asarray([159, 50, 70]), # red
     asarray([90, 50, 70]), # blue
-    asarray([0, 0, 231]), # white
-    asarray([10, 50, 70]), # orange
+    asarray([0, 0, 178]), # white
+    asarray([7, 50, 70]), # orange
     asarray([36, 50, 70]), # green
 ]
 
@@ -60,7 +60,7 @@ UPPER_BOUND_COLORS = [
     asarray([35, 255, 255]), # yellow
     asarray([180, 255, 255]), # red
     asarray([128, 255, 255]), # blue
-    asarray([180, 18, 255]), # white
+    asarray([190, 33, 255]), # white
     asarray([24, 255, 255]), # orange
     asarray([89, 255, 255]), # green
 ]
@@ -144,7 +144,7 @@ def colorAnalysis(peice):
         # turns into an array where everything that is set to 255 is in that range, everything else is 0
         peiceCopy = peice
         mask = cv2.inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
-        # print(f"checking for {COLORS[i]}")
+        print(f"checking for {COLORS[i]}")
         # cv2.imshow('Mask', mask)
         # cv2.waitKey(0)
         # find the percentage of the piece that is in that color range
@@ -156,7 +156,7 @@ def colorAnalysis(peice):
     return -1
 
 def redColorCheck(peiceCopy, mask1):
-    red2Upper = asarray([9, 255, 255])
+    red2Upper = asarray([6, 255, 255])
     red2Lower = asarray([0, 50, 70])
     mask2 = cv2.inRange(peiceCopy, red2Lower, red2Upper)
     result = cv2.bitwise_or(mask1, mask2)
@@ -229,10 +229,11 @@ def analyzeFace(image, colorsArray):
         for j in range(3):
             peice = imagePixels[i][j].copy()
             peiceCopy = peice.copy()
-            # print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
+            print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
             # cv2.imshow("Display window", cv2.cvtColor(peiceCopy, cv2.COLOR_HSV2BGR))
             # cv2.waitKey(0)
-            face[i][j] = colorsArray[colorAnalysis(peice)]
+            peiceColor = colorAnalysis(peice)
+            face[i][j] = colorsArray[peiceColor]
             print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
 
     return face
@@ -288,4 +289,4 @@ def testColorBoundries(imagePath):
     color = colorAnalysis(image)
     print(COLORS[color])
 
-test(2, 0, "test9")
+test(2, 0, "dadsCube")
