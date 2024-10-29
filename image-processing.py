@@ -173,17 +173,22 @@ def genColorsArray(frontCenterColor, upCenterColor):
     colorsArray[frontCenterColor] = 2
     rightCenterColor = RIGHT_FACE_COLOR_ARRAY[frontCenterColor][upCenterColor]
     colorsArray[rightCenterColor] = 1
-    try:
+    # Here ifs are used to eliminate out of bounds errors.
+    # Exploits fact that the same colors are always opposite of eachother
+    #down
+    if upCenterColor + 3 > 5:
         colorsArray[upCenterColor + 3] = 5
-    except:
+    else:
         colorsArray[upCenterColor - 3] = 5
-    try:
+    #back
+    if frontCenterColor + 3 > 5:
         colorsArray[frontCenterColor + 3] = 4
-    except:
+    else:
         colorsArray[frontCenterColor - 3] = 4
-    try:
+    #left
+    if rightCenterColor + 3 > 5:
         colorsArray[rightCenterColor + 3] = 3
-    except:
+    else:
         colorsArray[rightCenterColor - 3] = 3
 
     return colorsArray
