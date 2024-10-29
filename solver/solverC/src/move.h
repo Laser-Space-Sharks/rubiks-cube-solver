@@ -21,21 +21,20 @@ typedef struct {
 // no particular reason for this choice, 4 is just a nice and small power of two
 #define MIN_LIST_RESIZE 4
 
-int init_move_list(move_list_s *moves, size_t size);
-int copy_move_list(move_list_s *cpy, move_list_s *src);
-int insert_move(move_list_s *moves, move_s move, size_t index);
-int delete_move(move_list_s *moves, size_t index);
-void free_move_list(move_list_s *moves);
+move_list_s* move_list_create(size_t size);
+move_list_s* move_list_copy(const move_list_s *src);
+void move_list_free(move_list_s *moves);
 
-void invert_move_list(move_list_s *moves);
-int in_move_list(move_list_s *moves, move_s move);
-int face_in_move_list(move_list_s *moves, face_e face);
+int move_list_insert(move_list_s *moves, move_s move, size_t index);
+int move_list_delete(move_list_s *moves, size_t index);
+size_t move_list_lookup(const move_list_s *moves, move_s move);
+move_list_s* move_list_from_move_str(const char *move_str);
 
-void simplify_move_list(move_list_s *moves);
-int move_list_from_move_str(move_list_s *moves, char *move_str);
+void move_list_invert(move_list_s *moves);
+void move_list_simplify(move_list_s *moves);
 
 void print_move(move_s move);
-void print_move_list(move_list_s moves);
+void print_move_list(const move_list_s *moves);
 
 static const move_s NULL_MOVE = {
     .face = FACE_NULL,

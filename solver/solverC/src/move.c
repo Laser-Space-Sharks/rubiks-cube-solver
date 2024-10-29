@@ -1,32 +1,33 @@
 #include "move.h"
 #include "main.h"
 
-int init_move_list(move_list_s *moves, size_t size) {
+move_list_s *move_list_create(size_t size) {
+    move_list_s *moves = (move_list_s*) malloc(sizeof(move_list_s));
+
     moves->list = calloc(size, sizeof(move_s));
     moves->length = 0;
     moves->size = size;
-    return 1;
+
+    return moves;
 }
 
-// return a new move_list_s with a distinct yet identical array of the moves from src
-int copy_move_list(move_list_s *cpy, move_list_s *src) {
-    free_move_list(cpy);
-    init_move_list(cpy, src->size);
+// return a pointer to a new move_list_s with a distinct yet identical array of the moves from src
+move_list_s* move_list_copy(const move_list_s *src) {
+    move_list_s *copy = move_list_create(src->size);
 
-    (void)memcpy(cpy->list, src->list, src->length * sizeof(move_s));
+    (void)memcpy(copy->list, src->list, src->length * sizeof(move_s));
+    copy->length = src->length;
 
-    cpy->size = src->size;
-    cpy->length = src->length;
-    return 1;
+    return copy;
 }
 
-void free_move_list(move_list_s *moves) {
+void move_list_free(move_list_s *moves) {
     free(moves->list);
     moves->list = NULL;
     moves->size = moves->length = 0;
 }
 
-int insert_move(move_list_s *moves, move_s move, size_t index) {
+int move_list_insert(move_list_s *moves, move_s move, size_t index) {
     // don't try to insert if index is out of bounds
     if (index > moves->length) {
         return 0;
@@ -52,7 +53,7 @@ int insert_move(move_list_s *moves, move_s move, size_t index) {
     return 1;
 }
 
-int delete_move(move_list_s *moves, size_t index) {
+int move_list_delete(move_list_s *moves, size_t index) {
     // don't try to delete if index is out of bounds
     if (index >= moves->length) {
         return 0;
@@ -78,7 +79,7 @@ int delete_move(move_list_s *moves, size_t index) {
 }
 
 // reverse a move_list_s "moves" in place
-void invert_move_list(move_list_s *moves) {
+void move_list_invert(move_list_s *moves) {
     for (size_t i = 0, j = moves->length-1; i <= j; i++, j--) {
         move_s tmp  = moves->list[i];
         move_s tmp2 = moves->list[j];
@@ -91,7 +92,7 @@ void invert_move_list(move_list_s *moves) {
     }
 }
 
-int in_move_list(move_list_s *moves, move_s move) {
+size_t move_list_lookup(const move_list_s *moves, move_s move) {
     for (size_t i = 0; i < moves->length; i++) {
         if (moves->list[i].face == move.face &&
             positive_mod(moves->list[i].turns, 4) == positive_mod(move.turns, 4)) {
@@ -101,17 +102,8 @@ int in_move_list(move_list_s *moves, move_s move) {
     return -1;
 }
 
-int face_in_move_list(move_list_s *moves, face_e face) {
-    for (size_t i = 0; i < moves->length; i++) {
-        if (moves->list[i].face == face) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 // simplify move sequences in the move list
-void simplify_move_list(move_list_s *moves) {
+void move_list_simplify(move_list_s *moves) {
     size_t idx = 0;
     size_t idx2 = 1;
     while (idx2 < moves->length) {
@@ -122,7 +114,7 @@ void simplify_move_list(move_list_s *moves) {
 
         while (moves->list[idx].face == moves->list[idx2].face) {
             moves->list[idx].turns += moves->list[idx2].turns;
-            delete_move(moves, idx2);
+            move_list_delete(moves, idx2);
 
             // if we can't delete any more moves after this, stop
             if (idx2 >= moves->length || idx >= moves->length) {
@@ -137,7 +129,7 @@ void simplify_move_list(move_list_s *moves) {
         * to account for new potential simplifications of earlier moves.
         */
         if (moves->list[idx].turns % 4 == 0) {
-            delete_move(moves, idx);
+            move_list_delete(moves, idx);
             while (--idx > 0) {
 			    if (!(moves->list[idx].face == opposite_faces[moves->list[idx - 1].face] ||
                     moves->list[idx].face == moves->list[idx-1].face)) {
@@ -153,10 +145,11 @@ void simplify_move_list(move_list_s *moves) {
     }
 }
 
-int move_list_from_move_str(move_list_s *moves, char *move_str) {
-    free_move_list(moves);
+move_list_s* move_list_from_move_str(const char *move_str) {
+    size_t move_str_len = strlen(move_str);
 
-    init_move_list(moves, 10);
+    // 2*move_str_len/3 is a good approximation to how many moves we might have to consider
+    move_list_s *moves = move_list_create((2*move_str_len)/3);
 
     move_s move = (move_s) {
         .face = FACE_NULL,
@@ -167,7 +160,7 @@ int move_list_from_move_str(move_list_s *moves, char *move_str) {
     for (idx = 0; move_str[idx] != '\0'; idx++) {
         if (move_str[idx] == ' ') {
             if (move.face != FACE_NULL && move.turns % 4 != 0) {
-                insert_move(moves, move, moves->length);
+                move_list_insert(moves, move, moves->length);
 
                 // reset the move to add
                 move.face = FACE_NULL;
@@ -212,9 +205,10 @@ int move_list_from_move_str(move_list_s *moves, char *move_str) {
     // if we've processed a clockwise quarter turn that comes at the end of
     // the move string we need to add it to the moves
     if (move.face != FACE_NULL) {
-        insert_move(moves, move, moves->length);
+        move_list_insert(moves, move, moves->length);
     }
-    return 1;
+
+    return moves;
 }
 
 void print_move(move_s move) {
@@ -243,12 +237,12 @@ void print_move(move_s move) {
 	}
 }
 
-void print_move_list(move_list_s moves) {
-	for (size_t idx = 0; idx < moves.length; idx++) {
-		char move_char = get_char(moves.list[idx].face);
+void print_move_list(const move_list_s *moves) {
+	for (size_t idx = 0; idx < moves->length; idx++) {
+		char move_char = get_char(moves->list[idx].face);
 		char turn_char = '\0';
 
-		switch (positive_mod(moves.list[idx].turns, 4)) {
+		switch (positive_mod(moves->list[idx].turns, 4)) {
 			case 0:
 				turn_char = '0';
 				break;
@@ -260,7 +254,7 @@ void print_move_list(move_list_s moves) {
 				break;
 		}
 
-		if (moves.list[idx].face >= NUM_FACES) {
+		if (moves->list[idx].face >= NUM_FACES) {
 			printf("Invalid move in move list\n");
 			return;
 		}

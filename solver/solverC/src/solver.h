@@ -70,7 +70,7 @@ static const cube_s pll_mask = {
 };
 
 int stage_recursion(cube_s cube, cube_s mask, move_list_s *moves, uint8_t depth);
-move_list_s solve_stage(cube_s cube, cube_s mask);
+move_list_s* solve_stage(cube_s cube, cube_s mask);
 
 void print_masks();
 

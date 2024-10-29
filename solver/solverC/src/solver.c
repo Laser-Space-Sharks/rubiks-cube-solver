@@ -3,7 +3,6 @@
 #include "main.h"
 #include "move.h"
 
-
 cube_s mask_cube(cube_s cube, cube_s mask) {
     for (face_e face = FACE_U; face < NUM_FACES; face++) {
         cube.state[face] &= mask.state[face];
@@ -42,13 +41,13 @@ int stage_recursion(cube_s cube, cube_s mask, move_list_s *moves, uint8_t depth)
         move.face = face;
         for (int8_t turns = 1; turns < 4; turns++) {
             move.turns = turns;
-            insert_move(moves, move, moves->length);
+            move_list_insert(moves, move, moves->length);
             apply_move(&cube, move);
             if (stage_recursion(cube, mask, moves, depth - 1)) {
                 // we did it!
                 return 1;
             }
-            delete_move(moves, moves->length-1);
+            move_list_delete(moves, moves->length-1);
             move.turns = -turns;
             apply_move(&cube, move); // undo move if it doesn't pan out
         }
@@ -58,12 +57,11 @@ int stage_recursion(cube_s cube, cube_s mask, move_list_s *moves, uint8_t depth)
 }
 
 // Iterative deepening depth-first search
-move_list_s solve_stage(cube_s cube, cube_s mask) {
-    move_list_s moves;
-    init_move_list(&moves, 8);
+move_list_s* solve_stage(cube_s cube, cube_s mask) {
+    move_list_s *moves = move_list_create(8);
 
     for (uint8_t depth = 1; depth <= 20; depth++) {
-        if (stage_recursion(cube, mask, &moves, depth)) {
+        if (stage_recursion(cube, mask, moves, depth)) {
             break;
         }
     }

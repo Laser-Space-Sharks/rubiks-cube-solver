@@ -89,7 +89,8 @@ static const uint32_t turn_mask_table[NUM_FACES][NUM_SIDES] = {
     {side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D]}  // FACE D
 };
 
-// lookup table for getting sides in a given face turn
+// lookup table for getting which side a given face sees in a given direction
+// e.g. the SIDE_U bits of FACE_F 'see' the bottom SIDE_D bits of FACE_U
 static const side_e turn_sides_table[NUM_FACES][NUM_SIDES] = {
     {SIDE_U, SIDE_U, SIDE_U, SIDE_U}, // FACE_U
     {SIDE_R, SIDE_L, SIDE_R, SIDE_R}, // FACE_R
@@ -104,7 +105,7 @@ static const face_e opposite_faces[NUM_FACES] = {
     FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U,
 };
 
-// fast rol instruction that simplifies to rolq (on x86 and rol on arm64)
+// fast rol instruction that simplifies to rolq on x86 and rol on arm64
 static inline uint32_t rolq(uint32_t n, uint8_t c) {
     const uint32_t mask = CHAR_BIT*sizeof(n) - 1;
 
