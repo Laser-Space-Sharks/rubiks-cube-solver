@@ -3,7 +3,7 @@ CXX := clang
 pi?=
 sysroot?=
 
-CXXFLAGS  := -O2 -Wall -Wno-missing-braces -std=c23
+CXXFLAGS  := -O2 -Wall -Wno-missing-braces -std=c23 -static
 
 ifeq ($(pi), true)
 ifeq ($(sysroot),)
