@@ -13,7 +13,7 @@
 # image = normalizeImg(captureImg(CUBE_IMG_FOLDER, "cubeScan"))
 
 ####### IMPORTS #######
-from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\ 
+from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\
 NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
 imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
@@ -273,7 +273,7 @@ def test(frontCenterColor, upCenterColor, testImgFilename):
     print("colors array generated")
     print(f"Colors array: {colorsArray}")
     print("Starting Face Scan!")
-    faceArray = scanFace(colorsArray, readSavedImg=True, filename=testImgFilename)
+    faceArray = scanFace(colorsArray)
     print("face scanned!")
     print(faceArray)
     print(translateToColors(faceArray, colorsArray))
@@ -290,4 +290,4 @@ def testColorBoundries(imagePath):
     color = colorAnalysis(image)
     print(COLORS[color])
 
-test(2, 0, "dadsCube")
+test(1, 2, "test666")
