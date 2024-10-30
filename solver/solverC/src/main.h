@@ -59,6 +59,11 @@ typedef struct {
     uint32_t state[NUM_FACES];
 } cube_s;
 
+typedef struct {
+    face_e face;
+    int8_t turns;
+} move_s;
+
 // Here's a bunch of handy look-up tables to be used by cube manipulation functions and the solver
 
 // lookup table for the faces that connect to a given face
@@ -144,6 +149,11 @@ static const cube_s SOLVED_SHIFTCUBE = {
         (uint32_t)FACE_D <<  28 |                          (uint32_t)FACE_D << 12 |
         (uint32_t)FACE_D <<  24 | (uint32_t)FACE_D << 20 | (uint32_t)FACE_D << 16,
     }
+};
+
+static const move_s NULL_MOVE = {
+    .face = FACE_NULL,
+    .turns = 0
 };
 
 #endif // MAIN_H

@@ -1,7 +1,6 @@
 #include "solver.h"
+
 #include "cube.h"
-#include "main.h"
-#include "move.h"
 
 cube_s mask_cube(cube_s cube, cube_s mask) {
     for (face_e face = FACE_U; face < NUM_FACES; face++) {

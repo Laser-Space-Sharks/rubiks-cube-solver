@@ -1,6 +1,6 @@
 #include "main.h"
 #include "cube.h"
-#include "move.h"
+#include "move_list.h"
 #include "solver.h"
 
 int main(int argc, char *argv[]) {
@@ -70,14 +70,17 @@ int main(int argc, char *argv[]) {
     print_cube_colors(cube);
 
     move_list_free(moves);
+    moves = NULL;
     move_list_free(cross_solve);
+    cross_solve = NULL;
     move_list_free(f2l_1solve);
+    f2l_1solve = NULL;
     move_list_free(f2l_2solve);
+    f2l_2solve = NULL;
     move_list_free(f2l_3solve);
+    f2l_3solve = NULL;
     move_list_free(f2l_4solve);
-
-    // undangle those pointers!
-    moves = cross_solve = f2l_1solve = f2l_2solve = f2l_3solve = f2l_4solve = NULL;
+    f2l_4solve = NULL;
 
     return 0;
 }

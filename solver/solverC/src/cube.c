@@ -1,5 +1,4 @@
 #include "cube.h"
-#include "main.h"
 
 // test for the equality of two cube states
 int compare_cubes(cube_s a, cube_s b) {
@@ -43,7 +42,7 @@ void apply_move(cube_s *cube, move_s move) {
 }
 
 // Apply all the moves from a move_list on a cube
-void apply_move_list(cube_s *cube, move_list_s *moves) {
+void apply_move_list(cube_s *cube, const move_list_s *moves) {
     for (size_t i = 0; i < moves->length; i++) {
         apply_move(cube, moves->list[i]);
     }

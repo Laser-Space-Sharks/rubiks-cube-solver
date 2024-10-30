@@ -2,7 +2,7 @@
 #define SOLVER_H
 
 #include "main.h"
-#include "move.h"
+#include "move_list.h"
 
 cube_s mask_cube(cube_s cube, cube_s mask);
 

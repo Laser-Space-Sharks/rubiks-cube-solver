@@ -1,10 +1,9 @@
-#include "move.h"
-#include "main.h"
+#include "move_list.h"
 
 move_list_s *move_list_create(size_t size) {
-    move_list_s *moves = (move_list_s*) malloc(sizeof(move_list_s));
+    move_list_s *moves = (move_list_s*)malloc(sizeof(move_list_s));
 
-    moves->list = calloc(size, sizeof(move_s));
+    moves->list = (move_s*)malloc(size * sizeof(move_s));
     moves->length = 0;
     moves->size = size;
 
@@ -25,6 +24,7 @@ void move_list_free(move_list_s *moves) {
     free(moves->list);
     moves->list = NULL;
     moves->size = moves->length = 0;
+    free(moves);
 }
 
 int move_list_insert(move_list_s *moves, move_s move, size_t index) {
@@ -146,18 +146,14 @@ void move_list_simplify(move_list_s *moves) {
 }
 
 move_list_s* move_list_from_move_str(const char *move_str) {
-    size_t move_str_len = strlen(move_str);
-
-    // 2*move_str_len/3 is a good approximation to how many moves we might have to consider
-    move_list_s *moves = move_list_create((2*move_str_len)/3);
+    move_list_s *moves = move_list_create(2 * MIN_LIST_RESIZE);
 
     move_s move = (move_s) {
         .face = FACE_NULL,
         .turns = 1
     };
 
-    size_t idx;
-    for (idx = 0; move_str[idx] != '\0'; idx++) {
+    for (size_t idx = 0; move_str[idx] != '\0'; idx++) {
         if (move_str[idx] == ' ') {
             if (move.face != FACE_NULL && move.turns % 4 != 0) {
                 move_list_insert(moves, move, moves->length);
@@ -209,61 +205,4 @@ move_list_s* move_list_from_move_str(const char *move_str) {
     }
 
     return moves;
-}
-
-void print_move(move_s move) {
-	char move_char = get_char(move.face);
-	char turn_char;
-
-	switch (positive_mod(move.turns, 4)) {
-		case 0:
-			turn_char = '0';
-			break;
-		case 2:
-			turn_char = '2';
-			break;
-		case 3:
-			turn_char = '\'';
-			break;
-	}
-
-	if (move.face >= NUM_FACES) {
-		printf("INVALID MOVE\n");
-	}
-
-	printf("%c", move_char);
-	if (move.turns != 1) {
-	   printf("%c\n", turn_char);
-	}
-}
-
-void print_move_list(const move_list_s *moves) {
-	for (size_t idx = 0; idx < moves->length; idx++) {
-		char move_char = get_char(moves->list[idx].face);
-		char turn_char = '\0';
-
-		switch (positive_mod(moves->list[idx].turns, 4)) {
-			case 0:
-				turn_char = '0';
-				break;
-			case 2:
-				turn_char = '2';
-				break;
-			case 3:
-				turn_char = '\'';
-				break;
-		}
-
-		if (moves->list[idx].face >= NUM_FACES) {
-			printf("Invalid move in move list\n");
-			return;
-		}
-
-		printf("%c", move_char);
-		if (turn_char) {
-    		printf("%c", turn_char);
-		}
-		printf(" ");
-	}
-	printf("\n");
 }
