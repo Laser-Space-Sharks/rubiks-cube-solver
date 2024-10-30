@@ -22,8 +22,6 @@ move_list_s* move_list_copy(const move_list_s *src) {
 
 void move_list_free(move_list_s *moves) {
     free(moves->list);
-    moves->list = NULL;
-    moves->size = moves->length = 0;
     free(moves);
 }
 
