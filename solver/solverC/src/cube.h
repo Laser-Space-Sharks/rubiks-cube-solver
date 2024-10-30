@@ -4,6 +4,8 @@
 #include "main.h"
 #include "solver_print.h"
 
+cube_s* cube_copy(const cube_s *cube);
+
 int compare_cubes(cube_s a, cube_s b);
 
 void apply_move(cube_s *cube, move_s move);

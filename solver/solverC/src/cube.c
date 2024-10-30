@@ -1,5 +1,20 @@
 #include "cube.h"
 
+cube_s* cube_copy(const cube_s *cube) {
+    if (cube == NULL) {
+        return NULL;
+    }
+
+    cube_s *copy = (cube_s*)malloc(sizeof(cube_s));
+    if (copy == NULL) {
+        return NULL;
+    }
+
+    *copy = *cube;
+
+    return copy;
+}
+
 // test for the equality of two cube states
 int compare_cubes(cube_s a, cube_s b) {
     for (face_e face = FACE_U; face < NUM_FACES; face++) {
