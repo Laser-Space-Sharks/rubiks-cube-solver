@@ -25,10 +25,10 @@ void move_list_free(move_list_s *moves) {
     free(moves);
 }
 
-int move_list_insert(move_list_s *moves, move_s move, size_t index) {
+bool move_list_insert(move_list_s *moves, move_s move, size_t index) {
     // don't try to insert if index is out of bounds
     if (index > moves->length) {
-        return 0;
+        return false;
     }
 
 	// reallocate the move list if needed
@@ -48,13 +48,13 @@ int move_list_insert(move_list_s *moves, move_s move, size_t index) {
     moves->length++;
 
     // insertion was successful
-    return 1;
+    return true;
 }
 
-int move_list_delete(move_list_s *moves, size_t index) {
+bool move_list_delete(move_list_s *moves, size_t index) {
     // don't try to delete if index is out of bounds
     if (index >= moves->length) {
-        return 0;
+        return false;
     }
 
     // if this isn't just a "pop", bring moves ahead of index one index down
@@ -73,7 +73,7 @@ int move_list_delete(move_list_s *moves, size_t index) {
     }
 
     // deletion was successful
-    return 1;
+    return true;
 }
 
 // reverse a move_list_s "moves" in place

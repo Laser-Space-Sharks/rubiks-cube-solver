@@ -1,8 +1,9 @@
 #ifndef MOVE_LIST_H
 #define MOVE_LIST_H
 
-#include <string.h>
+#include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "main.h"
 
@@ -19,8 +20,8 @@ move_list_s* move_list_create(size_t size);
 move_list_s* move_list_copy(const move_list_s *src);
 void move_list_free(move_list_s *moves);
 
-int move_list_insert(move_list_s *moves, move_s move, size_t index);
-int move_list_delete(move_list_s *moves, size_t index);
+bool move_list_insert(move_list_s *moves, move_s move, size_t index);
+bool move_list_delete(move_list_s *moves, size_t index);
 size_t move_list_lookup(const move_list_s *moves, move_s move);
 move_list_s* move_list_from_move_str(const char *move_str);
 
