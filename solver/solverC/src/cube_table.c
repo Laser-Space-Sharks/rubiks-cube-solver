@@ -1,4 +1,5 @@
 #include "cube.h"
+#include "solver_print.h"
 #include "cube_table.h"
 
 typedef struct {
@@ -16,12 +17,13 @@ cube_table_s* cube_table_create(size_t size) {
     cube_table_s *ct = (cube_table_s*)malloc(sizeof(cube_table_s));
 
     ct->table = (table_entry_s*)calloc(size, sizeof(table_entry_s));
+    ct->entries = 0;
     ct->size = size;
     return ct;
 }
 
-uint32_t cube_table_hash(const cube_table_s *ct, const cube_s *cube) {
-    uint32_t hash = 0;
+size_t cube_table_hash(const cube_table_s *ct, const cube_s *cube) {
+    size_t hash = 0;
         for (face_e face = 0; face < NUM_FACES; face++) {
             hash *= (1024 % ct->size);
             hash %= ct->size;
@@ -33,24 +35,22 @@ uint32_t cube_table_hash(const cube_table_s *ct, const cube_s *cube) {
 }
 
 bool cube_table_insert(cube_table_s *ct, const cube_s *cube, const move_list_s *moves) {
-    uint32_t hash = cube_table_hash(ct, cube);
+    size_t hash = cube_table_hash(ct, cube);
+    size_t index = hash;
 
-    if (ct->table[hash].value == NULL) {
-        ct->table[hash].key = cube_copy(cube);
-        ct->table[hash].value = move_list_copy(moves);
-        ct->entries++;
-        return true;
+    // first check if the cube is in here to begin with
+    if (cube_table_lookup(ct, cube) != NULL) {
+        return false;
     }
 
-    // linear probing!
-    size_t index = (hash + 1) % ct->size;
+    // linear probing
     while (ct->table[index].key != NULL) {
-        // we've looped through the whole hash table, and it's full
+        index++;
         if (index == hash) {
             return false;
         }
 
-        if (++index >= ct->size) {
+        if (index >= ct->size) {
             index = 0;
         }
     }
@@ -62,11 +62,11 @@ bool cube_table_insert(cube_table_s *ct, const cube_s *cube, const move_list_s *
 }
 
 move_list_s* cube_table_lookup(const cube_table_s *ct, const cube_s *cube) {
-    uint32_t hash = cube_table_hash(ct, cube);
+    size_t hash = cube_table_hash(ct, cube);
     size_t index = hash;
 
     while (ct->table[index].key != NULL) {
-        if (compare_cubes(*(ct->table[index].key), *cube)) {
+        if (compare_cubes(ct->table[index].key, cube)) {
             return ct->table[index].value;
         }
 
@@ -84,11 +84,36 @@ void cube_table_free(cube_table_s *ct) {
     for (size_t i = 0; i < ct->size; i++) {
         // we will only have non-null values if the keys are also not null
         if (ct->table[i].key != NULL) {
-            free(ct->table[i].value);
+            move_list_free(ct->table[i].value);
             free(ct->table[i].key);
         }
     }
 
     free(ct->table);
     free(ct);
+}
+
+void cube_table_print(cube_table_s *ct) {
+    printf("   index  |               cube string representation            | algorithm\n");
+    printf("------------------------------------------------------------------------------\n");
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].key != NULL) {
+            printf("%10zu ", idx);
+            print_cube_line_colors(*(ct->table[idx].key));
+            print_move_list(ct->table[idx].value);
+        }
+        if (idx != 0) {
+            if (ct->table[idx].key == NULL && ct->table[idx-1].key != NULL) {
+                printf("                                    ...                                    \n");
+            }
+        }
+    }
+}
+
+size_t cube_table_entries(const cube_table_s *ct) {
+    return ct->entries;
+}
+
+size_t cube_table_size(const cube_table_s *ct) {
+    return ct->size;
 }

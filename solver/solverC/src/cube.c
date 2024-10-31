@@ -16,19 +16,22 @@ cube_s* cube_copy(const cube_s *cube) {
 }
 
 // test for the equality of two cube states
-int compare_cubes(cube_s a, cube_s b) {
+bool compare_cubes(const cube_s *a, const cube_s *b) {
     for (face_e face = FACE_U; face < NUM_FACES; face++) {
-        if (a.state[face] != b.state[face]) {
-            return 0;
+        if (a->state[face] != b->state[face]) {
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
 // Apply a move to the cube using bitshifts
 void apply_move(cube_s *cube, move_s move) {
     // make the turn count positive 
     uint8_t turns_pos = positive_mod(move.turns, NUM_SIDES);
+    if (turns_pos == 0) {
+        return;
+    }
 
     // copy current side faces for the loop
     uint32_t og_sfaces[NUM_SIDES] = {
@@ -70,7 +73,7 @@ void print_face(uint32_t face_bits) {
            get_piece(face_bits, 6), get_piece(face_bits, 5), get_piece(face_bits, 4));
 }
 
-void print_cube(cube_s cube) {
+void print_cube_map(cube_s cube) {
     printf("    %c%c%c\n    %c%c%c\n    %c%c%c\n",
            get_piece(cube.state[FACE_U], 0), get_piece(cube.state[FACE_U], 1), get_piece(cube.state[FACE_U], 2),
            get_piece(cube.state[FACE_U], 7), CHAR_U,                           get_piece(cube.state[FACE_U], 3),
@@ -96,7 +99,7 @@ void print_cube(cube_s cube) {
            get_piece(cube.state[FACE_D], 6), get_piece(cube.state[FACE_D], 5), get_piece(cube.state[FACE_D], 4));
 }
 
-void print_cube_colors(cube_s cube) {
+void print_cube_map_colors(cube_s cube) {
     printf("    "); print_piece(cube.state[FACE_U], 0); print_piece(cube.state[FACE_U], 1); print_piece(cube.state[FACE_U], 2); printf("\n");
     printf("    "); print_piece(cube.state[FACE_U], 7); print_piece(FACE_U, 0);             print_piece(cube.state[FACE_U], 3); printf("\n");
     printf("    "); print_piece(cube.state[FACE_U], 6); print_piece(cube.state[FACE_U], 5); print_piece(cube.state[FACE_U], 4); printf("\n");
@@ -119,4 +122,22 @@ void print_cube_colors(cube_s cube) {
     printf("    "); print_piece(cube.state[FACE_D], 0); print_piece(cube.state[FACE_D], 1); print_piece(cube.state[FACE_D], 2); printf("\n");
     printf("    "); print_piece(cube.state[FACE_D], 7); print_piece(FACE_D, 0);             print_piece(cube.state[FACE_D], 3); printf("\n");
     printf("    "); print_piece(cube.state[FACE_D], 6); print_piece(cube.state[FACE_D], 5); print_piece(cube.state[FACE_D], 4); printf("\n");
+}
+
+void print_cube_line(cube_s cube) {
+    for (face_e face = FACE_U; face < NUM_FACES; face++) {
+        for (uint8_t idx = 0; idx < 8; idx++) {
+            printf("%c", get_piece(cube.state[face], idx));
+        }
+        printf(" ");
+    }
+}
+
+void print_cube_line_colors(cube_s cube) {
+    for (face_e face = FACE_U; face < NUM_FACES; face++) {
+        for (uint8_t idx = 0; idx < 8; idx++) {
+            print_piece(cube.state[face], idx);
+        }
+        printf(" ");
+    }
 }
