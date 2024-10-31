@@ -14,7 +14,7 @@ cube_s masked_cube(const cube_s *cube, const cube_s *mask) {
 int stage_recursion(cube_s *cube, const cube_s *mask, const cube_s *goal, cube_table_s *ct, move_list_s *moves, uint8_t depth) {
     if (depth == 0) {
         cube_s test = masked_cube(cube, mask);
-        //cube_table_insert(ct, cube, moves);
+        // cube_table_insert(ct, cube, moves);
 
         if (compare_cubes(&test, goal)) {
             // holy crap, we did it!
@@ -67,13 +67,13 @@ move_list_s* solve_stage(cube_s cube, cube_s mask) {
 
     cube_table_s *ct = cube_table_create(1);
 
-    for (uint8_t depth = 1; depth <= 20; depth++) {
+    for (uint8_t depth = 1; depth <= 10; depth++) {
         if (stage_recursion(&cube, &mask, &goal, ct, moves, depth)) {
             break;
         }
     }
 
-    //cube_table_print(ct);
+//    cube_table_print(ct);
     cube_table_free(ct);
 
     return moves;
