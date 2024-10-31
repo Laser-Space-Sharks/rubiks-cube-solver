@@ -78,6 +78,11 @@ int move_list_delete(move_list_s *moves, size_t index) {
 
 // reverse a move_list_s "moves" in place
 void move_list_invert(move_list_s *moves) {
+    if (moves->length == 1) {
+        moves->list[0].turns = -moves->list[0].turns;
+        return;
+    }
+
     for (size_t i = 0, j = moves->length-1; i <= j; i++, j--) {
         move_s tmp  = moves->list[i];
         move_s tmp2 = moves->list[j];
