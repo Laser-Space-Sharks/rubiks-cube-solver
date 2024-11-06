@@ -1,4 +1,5 @@
 #include "move_list.h"
+#include "lookup_tables.h"
 
 move_list_s *move_list_create(size_t size) {
     move_list_s *moves = (move_list_s*)malloc(sizeof(move_list_s));
@@ -78,8 +79,7 @@ bool move_list_delete(move_list_s *moves, size_t index) {
 
 // reverse a move_list_s "moves" in place
 void move_list_invert(move_list_s *moves) {
-    if (moves->length == 1) {
-        moves->list[0].turns = -moves->list[0].turns;
+    if (moves == NULL) { 
         return;
     }
 
@@ -107,6 +107,10 @@ size_t move_list_lookup(const move_list_s *moves, move_s move) {
 
 // simplify move sequences in the move list
 void move_list_simplify(move_list_s *moves) {
+    if (moves == NULL) {
+        return;
+    }
+
     size_t idx = 0;
     size_t idx2 = 1;
     while (idx2 < moves->length) {
@@ -126,11 +130,11 @@ void move_list_simplify(move_list_s *moves) {
         }
 
         /* if our combined move consititutes zero moves, get rid of it
-        * and if we can, check the move before this deleted move for
-        * simplification. Additionally, if there's a sequence of
-        * consequtive same/opposite face moves, keep moving idx back
-        * to account for new potential simplifications of earlier moves.
-        */
+         * and if we can, check the move before this deleted move for
+         * simplification. Additionally, if there's a sequence of
+         * consequtive same/opposite face moves, keep moving idx back
+         * to account for new potential simplifications of earlier moves.
+         */
         if (moves->list[idx].turns % 4 == 0) {
             move_list_delete(moves, idx);
             while (--idx > 0) {
@@ -208,4 +212,27 @@ move_list_s* move_list_from_move_str(const char *move_str) {
     }
 
     return moves;
+}
+
+move_list_s* move_list_concat(const move_list_s *first, const move_list_s *second) {
+    if (first == NULL || second == NULL) {
+        return NULL;
+    }
+
+    move_list_s *concat = move_list_create(first->length + second->length);
+    concat->length = first->length + second->length;
+
+    if (concat == NULL) return NULL;
+
+    for (size_t idx = 0; idx < concat->size; idx++) {
+        if (idx < first->length) {
+            concat->list[idx] = first->list[idx];
+            continue;
+        }
+        concat->list[idx] = second->list[idx - first->length];
+    }
+
+    move_list_simplify(concat);
+
+    return concat;
 }

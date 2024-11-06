@@ -1,5 +1,7 @@
 #include "cube.h"
 
+#include "lookup_tables.h"
+
 cube_s* cube_copy(const cube_s *cube) {
     if (cube == NULL) {
         return NULL;
@@ -10,19 +12,18 @@ cube_s* cube_copy(const cube_s *cube) {
         return NULL;
     }
 
-    *copy = *cube;
+    memcpy(copy->state, cube->state, 24);
 
     return copy;
 }
 
 // test for the equality of two cube states
 bool compare_cubes(const cube_s *a, const cube_s *b) {
-    for (face_e face = FACE_U; face < NUM_FACES; face++) {
-        if (a->state[face] != b->state[face]) {
-            return false;
-        }
+    if (memcmp(a->state, b->state, 24) == 0) {
+        return true;
     }
-    return true;
+
+    return false;
 }
 
 // Apply a move to the cube using bitshifts
@@ -44,17 +45,25 @@ void apply_move(cube_s *cube, move_s move) {
     // rotate the face to be turned
     cube->state[move.face] = rolq(cube->state[move.face], 8 * turns_pos);
 
+    // at this point, we need to turn the pieces on the adjacent (side) faces
+    // of the face we just rotated, and propogate those rotations forward
+
     // rotate the side pieces
     for (side_e side = SIDE_U; side < NUM_SIDES; side++) {
+        // the side we need to send bits to
         side_e target_side  = (side + turns_pos) % NUM_SIDES;
+        // the face of the side we need to send bits to
         face_e target_sface = side_faces[move.face][target_side];
+
+        // we need to rotate the original side bits to make sure they're aligned
+        // with the bits on the target side
         uint8_t side_turns = positive_mod(turn_sides_table[move.face][target_side] -
                                           turn_sides_table[move.face][side], NUM_SIDES);
 
-        // clear the bits of the side pieces
+        // clear the bits of the side pieces we're writing to
         cube->state[target_sface] &= ~turn_mask_table[move.face][target_side];
-        // set the bits of the side pieces 
-        cube->state[target_sface] |=  turn_mask_table[move.face][target_side] & 
+        // set the bits of the moved side pieces
+        cube->state[target_sface] |=  turn_mask_table[move.face][target_side] &
                                       rolq(og_sfaces[side], side_turns*8);
 	}
 }

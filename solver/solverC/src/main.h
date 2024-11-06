@@ -55,6 +55,9 @@ typedef enum : uint8_t {
  *
  */
 
+#define NUM_EDGES   12
+#define NUM_CORNERS  8
+
 typedef struct {
     uint32_t state[NUM_FACES];
 } cube_s;
@@ -64,51 +67,10 @@ typedef struct {
     int8_t turns;
 } move_s;
 
-// Here's a bunch of handy look-up tables to be used by cube manipulation functions and the solver
-
-// lookup table for the faces that connect to a given face
-static const face_e side_faces[NUM_FACES][NUM_SIDES] = {
-    {FACE_B, FACE_R, FACE_F, FACE_L}, // FACE_U 
-    {FACE_U, FACE_B, FACE_D, FACE_F}, // FACE_R 
-    {FACE_U, FACE_R, FACE_D, FACE_L}, // FACE_F
-    {FACE_U, FACE_F, FACE_D, FACE_B}, // FACE_L
-    {FACE_U, FACE_L, FACE_D, FACE_R}, // FACE_B
-    {FACE_F, FACE_R, FACE_B, FACE_L}  // FACE_D
-};
-
-// bitmasks for masking a given side of a face
-static const uint32_t side_masks[NUM_SIDES] = {
-    0x00000FFF, // SIDE_U
-    0x000FFF00, // SIDE_R
-    0x0FFF0000, // SIDE_D
-    0xFF00000F  // SIDE_L
-};
-
-// lookup table for getting masks to the side pieces that a given face "sees"
-static const uint32_t turn_mask_table[NUM_FACES][NUM_SIDES] = {
-    {side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U]}, // FACE_U
-    {side_masks[SIDE_R], side_masks[SIDE_L], side_masks[SIDE_R], side_masks[SIDE_R]}, // FACE_R
-    {side_masks[SIDE_D], side_masks[SIDE_L], side_masks[SIDE_U], side_masks[SIDE_R]}, // FACE F
-    {side_masks[SIDE_L], side_masks[SIDE_L], side_masks[SIDE_L], side_masks[SIDE_R]}, // FACE L
-    {side_masks[SIDE_U], side_masks[SIDE_L], side_masks[SIDE_D], side_masks[SIDE_R]}, // FACE B
-    {side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D]}  // FACE D
-};
-
-// lookup table for getting which side a given face sees in a given direction
-// e.g. the SIDE_U bits of FACE_F 'see' the bottom SIDE_D bits of FACE_U
-static const side_e turn_sides_table[NUM_FACES][NUM_SIDES] = {
-    {SIDE_U, SIDE_U, SIDE_U, SIDE_U}, // FACE_U
-    {SIDE_R, SIDE_L, SIDE_R, SIDE_R}, // FACE_R
-    {SIDE_D, SIDE_L, SIDE_U, SIDE_R}, // FACE F
-    {SIDE_L, SIDE_L, SIDE_L, SIDE_R}, // FACE L
-    {SIDE_U, SIDE_L, SIDE_D, SIDE_R}, // FACE B
-    {SIDE_D, SIDE_D, SIDE_D, SIDE_D}  // FACE D
-};
-
-// lookup table for getting the opposite side of a face
-static const face_e opposite_faces[NUM_FACES] = {
-    FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U,
-};
+typedef struct {
+    face_e face;
+    uint8_t index;
+} facelet_pos_s;
 
 // fast rol instruction that simplifies to rolq on x86 and rol on arm64
 static inline uint32_t rolq(uint32_t n, uint8_t c) {
@@ -148,6 +110,34 @@ static const cube_s SOLVED_SHIFTCUBE = {
         (uint32_t)FACE_D        | (uint32_t)FACE_D <<  4 | (uint32_t)FACE_D <<  8 |
         (uint32_t)FACE_D <<  28 |                          (uint32_t)FACE_D << 12 |
         (uint32_t)FACE_D <<  24 | (uint32_t)FACE_D << 20 | (uint32_t)FACE_D << 16,
+    }
+};
+
+static const cube_s NULL_CUBE = {
+    .state = {
+        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
+        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
+        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
+
+        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
+        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
+        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
+
+        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
+        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
+        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
+
+        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
+        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
+        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
+
+        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
+        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
+        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
+
+        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
+        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
+        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
     }
 };
 

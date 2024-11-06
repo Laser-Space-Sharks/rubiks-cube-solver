@@ -28,5 +28,5 @@ move_list_s* move_list_from_move_str(const char *move_str);
 void move_list_invert(move_list_s *moves);
 void move_list_simplify(move_list_s *moves);
 
-
+move_list_s* move_list_concat(const move_list_s *first, const move_list_s *second);
 #endif // MOVE_LIST_H

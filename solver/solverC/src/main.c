@@ -3,6 +3,8 @@
 #include "move_list.h"
 #include "solver.h"
 
+#include "lookup_tables.h"
+
 int main(int argc, char *argv[]) {
     cube_s cube = SOLVED_SHIFTCUBE;
 
@@ -17,42 +19,51 @@ int main(int argc, char *argv[]) {
     printf("\n");
     apply_move_list(&cube, moves);
 
+
     printf("Initial Cube State:\n");
     print_cube_map_colors(cube);
     printf("\n");
 
-    move_list_s *cross_solve = solve_stage(cube, cross_mask);
+//    move_list_s *cross_solve = solve_stage(cube, cross_mask);
+
+    move_list_s *cross_solve = solve_cross(cube);
     printf("Solution!:\n");
     print_move_list(cross_solve);
     apply_move_list(&cube, cross_solve);
-    printf("New cube state:\n");
-    print_cube_map_colors(cube);
-
-    printf("Now for F2L 1st pair...\n");
-    move_list_s *f2l_1solve = solve_stage(cube, f2l_1mask);
-    printf("Solution!:\n");
-    print_move_list(f2l_1solve);
-    apply_move_list(&cube, f2l_1solve);
-
-    printf("Now for F2L 2nd pair...\n");
-    move_list_s *f2l_2solve = solve_stage(cube, f2l_2mask);
-    printf("Solution!:\n");
-    print_move_list(f2l_2solve);
-    apply_move_list(&cube, f2l_2solve);
-
-    printf("Now for F2L 3rd pair...\n");
-    move_list_s *f2l_3solve = solve_stage(cube, f2l_3mask);
-    printf("Solution!:\n");
-    print_move_list(f2l_3solve);
-    apply_move_list(&cube, f2l_3solve);
-
-    printf("Now for F2L Final pair...\n");
-    move_list_s *f2l_4solve = solve_stage(cube, f2l_4mask);
-    printf("Solution!:\n");
-    print_move_list(f2l_4solve);
-    apply_move_list(&cube, f2l_4solve);
-    printf("New cube state:\n");
-    print_cube_map_colors(cube);
+//    printf("New cube state:\n");
+//    print_cube_map_colors(cube);
+//
+//    printf("Now for F2L 1st pair...\n");
+//    move_list_s *f2l_1solve = solve_stage(cube, f2l_1mask);
+//    printf("Solution!:\n");
+//    print_move_list(f2l_1solve);
+//    apply_move_list(&cube, f2l_1solve);
+//
+//    printf("Now for F2L 2nd pair...\n");
+//    move_list_s *f2l_2solve = solve_stage(cube, f2l_2mask);
+//    printf("Solution!:\n");
+//    print_move_list(f2l_2solve);
+//    apply_move_list(&cube, f2l_2solve);
+//
+//    printf("Now for F2L 3rd pair...\n");
+//    move_list_s *f2l_3solve = solve_stage(cube, f2l_3mask);
+//    printf("Solution!:\n");
+//    print_move_list(f2l_3solve);
+//    apply_move_list(&cube, f2l_3solve);
+//
+//    printf("Now for F2L Final pair...\n");
+//    move_list_s *f2l_4solve = solve_stage(cube, f2l_4mask);
+//    printf("Solution!:\n");
+//    print_move_list(f2l_4solve);
+//    apply_move_list(&cube, f2l_4solve);
+//    printf("New cube state:\n");
+//    print_cube_map_colors(cube);
+//
+//    printf("Now for 1LLL\n");
+//    move_list_s *oll_solve = solve_1lll(cube);
+//    printf("Solution!\n");
+//    print_move_list(oll_solve);
+//    apply_move_list(&cube, oll_solve);
 
 
     printf("Final Cube State:\n");
@@ -65,6 +76,7 @@ int main(int argc, char *argv[]) {
 //    move_list_free(f2l_2solve);
 //    move_list_free(f2l_3solve);
 //    move_list_free(f2l_4solve);
+//    move_list_free(oll_solve);
 
     return 0;
 }
