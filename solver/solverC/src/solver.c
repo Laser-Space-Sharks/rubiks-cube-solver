@@ -1,9 +1,14 @@
+#define _GNU_SOURCE
+
 #include "solver.h"
 
 #include "cube.h"
 #include "cube_table.h"
 #include "lookup_tables.h"
 #include "move_list.h"
+
+#include <stdio.h>
+#include <sys/types.h>
 
 cube_s masked_cube(const cube_s *cube, const cube_s *mask) {
     cube_s new_cube = *cube;
@@ -41,10 +46,9 @@ cube_s get_cross_edges(const cube_s *cube) {
     return cross_cube;
 }
 
-int stage_recursion(cube_s *cube, const cube_s *mask, const cube_s *goal, cube_table_s *ct, move_list_s *moves, uint8_t depth) {
+int stage_recursion(cube_s *cube, const cube_s *mask, const cube_s *goal, move_list_s *moves, uint8_t depth) {
     if (depth == 0) {
         cube_s test = masked_cube(cube, mask);
-        // cube_table_insert(ct, cube, moves);
 
         if (compare_cubes(&test, goal)) {
             // holy crap, we did it!
@@ -76,7 +80,7 @@ int stage_recursion(cube_s *cube, const cube_s *mask, const cube_s *goal, cube_t
             move_list_insert(moves, move, moves->length);
             apply_move(cube, move);
             move.turns = -turns;
-            if (stage_recursion(cube, mask, goal, ct, moves, depth - 1)) {
+            if (stage_recursion(cube, mask, goal, moves, depth - 1)) {
                 // we did it! Begin undoing these cube moves we've accrewed
                 apply_move(cube, move);
                 return 1;
@@ -96,16 +100,11 @@ move_list_s* solve_stage(cube_s cube, cube_s mask) {
     move_list_s *moves = move_list_create(8);
     cube_s goal = masked_cube(&SOLVED_SHIFTCUBE, &mask);
 
-    cube_table_s *ct = cube_table_create(1);
-
     for (uint8_t depth = 1; depth <= 10; depth++) {
-        if (stage_recursion(&cube, &mask, &goal, ct, moves, depth)) {
+        if (stage_recursion(&cube, &mask, &goal, moves, depth)) {
             break;
         }
     }
-
-//    cube_table_print(ct);
-    cube_table_free(ct);
 
     return moves;
 }
@@ -236,4 +235,46 @@ move_list_s* solve_1lll(cube_s cube) {
     move_list_free(end_moves);
 
     return solution;
+}
+
+cube_table_s* generate_last_layer_table(char *filename) {
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL) {
+        return NULL;
+    }
+
+    char *line = NULL;
+    size_t len;
+    ssize_t read;
+
+    // generate a cube table twice the size of the number of 1lll states,
+    // the number below was chosen arbitrarily 
+    cube_table_s *last_layer_table = cube_table_create(131009);
+
+    cube_s cube;
+    move_list_s *algorithm = NULL;
+    while ((read = getline(&line, &len, file)) != -1) {
+        cube = SOLVED_SHIFTCUBE;
+        move_list_s *algorithm = move_list_from_move_str(line);
+
+        // If a line doesn't have a valid algorithm to parse, fail
+        if (algorithm == NULL) {
+            cube_table_free(last_layer_table);
+            last_layer_table = NULL;
+            break;
+        }
+
+        move_list_invert(algorithm);
+        apply_move_list(&cube, algorithm);
+        move_list_invert(algorithm);
+        cube_table_insert(last_layer_table, &cube, algorithm);
+
+        move_list_free(algorithm);
+    }
+
+
+    free(line);
+    fclose(file);
+    move_list_free(algorithm);
+    return last_layer_table;
 }

@@ -22,6 +22,10 @@ move_list_s* move_list_copy(const move_list_s *src) {
 }
 
 void move_list_free(move_list_s *moves) {
+    if (moves == NULL) {
+        return;
+    }
+
     free(moves->list);
     free(moves);
 }
@@ -80,6 +84,15 @@ bool move_list_delete(move_list_s *moves, size_t index) {
 // reverse a move_list_s "moves" in place
 void move_list_invert(move_list_s *moves) {
     if (moves == NULL) { 
+        return;
+    }
+
+    if (moves->list == NULL || moves->length == 0 || moves->size == 0) {
+        return;
+    }
+
+    if (moves->length == 1) {
+        moves->list[0].turns = positive_mod(-moves->list[0].turns, 4);
         return;
     }
 
@@ -161,7 +174,7 @@ move_list_s* move_list_from_move_str(const char *move_str) {
     };
 
     for (size_t idx = 0; move_str[idx] != '\0'; idx++) {
-        if (move_str[idx] == ' ') {
+        if (move_str[idx] == ' ' || move_str[idx] == '\n' || move_str[idx] == '\t') {
             if (move.face != FACE_NULL && move.turns % 4 != 0) {
                 move_list_insert(moves, move, moves->length);
 

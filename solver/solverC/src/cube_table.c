@@ -35,6 +35,14 @@ size_t cube_table_hash(const cube_table_s *ct, const cube_s *cube) {
 }
 
 bool cube_table_insert(cube_table_s *ct, const cube_s *cube, const move_list_s *moves) {
+    if (cube == NULL || moves == NULL) {
+        return false;
+    }
+
+    if (moves->list == NULL) {
+        return false;
+    }
+
     size_t hash = cube_table_hash(ct, cube);
     size_t index = hash;
 
@@ -61,7 +69,11 @@ bool cube_table_insert(cube_table_s *ct, const cube_s *cube, const move_list_s *
     return true;
 }
 
-move_list_s* cube_table_lookup(const cube_table_s *ct, const cube_s *cube) {
+const move_list_s* cube_table_lookup(const cube_table_s *ct, const cube_s *cube) {
+    if (ct == NULL || cube == NULL) {
+        return NULL;
+    }
+
     size_t hash = cube_table_hash(ct, cube);
     size_t index = hash;
 
@@ -81,11 +93,21 @@ move_list_s* cube_table_lookup(const cube_table_s *ct, const cube_s *cube) {
 }
 
 void cube_table_free(cube_table_s *ct) {
+    if (ct == NULL) {
+        return;
+    }
+
+    if (ct->table == NULL) {
+        free(ct);
+        return;
+    }
+
     for (size_t i = 0; i < ct->size; i++) {
         // we will only have non-null values if the keys are also not null
         if (ct->table[i].key != NULL) {
             move_list_free(ct->table[i].value);
             free(ct->table[i].key);
+            ct->table[i].key = NULL;
         }
     }
 
