@@ -85,6 +85,10 @@ static inline uint32_t positive_mod(int64_t n, uint64_t m) {
     return (n % m + m) % m;
 }
 
+static inline uint8_t mod4(int64_t n) {
+    return n & 3;
+}
+
 static const cube_s SOLVED_SHIFTCUBE = {
     .state = {
         (uint32_t)FACE_U        | (uint32_t)FACE_U <<  4 | (uint32_t)FACE_U <<  8 |
@@ -115,29 +119,12 @@ static const cube_s SOLVED_SHIFTCUBE = {
 
 static const cube_s NULL_CUBE = {
     .state = {
-        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
-        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
-        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
-
-        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
-        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
-        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
-
-        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
-        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
-        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
-
-        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
-        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
-        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
-
-        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
-        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
-        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
-
-        (uint32_t)FACE_NULL        | (uint32_t)FACE_NULL <<  4 | (uint32_t)FACE_NULL <<  8 |
-        (uint32_t)FACE_NULL <<  28 |                             (uint32_t)FACE_NULL << 12 |
-        (uint32_t)FACE_NULL <<  24 | (uint32_t)FACE_NULL << 20 | (uint32_t)FACE_NULL << 16,
+        (uint32_t)0,
+        (uint32_t)0,
+        (uint32_t)0,
+        (uint32_t)0,
+        (uint32_t)0,
+        (uint32_t)0
     }
 };
 
