@@ -22,7 +22,7 @@ static const uint32_t side_masks[NUM_SIDES] = {
 };
 
 // lookup table for getting masks to the side pieces that a given face "sees"
-static const uint32_t turn_mask_table[NUM_FACES][NUM_SIDES] = {
+static const uint32_t move_side_masks[NUM_FACES][NUM_SIDES] = {
     {side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U]}, // FACE_U
     {side_masks[SIDE_R], side_masks[SIDE_L], side_masks[SIDE_R], side_masks[SIDE_R]}, // FACE_R
     {side_masks[SIDE_D], side_masks[SIDE_L], side_masks[SIDE_U], side_masks[SIDE_R]}, // FACE F
@@ -33,7 +33,7 @@ static const uint32_t turn_mask_table[NUM_FACES][NUM_SIDES] = {
 
 // lookup table for getting which side a given face sees in a given direction
 // e.g. the SIDE_U bits of FACE_F 'see' the bottom SIDE_D bits of FACE_U
-static const side_e turn_sides_table[NUM_FACES][NUM_SIDES] = {
+static const side_e move_sfaces[NUM_FACES][NUM_SIDES] = {
     {SIDE_U, SIDE_U, SIDE_U, SIDE_U}, // FACE_U
     {SIDE_R, SIDE_L, SIDE_R, SIDE_R}, // FACE_R
     {SIDE_D, SIDE_L, SIDE_U, SIDE_R}, // FACE F
@@ -153,6 +153,33 @@ static const facelet_pos_s edge_pieces[NUM_EDGES][2] = {
     {{FACE_D, 3}, {FACE_R,5}},
     {{FACE_D, 5}, {FACE_B,5}},
     {{FACE_D, 7}, {FACE_L,5}},
+};
+
+static const face_e f2l_edge_colors[4][2] = {
+    {FACE_R, FACE_F},
+    {FACE_F, FACE_L},
+    {FACE_L, FACE_B},
+    {FACE_B, FACE_R}
+};
+
+static const face_e f2l_corner_colors[4][3] = {
+    {FACE_F, FACE_R, FACE_D},
+    {FACE_L, FACE_F, FACE_D},
+    {FACE_B, FACE_L, FACE_D},
+    {FACE_R, FACE_B, FACE_D}
+};
+
+static const face_e rotate_on_y[4][NUM_FACES] = {
+    {FACE_U, FACE_R, FACE_F, FACE_L, FACE_B, FACE_D},
+    {FACE_U, FACE_B, FACE_R, FACE_F, FACE_L, FACE_D},
+    {FACE_U, FACE_L, FACE_B, FACE_R, FACE_F, FACE_D},
+    {FACE_U, FACE_F, FACE_L, FACE_B, FACE_R, FACE_D}
+};
+
+#define MAX_CUBE_TABLE_DEPTH 7
+
+static const uint32_t cube_table_depth_sizes[MAX_CUBE_TABLE_DEPTH + 1] = {
+    1, 31, 487, 6883, 79103, 1201691, 14998309, 175005217
 };
 
 #endif // LOOKUP_TABLES_H
