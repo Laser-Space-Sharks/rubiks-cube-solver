@@ -10,9 +10,10 @@
 typedef struct cube_table cube_table_s;
 
 cube_table_s* cube_table_create(size_t size);
-bool cube_table_insert(cube_table_s *ct, const cube_s *cube, const move_list_s *moves);
-const move_list_s* cube_table_lookup(const cube_table_s *ct, const cube_s *cube);
+bool cube_table_insert(cube_table_s *ct, const cube_s *key, const move_list_s *moves);
+const alg_list_s* cube_table_lookup(const cube_table_s *ct, const cube_s *cube);
 void cube_table_free(cube_table_s *ct);
+void cube_table_clear(cube_table_s *ct);
 void cube_table_print(cube_table_s *ct);
 
 size_t cube_table_entries(const cube_table_s *ct);
