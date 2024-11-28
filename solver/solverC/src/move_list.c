@@ -13,10 +13,22 @@ move_list_s *move_list_create(size_t size) {
 
 // return a pointer to a new move_list_s with a distinct yet identical array of the moves from src
 move_list_s* move_list_copy(const move_list_s *src) {
-    move_list_s *copy = move_list_create(src->size);
+    if (!src) return NULL;
+
+    move_list_s *copy = move_list_create(src->length);
 
     (void)memcpy(copy->list, src->list, src->length * sizeof(move_s));
     copy->length = src->length;
+
+    return copy;
+}
+
+move_list_s move_list_static_copy(const move_list_s *src) {
+    move_list_s copy;
+    copy.list = malloc(sizeof(move_s) * src->length);
+    (void)memcpy(copy.list, src->list, src->length * sizeof(move_s));
+    copy.length = src->length;
+    copy.size   = src->length;
 
     return copy;
 }
@@ -92,7 +104,7 @@ void move_list_invert(move_list_s *moves) {
     }
 
     if (moves->length == 1) {
-        moves->list[0].turns = positive_mod(-moves->list[0].turns, 4);
+        moves->list[0].turns = mod4(-moves->list[0].turns);
         return;
     }
 
@@ -100,8 +112,8 @@ void move_list_invert(move_list_s *moves) {
         move_s tmp  = moves->list[i];
         move_s tmp2 = moves->list[j];
 
-        tmp.turns  = positive_mod(-tmp.turns,  4);
-        tmp2.turns = positive_mod(-tmp2.turns, 4);
+        tmp.turns  = mod4(-tmp.turns);
+        tmp2.turns = mod4(-tmp2.turns);
 
         moves->list[i] = tmp2;
         moves->list[j] = tmp;
@@ -111,7 +123,7 @@ void move_list_invert(move_list_s *moves) {
 size_t move_list_lookup(const move_list_s *moves, move_s move) {
     for (size_t i = 0; i < moves->length; i++) {
         if (moves->list[i].face == move.face &&
-            positive_mod(moves->list[i].turns, 4) == positive_mod(move.turns, 4)) {
+            mod4(moves->list[i].turns) == mod4(move.turns)) {
             return i;
         }
     }
@@ -148,7 +160,7 @@ void move_list_simplify(move_list_s *moves) {
          * consequtive same/opposite face moves, keep moving idx back
          * to account for new potential simplifications of earlier moves.
          */
-        if (moves->list[idx].turns % 4 == 0) {
+        if (mod4(moves->list[idx].turns) == 0) {
             move_list_delete(moves, idx);
             while (--idx > 0) {
 			    if (!(moves->list[idx].face == opposite_faces[moves->list[idx - 1].face] ||
@@ -166,6 +178,10 @@ void move_list_simplify(move_list_s *moves) {
 }
 
 move_list_s* move_list_from_move_str(const char *move_str) {
+    if (move_str == NULL) {
+        return move_list_create(0);
+    }
+
     move_list_s *moves = move_list_create(2 * MIN_LIST_RESIZE);
 
     move_s move = (move_s) {
@@ -175,7 +191,7 @@ move_list_s* move_list_from_move_str(const char *move_str) {
 
     for (size_t idx = 0; move_str[idx] != '\0'; idx++) {
         if (move_str[idx] == ' ' || move_str[idx] == '\n' || move_str[idx] == '\t') {
-            if (move.face != FACE_NULL && move.turns % 4 != 0) {
+            if (move.face != FACE_NULL && mod4(move.turns) != 0) {
                 move_list_insert(moves, move, moves->length);
 
                 // reset the move to add
@@ -209,7 +225,7 @@ move_list_s* move_list_from_move_str(const char *move_str) {
                 break;
             default:
                 if (move_str[idx] >= '0' && move_str[idx] <= '9') {
-                    move.turns = (move_str[idx] - '0') % 4;
+                    move.turns = mod4(move_str[idx] - '0');
                     break;
                 }
                 // if we're here we've hit an invalid character, moves
@@ -227,25 +243,35 @@ move_list_s* move_list_from_move_str(const char *move_str) {
     return moves;
 }
 
-move_list_s* move_list_concat(const move_list_s *first, const move_list_s *second) {
-    if (first == NULL || second == NULL) {
+void move_list_rotate_on_y(move_list_s *moves, uint8_t y_turns) {
+    if (moves == NULL || moves->list == NULL) {
+        return;
+    }
+
+    for (int i = 0; i < moves->length; i++) {
+        moves->list[i].face = rotate_on_y[mod4(y_turns)][moves->list[i].face];
+    }
+}
+
+move_s* move_list_concat(move_list_s *dest, const move_list_s *src) {
+    if (!dest || !src) {
         return NULL;
     }
 
-    move_list_s *concat = move_list_create(first->length + second->length);
-    concat->length = first->length + second->length;
-
-    if (concat == NULL) return NULL;
-
-    for (size_t idx = 0; idx < concat->size; idx++) {
-        if (idx < first->length) {
-            concat->list[idx] = first->list[idx];
-            continue;
+    size_t new_len = dest->length + src->length;
+    if (new_len > dest->size) {
+        move_s *tmp = (move_s*)realloc(dest->list, sizeof(move_s)*new_len);
+        if (!tmp) {
+            return NULL;
         }
-        concat->list[idx] = second->list[idx - first->length];
+        dest->list = tmp;
+        dest->size = new_len;
     }
 
-    move_list_simplify(concat);
+    for (size_t idx = 0; idx < src->length; idx++) {
+        dest->list[dest->length+idx] = src->list[idx];
+    }
 
-    return concat;
+    dest->length = new_len;
+    return dest->list;
 }
