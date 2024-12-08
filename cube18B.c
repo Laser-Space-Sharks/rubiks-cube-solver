@@ -87,7 +87,7 @@ cube18B_s SOLVED_CUBE18B = {
 
 //Then, we will need a 72x4 table
 uint8_t cubieDefinitions[NUM_CUBIES][4] = {
-  // e    F       R
+  // e    F      R/U/D
     {0, FACE_U, FACE_R, FACE_NULL}, //eUR
     {0, FACE_U, FACE_F, FACE_NULL}, //eUF
     {0, FACE_U, FACE_L, FACE_NULL}, //eUL
