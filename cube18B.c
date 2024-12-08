@@ -1,11 +1,3 @@
-typedef struct {
-    uint8_t state[18]
-} cube18B_s;
-
-cube18B_s SOLVED_CUBE18B = {
-    .state = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
-};
-
 //First we will make 72-long Enum called cubie_e.
 //It will go like this:
 typedef enum : uint8_t {
@@ -84,6 +76,15 @@ typedef enum : uint8_t {
     NUM_CUBIES = 72,
     CUBIE_NULL = 73,
 } cubie_e;
+
+typedef struct {
+    uint8_t state[18]
+} cube18B_s;
+
+cube18B_s SOLVED_CUBE18B = {
+    .state = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
+};
+
 //Then, we will need a 72x4 table
 uint8_t cubieDefinitions[NUM_CUBIES][4] = {
   // e    F       R
