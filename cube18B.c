@@ -1,5 +1,8 @@
 //First we will make 72-long Enum called cubie_e.
 //It will go like this:
+// Procedure for counting in cubies: 
+// for face1 in (U, R, F, L, B, D), for face2 in (U, R, F, L, B, D) exluding face1 and opposite(face1).
+// repeat for e, d, and u type cubies.
 typedef enum : uint8_t {
     eUR = 0,
     eUF = 1,
@@ -77,10 +80,17 @@ typedef enum : uint8_t {
     CUBIE_NULL = 73,
 } cubie_e;
 
+
+//####################################################################################################################################################
+// The cube can be defined in 18 bytes, where each byte is a cubie.
+// |           CROSS              |                               F2L                             |                        1LLL                   |
+// | eFD     eRD     eBD     eLD  |  eFR     dFR     eRB     dRB     eBL     dBL     eLF     dLF  |  eFU     eRU     eBU     uFR     uRB     uBL  |
+// [[Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte]]
+// Experimentally tested via the 1LLL table hashing that we don't need the last 2 1LLL cubies. That's why cubie18B is not cube20B.
+//####################################################################################################################################################
 typedef struct {
     uint8_t state[18]
 } cube18B_s;
-
 cube18B_s SOLVED_CUBE18B = {
     .state = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
 };
@@ -250,13 +260,6 @@ void init_cubieAfterMove() {
 }
 
 void cube18B_apply_move(cube18B_s* cube, move_s move) {
-    //####################################################################################################################################################
-    // The cube can be defined in 18 bytes, where each byte is a cubie.
-    // |           CROSS              |                               F2L                             |                        1LLL                   |
-    // | eFD     eRD     eBD     eLD  |  eFR     dFR     eRB     dRB     eBL     dBL     eLF     dLF  |  eFU     eRU     eBU     uFR     uRB     uBL  |
-    // [[Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte]]
-    // Experimentally tested via the 1LLL table hashing that we don't need the last 2 1LLL cubies. That's why cubie18B is not cube20B.
-    //####################################################################################################################################################
     uint8_t turns = move.turns&3;
     face_e face = move.face;
     cube->state[0]  = cubieAfterMove[cube->state[0]][face][turns];
