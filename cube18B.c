@@ -248,7 +248,7 @@ void init_cubieAfterMove() {
     }
 }
 
-void cube18B_apply_move(cube18B* cube, move_s move) {
+void cube18B_apply_move(cube18B_s* cube, move_s move) {
     //####################################################################################################################################################
     // The cube can be defined in 18 bytes, where each byte is a cubie.
     // |           CROSS              |                               F2L                             |                        1LLL                   |
