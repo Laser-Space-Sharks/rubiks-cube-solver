@@ -236,24 +236,30 @@ void init_cubieAfterMove() {
                 face_e cubie0_face1 = cubieDefinitions[cubie0][1];
                 face_e cubie0_face2 = cubieDefinitions[cubie0][2];
                 face_e cubie0_face3 = cubieDefinitions[cubie0][3];
-                face_e cubie1_face1 = faceAfterMove[cubie0_face1][move_face][move_count];
-                face_e cubie1_face2 = faceAfterMove[cubie0_face2][move_face][move_count];
-                face_e cubie1_face3;
-                if (cubie0_face3 == FACE_NULL) cubie1_face3 = FACE_NULL;
-                else cubie1_face3 = faceAfterMove[cubie0_face3][move_face][move_count];
-
-                uint8_t cubie1_def[4] = {prefix, cubie1_face1, cubie1_face2, cubie1_face3};
-                cubie_e cubie1;
-                for (cubie_e cubie = eUR; cubie < NUM_CUBIES; cubie++) {
-                    if (cubieDefinitions[cubie][0] == cubie1_def[0] &&
-                        cubieDefinitions[cubie][1] == cubie1_def[1] &&
-                        cubieDefinitions[cubie][2] == cubie1_def[2] &&
-                        cubieDefinitions[cubie][3] == cubie1_def[3]) {
-                        cubie1 = cubie;
-                        break;
+                if (cubie0_face1 != move_face &&
+                    cubie0_face2 != move_face &&
+                    cubie0_face3 != move_face) { // move_face would never be equal to FACE_NULL
+                    cubieAfterMove[cubie0][move_face][move_count] = cubie0;
+                } else {
+                    face_e cubie1_face1 = faceAfterMove[cubie0_face1][move_face][move_count];
+                    face_e cubie1_face2 = faceAfterMove[cubie0_face2][move_face][move_count];
+                    face_e cubie1_face3;
+                    if (cubie0_face3 == FACE_NULL) cubie1_face3 = FACE_NULL;
+                    else cubie1_face3 = faceAfterMove[cubie0_face3][move_face][move_count];
+    
+                    uint8_t cubie1_def[4] = {prefix, cubie1_face1, cubie1_face2, cubie1_face3};
+                    cubie_e cubie1;
+                    for (cubie_e cubie = eUR; cubie < NUM_CUBIES; cubie++) {
+                        if (cubieDefinitions[cubie][0] == cubie1_def[0] &&
+                            cubieDefinitions[cubie][1] == cubie1_def[1] &&
+                            cubieDefinitions[cubie][2] == cubie1_def[2] &&
+                            cubieDefinitions[cubie][3] == cubie1_def[3]) {
+                            cubie1 = cubie;
+                            break;
+                        }
                     }
+                    cubieAfterMove[cubie0][move_face][move_count] = cubie1;
                 }
-                cubieAfterMove[cubie0][move_face][move_count] = cubie1;
             }
         }
     }
