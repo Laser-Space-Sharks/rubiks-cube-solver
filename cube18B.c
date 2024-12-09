@@ -449,6 +449,7 @@ void paint_cubie_onto_shiftCube(shiftCube_s* shiftcube, cube_e cubie, cube_e sol
 }
 
 shiftCube_s shiftCube_from_cube18B(const cube18B_s* cube18B) {
+    // those two cubies we omitted will be null on shiftcube.
     shiftCube_s shiftcube = NULL_CUBE; // must be completely 0s
     for (int i = 0; i < 18; i++) {
         paint_cubie_onto_shiftCube(shiftcube, cube18B->cubies[i], SOLVED_CUBE18B[i]);
