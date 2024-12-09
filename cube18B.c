@@ -89,10 +89,10 @@ typedef enum : uint8_t {
 // Experimentally tested via the 1LLL table hashing that we don't need the last 2 1LLL cubies. That's why cube18B is not cube20B.
 //####################################################################################################################################################
 typedef struct {
-    uint8_t state[18]
+    uint8_t cubies[18]
 } cube18B_s;
 cube18B_s SOLVED_CUBE18B = {
-    .state = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
+    .cubies = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
 };
 
 //Then, we will need a 72x4 table
@@ -226,8 +226,20 @@ face_e faceAfterMove[NUM_FACES][NUM_FACES][NUM_SIDES] = {
 };
 
 //Finally, we will have a global, const, and hopefully cached 72x6x4 table
-cubie_e cubieAfterMove[NUM_CUBIES][NUM_FACES][NUM_SIDES];
+cubie_e cubieAfterMove[NUM_FACES][NUM_SIDES][NUM_CUBIES];
 
+cubie_e cubie_from_cubieDefinition(const uint8_t* cubieDef) {
+    cubie_e cubie1;
+    for (cubie_e cubie = eUR; cubie < NUM_CUBIES; cubie++) {
+        if (cubieDefinitions[cubie][0] == cubieDef[0] &&
+            cubieDefinitions[cubie][1] == cubieDef[1] &&
+            cubieDefinitions[cubie][2] == cubieDef[2] &&
+            cubieDefinitions[cubie][3] == cubieDef[3]) {
+            cubie1 = cubie;
+            break;
+        }
+    } return cubie1;
+}
 void init_cubieAfterMove() {
     for (cubie_e cubie0 = eUR; cubie0 < NUM_CUBIES; cubie0++) {
         for (face_e move_face = FACE_U; move_face < NUM_FACES; move_face++) {
@@ -239,7 +251,7 @@ void init_cubieAfterMove() {
                 if (cubie0_face1 != move_face &&
                     cubie0_face2 != move_face &&
                     cubie0_face3 != move_face) { // move_face would never be equal to FACE_NULL
-                    cubieAfterMove[cubie0][move_face][move_count] = cubie0;
+                    cubieAfterMove[move_face][move_count][cubie0] = cubie0;
                 } else {
                     face_e cubie1_face1 = faceAfterMove[cubie0_face1][move_face][move_count];
                     face_e cubie1_face2 = faceAfterMove[cubie0_face2][move_face][move_count];
@@ -248,17 +260,7 @@ void init_cubieAfterMove() {
                     else cubie1_face3 = faceAfterMove[cubie0_face3][move_face][move_count];
     
                     uint8_t cubie1_def[4] = {prefix, cubie1_face1, cubie1_face2, cubie1_face3};
-                    cubie_e cubie1;
-                    for (cubie_e cubie = eUR; cubie < NUM_CUBIES; cubie++) {
-                        if (cubieDefinitions[cubie][0] == cubie1_def[0] &&
-                            cubieDefinitions[cubie][1] == cubie1_def[1] &&
-                            cubieDefinitions[cubie][2] == cubie1_def[2] &&
-                            cubieDefinitions[cubie][3] == cubie1_def[3]) {
-                            cubie1 = cubie;
-                            break;
-                        }
-                    }
-                    cubieAfterMove[cubie0][move_face][move_count] = cubie1;
+                    cubieAfterMove[move_face][move_count][cubie0] = cubie_from_cubieDefinition(cubie1_def);
                 }
             }
         }
@@ -266,24 +268,24 @@ void init_cubieAfterMove() {
 }
 
 void cube18B_apply_move(cube18B_s* cube, move_s move) {
-    uint8_t turns = move.turns&3;
+    uint8_t turns = move.turns & 3;
     face_e face = move.face;
-    cube->state[0]  = cubieAfterMove[cube->state[0]][face][turns];
-    cube->state[1]  = cubieAfterMove[cube->state[1]][face][turns];
-    cube->state[2]  = cubieAfterMove[cube->state[2]][face][turns];
-    cube->state[3]  = cubieAfterMove[cube->state[3]][face][turns];
-    cube->state[4]  = cubieAfterMove[cube->state[4]][face][turns];
-    cube->state[5]  = cubieAfterMove[cube->state[5]][face][turns];
-    cube->state[6]  = cubieAfterMove[cube->state[6]][face][turns];
-    cube->state[7]  = cubieAfterMove[cube->state[7]][face][turns];
-    cube->state[8]  = cubieAfterMove[cube->state[8]][face][turns];
-    cube->state[9]  = cubieAfterMove[cube->state[9]][face][turns];
-    cube->state[10] = cubieAfterMove[cube->state[10]][face][turns];
-    cube->state[11] = cubieAfterMove[cube->state[11]][face][turns];
-    cube->state[12] = cubieAfterMove[cube->state[12]][face][turns];
-    cube->state[13] = cubieAfterMove[cube->state[13]][face][turns];
-    cube->state[14] = cubieAfterMove[cube->state[14]][face][turns];
-    cube->state[15] = cubieAfterMove[cube->state[15]][face][turns];
-    cube->state[16] = cubieAfterMove[cube->state[16]][face][turns];
-    cube->state[17] = cubieAfterMove[cube->state[17]][face][turns];
+    cube->cubies[0]  = cubieAfterMove[face][turns][cube->cubies[0]];
+    cube->cubies[1]  = cubieAfterMove[face][turns][cube->cubies[1]];
+    cube->cubies[2]  = cubieAfterMove[face][turns][cube->cubies[2]];
+    cube->cubies[3]  = cubieAfterMove[face][turns][cube->cubies[3]];
+    cube->cubies[4]  = cubieAfterMove[face][turns][cube->cubies[4]];
+    cube->cubies[5]  = cubieAfterMove[face][turns][cube->cubies[5]];
+    cube->cubies[6]  = cubieAfterMove[face][turns][cube->cubies[6]];
+    cube->cubies[7]  = cubieAfterMove[face][turns][cube->cubies[7]];
+    cube->cubies[8]  = cubieAfterMove[face][turns][cube->cubies[8]];
+    cube->cubies[9]  = cubieAfterMove[face][turns][cube->cubies[9]];
+    cube->cubies[10] = cubieAfterMove[face][turns][cube->cubies[10]];
+    cube->cubies[11] = cubieAfterMove[face][turns][cube->cubies[11]];
+    cube->cubies[12] = cubieAfterMove[face][turns][cube->cubies[12]];
+    cube->cubies[13] = cubieAfterMove[face][turns][cube->cubies[13]];
+    cube->cubies[14] = cubieAfterMove[face][turns][cube->cubies[14]];
+    cube->cubies[15] = cubieAfterMove[face][turns][cube->cubies[15]];
+    cube->cubies[16] = cubieAfterMove[face][turns][cube->cubies[16]];
+    cube->cubies[17] = cubieAfterMove[face][turns][cube->cubies[17]];
 }
