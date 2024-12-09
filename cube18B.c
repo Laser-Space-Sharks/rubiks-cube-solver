@@ -348,12 +348,10 @@ cubie_e cubie_from_shiftCube(const shiftCube_s* cube, cubie_e solved_pos) {
                 } else {
                     cubieDef = {solvedCubieDef[0], corner[1].face, corner[2].face, corner[0].face};
                 }
+            } else if (facelet_colors[0] == cubie_face2) {
+                cubieDef = {solvedCubieDef[0], corner[2].face, corner[0].face, corner[1].face};
             } else {
-                if (facelet_colors[0] == cubie_face2) {
-                    cubieDef = {solvedCubieDef[0], corner[2].face, corner[0].face, corner[1].face};
-                } else {
-                    cubieDef = {solvedCubieDef[0], corner[2].face, corner[1].face, corner[0].face};
-                }
+                cubieDef = {solvedCubieDef[0], corner[2].face, corner[1].face, corner[0].face};
             }
             cubie1 = cubie_from_cubieDefinition(cubieDef);
             break;
@@ -399,14 +397,15 @@ void paint_cubie_onto_shiftCube(shiftCube_s* shiftcube, cube_e cubie, cube_e sol
             facelet_pos_s edge[2] = edge_pieces[i];
             if ((edge[0].face == cubieDef[1] || edge[0].face == cubieDef[2]) &&
                 (edge[1].face == cubieDef[1] || edge[1].face == cubieDef[2])) {
-                if (edge[0].face == cubieDef[1]) {
-                    paint_facelet_onto_shiftCube(shiftcube, edge[0], solved_cubieDef[1]);
-                    paint_facelet_onto_shiftCube(shiftcube, edge[1], solved_cubieDef[2]);
-                } else {
-                    paint_facelet_onto_shiftCube(shiftcube, edge[0], solved_cubieDef[2]);
-                    paint_facelet_onto_shiftCube(shiftcube, edge[1], solved_cubieDef[1]);
-                } break;
+                continue;
             }
+            if (edge[0].face == cubieDef[1]) {
+                paint_facelet_onto_shiftCube(shiftcube, edge[0], solved_cubieDef[1]);
+                paint_facelet_onto_shiftCube(shiftcube, edge[1], solved_cubieDef[2]);
+            } else {
+                paint_facelet_onto_shiftCube(shiftcube, edge[0], solved_cubieDef[2]);
+                paint_facelet_onto_shiftCube(shiftcube, edge[1], solved_cubieDef[1]);
+            } break;
         }
     } else {
         for (int i = 0; i < NUM_CORNERS; i++) {
@@ -414,38 +413,37 @@ void paint_cubie_onto_shiftCube(shiftCube_s* shiftcube, cube_e cubie, cube_e sol
             if ((corner[0].face == cubieDef[1] || corner[0].face == cubieDef[2] || corner[0].face == cubieDef[3]) &&
                 (corner[1].face == cubieDef[1] || corner[1].face == cubieDef[2] || corner[1].face == cubieDef[3]) &&
                 (corner[2].face == cubieDef[1] || corner[2].face == cubieDef[2] || corner[2].face == cubieDef[3])) {
-                if (corner[0].face == cubieDef[1]) {
-                    if (corner[1].face == cubieDef[2]) {
-                        paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[1]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[2]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[3]);
-                    } else {
-                        paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[1]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[3]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[2]);
-                    }
-                } else if (corner[0].face == cubieDef[2]) {
-                    if (corner[1].face == cubieDef[1]) {
-                        paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[2]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[1]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[3]);
-                    } else {
-                        paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[2]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[3]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[1]);
-                    }
-                } else {
-                    if (corner[1].face == cubieDef[1]) {
-                        paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[3]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[1]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[2]);
-                    } else {
-                        paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[3]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[2]);
-                        paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[1]);
-                    }
-                } break;
+                continue;
             }
+            if (corner[0].face == cubieDef[1]) {
+                if (corner[1].face == cubieDef[2]) {
+                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[1]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[2]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[3]);
+                } else {
+                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[1]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[3]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[2]);
+                }
+            } else if (corner[0].face == cubieDef[2]) {
+                if (corner[1].face == cubieDef[1]) {
+                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[2]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[1]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[3]);
+                } else {
+                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[2]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[3]);
+                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[1]);
+                }
+            } else if (corner[1].face == cubieDef[1]) {
+                paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[3]);
+                paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[1]);
+                paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[2]);
+            } else {
+                paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[3]);
+                paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[2]);
+                paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[1]);
+            } break;
         }
     }
 }
