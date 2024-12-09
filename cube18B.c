@@ -1,7 +1,7 @@
 //First we will make 72-long Enum called cubie_e.
 //It will go like this:
 // Procedure for counting in cubies: 
-// for face1 in (U, R, F, L, B, D), for face2 in (U, R, F, L, B, D) exluding face1 and opposite(face1).
+// for face1 in (U, R, F, L, B, D), for face2 in (U, R, F, L, B, D) excluding face1 and opposite(face1).
 // repeat for e, d, and u type cubies.
 typedef enum : uint8_t {
     eUR = 0,
