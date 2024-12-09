@@ -381,6 +381,29 @@ void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move) {
     cube->cubies[5] = cubieAfterMove[face][turns][cube->cubies[5]];
 }
 
+bool unordered_match_faces_2x2(face_e a1, face_e a2, face_e b1, face_e b2) {
+    return ((a1 == b1 || a1 == b2) &&
+            (a2 == b1 || a2 == b2));
+}
+bool unordered_match_faces_3x3(face_e a1, face_e a2, face_e a3, face_e b1, face_e b2, face_e b3) {
+    return ((a1 == b1 || a1 == b2 || a1 == b3) &&
+            (a2 == b1 || a2 == b2 || a2 == b3) &&
+            (a3 == b1 || a3 == b2 || a3 == b3));
+}
+uint8_t find_face_in_2(face_e a1, face_e a2, face_e b) {
+    uint8_t ind;
+    if (b == a1) ind = 0;
+    else ind = 1;
+    return ind;
+}
+uint8_t find_face_in_3(face_e a1, face_e a2, face_e a3, face_e b) {
+    uint8_t ind;
+    if (b == a1) ind = 0;
+    else if (b == a2) ind = 1;
+    else ind = 2;
+    return ind;
+}
+
 face_e facelet_at_facelet_pos(const shiftCube_s* cube, facelet_pos_s pos) {
     return (((cube->state[pos.face])>>(4*pos.index))&15);
 }
@@ -388,7 +411,7 @@ face_e facelet_at_facelet_pos(const shiftCube_s* cube, facelet_pos_s pos) {
 cubie_e cubie_from_shiftCube(const shiftCube_s* cube, cubie_e solved_pos) {
     uint8_t solvedCubieDef[4] = cubieDefinitions[solved_pos];
     cubie_e cubie1;
-    if (cubeDef[0] == 0) { // cubie is an edge
+    if (solvedCubieDef[0] == 0) { // cubie is an edge
         for (int i = 0; i < NUM_EDGES; i++) {
             facelet_pos_s edge[2] = edge_pieces[i];
             face_e facelet_colors[2] = {
@@ -397,18 +420,18 @@ cubie_e cubie_from_shiftCube(const shiftCube_s* cube, cubie_e solved_pos) {
             };
             cubie_face1 = solvedCubieDef[1];
             cubie_face2 = solvedCubieDef[2];
-            if ((cubie_face1 != facelet_colors[0] && cubie_face1 != facelet_colors[1]) ||
-                (cubie_face2 != facelet_colors[0] && cubie_face2 != facelet_colors[1])) {
-                continue;
+            if (unordered_match_faces_2x2(
+                    cubie_face1, cubie_face2, 
+                    facelet_colors[0], facelet_colors[1]
+                )) {
+                uint8_t cubieDef[4] = {
+                    solvedCubieDef[0];
+                    edge[find_face_in_2(cubie_face1, cubie_face2, facelet_colors[0])].face;
+                    edge[find_face_in_2(cubie_face1, cubie_face2, facelet_colors[1])].face;
+                    FACE_NULL;
+                }; cubie1 = cubie_from_cubieDefinition(cubieDef);
+                break;
             }
-            uint8_t cubieDef[4];
-            if (facelet_colors[0] == cubie_face2) {
-                cubieDef = {0, edge[0].face, edge[1].face, FACE_NULL};
-            } else {
-                cubieDef = {0, edge[1].face, edge[0].face, FACE_NULL};
-            }
-            cubie1 = cubie_from_cubieDefinition(cubieDef);
-            break;
         }
     } else {
         for (int i = 0; i < NUM_CORNERS; i++) {
@@ -421,31 +444,19 @@ cubie_e cubie_from_shiftCube(const shiftCube_s* cube, cubie_e solved_pos) {
             cubie_face1 = solvedCubieDef[1];
             cubie_face2 = solvedCubieDef[2];
             cubie_face3 = solvedCubieDef[3];
-            if ((cubie_face1 != facelet_colors[0] && cubie_face1 != facelet_colors[1] && cubie_face1 != facelet_colors[2]) ||
-                (cubie_face2 != facelet_colors[0] && cubie_face2 != facelet_colors[1] && cubie_face2 != facelet_colors[2]) ||
-                (cubie_face3 != facelet_colors[0] && cubie_face3 != facelet_colors[1] && cubie_face3 != facelet_colors[2])) {
-                continue;
+            if (unordered_match_faces_3x3(
+                    cubie_face1, cubie_face2, cubie_face3,
+                    facelet_colors[0], facelet_colors[1], facelet_colors[3]
+                )) {
+                uint8_t cubieDef[4] = {
+                    cubieDef[0] = solvedCubieDef[0];
+                    cubieDef[1] = corner[find_face_in_3(facelet_colors[0], facelet_colors[1], facelet_colors[2], cubie_face1)].face;
+                    cubieDef[2] = corner[find_face_in_3(facelet_colors[0], facelet_colors[1], facelet_colors[2], cubie_face2)].face;
+                    cubieDef[3] = corner[find_face_in_3(facelet_colors[0], facelet_colors[1], facelet_colors[2], cubie_face3)].face;
+                };
+                cubie1 = cubie_from_cubieDefinition(cubieDef);
+                break;
             }
-            uint8_t cubieDef[4];
-            if (facelet_colors[0] == cubie_face1) {
-                if (facelet_colors[1] == cubie_face2) {
-                    cubieDef = {solvedCubieDef[0], corner[0].face, corner[1].face, corner[2].face};
-                } else {
-                    cubieDef = {solvedCubieDef[0], corner[0].face, corner[2].face, corner[1].face};
-                }
-            } else if (facelet_colors[1] == cubie_face1) {
-                if (facelet_colors[0] == cubie_face2) {
-                    cubieDef = {solvedCubieDef[0], corner[1].face, corner[0].face, corner[2].face};
-                } else {
-                    cubieDef = {solvedCubieDef[0], corner[1].face, corner[2].face, corner[0].face};
-                }
-            } else if (facelet_colors[0] == cubie_face2) {
-                cubieDef = {solvedCubieDef[0], corner[2].face, corner[0].face, corner[1].face};
-            } else {
-                cubieDef = {solvedCubieDef[0], corner[2].face, corner[1].face, corner[0].face};
-            }
-            cubie1 = cubie_from_cubieDefinition(cubieDef);
-            break;
         }
     } return cubie;
 }
@@ -486,55 +497,27 @@ void paint_cubie_onto_shiftCube(shiftCube_s* shiftcube, cube_e cubie, cube_e sol
     if (cubieDef[0] == 0) { // if cubie is an edge
         for (int i = 0; i < NUM_EDGES; i++) {
             facelet_pos_s edge[2] = edge_pieces[i];
-            if ((edge[0].face != cubieDef[1] && edge[0].face != cubieDef[2]) ||
-                (edge[1].face != cubieDef[1] && edge[1].face != cubieDef[2])) {
-                continue;
+            if (unordered_match_faces_2x2(
+                    edge[0].face, edge[1].face, 
+                    cubieDef[1], cubieDef[2],
+                )) {
+                paint_facelet_onto_shiftcube(shiftcube, edge[find_face_in_2(cubieDef[1], cubieDef[2], edge[0].face)], solved_cubieDef[1]);
+                paint_facelet_onto_shiftcube(shiftcube, edge[find_face_in_2(cubieDef[1], cubieDef[2], edge[1].face)], solved_cubieDef[2]);
+                break;
             }
-            if (edge[0].face == cubieDef[1]) {
-                paint_facelet_onto_shiftCube(shiftcube, edge[0], solved_cubieDef[1]);
-                paint_facelet_onto_shiftCube(shiftcube, edge[1], solved_cubieDef[2]);
-            } else {
-                paint_facelet_onto_shiftCube(shiftcube, edge[0], solved_cubieDef[2]);
-                paint_facelet_onto_shiftCube(shiftcube, edge[1], solved_cubieDef[1]);
-            } break;
         }
     } else {
         for (int i = 0; i < NUM_CORNERS; i++) {
             facelet_pos_s corner[3] = corner_pieces[i];
-            if ((corner[0].face != cubieDef[1] && corner[0].face != cubieDef[2] && corner[0].face != cubieDef[3]) ||
-                (corner[1].face != cubieDef[1] && corner[1].face != cubieDef[2] && corner[1].face != cubieDef[3]) ||
-                (corner[2].face != cubieDef[1] && corner[2].face != cubieDef[2] && corner[2].face != cubieDef[3])) {
-                continue;
+            if (unordered_match_faces_3x3(
+                    corner[0].face, corner[1].face, corner[2].face,
+                    cubieDef[1], cubieDef[2], cubieDef[3]
+                )) {
+                paint_facelet_onto_shiftcube(shiftcube, corner[find_face_in_3(cubieDef[1], cubieDef[2], cubieDef[3], corner[0].face)], solved_cubieDef[1]);
+                paint_facelet_onto_shiftcube(shiftcube, corner[find_face_in_3(cubieDef[1], cubieDef[2], cubieDef[3], corner[1].face)], solved_cubieDef[2]);
+                paint_facelet_onto_shiftcube(shiftcube, corner[find_face_in_3(cubieDef[1], cubieDef[2], cubieDef[3], corner[2].face)], solved_cubieDef[3]);
+                break;
             }
-            if (corner[0].face == cubieDef[1]) {
-                if (corner[1].face == cubieDef[2]) {
-                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[1]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[2]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[3]);
-                } else {
-                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[1]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[3]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[2]);
-                }
-            } else if (corner[0].face == cubieDef[2]) {
-                if (corner[1].face == cubieDef[1]) {
-                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[2]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[1]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[3]);
-                } else {
-                    paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[2]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[3]);
-                    paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[1]);
-                }
-            } else if (corner[1].face == cubieDef[1]) {
-                paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[3]);
-                paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[1]);
-                paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[2]);
-            } else {
-                paint_facelet_onto_shiftCube(shiftcube, corner[0], solved_cubieDef[3]);
-                paint_facelet_onto_shiftCube(shiftcube, corner[1], solved_cubieDef[2]);
-                paint_facelet_onto_shiftCube(shiftcube, corner[2], solved_cubieDef[1]);
-            } break;
         }
     }
 }
