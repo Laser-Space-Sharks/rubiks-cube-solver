@@ -89,10 +89,22 @@ typedef enum : uint8_t {
 // Experimentally tested via the 1LLL table hashing that we don't need the last 2 1LLL cubies. That's why cube18B is not cube20B.
 //####################################################################################################################################################
 typedef struct {
-    uint8_t cubies[18]
+    cubie_e cubies[18]
 } cube18B_s;
+typedef struct {
+    cubie_e cubies[12]
+} cube18B_xcross_s;
+typedef struct {
+    cubie_e cubies[6]
+} LL_cube18B_s;
 cube18B_s SOLVED_CUBE18B = {
     .cubies = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
+};
+cube18B_xcross_s SOLVED_CUBE18B_XCROSS = {
+    .cubies = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF}
+};
+cube18B_1LLL_s SOLVED_CUBE18B_1LLL = {
+    .cubies = {eFU, eRU, eBU, eFR, uRB, uBL}
 };
 
 //Then, we will need a 72x4 table
