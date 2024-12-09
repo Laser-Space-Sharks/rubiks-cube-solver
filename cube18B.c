@@ -342,7 +342,7 @@ cubie_e cubie_from_shiftCube(const shiftCube_s* cube, cubie_e solved_pos) {
                 } else {
                     cubieDef = {solvedCubieDef[0], corner[0].face, corner[2].face, corner[1].face};
                 }
-            } if (facelet_colors[1] == cubie_face1) {
+            } else if (facelet_colors[1] == cubie_face1) {
                 if (facelet_colors[0] == cubie_face2) {
                     cubieDef = {solvedCubieDef[0], corner[1].face, corner[0].face, corner[2].face};
                 } else {
