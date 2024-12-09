@@ -308,7 +308,7 @@ cubie_e cubie_from_cubieDefinition(const uint8_t* cubieDef) {
 void init_cubieAfterMove() {
     for (cubie_e cubie0 = eUR; cubie0 < NUM_CUBIES; cubie0++) {
         for (face_e move_face = FACE_U; move_face < NUM_FACES; move_face++) {
-            for (side_e move_count = SIDE_U; move_count < 4; move_count++) {
+            for (uint8_t move_count = 0; move_count < 4; move_count++) {
                 int prefix = cubieDefinitions[cubie0][0];
                 face_e cubie0_face1 = cubieDefinitions[cubie0][1];
                 face_e cubie0_face2 = cubieDefinitions[cubie0][2];
@@ -373,12 +373,12 @@ void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_s move) {
 void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move) {
     uint8_t turns = move.turns & 3;
     face_e face = move.face;
-    cube->cubies[0]  = cubieAfterMove[face][turns][cube->cubies[0]];
-    cube->cubies[1]  = cubieAfterMove[face][turns][cube->cubies[1]];
-    cube->cubies[2]  = cubieAfterMove[face][turns][cube->cubies[2]];
-    cube->cubies[3]  = cubieAfterMove[face][turns][cube->cubies[3]];
-    cube->cubies[4]  = cubieAfterMove[face][turns][cube->cubies[4]];
-    cube->cubies[5]  = cubieAfterMove[face][turns][cube->cubies[5]];
+    cube->cubies[0] = cubieAfterMove[face][turns][cube->cubies[0]];
+    cube->cubies[1] = cubieAfterMove[face][turns][cube->cubies[1]];
+    cube->cubies[2] = cubieAfterMove[face][turns][cube->cubies[2]];
+    cube->cubies[3] = cubieAfterMove[face][turns][cube->cubies[3]];
+    cube->cubies[4] = cubieAfterMove[face][turns][cube->cubies[4]];
+    cube->cubies[5] = cubieAfterMove[face][turns][cube->cubies[5]];
 }
 
 face_e facelet_at_facelet_pos(const shiftCube_s* cube, facelet_pos_s pos) {
@@ -453,24 +453,24 @@ cubie_e cubie_from_shiftCube(const shiftCube_s* cube, cubie_e solved_pos) {
 cube18B_s cube18B_from_shiftCube(const shiftCube_s* shiftcube) {
     cube18B_s cube18B = {
         .cubies = {
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[0]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[1]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[2]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[3]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[4]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[5]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[6]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[7]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[8]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[9]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[10]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[11]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[12]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[13]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[14]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[15]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[16]),
-            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B[18])
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[0]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[1]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[2]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[3]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[4]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[5]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[6]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[7]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[8]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[9]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[10]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[11]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[12]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[13]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[14]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[15]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[16]),
+            cubie_from_shiftCube(shiftcube, SOLVED_CUBE18B.cubies[17])
         }
     };
     return cube18B;
@@ -486,8 +486,8 @@ void paint_cubie_onto_shiftCube(shiftCube_s* shiftcube, cube_e cubie, cube_e sol
     if (cubieDef[0] == 0) { // if cubie is an edge
         for (int i = 0; i < NUM_EDGES; i++) {
             facelet_pos_s edge[2] = edge_pieces[i];
-            if ((edge[0].face == cubieDef[1] || edge[0].face == cubieDef[2]) &&
-                (edge[1].face == cubieDef[1] || edge[1].face == cubieDef[2])) {
+            if ((edge[0].face != cubieDef[1] && edge[0].face != cubieDef[2]) ||
+                (edge[1].face != cubieDef[1] && edge[1].face != cubieDef[2])) {
                 continue;
             }
             if (edge[0].face == cubieDef[1]) {
@@ -501,9 +501,9 @@ void paint_cubie_onto_shiftCube(shiftCube_s* shiftcube, cube_e cubie, cube_e sol
     } else {
         for (int i = 0; i < NUM_CORNERS; i++) {
             facelet_pos_s corner[3] = corner_pieces[i];
-            if ((corner[0].face == cubieDef[1] || corner[0].face == cubieDef[2] || corner[0].face == cubieDef[3]) &&
-                (corner[1].face == cubieDef[1] || corner[1].face == cubieDef[2] || corner[1].face == cubieDef[3]) &&
-                (corner[2].face == cubieDef[1] || corner[2].face == cubieDef[2] || corner[2].face == cubieDef[3])) {
+            if ((corner[0].face != cubieDef[1] && corner[0].face != cubieDef[2] && corner[0].face != cubieDef[3]) ||
+                (corner[1].face != cubieDef[1] && corner[1].face != cubieDef[2] && corner[1].face != cubieDef[3]) ||
+                (corner[2].face != cubieDef[1] && corner[2].face != cubieDef[2] && corner[2].face != cubieDef[3])) {
                 continue;
             }
             if (corner[0].face == cubieDef[1]) {
@@ -543,6 +543,6 @@ shiftCube_s shiftCube_from_cube18B(const cube18B_s* cube18B) {
     // those two cubies we omitted will be null on shiftcube.
     shiftCube_s shiftcube = NULL_CUBE; // must be completely 0s
     for (int i = 0; i < 18; i++) {
-        paint_cubie_onto_shiftCube(shiftcube, cube18B->cubies[i], SOLVED_CUBE18B[i]);
+        paint_cubie_onto_shiftCube(shiftcube, cube18B->cubies[i], SOLVED_CUBE18B.cubies[i]);
     } return shiftcube;
 }
