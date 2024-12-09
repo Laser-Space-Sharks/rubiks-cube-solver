@@ -86,7 +86,7 @@ typedef enum : uint8_t {
 // |           CROSS              |                               F2L                             |                        1LLL                   |
 // | eFD     eRD     eBD     eLD  |  eFR     dFR     eRB     dRB     eBL     dBL     eLF     dLF  |  eFU     eRU     eBU     uFR     uRB     uBL  |
 // [[Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte], [Byte]]
-// Experimentally tested via the 1LLL table hashing that we don't need the last 2 1LLL cubies. That's why cubie18B is not cube20B.
+// Experimentally tested via the 1LLL table hashing that we don't need the last 2 1LLL cubies. That's why cube18B is not cube20B.
 //####################################################################################################################################################
 typedef struct {
     uint8_t state[18]
