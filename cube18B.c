@@ -98,10 +98,10 @@ typedef struct {
     cubie_e cubies[6]
 } cube18B_1LLL_s;
 cube18B_s SOLVED_CUBE18B = {
-    .cubies = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
+    .cubies = {eFD, eRD, eBD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
 };
 cube18B_xcross_s SOLVED_CUBE18B_XCROSS = {
-    .cubies = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF}
+    .cubies = {eFD, eRD, eBD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF}
 };
 cube18B_1LLL_s SOLVED_CUBE18B_1LLL = {
     .cubies = {eFU, eRU, eBU, eFR, uRB, uBL}
