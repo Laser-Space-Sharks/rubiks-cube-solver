@@ -1,5 +1,5 @@
-//First we will make 72-long Enum called cubie_e.
-//It will go like this:
+// We will need make 72-long Enum called cubie_e.
+// It will go like this:
 // Procedure for counting in cubies: 
 // for face1 in (U, R, F, L, B, D), for face2 in (U, R, F, L, B, D) excluding face1 and opposite(face1).
 // repeat for e, d, and u type cubies.
@@ -96,7 +96,7 @@ typedef struct {
 } cube18B_xcross_s;
 typedef struct {
     cubie_e cubies[6]
-} LL_cube18B_s;
+} cube18B_1LLL_s;
 cube18B_s SOLVED_CUBE18B = {
     .cubies = {eFD, eRD, eLD, eFR, dFR, eRB, dRB, eBL, dBL, eLF, dLF, eFU, eRU, eBU, eFR, uRB, uBL}
 };
@@ -106,7 +106,60 @@ cube18B_xcross_s SOLVED_CUBE18B_XCROSS = {
 cube18B_1LLL_s SOLVED_CUBE18B_1LLL = {
     .cubies = {eFU, eRU, eBU, eFR, uRB, uBL}
 };
-
+cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube) {
+    cube18B_xcross_s xcross_portion = {
+        .cubies = {
+            cube->cubies[0],
+            cube->cubies[1],
+            cube->cubies[2],
+            cube->cubies[3],
+            cube->cubies[4],
+            cube->cubies[5],
+            cube->cubies[6],
+            cube->cubies[7],
+            cube->cubies[8],
+            cube->cubies[9],
+            cube->cubies[10],
+            cube->cubies[11]
+        }
+    }; return xcross_portion;
+}
+cube18B_1LLL_s cube18B_1LLL_from_cube18B(const cube18B_s* cube) {
+    cube18B_1LLL_s LL_portion = {
+        .cubies = {
+            cube->cubies[12],
+            cube->cubies[13],
+            cube->cubies[14],
+            cube->cubies[15],
+            cube->cubies[16],
+            cube->cubies[17]
+        }
+    }; return LL_portion;
+}
+cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cube18B_1LLL_s* LL) {
+    cube18B_s cube = {
+        .cubies = {
+            xcross->cubies[0],
+            xcross->cubies[1],
+            xcross->cubies[2],
+            xcross->cubies[3],
+            xcross->cubies[4],
+            xcross->cubies[5],
+            xcross->cubies[6],
+            xcross->cubies[7],
+            xcross->cubies[8],
+            xcross->cubies[9],
+            xcross->cubies[10],
+            xcross->cubies[11],
+            LL->cubies[0],
+            LL->cubies[1],
+            LL->cubies[2],
+            LL->cubies[3],
+            LL->cubies[4],
+            LL->cubies[5]
+        }
+    }; return cube;
+}
 //Then, we will need a 72x4 table
 uint8_t cubieDefinitions[NUM_CUBIES][4] = {
   // e    F      R/U/D
@@ -186,7 +239,7 @@ uint8_t cubieDefinitions[NUM_CUBIES][4] = {
     {2, FACE_D, FACE_B, FACE_R}, //uDB
 };
 //Then, we will need a 6x6x4 table
-face_e faceAfterMove[NUM_FACES][NUM_FACES][NUM_SIDES] = {
+face_e faceAfterMove[NUM_FACES][NUM_FACES][4] = {
     {// U
         {FACE_U, FACE_U, FACE_U, FACE_U}, // U
         {FACE_U, FACE_B, FACE_D, FACE_F}, // R
@@ -255,7 +308,7 @@ cubie_e cubie_from_cubieDefinition(const uint8_t* cubieDef) {
 void init_cubieAfterMove() {
     for (cubie_e cubie0 = eUR; cubie0 < NUM_CUBIES; cubie0++) {
         for (face_e move_face = FACE_U; move_face < NUM_FACES; move_face++) {
-            for (side_e move_count = SIDE_U; move_count < NUM_SIDES; move_count++) {
+            for (side_e move_count = SIDE_U; move_count < 4; move_count++) {
                 int prefix = cubieDefinitions[cubie0][0];
                 face_e cubie0_face1 = cubieDefinitions[cubie0][1];
                 face_e cubie0_face2 = cubieDefinitions[cubie0][2];
@@ -300,6 +353,32 @@ void cube18B_apply_move(cube18B_s* cube, move_s move) {
     cube->cubies[15] = cubieAfterMove[face][turns][cube->cubies[15]];
     cube->cubies[16] = cubieAfterMove[face][turns][cube->cubies[16]];
     cube->cubies[17] = cubieAfterMove[face][turns][cube->cubies[17]];
+}
+void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_s move) {
+    uint8_t turns = move.turns & 3;
+    face_e face = move.face;
+    cube->cubies[0]  = cubieAfterMove[face][turns][cube->cubies[0]];
+    cube->cubies[1]  = cubieAfterMove[face][turns][cube->cubies[1]];
+    cube->cubies[2]  = cubieAfterMove[face][turns][cube->cubies[2]];
+    cube->cubies[3]  = cubieAfterMove[face][turns][cube->cubies[3]];
+    cube->cubies[4]  = cubieAfterMove[face][turns][cube->cubies[4]];
+    cube->cubies[5]  = cubieAfterMove[face][turns][cube->cubies[5]];
+    cube->cubies[6]  = cubieAfterMove[face][turns][cube->cubies[6]];
+    cube->cubies[7]  = cubieAfterMove[face][turns][cube->cubies[7]];
+    cube->cubies[8]  = cubieAfterMove[face][turns][cube->cubies[8]];
+    cube->cubies[9]  = cubieAfterMove[face][turns][cube->cubies[9]];
+    cube->cubies[10] = cubieAfterMove[face][turns][cube->cubies[10]];
+    cube->cubies[11] = cubieAfterMove[face][turns][cube->cubies[11]];
+}
+void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move) {
+    uint8_t turns = move.turns & 3;
+    face_e face = move.face;
+    cube->cubies[0]  = cubieAfterMove[face][turns][cube->cubies[0]];
+    cube->cubies[1]  = cubieAfterMove[face][turns][cube->cubies[1]];
+    cube->cubies[2]  = cubieAfterMove[face][turns][cube->cubies[2]];
+    cube->cubies[3]  = cubieAfterMove[face][turns][cube->cubies[3]];
+    cube->cubies[4]  = cubieAfterMove[face][turns][cube->cubies[4]];
+    cube->cubies[5]  = cubieAfterMove[face][turns][cube->cubies[5]];
 }
 
 face_e facelet_at_facelet_pos(const shiftCube_s* cube, facelet_pos_s pos) {
