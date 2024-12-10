@@ -30,7 +30,6 @@ face_e facelet_at_facelet_pos(const shiftCube_s* cube, facelet_pos_s pos) {
     return (((cube->state[pos.face])>>(4*pos.index))&15);
 }
 
-// We will need make 50-long Enum called cubie_e.
 typedef enum : uint8_t {
     CUBIE_UR  = 0,
     CUBIE_RU  = 1,
@@ -149,7 +148,6 @@ cube18B_1LLL_s SOLVED_CUBE18B_1LLL = {
         CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_FR, CUBIE_RBU, CUBIE_BLU
     }
 };
-//Then, we will need a 72x3 table
 face_e cubieDefinitions[NUM_SEQUENCES][3] = {
     {FACE_U, FACE_R, FACE_NULL}, //UR 
     {FACE_R, FACE_U, FACE_NULL}, //RU 
@@ -224,7 +222,6 @@ face_e cubieDefinitions[NUM_SEQUENCES][3] = {
     {FACE_D, FACE_B, FACE_R},   //DBR
     {FACE_B, FACE_R, FACE_D},   //BRD
 };
-//Then, we will need a 6x6x4 table
 face_e faceAfterMove[NUM_FACES][NUM_FACES][4] = {
     {// U
         {FACE_U, FACE_U, FACE_U, FACE_U}, // U
