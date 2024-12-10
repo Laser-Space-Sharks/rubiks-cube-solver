@@ -287,7 +287,7 @@ void init_cubieToOrderedPositions();
 void init_cubieAfterMove();
 void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
 void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
-cubie_e cubie_from_cubieDefinition(const uint8_t* cubieDef);
+cubie_e cubie_from_cubieDefinition(const face_e* cubieDef);
 uint8_t solvedCubieInd_from_colorSequence(const face_e* colorsArr);
 cube18B_s cube18B_from_shiftCube(const shiftCube_s* shiftcube);
 void paint_facelet_onto_shiftCube(shiftCube_s* shiftcube, facelet_pos_s pos, face_e color);
@@ -309,8 +309,8 @@ void init_cubieDefinition_to_cubie() {
 }
 void init_colorSequence_to_solvedCubieInd() {
     for (int solved = 0; solved < 20; solved++) {
-        solvedCubie = SOLVED_CUBIES[solved];
-        solvedCubieDef[3] = cubieDefinitions[solvedCubie];
+        cubie_e solvedCubie = SOLVED_CUBIES[solved];
+        face_e solvedCubieDef[3] = cubieDefinitions[solvedCubie];
         face_e sequences[6][3] = {
             {solvedCubieDef[0], solvedCubieDef[1], solvedCubieDef[2]},
             {solvedCubieDef[0], solvedCubieDef[2], solvedCubieDef[1]},
@@ -383,7 +383,7 @@ void init_cubieAfterMove() {
                     if (cubie0_face3 == FACE_NULL) cubie1_face3 = FACE_NULL;
                     else cubie1_face3 = faceAfterMove[cubie0_face3][move_face][move_count];
     
-                    uint8_t cubie1_def[4] = {prefix, cubie1_face1, cubie1_face2, cubie1_face3};
+                    uint8_t cubie1_def[3] = {cubie1_face1, cubie1_face2, cubie1_face3};
                     cubieAfterMove[move_face][move_count][cubie0] = cubie_from_cubieDefinition(cubie1_def);
                 }
             }
@@ -394,7 +394,7 @@ void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie() {
     for (int row = 0; row < NUM_EDGES; row++) { //*********
         for (cubie_e colors = 0; colors < 24; colors++) { //*********
             face_e colorsArr[3] = cubieDefinitions[colors];
-            uint8_t solved_cubieInd = solvedCubieInd_from_colorSequence(colorsArr);
+            uint8_t solved_cubieInd = solvedCubieInd_from_colorSequence(colorsArr); //*********
             cubie_e solvedCubie = SOLVED_CUBIES[solved_cubieInd];
             face_e solvedCubieDef[3] = cubieDefinitions[solvedCubie];
             //-------------------------------------------------
@@ -424,7 +424,7 @@ void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie() {
     for (int row = 0; row < NUM_CORNERS; row++) {
         for (cubie_e colors = 24; colors < 72; colors++) {
             face_e colorsArr[3] = cubieDefinitions[colors];
-            uint8_t solved_cubieInd = solvedCubieInd_from_colorSequence(colorsArr);
+            uint8_t solved_cubieInd = solvedCubieInd_from_colorSequence(colorsArr); //*********
             cubie_e solvedCubie = SOLVED_CUBIES[solved_cubieInd];
             face_e solvedCubieDef[3] = cubieDefinitions[solvedCubie];
             //-------------------------------------------------
@@ -451,7 +451,7 @@ void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie() {
     }
 }
 
-cubie_e cubie_from_cubieDefinition(const uint8_t* cubieDef) {
+cubie_e cubie_from_cubieDefinition(const face_e* cubieDef) {
     return cubieDefinition_to_cubie[cubieDef[0]][cubieDef[1]][cubieDef[2] - (cubieDef[2] == FACE_NULL)];
 }
 
