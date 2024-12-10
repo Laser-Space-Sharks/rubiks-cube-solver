@@ -294,7 +294,7 @@ cubie_e cubieAfterMove[NUM_FACES][NUM_SIDES][NUM_CUBIES];                       
 uint8_t colorsAtEdgePosInd_to_cubieAndSolvedCubie[24][NUM_EDGES][2];             // 5: depends on 1 and 2
 uint8_t colorsAtCornerPosInd_to_cubieAndSolvedCubie[48][NUM_CORNERS][2];         // 6: depends on 1 and 2
 
-void init_all_tables_in_cubie18Bc();
+void init_all_tables_in_cube18Bc();
 void init_cubieDefinition_to_cubie();                    // do not share
 void init_colorSequence_to_solvedCubieInd();             // do not share
 void init_cubieToOrderedPositions();                     // do not share
