@@ -12,7 +12,7 @@ EXTERNAL DEPENDENCIES:
 
 
 facelet_pos_s NULL_POS = {
-    FACE_NULL, -1
+    FACE_NULL, 8
 };
 
 bool unordered_match_faces_2x2(face_e a1, face_e a2, face_e b1, face_e b2) {
