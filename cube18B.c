@@ -279,6 +279,24 @@ cubie_e cubieAfterMove[NUM_FACES][NUM_SIDES][NUM_CUBIES];                // 3: d
 uint8_t colorsAtEdgePosInd_to_cubieAndSolvedCubie[24][NUM_EDGES][2];     // 4: depends on 1 and 2
 uint8_t colorsAtCornerPosInd_to_cubieAndSolvedCubie[48][NUM_CORNERS][2]; // 5: depends on 1 and 2
 
+void init_cubieDefinition_to_cubie();
+void init_cubieToOrderedPositions();
+void init_cubieAfterMove();
+void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
+void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
+cubie_e cubie_from_cubieDefinition(const uint8_t* cubieDef);
+cube18B_s cube18B_from_shiftCube(const shiftCube_s* shiftcube);
+void paint_facelet_onto_shiftCube(shiftCube_s* shiftcube, facelet_pos_s pos, face_e color);
+void paint_cubie_onto_shiftCube(shiftCube_s* shiftcube, cube_e cubie, cubie_e solved_cubie);
+shiftCube_s shiftCube_from_cube18B(const cube18B_s* cube18B);
+cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube);
+cube18B_1LLL_s cube18B_1LLL_from_cube18B(const cube18B_s* cube);
+cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cube18B_1LLL_s* LL);
+void cube18B_apply_move(cube18B_s* cube, move_s move);
+void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_s move);
+void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move);
+
+
 void init_cubieDefinition_to_cubie() {
     for (cubie_e cubie = CUBIE_UR; cubie < NUM_SEQUENCES; cubie++) {
         face_e cubieDef[3] = cubeDefinitions[cubie];
