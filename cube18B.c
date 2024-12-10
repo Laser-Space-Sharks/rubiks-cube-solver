@@ -30,7 +30,6 @@ face_e facelet_at_facelet_pos(const shiftCube_s* cube, facelet_pos_s pos) {
     return (((cube->state[pos.face])>>(4*pos.index))&15);
 }
 
-// We will need make 50-long Enum called cubie_e.
 typedef enum : uint8_t {
     CUBIE_UR  = 0,
     CUBIE_RU  = 1,
