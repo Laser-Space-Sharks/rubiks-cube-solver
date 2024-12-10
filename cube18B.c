@@ -314,7 +314,7 @@ void cube18B_apply_move(cube18B_s* cube, move_s move);
 void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_s move);
 void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move);
 
-void init_all_tables_in_cubie18Bc() {
+void init_all_tables_in_cube18Bc() {
     init_cubieDefinition_to_cubie();
     init_colorSequence_to_solvedCubieInd();
     init_cubieToOrderedPositions();
