@@ -22,6 +22,7 @@ from numpy import asarray, zeros, where, copy
 from os import chdir
 # from io import BytesIO
 from subprocess import run
+from math import trunc, log2
 
 #######################################################
 ####### Constant Variables            #################
@@ -82,7 +83,9 @@ def delImg(directory, filename):
     chdir(directory)
     run(["rm", f"{filename}.jpg"])
 
-# caution untested 
+# caution untested
+# this did not work with our device but it is
+# the "proper" way to capture an image
 ####### CAPTURE IMAGE WITH PICAMERA #######
 # def captureImgPiCam():
 #     camera = Picamera2()
@@ -153,8 +156,8 @@ def colorAnalysis(peice):
         # if more than 70% of the cube is that color, return the color
         if percent >= 60 or (i == 1 and redColorCheck(peiceCopy, mask) >= 60):
             return i
-    # if nothing hits you've got a problem 
-    return -1
+    # if nothing hits its probably white
+    return 3
 
 def redColorCheck(peiceCopy, mask1):
     red2Upper = asarray([6, 255, 255])
@@ -261,9 +264,34 @@ def getCenterColor(image):
 #######################################################
 ####### Format to ShiftCube ###########################
 #######################################################
+def faceSearch(cubeArray, query):
+    for face in cubeArray:
+        if face[1][1] == query:
+            return face
+    return -1
 
 def convertToShiftCube(cubeArray):
-    shiftCube = zeros(shape=6, dtype=uint64)
+    shiftCube = zeros(shape=6, dtype=uint32)
+    # face order is the order in which you will save to
+    # the shift cube, written in Colorblind notation
+    faceOrder = [0, 1, 2, 3, 4, 5]
+    for i in range(6):
+        face = faceSearch(faceOrder[i])
+        faceNum = 0; i = 1; j = 0
+        while i!=0 or j!=0:
+            peice = face[i][j]
+            faceNum << (4) # move over a nibble
+            faceNum += peice
+            # traverse in loop around center
+            if j == 0 and i != 2:
+                i+=1
+            if i == 2 and j != 2:
+                j+=1
+            if j == 2 and i !=0:
+                i-=1
+            if i == 0:
+                j-=1
+        shiftCube[i] = faceNum 
     return shiftCube
 
 #######################################################
@@ -294,5 +322,3 @@ def testColorBoundries(imagePath):
     image = imread(f"{imagePath}.jpg", IMREAD_COLOR)
     color = colorAnalysis(image)
     print(COLORS[color])
-
-test(1, 2, "test666")
