@@ -2,7 +2,7 @@
 
 #include "solver.h"
 
-#include "cube.h"
+#include "shift_cube.h"
 #include "lookup_tables.h"
 
 #include <stdio.h>
@@ -26,20 +26,20 @@ void cleanup_solver() {
     cube_table_free(xcross_end_ct);
 }
 
-cube_s get_f2l_pair(const cube_s *cube, uint8_t pair) {
+shift_cube_s get_f2l_pair(const shift_cube_s *cube, uint8_t pair) {
     if (pair >= 4) {
         return NULL_CUBE;
     }
 
-    cube_s pair_edge = get_edges(cube, f2l_edge_colors[pair][0], f2l_edge_colors[pair][1]);
-    cube_s pair_corner = get_corners(cube, f2l_corner_colors[pair][0], f2l_corner_colors[pair][1], f2l_corner_colors[pair][2]);
+    shift_cube_s pair_edge = get_edges(cube, f2l_edge_colors[pair][0], f2l_edge_colors[pair][1]);
+    shift_cube_s pair_corner = get_corners(cube, f2l_corner_colors[pair][0], f2l_corner_colors[pair][1], f2l_corner_colors[pair][2]);
 
     return ored_cube(&pair_edge, &pair_corner);
 }
 
-int stage_recursion(cube_s *cube, const cube_s *mask, const cube_s *goal, alg_s *alg, uint8_t depth) {
+int stage_recursion(shift_cube_s *cube, const shift_cube_s *mask, const shift_cube_s *goal, alg_s *alg, uint8_t depth) {
     if (depth == 0) {
-        cube_s test = masked_cube(cube, mask);
+        shift_cube_s test = masked_cube(cube, mask);
 
         if (compare_cubes(&test, goal)) {
             // holy crap, we did it!
@@ -87,9 +87,9 @@ int stage_recursion(cube_s *cube, const cube_s *mask, const cube_s *goal, alg_s 
 
 
 // Iterative deepening depth-first search
-alg_s* solve_stage(cube_s cube, cube_s mask) {
+alg_s* solve_stage(shift_cube_s cube, shift_cube_s mask) {
     alg_s *alg = alg_create(8);
-    cube_s goal = masked_cube(&SOLVED_SHIFTCUBE, &mask);
+    shift_cube_s goal = masked_cube(&SOLVED_SHIFTCUBE, &mask);
 
     for (uint8_t depth = 1; depth <= 10; depth++) {
         if (stage_recursion(&cube, &mask, &goal, alg, depth)) {
@@ -100,7 +100,7 @@ alg_s* solve_stage(cube_s cube, cube_s mask) {
     return alg;
 }
 
-int bidirectional_recursion(cube_s *cube, cube_table_s *our_ct, cube_table_s *other_ct, alg_s *alg, uint8_t depth) {
+int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table_s *other_ct, alg_s *alg, uint8_t depth) {
     if (depth == 0) {
         if (!cube_table_lookup(our_ct, cube)) {
             cube_table_insert(our_ct, cube, alg);
@@ -156,7 +156,7 @@ int bidirectional_recursion(cube_s *cube, cube_table_s *our_ct, cube_table_s *ot
     return 0;
 }
 
-alg_s* bidirectional_search(const cube_s *start, const cube_s *goal, uint8_t max_depth) {
+alg_s* bidirectional_search(const shift_cube_s *start, const shift_cube_s *goal, uint8_t max_depth) {
     uint8_t start_depth, end_depth;
     start_depth = end_depth = max_depth/2;
 
@@ -175,8 +175,8 @@ alg_s* bidirectional_search(const cube_s *start, const cube_s *goal, uint8_t max
     alg_s *start_alg = alg_create(start_depth);
     alg_s *end_alg   = alg_create(end_depth);
 
-    cube_s start_cube = *start;
-    cube_s end_cube   = *goal;
+    shift_cube_s start_cube = *start;
+    shift_cube_s end_cube   = *goal;
 
     for (uint8_t depth = 0; depth < start_depth; depth++) {
         if (bidirectional_recursion(&start_cube, start_ct, end_ct, start_alg, depth)) {
@@ -202,7 +202,7 @@ alg_s* bidirectional_search(const cube_s *start, const cube_s *goal, uint8_t max
     return start_alg;
 }
 
-static alg_s* xcross_search(const cube_s *start, const cube_s *goal) {
+static alg_s* xcross_search(const shift_cube_s *start, const shift_cube_s *goal) {
     if (!xcross_start_ct || !xcross_end_ct) {
         printf("Didn't have the tables initialized :(\n");
         return NULL;
@@ -211,8 +211,8 @@ static alg_s* xcross_search(const cube_s *start, const cube_s *goal) {
     alg_s *start_alg = alg_create(5);
     alg_s *end_alg   = alg_create(5);
 
-    cube_s start_cube = *start;
-    cube_s end_cube   = *goal;
+    shift_cube_s start_cube = *start;
+    shift_cube_s end_cube   = *goal;
 
     for (uint8_t depth = 0; depth < 5; depth++) {
         if (bidirectional_recursion(&start_cube, xcross_start_ct, xcross_end_ct, start_alg, depth)) {
@@ -235,15 +235,15 @@ static alg_s* xcross_search(const cube_s *start, const cube_s *goal) {
     return start_alg;
 }
 
-alg_s* solve_cross(cube_s cube) {
+alg_s* solve_cross(shift_cube_s cube) {
     // match to cross pieces
-    cube_s start_cube = get_edges(&cube, FACE_D, FACE_NULL);
-    cube_s goal_cube = get_edges(&SOLVED_SHIFTCUBE, FACE_D, FACE_NULL);
+    shift_cube_s start_cube = get_edges(&cube, FACE_D, FACE_NULL);
+    shift_cube_s goal_cube = get_edges(&SOLVED_SHIFTCUBE, FACE_D, FACE_NULL);
 
     return bidirectional_search(&start_cube, &goal_cube, 8);
 }
 
-static void last_layer_stage(const cube_s *cube, alg_s **best, const alg_s *xsolve,
+static void last_layer_stage(const shift_cube_s *cube, alg_s **best, const alg_s *xsolve,
                              const alg_s *f2l_solve, const cube_table_s *ll_table) {
 
     alg_s *solve = alg_copy(xsolve);
@@ -265,12 +265,12 @@ static void last_layer_stage(const cube_s *cube, alg_s **best, const alg_s *xsol
     *best = solve;
 }
 
-static void f2l_stage(cube_s cube, alg_s **best, const alg_s *xsolve,
+static void f2l_stage(shift_cube_s cube, alg_s **best, const alg_s *xsolve,
                       alg_s *f2l_solve, const cube_table_s *f2l_table,
                       const cube_table_s *ll_table) {
 
-    const cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
-    cube_s cube_f2l_bits = masked_cube(&cube, &f2l_4mask);
+    const shift_cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
+    shift_cube_s cube_f2l_bits = masked_cube(&cube, &f2l_4mask);
 
     // we solved F2L! Proceed to the last layer
     if (compare_cubes(&cube_f2l_bits, &solved_f2l_bits)) {
@@ -279,8 +279,8 @@ static void f2l_stage(cube_s cube, alg_s **best, const alg_s *xsolve,
     }
 
     for (uint8_t pair = 0; pair < 4; pair++) {
-        cube_s pair_mask = get_f2l_pair(&cube, pair);
-        cube_s solved_pair_mask = get_f2l_pair(&SOLVED_SHIFTCUBE, pair);
+        shift_cube_s pair_mask = get_f2l_pair(&cube, pair);
+        shift_cube_s solved_pair_mask = get_f2l_pair(&SOLVED_SHIFTCUBE, pair);
         if (compare_cubes(&pair_mask, &solved_pair_mask)) continue;
 
         const alg_list_s *pair_algs = cube_table_lookup(f2l_table, &pair_mask);
@@ -289,7 +289,7 @@ static void f2l_stage(cube_s cube, alg_s **best, const alg_s *xsolve,
         }
 
         for (size_t alg = 0; alg < pair_algs->num_algs; alg++) {
-            cube_s new_cube = cube;
+            shift_cube_s new_cube = cube;
             apply_alg(&new_cube, &pair_algs->list[alg]);
             size_t old_len = f2l_solve->length;
             alg_concat(f2l_solve, &pair_algs->list[alg]);
@@ -299,19 +299,19 @@ static void f2l_stage(cube_s cube, alg_s **best, const alg_s *xsolve,
     }
 }
 
-static void xcross_stage(cube_s cube, alg_s **best,
+static void xcross_stage(shift_cube_s cube, alg_s **best,
                          const cube_table_s *f2l_table, const cube_table_s *ll_table) {
-    cube_s mask_cube   = get_edges(&cube, FACE_D, FACE_NULL);
-    cube_s target_cube = get_edges(&SOLVED_SHIFTCUBE, FACE_D, FACE_NULL);
+    shift_cube_s mask_cube   = get_edges(&cube, FACE_D, FACE_NULL);
+    shift_cube_s target_cube = get_edges(&SOLVED_SHIFTCUBE, FACE_D, FACE_NULL);
 
     for (uint8_t pair = 0; pair < 4; pair++) {
-        cube_s cube_pair_mask   = get_f2l_pair(&cube, pair);
-        cube_s target_pair_mask = get_f2l_pair(&SOLVED_SHIFTCUBE, pair);
-        cube_s start_cube       = ored_cube(&mask_cube, &cube_pair_mask);
-        cube_s goal_cube        = ored_cube(&target_cube, &target_pair_mask);
+        shift_cube_s cube_pair_mask   = get_f2l_pair(&cube, pair);
+        shift_cube_s target_pair_mask = get_f2l_pair(&SOLVED_SHIFTCUBE, pair);
+        shift_cube_s start_cube       = ored_cube(&mask_cube, &cube_pair_mask);
+        shift_cube_s goal_cube        = ored_cube(&target_cube, &target_pair_mask);
         alg_s *xcross_alg       = xcross_search(&start_cube, &goal_cube);
 
-        cube_s new_cube = cube;
+        shift_cube_s new_cube = cube;
         apply_alg(&new_cube, xcross_alg);
         alg_s *f2l_solve = alg_create(10);
         f2l_stage(new_cube, best, xcross_alg, f2l_solve, f2l_table, ll_table);
@@ -320,7 +320,7 @@ static void xcross_stage(cube_s cube, alg_s **best,
     }
 }
 
-alg_s* solve_cube(cube_s cube, const cube_table_s *f2l_table, const cube_table_s *ll_table) {
+alg_s* solve_cube(shift_cube_s cube, const cube_table_s *f2l_table, const cube_table_s *ll_table) {
     if (!f2l_table || !ll_table) {
         printf("No F2L or last layer table was provided!");
     }
@@ -374,7 +374,7 @@ cube_table_s* generate_last_layer_table(char *filename) {
     // the number below was chosen arbitrarily 
     cube_table_s *last_layer_table = cube_table_create(131009);
 
-    cube_s cube;
+    shift_cube_s cube;
     alg_s *algorithm = NULL;
     while ((read = getline(&line, &len, file)) != -1) {
         cube = SOLVED_SHIFTCUBE;
@@ -416,11 +416,11 @@ cube_table_s* generate_f2l_table(char *filename) {
     // the number below was chosen arbitrarily 
     cube_table_s *f2l_table = cube_table_create(2909);
 
-    cube_s cube;
+    shift_cube_s cube;
     alg_s *algorithm = NULL;
 
     while ((read = getline(&line, &len, file)) != -1) {
-        cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
+        shift_cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
         alg_s *algorithm = alg_from_alg_str(line);
 
         // If a line doesn't have a valid algorithm to parse, fail

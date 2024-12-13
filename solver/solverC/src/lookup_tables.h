@@ -47,7 +47,7 @@ static const face_e opposite_faces[NUM_FACES] = {
     FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U,
 };
 
-static const cube_s cross_mask = {
+static const shift_cube_s cross_mask = {
     .state[FACE_U] = 0x00000000,
     .state[FACE_R] = 0x00F00000,
     .state[FACE_F] = 0x00F00000,
@@ -56,7 +56,7 @@ static const cube_s cross_mask = {
     .state[FACE_D] = 0xF0F0F0F0
 };
 
-static const cube_s f2l_1mask = {
+static const shift_cube_s f2l_1mask = {
     .state[FACE_U] = 0x00000000,
     .state[FACE_R] = 0xFFF00000,
     .state[FACE_F] = 0x00FFF000,
@@ -65,7 +65,7 @@ static const cube_s f2l_1mask = {
     .state[FACE_D] = 0xF0F0FFF0
 };
 
-static const cube_s f2l_2mask = {
+static const shift_cube_s f2l_2mask = {
     .state[FACE_U] = 0x00000000,
     .state[FACE_R] = 0xFFF00000,
     .state[FACE_F] = 0xFFFFF000,
@@ -74,7 +74,7 @@ static const cube_s f2l_2mask = {
     .state[FACE_D] = 0xF0F0FFFF
 };
 
-static const cube_s f2l_3mask = {
+static const shift_cube_s f2l_3mask = {
     .state[FACE_U] = 0x00000000,
     .state[FACE_R] = 0xFFFFF000,
     .state[FACE_F] = 0xFFFFF000,
@@ -83,7 +83,7 @@ static const cube_s f2l_3mask = {
     .state[FACE_D] = 0xF0FFFFFF
 };
 
-static const cube_s f2l_4mask = {
+static const shift_cube_s f2l_4mask = {
     .state[FACE_U] = 0x00000000,
     .state[FACE_R] = 0xFFFFF000,
     .state[FACE_F] = 0xFFFFF000,
@@ -92,7 +92,7 @@ static const cube_s f2l_4mask = {
     .state[FACE_D] = 0xFFFFFFFF
 };
 
-static const cube_s oll_mask = {
+static const shift_cube_s oll_mask = {
     .state[FACE_U] = 0xFFFFFFFF,
     .state[FACE_R] = 0xFFFFF000,
     .state[FACE_F] = 0xFFFFF000,
@@ -101,7 +101,7 @@ static const cube_s oll_mask = {
     .state[FACE_D] = 0xFFFFFFFF
 };
 
-static const cube_s pll_mask = {
+static const shift_cube_s pll_mask = {
     .state[FACE_U] = 0x00000000,
     .state[FACE_R] = 0x00000FFF,
     .state[FACE_F] = 0x00000FFF,
@@ -111,7 +111,7 @@ static const cube_s pll_mask = {
 };
 
 // Cube piece lookups
-static const cube_s corner_piece_mask = {
+static const shift_cube_s corner_piece_mask = {
     .state[FACE_U] = 0xF0F0F0F0,
     .state[FACE_R] = 0xF0F0F0F0,
     .state[FACE_F] = 0xF0F0F0F0,
@@ -120,7 +120,7 @@ static const cube_s corner_piece_mask = {
     .state[FACE_D] = 0xF0F0F0F0
 };
 
-static const cube_s edge_piece_mask = {
+static const shift_cube_s edge_piece_mask = {
     .state[FACE_U] = 0x0F0F0F0F,
     .state[FACE_R] = 0x0F0F0F0F,
     .state[FACE_F] = 0x0F0F0F0F,

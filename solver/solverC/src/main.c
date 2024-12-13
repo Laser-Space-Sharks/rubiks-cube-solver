@@ -1,12 +1,12 @@
 #include "main.h"
-#include "cube.h"
+#include "shift_cube.h"
 #include "alg.h"
 #include "solver.h"
 
 int main(int argc, char *argv[]) {
     init_move_bitrolls();
 
-    cube_s cube = SOLVED_SHIFTCUBE;
+    shift_cube_s cube = SOLVED_SHIFTCUBE;
 
     cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
     cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");

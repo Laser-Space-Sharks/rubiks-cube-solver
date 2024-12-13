@@ -35,6 +35,84 @@ typedef enum : uint8_t {
     NUM_SIDES
 } side_e;
 
+typedef enum : uint8_t {
+    CUBIE_UR  = 0,
+    CUBIE_RU  = 1,
+    CUBIE_UF  = 2,
+    CUBIE_FU  = 3,
+    CUBIE_UL  = 4,
+    CUBIE_LU  = 5,
+    CUBIE_UB  = 6,
+    CUBIE_BU  = 7,
+    CUBIE_RF  = 8,
+    CUBIE_FR  = 9,
+    CUBIE_RB  = 10,
+    CUBIE_BR  = 11,
+    CUBIE_RD  = 12,
+    CUBIE_DR  = 13,
+    CUBIE_FL  = 14,
+    CUBIE_LF  = 15,
+    CUBIE_FD  = 16,
+    CUBIE_DF  = 17,
+    CUBIE_LB  = 18,
+    CUBIE_BL  = 19,
+    CUBIE_LD  = 20,
+    CUBIE_DL  = 21,
+    CUBIE_BD  = 22,
+    CUBIE_DB  = 23,
+    CUBIE_FRU = 24,
+    CUBIE_UFR = 25,
+    CUBIE_RUF = 26,
+    CUBIE_LFU = 27,
+    CUBIE_ULF = 28,
+    CUBIE_FUL = 29,
+    CUBIE_BLU = 30,
+    CUBIE_UBL = 31,
+    CUBIE_LUB = 32,
+    CUBIE_RBU = 33,
+    CUBIE_URB = 34,
+    CUBIE_BUR = 35,
+    CUBIE_FRD = 36,
+    CUBIE_DFR = 37,
+    CUBIE_RDF = 38,
+    CUBIE_LFD = 39,
+    CUBIE_DLF = 40,
+    CUBIE_FDL = 41,
+    CUBIE_BLD = 42,
+    CUBIE_DBL = 43,
+    CUBIE_LDB = 44,
+    CUBIE_RBD = 45,
+    CUBIE_DRB = 46,
+    CUBIE_BDR = 47, // This is the last real cubie. All cubies beyond are kept for colorSequence encoding
+    CUBIE_FUR = 48,
+    CUBIE_URF = 49,
+    CUBIE_RFU = 50,
+    CUBIE_LUF = 51,
+    CUBIE_UFL = 52,
+    CUBIE_FLU = 53,
+    CUBIE_BUL = 54,
+    CUBIE_ULB = 55,
+    CUBIE_LBU = 56,
+    CUBIE_RUB = 57,
+    CUBIE_UBR = 58,
+    CUBIE_BRU = 59,
+    CUBIE_FDR = 60,
+    CUBIE_DRF = 61,
+    CUBIE_RFD = 62,
+    CUBIE_LDF = 63,
+    CUBIE_DFL = 64,
+    CUBIE_FLD = 65,
+    CUBIE_BDL = 66,
+    CUBIE_DLB = 67,
+    CUBIE_LBD = 68,
+    CUBIE_RDB = 69,
+    CUBIE_DBR = 70,
+    CUBIE_BRD = 71,
+    NUM_CUBIES = 48,
+    NUM_SEQUENCES = 72,
+    CUBIE_NULL = 73
+} cubie_e;
+
 /* Each element of a cube_s is a bitfield representing the state of a cube face,
  * with each 4-bit-word being a different piece, indexed in the following way:
  *
@@ -60,7 +138,17 @@ typedef enum : uint8_t {
 
 typedef struct {
     uint32_t state[NUM_FACES];
-} cube_s;
+} shift_cube_s;
+
+typedef struct {
+    cubie_e cubies[18];
+} cube18B_s;
+typedef struct {
+    cubie_e cubies[12];
+} cube18B_xcross_s;
+typedef struct {
+    cubie_e cubies[6];
+} cube18B_1LLL_s;
 
 typedef struct {
     face_e face;
@@ -89,7 +177,7 @@ static inline uint8_t mod4(int64_t n) {
     return n & 3;
 }
 
-static const cube_s SOLVED_SHIFTCUBE = {
+static const shift_cube_s SOLVED_SHIFTCUBE = {
     .state = {
         (uint32_t)FACE_U        | (uint32_t)FACE_U <<  4 | (uint32_t)FACE_U <<  8 |
         (uint32_t)FACE_U <<  28 |                          (uint32_t)FACE_U << 12 |
@@ -117,7 +205,7 @@ static const cube_s SOLVED_SHIFTCUBE = {
     }
 };
 
-static const cube_s NULL_CUBE = {
+static const shift_cube_s NULL_CUBE = {
     .state = {
         (uint32_t)0,
         (uint32_t)0,

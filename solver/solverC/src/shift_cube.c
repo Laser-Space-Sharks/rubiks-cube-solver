@@ -1,13 +1,13 @@
-#include "cube.h"
+#include "shift_cube.h"
 
 #include "lookup_tables.h"
 
-cube_s* cube_copy(const cube_s *cube) {
+shift_cube_s* cube_copy(const shift_cube_s *cube) {
     if (cube == NULL) {
         return NULL;
     }
 
-    cube_s *copy = (cube_s*)malloc(sizeof(cube_s));
+    shift_cube_s *copy = (shift_cube_s*)malloc(sizeof(shift_cube_s));
     if (copy == NULL) {
         return NULL;
     }
@@ -17,8 +17,8 @@ cube_s* cube_copy(const cube_s *cube) {
     return copy;
 }
 
-cube_s ored_cube(const cube_s *a, const cube_s *b) {
-    cube_s new_cube = *a;
+shift_cube_s ored_cube(const shift_cube_s *a, const shift_cube_s *b) {
+    shift_cube_s new_cube = *a;
 
     new_cube.state[FACE_U] |= b->state[FACE_U];
     new_cube.state[FACE_R] |= b->state[FACE_R];
@@ -30,8 +30,8 @@ cube_s ored_cube(const cube_s *a, const cube_s *b) {
     return new_cube;
 }
 
-cube_s masked_cube(const cube_s *cube, const cube_s *mask) {
-    cube_s new_cube = *cube;
+shift_cube_s masked_cube(const shift_cube_s *cube, const shift_cube_s *mask) {
+    shift_cube_s new_cube = *cube;
 
     new_cube.state[FACE_U] &= mask->state[FACE_U];
     new_cube.state[FACE_R] &= mask->state[FACE_R];
@@ -44,7 +44,7 @@ cube_s masked_cube(const cube_s *cube, const cube_s *mask) {
 }
 
 // test for the equality of two cube states
-bool compare_cubes(const cube_s *a, const cube_s *b) {
+bool compare_cubes(const shift_cube_s *a, const shift_cube_s *b) {
     if (memcmp(a->state, b->state, 24) == 0) {
         return true;
     }
@@ -55,8 +55,8 @@ bool compare_cubes(const cube_s *a, const cube_s *b) {
 // builds a masked cube with edges that match color1 and color2,
 // if color1 or color2 are FACE_NULL, it matches to any face which matches
 // the criterion set by another color
-cube_s get_edges(const cube_s *cube, face_e color1, face_e color2) {
-    cube_s masked_edges = NULL_CUBE;
+shift_cube_s get_edges(const shift_cube_s *cube, face_e color1, face_e color2) {
+    shift_cube_s masked_edges = NULL_CUBE;
     for (uint8_t edge = 0; edge < NUM_EDGES; edge++) {
         uint8_t facelet_indices[2] = {
             4 * edge_pieces[edge][0].index,
@@ -87,8 +87,8 @@ cube_s get_edges(const cube_s *cube, face_e color1, face_e color2) {
 // builds a masked cube with edges that match color1, color2, and color3,
 // if color1 or color2 or color3 are FACE_NULL, it matches to any face which matches
 // the criterion set by another color
-cube_s get_corners(const cube_s *cube, face_e color1, face_e color2, face_e color3) {
-    cube_s masked_corners = NULL_CUBE;
+shift_cube_s get_corners(const shift_cube_s *cube, face_e color1, face_e color2, face_e color3) {
+    shift_cube_s masked_corners = NULL_CUBE;
     for (uint8_t corner = 0; corner < NUM_CORNERS; corner++) {
         uint8_t facelet_indices[3] = {
             4 * corner_pieces[corner][0].index,
@@ -146,7 +146,7 @@ void init_move_bitrolls() {
 }
 
 // Apply a move to the cube using bit manipulations
-void apply_move(cube_s *c, move_s m) {
+void apply_move(shift_cube_s *c, move_s m) {
     // make the turn count positive
     m.turns = mod4(m.turns);
 
@@ -181,7 +181,7 @@ void apply_move(cube_s *c, move_s m) {
 }
 
 // Apply all the moves from a move_list on a cube
-void apply_alg(cube_s *cube, const alg_s *alg) {
+void apply_alg(shift_cube_s *cube, const alg_s *alg) {
     for (size_t i = 0; i < alg->length; i++) {
         apply_move(cube, alg->moves[i]);
     }
@@ -194,7 +194,7 @@ void print_face(uint32_t face_bits) {
            get_piece(face_bits, 6), get_piece(face_bits, 5), get_piece(face_bits, 4));
 }
 
-void print_cube_map(cube_s cube) {
+void print_cube_map(shift_cube_s cube) {
     printf("    %c%c%c\n    %c%c%c\n    %c%c%c\n",
            get_piece(cube.state[FACE_U], 0), get_piece(cube.state[FACE_U], 1), get_piece(cube.state[FACE_U], 2),
            get_piece(cube.state[FACE_U], 7), CHAR_U,                           get_piece(cube.state[FACE_U], 3),
@@ -220,7 +220,7 @@ void print_cube_map(cube_s cube) {
            get_piece(cube.state[FACE_D], 6), get_piece(cube.state[FACE_D], 5), get_piece(cube.state[FACE_D], 4));
 }
 
-void print_cube_map_colors(cube_s cube) {
+void print_cube_map_colors(shift_cube_s cube) {
     printf("    "); print_piece(cube.state[FACE_U], 0); print_piece(cube.state[FACE_U], 1); print_piece(cube.state[FACE_U], 2); printf("\n");
     printf("    "); print_piece(cube.state[FACE_U], 7); print_piece(FACE_U, 0);             print_piece(cube.state[FACE_U], 3); printf("\n");
     printf("    "); print_piece(cube.state[FACE_U], 6); print_piece(cube.state[FACE_U], 5); print_piece(cube.state[FACE_U], 4); printf("\n");
@@ -245,7 +245,7 @@ void print_cube_map_colors(cube_s cube) {
     printf("    "); print_piece(cube.state[FACE_D], 6); print_piece(cube.state[FACE_D], 5); print_piece(cube.state[FACE_D], 4); printf("\n");
 }
 
-void print_cube_line(cube_s cube) {
+void print_cube_line(shift_cube_s cube) {
     for (face_e face = FACE_U; face < NUM_FACES; face++) {
         for (uint8_t idx = 0; idx < 8; idx++) {
             printf("%c", get_piece(cube.state[face], idx));
@@ -254,7 +254,7 @@ void print_cube_line(cube_s cube) {
     }
 }
 
-void print_cube_line_colors(cube_s cube) {
+void print_cube_line_colors(shift_cube_s cube) {
     for (face_e face = FACE_U; face < NUM_FACES; face++) {
         for (uint8_t idx = 0; idx < 8; idx++) {
             print_piece(cube.state[face], idx);

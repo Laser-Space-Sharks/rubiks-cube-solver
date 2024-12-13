@@ -1,9 +1,9 @@
-#include "cube.h"
+#include "shift_cube.h"
 #include "solver_print.h"
 #include "cube_table.h"
 
 typedef struct {
-    cube_s key;
+    shift_cube_s key;
     alg_list_s algs;
 } entry_s;
 
@@ -24,7 +24,7 @@ cube_table_s* cube_table_create(size_t size) {
     return ct;
 }
 
-size_t cube_table_hash(const cube_table_s *ct, const cube_s *key) {
+size_t cube_table_hash(const cube_table_s *ct, const shift_cube_s *key) {
     size_t hash = 0;
     for (face_e face = FACE_U; face < NUM_FACES; face++) {
         hash ^= key->state[face];
@@ -34,7 +34,7 @@ size_t cube_table_hash(const cube_table_s *ct, const cube_s *key) {
     return hash % ct->size;
 }
 
-bool cube_table_insert(cube_table_s *ct, const cube_s *key, const alg_s *moves) {
+bool cube_table_insert(cube_table_s *ct, const shift_cube_s *key, const alg_s *moves) {
     if (ct == NULL || key == NULL || moves == NULL) {
         return false;
     }
@@ -87,7 +87,7 @@ bool cube_table_insert(cube_table_s *ct, const cube_s *key, const alg_s *moves) 
     return true;
 }
 
-static inline size_t cube_table_get_cube_index(const cube_table_s *ct, const cube_s *cube) {
+static inline size_t cube_table_get_cube_index(const cube_table_s *ct, const shift_cube_s *cube) {
     if (ct == NULL || cube == NULL) {
         return ct->size;
     }
@@ -110,7 +110,7 @@ static inline size_t cube_table_get_cube_index(const cube_table_s *ct, const cub
     return ct->size;
 }
 
-const alg_list_s* cube_table_lookup(const cube_table_s *ct, const cube_s *cube) {
+const alg_list_s* cube_table_lookup(const cube_table_s *ct, const shift_cube_s *cube) {
     size_t index = cube_table_get_cube_index(ct, cube);
 
     return (index == ct->size) ? NULL : &ct->table[index].algs;
