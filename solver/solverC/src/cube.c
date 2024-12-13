@@ -1,49 +1,187 @@
 #include "cube.h"
-#include "main.h"
 
-// test for the equality of two cube states
-int compare_cubes(cube_s a, cube_s b) {
-    for (face_e face = FACE_U; face < NUM_FACES; face++) {
-        if (a.state[face] != b.state[face]) {
-            return 0;
-        }
+#include "lookup_tables.h"
+
+cube_s* cube_copy(const cube_s *cube) {
+    if (cube == NULL) {
+        return NULL;
     }
-    return 1;
+
+    cube_s *copy = (cube_s*)malloc(sizeof(cube_s));
+    if (copy == NULL) {
+        return NULL;
+    }
+
+    memcpy(copy->state, cube->state, 24);
+
+    return copy;
 }
 
-// Apply a move to the cube using bitshifts
-void apply_move(cube_s *cube, move_s move) {
-    // make the turn count positive 
-    uint8_t turns_pos = positive_mod(move.turns, NUM_SIDES);
+cube_s ored_cube(const cube_s *a, const cube_s *b) {
+    cube_s new_cube = *a;
 
-    // copy current side faces for the loop
-    uint32_t og_sfaces[NUM_SIDES] = {
-        cube->state[side_faces[move.face][SIDE_U]],
-        cube->state[side_faces[move.face][SIDE_R]],
-        cube->state[side_faces[move.face][SIDE_D]],
-        cube->state[side_faces[move.face][SIDE_L]]
+    new_cube.state[FACE_U] |= b->state[FACE_U];
+    new_cube.state[FACE_R] |= b->state[FACE_R];
+    new_cube.state[FACE_F] |= b->state[FACE_F];
+    new_cube.state[FACE_L] |= b->state[FACE_L];
+    new_cube.state[FACE_B] |= b->state[FACE_B];
+    new_cube.state[FACE_D] |= b->state[FACE_D];
+
+    return new_cube;
+}
+
+cube_s masked_cube(const cube_s *cube, const cube_s *mask) {
+    cube_s new_cube = *cube;
+
+    new_cube.state[FACE_U] &= mask->state[FACE_U];
+    new_cube.state[FACE_R] &= mask->state[FACE_R];
+    new_cube.state[FACE_F] &= mask->state[FACE_F];
+    new_cube.state[FACE_L] &= mask->state[FACE_L];
+    new_cube.state[FACE_B] &= mask->state[FACE_B];
+    new_cube.state[FACE_D] &= mask->state[FACE_D];
+
+    return new_cube;
+}
+
+// test for the equality of two cube states
+bool compare_cubes(const cube_s *a, const cube_s *b) {
+    if (memcmp(a->state, b->state, 24) == 0) {
+        return true;
+    }
+
+    return false;
+}
+
+// builds a masked cube with edges that match color1 and color2,
+// if color1 or color2 are FACE_NULL, it matches to any face which matches
+// the criterion set by another color
+cube_s get_edges(const cube_s *cube, face_e color1, face_e color2) {
+    cube_s masked_edges = NULL_CUBE;
+    for (uint8_t edge = 0; edge < NUM_EDGES; edge++) {
+        uint8_t facelet_indices[2] = {
+            4 * edge_pieces[edge][0].index,
+            4 * edge_pieces[edge][1].index
+        };
+
+        face_e facelet_colors[2] = {
+            (cube->state[edge_pieces[edge][0].face] >> facelet_indices[0]) & 0xF,
+            (cube->state[edge_pieces[edge][1].face] >> facelet_indices[1]) & 0xF
+        };
+
+        if ((color1 == FACE_NULL || facelet_colors[0] == color1 || facelet_colors[1] == color1) &&
+            (color2 == FACE_NULL || facelet_colors[0] == color2 || facelet_colors[1] == color2)) {
+            // set the bits
+            masked_edges.state[edge_pieces[edge][0].face] |= facelet_colors[0] << facelet_indices[0];
+            masked_edges.state[edge_pieces[edge][1].face] |= facelet_colors[1] << facelet_indices[1];
+
+            if (color1 != FACE_NULL && color2 != FACE_NULL) {
+                break;
+            }
+        }
+
+    }
+
+    return masked_edges;
+}
+
+// builds a masked cube with edges that match color1, color2, and color3,
+// if color1 or color2 or color3 are FACE_NULL, it matches to any face which matches
+// the criterion set by another color
+cube_s get_corners(const cube_s *cube, face_e color1, face_e color2, face_e color3) {
+    cube_s masked_corners = NULL_CUBE;
+    for (uint8_t corner = 0; corner < NUM_CORNERS; corner++) {
+        uint8_t facelet_indices[3] = {
+            4 * corner_pieces[corner][0].index,
+            4 * corner_pieces[corner][1].index,
+            4 * corner_pieces[corner][2].index
+        };
+
+        face_e facelet_colors[3] = {
+            (cube->state[corner_pieces[corner][0].face] >> facelet_indices[0]) & 0xF,
+            (cube->state[corner_pieces[corner][1].face] >> facelet_indices[1]) & 0xF,
+            (cube->state[corner_pieces[corner][2].face] >> facelet_indices[2]) & 0xF
+        };
+
+        if ((color1 == FACE_NULL || facelet_colors[0] == color1 || facelet_colors[1] == color1 || facelet_colors[2] == color1) &&
+            (color2 == FACE_NULL || facelet_colors[0] == color2 || facelet_colors[1] == color2 || facelet_colors[2] == color2) &&
+            (color3 == FACE_NULL || facelet_colors[0] == color3 || facelet_colors[1] == color3 || facelet_colors[2] == color3)) {
+
+            // set the bits
+            masked_corners.state[corner_pieces[corner][0].face] |= facelet_colors[0] << facelet_indices[0];
+            masked_corners.state[corner_pieces[corner][1].face] |= facelet_colors[1] << facelet_indices[1];
+            masked_corners.state[corner_pieces[corner][2].face] |= facelet_colors[2] << facelet_indices[2];
+
+            if (color1 != FACE_NULL && color2 != FACE_NULL && color3 != FACE_NULL) {
+                break;
+            }
+        }
+    }
+
+    return masked_corners;
+}
+
+// lookup table generated by init_move_bitrolls that, given a face, a side of
+// that face, and a count of turns of that face (modulo 4), returns the amount
+// by which the bits of a side face need to be rolled in order to align them
+// for insertion into the appropriate target side face
+static uint8_t move_bitrolls[NUM_FACES][NUM_SIDES][4];
+
+// a lookup table that given a side of a face and a number of turns of said
+// face (modulo 4) returns the 'target side' of the input side, i.e. which side
+// the facelets of the input side would end up after turning a face
+static const side_e target_sides[NUM_SIDES][4] = {
+    {SIDE_U, SIDE_R, SIDE_D, SIDE_L},
+    {SIDE_R, SIDE_D, SIDE_L, SIDE_U},
+    {SIDE_D, SIDE_L, SIDE_U, SIDE_R},
+    {SIDE_L, SIDE_U, SIDE_R, SIDE_D}
+};
+
+void init_move_bitrolls() {
+    for (face_e f = FACE_U; f < NUM_FACES; f++) {
+    for (side_e s = SIDE_U; s < NUM_SIDES; s++) {
+    for (uint8_t turns = 0; turns < 4; turns++) {
+        move_bitrolls[f][s][turns] = mod4(move_sfaces[f][target_sides[s][turns]]
+                                          - move_sfaces[f][s]) * 8;
+    }}}
+}
+
+// Apply a move to the cube using bit manipulations
+void apply_move(cube_s *c, move_s m) {
+    // make the turn count positive
+    m.turns = mod4(m.turns);
+
+    /* these are some handy macros for quickly indexing into the tables used
+     * for applying a move, where the input s is a side of m.face
+     */
+    #define move_sface(s)       side_faces[m.face][s]
+    #define target_sface(s)     side_faces[m.face][target_sides[s][m.turns]]
+    #define side_roll(s)        move_bitrolls[m.face][s][m.turns]
+
+    uint32_t sfacelets[NUM_SIDES] = {
+        c->state[move_sface(SIDE_U)] & move_side_masks[m.face][SIDE_U],
+        c->state[move_sface(SIDE_R)] & move_side_masks[m.face][SIDE_R],
+        c->state[move_sface(SIDE_D)] & move_side_masks[m.face][SIDE_D],
+        c->state[move_sface(SIDE_L)] & move_side_masks[m.face][SIDE_L]
     };
 
     // rotate the face to be turned
-    cube->state[move.face] = rolq(cube->state[move.face], 8 * turns_pos);
+    c->state[m.face] = rolq(c->state[m.face], 8*m.turns);
 
-    // rotate the side pieces
-    for (side_e side = SIDE_U; side < NUM_SIDES; side++) {
-        side_e target_side  = (side + turns_pos) % NUM_SIDES;
-        face_e target_sface = side_faces[move.face][target_side];
-        uint8_t side_turns = positive_mod(turn_sides_table[move.face][target_side] -
-                                          turn_sides_table[move.face][side], NUM_SIDES);
+    // at this point, we need to turn the pieces on the adjacent (side) faces
+    // of the face we just rotated, and propogate those rotations forward
+    c->state[move_sface(SIDE_U)] &= ~move_side_masks[m.face][SIDE_U];
+    c->state[move_sface(SIDE_R)] &= ~move_side_masks[m.face][SIDE_R];
+    c->state[move_sface(SIDE_D)] &= ~move_side_masks[m.face][SIDE_D];
+    c->state[move_sface(SIDE_L)] &= ~move_side_masks[m.face][SIDE_L];
 
-        // clear the bits of the side pieces
-        cube->state[target_sface] &= ~turn_mask_table[move.face][target_side];
-        // set the bits of the side pieces 
-        cube->state[target_sface] |=  turn_mask_table[move.face][target_side] & 
-                                      rolq(og_sfaces[side], side_turns*8);
-	}
+    c->state[target_sface(SIDE_U)] |= rolq(sfacelets[SIDE_U], side_roll(SIDE_U));
+    c->state[target_sface(SIDE_R)] |= rolq(sfacelets[SIDE_R], side_roll(SIDE_R));
+    c->state[target_sface(SIDE_D)] |= rolq(sfacelets[SIDE_D], side_roll(SIDE_D));
+    c->state[target_sface(SIDE_L)] |= rolq(sfacelets[SIDE_L], side_roll(SIDE_L));
 }
 
 // Apply all the moves from a move_list on a cube
-void apply_move_list(cube_s *cube, move_list_s *moves) {
+void apply_move_list(cube_s *cube, const move_list_s *moves) {
     for (size_t i = 0; i < moves->length; i++) {
         apply_move(cube, moves->list[i]);
     }
@@ -56,7 +194,7 @@ void print_face(uint32_t face_bits) {
            get_piece(face_bits, 6), get_piece(face_bits, 5), get_piece(face_bits, 4));
 }
 
-void print_cube(cube_s cube) {
+void print_cube_map(cube_s cube) {
     printf("    %c%c%c\n    %c%c%c\n    %c%c%c\n",
            get_piece(cube.state[FACE_U], 0), get_piece(cube.state[FACE_U], 1), get_piece(cube.state[FACE_U], 2),
            get_piece(cube.state[FACE_U], 7), CHAR_U,                           get_piece(cube.state[FACE_U], 3),
@@ -82,7 +220,7 @@ void print_cube(cube_s cube) {
            get_piece(cube.state[FACE_D], 6), get_piece(cube.state[FACE_D], 5), get_piece(cube.state[FACE_D], 4));
 }
 
-void print_cube_colors(cube_s cube) {
+void print_cube_map_colors(cube_s cube) {
     printf("    "); print_piece(cube.state[FACE_U], 0); print_piece(cube.state[FACE_U], 1); print_piece(cube.state[FACE_U], 2); printf("\n");
     printf("    "); print_piece(cube.state[FACE_U], 7); print_piece(FACE_U, 0);             print_piece(cube.state[FACE_U], 3); printf("\n");
     printf("    "); print_piece(cube.state[FACE_U], 6); print_piece(cube.state[FACE_U], 5); print_piece(cube.state[FACE_U], 4); printf("\n");
@@ -105,4 +243,22 @@ void print_cube_colors(cube_s cube) {
     printf("    "); print_piece(cube.state[FACE_D], 0); print_piece(cube.state[FACE_D], 1); print_piece(cube.state[FACE_D], 2); printf("\n");
     printf("    "); print_piece(cube.state[FACE_D], 7); print_piece(FACE_D, 0);             print_piece(cube.state[FACE_D], 3); printf("\n");
     printf("    "); print_piece(cube.state[FACE_D], 6); print_piece(cube.state[FACE_D], 5); print_piece(cube.state[FACE_D], 4); printf("\n");
+}
+
+void print_cube_line(cube_s cube) {
+    for (face_e face = FACE_U; face < NUM_FACES; face++) {
+        for (uint8_t idx = 0; idx < 8; idx++) {
+            printf("%c", get_piece(cube.state[face], idx));
+        }
+        printf(" ");
+    }
+}
+
+void print_cube_line_colors(cube_s cube) {
+    for (face_e face = FACE_U; face < NUM_FACES; face++) {
+        for (uint8_t idx = 0; idx < 8; idx++) {
+            print_piece(cube.state[face], idx);
+        }
+        printf(" ");
+    }
 }

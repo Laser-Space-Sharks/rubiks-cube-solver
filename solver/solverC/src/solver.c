@@ -1,18 +1,49 @@
-#include "solver.h"
-#include "cube.h"
-#include "main.h"
-#include "move.h"
+#define _GNU_SOURCE
 
-cube_s mask_cube(cube_s cube, cube_s mask) {
-    for (face_e face = FACE_U; face < NUM_FACES; face++) {
-        cube.state[face] &= mask.state[face];
+#include "solver.h"
+
+#include "cube.h"
+#include "cube_table.h"
+#include "lookup_tables.h"
+#include "move_list.h"
+
+#include <stdio.h>
+#include <sys/types.h>
+
+cube_table_s *xcross_start_ct = NULL;
+cube_table_s *xcross_end_ct   = NULL;
+
+bool init_solver() {
+    xcross_start_ct = cube_table_create(cube_table_depth_sizes[5]);
+    xcross_end_ct   = cube_table_create(cube_table_depth_sizes[5]);
+    if (!xcross_start_ct || !xcross_end_ct) {
+        return false;
     }
-    return cube;
+
+    return true;
 }
 
-int stage_recursion(cube_s cube, cube_s mask, move_list_s *moves, uint8_t depth) {
+void cleanup_solver() {
+    cube_table_free(xcross_start_ct);
+    cube_table_free(xcross_end_ct);
+}
+
+cube_s get_f2l_pair(const cube_s *cube, uint8_t pair) {
+    if (pair >= 4) {
+        return NULL_CUBE;
+    }
+
+    cube_s pair_edge = get_edges(cube, f2l_edge_colors[pair][0], f2l_edge_colors[pair][1]);
+    cube_s pair_corner = get_corners(cube, f2l_corner_colors[pair][0], f2l_corner_colors[pair][1], f2l_corner_colors[pair][2]);
+
+    return ored_cube(&pair_edge, &pair_corner);
+}
+
+int stage_recursion(cube_s *cube, const cube_s *mask, const cube_s *goal, move_list_s *moves, uint8_t depth) {
     if (depth == 0) {
-        if (compare_cubes(mask_cube(cube, mask), mask_cube(SOLVED_SHIFTCUBE, mask))) {
+        cube_s test = masked_cube(cube, mask);
+
+        if (compare_cubes(&test, goal)) {
             // holy crap, we did it!
             return 1;
         }
@@ -23,58 +54,403 @@ int stage_recursion(cube_s cube, cube_s mask, move_list_s *moves, uint8_t depth)
 
     // depth > 0
     move_s move = NULL_MOVE;
-    move_s prev_move = (moves->length > 1) ? moves->list[moves->length-1] : NULL_MOVE;
-    move_s prev_prev_move = (moves->length > 2) ? moves->list[moves->length - 2] : NULL_MOVE;
+    move_s prev_move = (moves->length >= 1) ? moves->list[moves->length-1] : NULL_MOVE;
+    move_s prev_prev_move = (moves->length >= 2) ? moves->list[moves->length - 2] : NULL_MOVE;
 
     for (face_e face = FACE_U; face < NUM_FACES; face++) {
         if (face == prev_move.face) {
             continue;
         }
 
-        if (prev_prev_move.face != FACE_NULL) {
-            if (face == opposite_faces[prev_move.face] &&
-                (face == prev_prev_move.face || face > prev_move.face)) {
-                continue;
-            }
+        if (face == opposite_faces[prev_move.face] &&
+            (face == prev_prev_move.face || face > prev_move.face)) {
+            continue;
         }
 
         move.face = face;
         for (int8_t turns = 1; turns < 4; turns++) {
             move.turns = turns;
             move_list_insert(moves, move, moves->length);
-            apply_move(&cube, move);
-            if (stage_recursion(cube, mask, moves, depth - 1)) {
-                // we did it!
+            apply_move(cube, move);
+            move.turns = -turns;
+            if (stage_recursion(cube, mask, goal, moves, depth - 1)) {
+                // we did it! Begin undoing these cube moves we've accrewed
+                apply_move(cube, move);
                 return 1;
             }
+            // keep going, move didn't pan out
             move_list_delete(moves, moves->length-1);
-            move.turns = -turns;
-            apply_move(&cube, move); // undo move if it doesn't pan out
+            apply_move(cube, move); // undo move
         }
     }
 
     return 0;
 }
 
+
 // Iterative deepening depth-first search
 move_list_s* solve_stage(cube_s cube, cube_s mask) {
     move_list_s *moves = move_list_create(8);
+    cube_s goal = masked_cube(&SOLVED_SHIFTCUBE, &mask);
 
-    for (uint8_t depth = 1; depth <= 20; depth++) {
-        if (stage_recursion(cube, mask, moves, depth)) {
+    for (uint8_t depth = 1; depth <= 10; depth++) {
+        if (stage_recursion(&cube, &mask, &goal, moves, depth)) {
             break;
         }
     }
+
     return moves;
 }
 
-void print_masks() {
-    printf("Cross mask:\n");
-    print_cube(cross_mask);
-    printf("F2L mask:\n");
-    print_cube(f2l_1mask);
-    printf("OLL mask:\n");
-    print_cube(oll_mask);
-    printf("PLL mask:\n");
-    print_cube(pll_mask);
+int bidirectional_recursion(cube_s *cube, cube_table_s *our_ct, cube_table_s *other_ct, move_list_s *moves, uint8_t depth) {
+    if (depth == 0) {
+        if (!cube_table_lookup(our_ct, cube)) {
+            cube_table_insert(our_ct, cube, moves);
+        }
+
+        if (cube_table_lookup(other_ct, cube) != NULL) {
+            // holy crap, we did it!
+            return 1;
+        }
+
+        // no dice
+        return 0;
+    }
+
+    // depth > 0
+    if (cube_table_lookup(our_ct, cube) != NULL &&
+        cube_table_lookup(our_ct, cube)->list[0].length < moves->length) {
+        return 0;
+
+    }
+
+    move_s move = NULL_MOVE;
+    move_s prev_move = (moves->length >= 1) ? moves->list[moves->length-1] : NULL_MOVE;
+    move_s prev_prev_move = (moves->length >= 2) ? moves->list[moves->length - 2] : NULL_MOVE;
+
+    for (face_e face = FACE_U; face < NUM_FACES; face++) {
+        if (face == prev_move.face) {
+            continue;
+        }
+
+        if (face == opposite_faces[prev_move.face] &&
+            (face == prev_prev_move.face || face > prev_move.face)) {
+            continue;
+        }
+
+        move.face = face;
+        for (int8_t turns = 1; turns < 4; turns++) {
+            move.turns = turns;
+            move_list_insert(moves, move, moves->length);
+            apply_move(cube, move);
+            if (bidirectional_recursion(cube, our_ct, other_ct, moves, depth - 1)) {
+                // we did it!
+                return 1;
+            }
+
+            move.turns = -turns;
+            // keep going, move didn't pan out
+            move_list_delete(moves, moves->length-1);
+            apply_move(cube, move); // undo move
+        }
+    }
+
+    return 0;
+}
+
+move_list_s* bidirectional_search(const cube_s *start, const cube_s *goal, uint8_t max_depth) {
+    uint8_t start_depth, end_depth;
+    start_depth = end_depth = max_depth/2;
+
+    if (max_depth % 2 == 1) {
+        start_depth++;
+    }
+
+    if (start_depth > MAX_CUBE_TABLE_DEPTH) {
+        printf("Attempted to recurse too deep for cube_table\n");
+        return NULL;
+    }
+
+    cube_table_s *start_ct = cube_table_create(cube_table_depth_sizes[start_depth]);
+    cube_table_s *end_ct   = cube_table_create(cube_table_depth_sizes[end_depth]);
+
+    move_list_s *start_moves = move_list_create(start_depth);
+    move_list_s *end_moves   = move_list_create(end_depth);
+
+    cube_s start_cube = *start;
+    cube_s end_cube   = *goal;
+
+    for (uint8_t depth = 0; depth < start_depth; depth++) {
+        if (bidirectional_recursion(&start_cube, start_ct, end_ct, start_moves, depth)) {
+            move_list_free(end_moves);
+            end_moves = move_list_copy(&cube_table_lookup(end_ct, &start_cube)->list[0]);
+            break;
+        }
+
+        if (bidirectional_recursion(&end_cube, end_ct, start_ct, end_moves, depth)) {
+            move_list_free(start_moves);
+            start_moves = move_list_copy(&cube_table_lookup(start_ct, &end_cube)->list[0]);
+            break;
+        }
+    }
+
+    move_list_invert(end_moves);
+    move_list_concat(start_moves, end_moves);
+
+    move_list_free(end_moves);
+    cube_table_free(start_ct);
+    cube_table_free(end_ct);
+
+    return start_moves;
+}
+
+static move_list_s* xcross_search(const cube_s *start, const cube_s *goal) {
+    if (!xcross_start_ct || !xcross_end_ct) {
+        printf("Didn't have the tables initialized :(\n");
+        return NULL;
+    }
+
+    move_list_s *start_moves = move_list_create(5);
+    move_list_s *end_moves   = move_list_create(5);
+
+    cube_s start_cube = *start;
+    cube_s end_cube   = *goal;
+
+    for (uint8_t depth = 0; depth < 5; depth++) {
+        if (bidirectional_recursion(&start_cube, xcross_start_ct, xcross_end_ct, start_moves, depth)) {
+            move_list_free(end_moves);
+            end_moves = move_list_copy(&cube_table_lookup(xcross_end_ct, &start_cube)->list[0]);
+            break;
+        }
+
+        if (bidirectional_recursion(&end_cube, xcross_end_ct, xcross_start_ct, end_moves, depth)) {
+            move_list_free(start_moves);
+            start_moves = move_list_copy(&cube_table_lookup(xcross_start_ct, &end_cube)->list[0]);
+            break;
+        }
+    }
+
+    move_list_invert(end_moves);
+    move_list_concat(start_moves, end_moves);
+
+    move_list_free(end_moves);
+    return start_moves;
+}
+
+move_list_s* solve_cross(cube_s cube) {
+    // match to cross pieces
+    cube_s start_cube = get_edges(&cube, FACE_D, FACE_NULL);
+    cube_s goal_cube = get_edges(&SOLVED_SHIFTCUBE, FACE_D, FACE_NULL);
+
+    return bidirectional_search(&start_cube, &goal_cube, 8);
+}
+
+static void last_layer_stage(const cube_s *cube, move_list_s **best, const move_list_s *xsolve,
+                             const move_list_s *f2l_solve, const cube_table_s *ll_table) {
+
+    move_list_s *solve = move_list_copy(xsolve);
+    move_list_concat(solve, f2l_solve);
+
+    const alg_list_s *last_layer_alg = cube_table_lookup(ll_table, cube);
+    if (last_layer_alg != NULL) {
+        move_list_concat(solve, &(last_layer_alg->list[0]));
+    }
+
+    move_list_simplify(solve);
+
+    if (*best && (*best)->length <= solve->length) {
+        move_list_free(solve);
+        return;
+    }
+
+    move_list_free(*best);
+    *best = solve;
+}
+
+static void f2l_stage(cube_s cube, move_list_s **best, const move_list_s *xsolve,
+                      move_list_s *f2l_solve, const cube_table_s *f2l_table,
+                      const cube_table_s *ll_table) {
+
+    const cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
+    cube_s cube_f2l_bits = masked_cube(&cube, &f2l_4mask);
+
+    // we solved F2L! Proceed to the last layer
+    if (compare_cubes(&cube_f2l_bits, &solved_f2l_bits)) {
+        last_layer_stage(&cube, best, xsolve, f2l_solve, ll_table);
+        return;
+    }
+
+    for (uint8_t pair = 0; pair < 4; pair++) {
+        cube_s pair_mask = get_f2l_pair(&cube, pair);
+        cube_s solved_pair_mask = get_f2l_pair(&SOLVED_SHIFTCUBE, pair);
+        if (compare_cubes(&pair_mask, &solved_pair_mask)) continue;
+
+        const alg_list_s *pair_algs = cube_table_lookup(f2l_table, &pair_mask);
+        if (!pair_algs) {
+            return;
+        }
+
+        for (size_t alg = 0; alg < pair_algs->num_algs; alg++) {
+            cube_s new_cube = cube;
+            apply_move_list(&new_cube, &pair_algs->list[alg]);
+            size_t old_len = f2l_solve->length;
+            move_list_concat(f2l_solve, &pair_algs->list[alg]);
+            f2l_stage(new_cube, best, xsolve, f2l_solve, f2l_table, ll_table);
+            f2l_solve->length -= f2l_solve->length - old_len;
+        }
+    }
+}
+
+static void xcross_stage(cube_s cube, move_list_s **best,
+                         const cube_table_s *f2l_table, const cube_table_s *ll_table) {
+    cube_s mask_cube   = get_edges(&cube, FACE_D, FACE_NULL);
+    cube_s target_cube = get_edges(&SOLVED_SHIFTCUBE, FACE_D, FACE_NULL);
+
+    for (uint8_t pair = 0; pair < 4; pair++) {
+        cube_s cube_pair_mask   = get_f2l_pair(&cube, pair);
+        cube_s target_pair_mask = get_f2l_pair(&SOLVED_SHIFTCUBE, pair);
+        cube_s start_cube       = ored_cube(&mask_cube, &cube_pair_mask);
+        cube_s goal_cube        = ored_cube(&target_cube, &target_pair_mask);
+        move_list_s *xcross_alg = xcross_search(&start_cube, &goal_cube);
+
+        cube_s new_cube = cube;
+        apply_move_list(&new_cube, xcross_alg);
+        move_list_s *f2l_solve = move_list_create(10);
+        f2l_stage(new_cube, best, xcross_alg, f2l_solve, f2l_table, ll_table);
+        move_list_free(f2l_solve);
+        move_list_free(xcross_alg);
+    }
+}
+
+move_list_s* solve_cube(cube_s cube, const cube_table_s *f2l_table, const cube_table_s *ll_table) {
+    if (!f2l_table || !ll_table) {
+        printf("No F2L or last layer table was provided!");
+    }
+
+    move_list_s *best_solve = NULL;
+    xcross_stage(cube, &best_solve, f2l_table, ll_table);
+    cube_table_clear(xcross_start_ct);
+    cube_table_clear(xcross_end_ct);
+
+    return best_solve;
+}
+
+uint8_t f2l_pair_orders[24][4] = {
+    {0, 1, 2, 3},
+    {0, 1, 3, 2},
+    {0, 2, 1, 3},
+    {0, 2, 3, 1},
+    {0, 3, 1, 2},
+    {0, 3, 2, 1},
+    {1, 0, 2, 3},
+    {1, 0, 3, 2},
+    {1, 2, 0, 3},
+    {1, 2, 3, 0},
+    {1, 3, 0, 2},
+    {1, 3, 2, 0},
+    {2, 0, 1, 3},
+    {2, 0, 3, 1},
+    {2, 1, 0, 3},
+    {2, 1, 3, 0},
+    {2, 3, 0, 1},
+    {2, 3, 1, 0},
+    {3, 0, 1, 2},
+    {3, 0, 2, 1},
+    {3, 1, 0, 2},
+    {3, 1, 2, 0},
+    {3, 2, 0, 1},
+    {3, 2, 1, 0}
+};
+
+cube_table_s* generate_last_layer_table(char *filename) {
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL) {
+        return NULL;
+    }
+
+    char *line = NULL;
+    size_t len;
+    ssize_t read;
+
+    // generate a cube table twice the size of the number of 1lll states,
+    // the number below was chosen arbitrarily 
+    cube_table_s *last_layer_table = cube_table_create(131009);
+
+    cube_s cube;
+    move_list_s *algorithm = NULL;
+    while ((read = getline(&line, &len, file)) != -1) {
+        cube = SOLVED_SHIFTCUBE;
+        move_list_s *algorithm = move_list_from_move_str(line);
+
+        // If a line doesn't have a valid algorithm to parse, fail
+        if (algorithm == NULL) {
+            cube_table_free(last_layer_table);
+            last_layer_table = NULL;
+            break;
+        }
+
+        move_list_invert(algorithm);
+        apply_move_list(&cube, algorithm);
+        move_list_invert(algorithm);
+        cube_table_insert(last_layer_table, &cube, algorithm);
+
+        move_list_free(algorithm);
+    }
+
+
+    free(line);
+    fclose(file);
+    move_list_free(algorithm);
+    return last_layer_table;
+}
+
+cube_table_s* generate_f2l_table(char *filename) {
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL) {
+        return NULL;
+    }
+
+    char *line = NULL;
+    size_t len;
+    ssize_t read;
+
+    // generate a cube table twice the size of the number of 1lll states,
+    // the number below was chosen arbitrarily 
+    cube_table_s *f2l_table = cube_table_create(2909);
+
+    cube_s cube;
+    move_list_s *algorithm = NULL;
+
+    while ((read = getline(&line, &len, file)) != -1) {
+        cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
+        move_list_s *algorithm = move_list_from_move_str(line);
+
+        // If a line doesn't have a valid algorithm to parse, fail
+        if (algorithm == NULL) {
+            cube_table_free(f2l_table);
+            f2l_table = NULL;
+            break;
+        }
+
+        for (uint8_t y_turns = 0; y_turns < 4; y_turns ++) {
+            cube = solved_f2l_bits;
+            move_list_rotate_on_y(algorithm, y_turns);
+            move_list_invert(algorithm);
+            apply_move_list(&cube, algorithm);
+            // a y_turn, as a rotation about U, goes in the opposite direction
+            // of the f2l pairs, so to get the f2l_pair an algorithm is associated
+            // with, take the negative of y_turns to get that slot
+            cube = get_f2l_pair(&cube, mod4(-y_turns));
+            move_list_invert(algorithm);
+            cube_table_insert(f2l_table, &cube, algorithm);
+            move_list_rotate_on_y(algorithm, -y_turns);
+        }
+
+        move_list_free(algorithm);
+    }
+
+    free(line);
+    fclose(file);
+    move_list_free(algorithm);
+    return f2l_table;
 }
