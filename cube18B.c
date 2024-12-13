@@ -91,7 +91,7 @@ typedef enum : uint8_t {
     CUBIE_LDB = 44,
     CUBIE_RBD = 45,
     CUBIE_DRB = 46,
-    CUBIE_BDR = 47,
+    CUBIE_BDR = 47, // This is the last real cubie. All cubies beyond are kept for colorSequence encoding
     CUBIE_FUR = 48,
     CUBIE_URF = 49,
     CUBIE_RFU = 50,
