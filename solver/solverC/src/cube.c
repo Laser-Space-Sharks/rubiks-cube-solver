@@ -181,9 +181,9 @@ void apply_move(cube_s *c, move_s m) {
 }
 
 // Apply all the moves from a move_list on a cube
-void apply_move_list(cube_s *cube, const move_list_s *moves) {
-    for (size_t i = 0; i < moves->length; i++) {
-        apply_move(cube, moves->list[i]);
+void apply_alg(cube_s *cube, const alg_s *alg) {
+    for (size_t i = 0; i < alg->length; i++) {
+        apply_move(cube, alg->moves[i]);
     }
 }
 

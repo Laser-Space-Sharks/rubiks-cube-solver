@@ -20,7 +20,7 @@ char get_char(face_e face) {
             return CHAR_D;
         default:
             return 'X';
-	}
+    }
 }
 
 char get_piece(uint32_t face, uint8_t index) {
@@ -55,58 +55,62 @@ void print_piece(uint32_t face, uint8_t index) {
 }
 
 void print_move(move_s move) {
-	char move_char = get_char(move.face);
-	char turn_char;
+    char move_char = get_char(move.face);
+    char turn_char;
 
-	switch (positive_mod(move.turns, 4)) {
-		case 0:
-			turn_char = '0';
-			break;
-		case 2:
-			turn_char = '2';
-			break;
-		case 3:
-			turn_char = '\'';
-			break;
-	}
+    switch (positive_mod(move.turns, 4)) {
+        case 0:
+            turn_char = '0';
+            break;
+        case 2:
+            turn_char = '2';
+            break;
+        case 3:
+            turn_char = '\'';
+            break;
+    }
 
-	if (move.face >= NUM_FACES) {
-		printf("INVALID MOVE\n");
-	}
+    if (move.face >= NUM_FACES) {
+        printf("INVALID MOVE\n");
+    }
 
-	printf("%c", move_char);
-	if (move.turns != 1) {
-	   printf("%c\n", turn_char);
-	}
+    printf("%c", move_char);
+    if (move.turns != 1) {
+        printf("%c\n", turn_char);
+    }
 }
 
-void print_move_list(const move_list_s *moves) {
-	for (size_t idx = 0; idx < moves->length; idx++) {
-		char move_char = get_char(moves->list[idx].face);
-		char turn_char = '\0';
+void print_alg(const alg_s *alg) {
+    if (alg == NULL) {
+        return;
+    }
 
-		switch (positive_mod(moves->list[idx].turns, 4)) {
-			case 0:
-				turn_char = '0';
-				break;
-			case 2:
-				turn_char = '2';
-				break;
-			case 3:
-				turn_char = '\'';
-				break;
-		}
+    for (size_t idx = 0; idx < alg->length; idx++) {
+        char move_char = get_char(alg->moves[idx].face);
+        char turn_char = '\0';
 
-		if (moves->list[idx].face >= NUM_FACES) {
-			printf("Invalid move in move list\n");
-			return;
-		}
+        switch (positive_mod(alg->moves[idx].turns, 4)) {
+            case 0:
+                turn_char = '0';
+                break;
+            case 2:
+                turn_char = '2';
+                break;
+            case 3:
+                turn_char = '\'';
+                break;
+        }
 
-		printf("%c", move_char);
-		if (turn_char) {
-    		printf("%c", turn_char);
-		}
-		printf(" ");
-	}
-	printf("\n");
+        if (alg->moves[idx].face >= NUM_FACES) {
+            printf("Invalid move in move list\n");
+            return;
+        }
+
+        printf("%c", move_char);
+        if (turn_char) {
+            printf("%c", turn_char);
+        }
+        printf(" ");
+    }
+    printf("\n");
 }

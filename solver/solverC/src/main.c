@@ -1,6 +1,6 @@
 #include "main.h"
 #include "cube.h"
-#include "move_list.h"
+#include "alg.h"
 #include "solver.h"
 
 int main(int argc, char *argv[]) {
@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
     init_solver();
 
-    move_list_s *moves = NULL;
+    alg_s *alg = NULL;
     #define NUM_TESTS 9
     char *scrambles[] = {
         "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2",
@@ -28,22 +28,27 @@ int main(int argc, char *argv[]) {
     };
 
     if (argc > 1) {
-        moves = move_list_from_move_str(argv[1]);
+        alg = alg_from_alg_str(argv[1]);
     } else {
         printf("Performing tests\n");
         double sum = 0;
 
         for (uint8_t test = 0; test < NUM_TESTS; test++) {
             cube = SOLVED_SHIFTCUBE;
-            moves = move_list_from_move_str(scrambles[test]);
+            alg = alg_from_alg_str(scrambles[test]);
             printf("Testing scramble: %s\n", scrambles[test]);
-            apply_move_list(&cube, moves);
-            move_list_s *solve = solve_cube(cube, f2l_table, last_layer_table);
+            apply_alg(&cube, alg);
+            alg_s *solve = solve_cube(cube, f2l_table, last_layer_table);
+            apply_alg(&cube, solve);
+            if (!compare_cubes(&cube, &SOLVED_SHIFTCUBE)) {
+                printf("It didn't solve it, this is bad...\n");
+            }
+            cube = SOLVED_SHIFTCUBE;
             printf("Solution (%zu moves): ", solve->length);
-            print_move_list(solve);
+            print_alg(solve);
             sum += solve->length;
-            move_list_free(solve);
-            move_list_free(moves);
+            alg_free(solve);
+            alg_free(alg);
         }
         printf("Average solve length: %f\n", sum / NUM_TESTS);
     }

@@ -16,7 +16,7 @@ cube_s get_corners(const cube_s *cube, face_e color1, face_e color2, face_e colo
 
 void init_move_bitrolls();
 void apply_move(cube_s *cube, move_s move);
-void apply_move_list(cube_s *cube, const move_list_s *moves);
+void apply_alg(cube_s *cube, const alg_s *alg);
 
 void print_face(uint32_t face);
 

@@ -2,7 +2,7 @@
 #define SOLVER_PRINT_H
 
 #include "main.h"
-#include "move_list.h"
+#include "alg.h"
 
 // ASCII display utilities
 char get_char(face_e face);
@@ -10,6 +10,6 @@ char get_piece(uint32_t face, uint8_t index);
 void print_piece(uint32_t face, uint8_t index);
 
 void print_move(move_s move);
-void print_move_list(const move_list_s *moves);
+void print_alg(const alg_s *alg);
 
 #endif // SOLVER_PRINT_H
