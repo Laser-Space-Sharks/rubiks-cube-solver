@@ -156,8 +156,8 @@ def colorAnalysis(peice):
         # if more than 70% of the cube is that color, return the color
         if percent >= 60 or (i == 1 and redColorCheck(peiceCopy, mask) >= 60):
             return i
-    # if nothing hits you've got a problem 
-    return -1
+    # if nothing hits its probably white
+    return 3
 
 def redColorCheck(peiceCopy, mask1):
     red2Upper = asarray([6, 255, 255])
