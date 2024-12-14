@@ -1,6 +1,7 @@
 #include "cube18B.h"
 #include "main.h"
 #include "lookup_tables.h"
+#include "alg.h"
 
 /*
 EXTERNAL DEPENDENCIES:
@@ -50,28 +51,10 @@ face_e facelet_at_facelet_pos(const shift_cube_s* cube, facelet_pos_s pos) {
     return (((cube->state[pos.face])>>(4*pos.index))&15);
 }
 
-cube18B_s SOLVED_CUBE18B = {
-    .cubies = {
-        CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
-        CUBIE_FR, CUBIE_FRD, CUBIE_RB, CUBIE_RBD, CUBIE_BL, CUBIE_BLD, CUBIE_LF, CUBIE_LFD, 
-        CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_FR, CUBIE_RBU, CUBIE_BLU
-    }
-};
 cubie_e SOLVED_CUBIES[20] = {
     CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
     CUBIE_FR, CUBIE_FRD, CUBIE_RB, CUBIE_RBD, CUBIE_BL, CUBIE_BLD, CUBIE_LF, CUBIE_LFD, 
-    CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_FR, CUBIE_RBU, CUBIE_BLU, CUBIE_LU, CUBIE_LFU
-};
-cube18B_xcross_s SOLVED_CUBE18B_XCROSS = {
-    .cubies = {
-        CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
-        CUBIE_FR, CUBIE_FRD, CUBIE_RB, CUBIE_RBD, CUBIE_BL, CUBIE_BLD, CUBIE_LF, CUBIE_LFD
-    }
-};
-cube18B_1LLL_s SOLVED_CUBE18B_1LLL = {
-    .cubies = {
-        CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_FR, CUBIE_RBU, CUBIE_BLU
-    }
+    CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_URF, CUBIE_UBR, CUBIE_ULB, CUBIE_LU, CUBIE_UFL
 };
 static const face_e cubieDefinitions[NUM_SEQUENCES][3] = {
     {FACE_U, FACE_R, FACE_NULL}, //UR 
@@ -98,30 +81,6 @@ static const face_e cubieDefinitions[NUM_SEQUENCES][3] = {
     {FACE_D, FACE_L, FACE_NULL}, //DL 
     {FACE_B, FACE_D, FACE_NULL}, //BD 
     {FACE_D, FACE_B, FACE_NULL}, //DB 
-    {FACE_F, FACE_R, FACE_U},    //FRU
-    {FACE_U, FACE_R, FACE_F},    //URF
-    {FACE_F, FACE_U, FACE_R},    //FUR
-    {FACE_L, FACE_F, FACE_U},    //LFU
-    {FACE_U, FACE_L, FACE_F},    //ULF
-    {FACE_F, FACE_L, FACE_U},    //FLU
-    {FACE_B, FACE_L, FACE_U},    //BLU
-    {FACE_U, FACE_B, FACE_L},    //UBL
-    {FACE_L, FACE_U, FACE_B},    //LUB
-    {FACE_R, FACE_B, FACE_U},    //RBU
-    {FACE_U, FACE_R, FACE_B},    //URB
-    {FACE_B, FACE_U, FACE_R},    //BUR
-    {FACE_F, FACE_R, FACE_D},    //FRD
-    {FACE_D, FACE_R, FACE_F},    //DRF
-    {FACE_F, FACE_D, FACE_R},    //FDR
-    {FACE_L, FACE_F, FACE_D},    //LFD
-    {FACE_D, FACE_L, FACE_F},    //DLF
-    {FACE_F, FACE_L, FACE_D},    //FLD
-    {FACE_B, FACE_L, FACE_D},    //BLD
-    {FACE_D, FACE_B, FACE_L},    //DBL
-    {FACE_L, FACE_D, FACE_B},    //LDB
-    {FACE_R, FACE_B, FACE_D},    //RBD
-    {FACE_D, FACE_R, FACE_B},    //DRB
-    {FACE_B, FACE_D, FACE_R},    //BDR
     {FACE_F, FACE_U, FACE_R},   //FUR
     {FACE_U, FACE_R, FACE_F},   //URF
     {FACE_R, FACE_F, FACE_U},   //RFU
@@ -134,6 +93,30 @@ static const face_e cubieDefinitions[NUM_SEQUENCES][3] = {
     {FACE_R, FACE_U, FACE_B},   //RUB
     {FACE_U, FACE_B, FACE_R},   //UBR
     {FACE_B, FACE_R, FACE_U},   //BRU
+    {FACE_F, FACE_R, FACE_D},    //FRD
+    {FACE_D, FACE_R, FACE_F},    //DRF
+    {FACE_F, FACE_D, FACE_R},    //FDR
+    {FACE_L, FACE_F, FACE_D},    //LFD
+    {FACE_D, FACE_L, FACE_F},    //DLF
+    {FACE_F, FACE_L, FACE_D},    //FLD
+    {FACE_B, FACE_L, FACE_D},    //BLD
+    {FACE_D, FACE_B, FACE_L},    //DBL
+    {FACE_L, FACE_D, FACE_B},    //LDB
+    {FACE_R, FACE_B, FACE_D},    //RBD
+    {FACE_D, FACE_R, FACE_B},    //DRB
+    {FACE_B, FACE_D, FACE_R},    //BDR
+    {FACE_F, FACE_R, FACE_U},    //FRU
+    {FACE_U, FACE_R, FACE_F},    //UFR
+    {FACE_F, FACE_U, FACE_R},    //RUF
+    {FACE_L, FACE_F, FACE_U},    //LFU
+    {FACE_U, FACE_L, FACE_F},    //ULF
+    {FACE_F, FACE_L, FACE_U},    //FLU
+    {FACE_B, FACE_L, FACE_U},    //BLU
+    {FACE_U, FACE_B, FACE_L},    //UBL
+    {FACE_L, FACE_U, FACE_B},    //LUB
+    {FACE_R, FACE_B, FACE_U},    //RBU
+    {FACE_U, FACE_R, FACE_B},    //URB
+    {FACE_B, FACE_U, FACE_R},    //BUR
     {FACE_F, FACE_D, FACE_R},   //FDR
     {FACE_D, FACE_R, FACE_F},   //DRF
     {FACE_R, FACE_F, FACE_D},   //RFD
@@ -513,13 +496,9 @@ cube18B_s cube18B_from_shiftCube(const shift_cube_s* shiftcube) {
     */
     cube18B_s cube18B;
     for (int i = 0; i < NUM_EDGES; i++) {
-        facelet_pos_s edge[2] = {
-            edge_pieces[i][0],
-            edge_pieces[i][1],
-        };
         face_e facelet_colors[3] = {
-            facelet_at_facelet_pos(shiftcube, edge[0]),
-            facelet_at_facelet_pos(shiftcube, edge[1]),
+            facelet_at_facelet_pos(shiftcube, edge_pieces[i][0]),
+            facelet_at_facelet_pos(shiftcube, edge_pieces[i][1]),
             FACE_NULL
         };
         cubie_e colorsequence = cubie_from_cubieDefinition(facelet_colors);
@@ -527,19 +506,14 @@ cube18B_s cube18B_from_shiftCube(const shift_cube_s* shiftcube) {
         uint8_t solved_cubieInd = colorsAtEdgePosInd_to_cubieAndSolvedCubie[colorsequence][i][1];
         if (solved_cubieInd < 18) cube18B.cubies[solved_cubieInd] = cubie;
     } for (int i = 0; i < NUM_CORNERS; i++) {
-        facelet_pos_s corner[3] = {
-            corner_pieces[i][0],
-            corner_pieces[i][1],
-            corner_pieces[i][2],
-        };
         face_e facelet_colors[3] = {
-            facelet_at_facelet_pos(shiftcube, corner[0]),
-            facelet_at_facelet_pos(shiftcube, corner[1]),
-            facelet_at_facelet_pos(shiftcube, corner[2]),
+            facelet_at_facelet_pos(shiftcube, corner_pieces[i][0]),
+            facelet_at_facelet_pos(shiftcube, corner_pieces[i][1]),
+            facelet_at_facelet_pos(shiftcube, corner_pieces[i][2]),
         };
         cubie_e colorsequence = cubie_from_cubieDefinition(facelet_colors);
-        cubie_e cubie = colorsAtEdgePosInd_to_cubieAndSolvedCubie[colorsequence-24][i][0];
-        uint8_t solved_cubieInd = colorsAtEdgePosInd_to_cubieAndSolvedCubie[colorsequence-24][i][1];
+        cubie_e cubie = colorsAtCornerPosInd_to_cubieAndSolvedCubie[colorsequence-24][i][0];
+        uint8_t solved_cubieInd = colorsAtCornerPosInd_to_cubieAndSolvedCubie[colorsequence-24][i][1];
         if (solved_cubieInd < 18) cube18B.cubies[solved_cubieInd] = cubie;
     } return cube18B;
 }
@@ -670,6 +644,20 @@ cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cub
         }
     }; return cube;
 }
+bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2) {
+    bool res = true;
+    for (int i = 0; i < 18; i++) {
+        if (cube1->cubies[i] != cube2->cubies[i]) {
+            res = false;
+            break;
+        }
+    } return res;
+}
+void print_cube18B(const cube18B_s* cube) {
+    for (int i = 0; i < 18; i++) {
+        printf("%d ", cube->cubies[i]);
+    } printf("\n");
+}
 
 void cube18B_apply_move(cube18B_s* cube, move_s move) {
     /*
@@ -742,4 +730,19 @@ void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move) {
     cube->cubies[3] = cubieAfterMove[face][turns][cube->cubies[3]];
     cube->cubies[4] = cubieAfterMove[face][turns][cube->cubies[4]];
     cube->cubies[5] = cubieAfterMove[face][turns][cube->cubies[5]];
+}
+void cube18B_apply_alg(cube18B_s *cube, const alg_s *alg) {
+    for (size_t i = 0; i < alg->length; i++) {
+        cube18B_apply_move(cube, alg->moves[i]);
+    }
+}
+void cube18B_xcross_apply_alg(cube18B_xcross_s *cube, const alg_s *alg) {
+    for (size_t i = 0; i < alg->length; i++) {
+        cube18B_xcross_apply_move(cube, alg->moves[i]);
+    }
+}
+void cube18B_1LLL_apply_alg(cube18B_1LLL_s *cube, const alg_s *alg) {
+    for (size_t i = 0; i < alg->length; i++) {
+        cube18B_1LLL_apply_move(cube, alg->moves[i]);
+    }
 }

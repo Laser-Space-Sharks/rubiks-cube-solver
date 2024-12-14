@@ -60,18 +60,18 @@ typedef enum : uint8_t {
     CUBIE_DL  = 21,
     CUBIE_BD  = 22,
     CUBIE_DB  = 23,
-    CUBIE_FRU = 24,
-    CUBIE_UFR = 25,
-    CUBIE_RUF = 26,
-    CUBIE_LFU = 27,
-    CUBIE_ULF = 28,
-    CUBIE_FUL = 29,
-    CUBIE_BLU = 30,
-    CUBIE_UBL = 31,
-    CUBIE_LUB = 32,
-    CUBIE_RBU = 33,
-    CUBIE_URB = 34,
-    CUBIE_BUR = 35,
+    CUBIE_FUR = 24,
+    CUBIE_URF = 25,
+    CUBIE_RFU = 26,
+    CUBIE_LUF = 27,
+    CUBIE_UFL = 28,
+    CUBIE_FLU = 29,
+    CUBIE_BUL = 30,
+    CUBIE_ULB = 31,
+    CUBIE_LBU = 32,
+    CUBIE_RUB = 33,
+    CUBIE_UBR = 34,
+    CUBIE_BRU = 35,
     CUBIE_FRD = 36,
     CUBIE_DFR = 37,
     CUBIE_RDF = 38,
@@ -84,18 +84,18 @@ typedef enum : uint8_t {
     CUBIE_RBD = 45,
     CUBIE_DRB = 46,
     CUBIE_BDR = 47, // This is the last real cubie. All cubies beyond are kept for colorSequence encoding
-    CUBIE_FUR = 48,
-    CUBIE_URF = 49,
-    CUBIE_RFU = 50,
-    CUBIE_LUF = 51,
-    CUBIE_UFL = 52,
-    CUBIE_FLU = 53,
-    CUBIE_BUL = 54,
-    CUBIE_ULB = 55,
-    CUBIE_LBU = 56,
-    CUBIE_RUB = 57,
-    CUBIE_UBR = 58,
-    CUBIE_BRU = 59,
+    CUBIE_FRU = 48,
+    CUBIE_UFR = 49,
+    CUBIE_RUF = 50,
+    CUBIE_LFU = 51,
+    CUBIE_ULF = 52,
+    CUBIE_FUL = 53,
+    CUBIE_BLU = 54,
+    CUBIE_UBL = 55,
+    CUBIE_LUB = 56,
+    CUBIE_RBU = 57,
+    CUBIE_URB = 58,
+    CUBIE_BUR = 59,
     CUBIE_FDR = 60,
     CUBIE_DRF = 61,
     CUBIE_RFD = 62,
@@ -132,7 +132,6 @@ typedef enum : uint8_t {
  *     DDD
  *
  */
-
 #define NUM_EDGES   12
 #define NUM_CORNERS  8
 
@@ -202,6 +201,25 @@ static const shift_cube_s SOLVED_SHIFTCUBE = {
         (uint32_t)FACE_D        | (uint32_t)FACE_D <<  4 | (uint32_t)FACE_D <<  8 |
         (uint32_t)FACE_D <<  28 |                          (uint32_t)FACE_D << 12 |
         (uint32_t)FACE_D <<  24 | (uint32_t)FACE_D << 20 | (uint32_t)FACE_D << 16,
+    }
+};
+
+static const cube18B_s SOLVED_CUBE18B = {
+    .cubies = {
+        CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
+        CUBIE_FR, CUBIE_FRD, CUBIE_RB, CUBIE_RBD, CUBIE_BL, CUBIE_BLD, CUBIE_LF, CUBIE_LFD, 
+        CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_URF, CUBIE_UBR, CUBIE_ULB
+    }
+};
+static const cube18B_xcross_s SOLVED_CUBE18B_XCROSS = {
+    .cubies = {
+        CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
+        CUBIE_FR, CUBIE_FRD, CUBIE_RB, CUBIE_RBD, CUBIE_BL, CUBIE_BLD, CUBIE_LF, CUBIE_LFD
+    }
+};
+static const cube18B_1LLL_s SOLVED_CUBE18B_1LLL = {
+    .cubies = {
+        CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_URF, CUBIE_UBR, CUBIE_ULB
     }
 };
 
