@@ -55,14 +55,14 @@ int main(int argc, char *argv[]) {
 
 
 
-        alg = alg_from_alg_str("F");
+        alg = alg_from_alg_str("F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
         init_all_tables_in_cube18Bc();
         shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
         cube18B_s cube18B = SOLVED_CUBE18B;
         //print_cube_line_colors(shiftcube);
         //print_cube18B(&cube18B);
 
-        int apply_alg_times = 0;
+        int apply_alg_times = 7894379;
         printf("Stress-testing cube18B with %zu moves...\n", apply_alg_times*(alg->length));
         for (int i = 0; i < apply_alg_times; i++) {
             cube18B_apply_alg(&cube18B, alg);
