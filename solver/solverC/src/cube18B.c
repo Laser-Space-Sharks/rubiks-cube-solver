@@ -81,24 +81,24 @@ static const face_e cubieDefinitions[NUM_SEQUENCES][3] = {
     {FACE_D, FACE_L, FACE_NULL}, //DL 
     {FACE_B, FACE_D, FACE_NULL}, //BD 
     {FACE_D, FACE_B, FACE_NULL}, //DB 
-    {FACE_F, FACE_U, FACE_R},   //FUR
-    {FACE_U, FACE_R, FACE_F},   //URF
-    {FACE_R, FACE_F, FACE_U},   //RFU
-    {FACE_L, FACE_U, FACE_F},   //LUF
-    {FACE_U, FACE_F, FACE_L},   //UFL
-    {FACE_F, FACE_L, FACE_U},   //FLU
-    {FACE_B, FACE_U, FACE_L},   //BUL
-    {FACE_U, FACE_L, FACE_B},   //ULB
-    {FACE_L, FACE_B, FACE_U},   //LBU
-    {FACE_R, FACE_U, FACE_B},   //RUB
-    {FACE_U, FACE_B, FACE_R},   //UBR
-    {FACE_B, FACE_R, FACE_U},   //BRU
+    {FACE_F, FACE_U, FACE_R},    //FUR
+    {FACE_U, FACE_R, FACE_F},    //URF
+    {FACE_R, FACE_F, FACE_U},    //RFU
+    {FACE_L, FACE_U, FACE_F},    //LUF
+    {FACE_U, FACE_F, FACE_L},    //UFL
+    {FACE_F, FACE_L, FACE_U},    //FLU
+    {FACE_B, FACE_U, FACE_L},    //BUL
+    {FACE_U, FACE_L, FACE_B},    //ULB
+    {FACE_L, FACE_B, FACE_U},    //LBU
+    {FACE_R, FACE_U, FACE_B},    //RUB
+    {FACE_U, FACE_B, FACE_R},    //UBR
+    {FACE_B, FACE_R, FACE_U},    //BRU
     {FACE_F, FACE_R, FACE_D},    //FRD
-    {FACE_D, FACE_R, FACE_F},    //DRF
-    {FACE_F, FACE_D, FACE_R},    //FDR
+    {FACE_D, FACE_F, FACE_R},    //DFR
+    {FACE_R, FACE_D, FACE_F},    //RDF
     {FACE_L, FACE_F, FACE_D},    //LFD
     {FACE_D, FACE_L, FACE_F},    //DLF
-    {FACE_F, FACE_L, FACE_D},    //FLD
+    {FACE_F, FACE_D, FACE_L},    //FDL
     {FACE_B, FACE_L, FACE_D},    //BLD
     {FACE_D, FACE_B, FACE_L},    //DBL
     {FACE_L, FACE_D, FACE_B},    //LDB
@@ -106,29 +106,29 @@ static const face_e cubieDefinitions[NUM_SEQUENCES][3] = {
     {FACE_D, FACE_R, FACE_B},    //DRB
     {FACE_B, FACE_D, FACE_R},    //BDR
     {FACE_F, FACE_R, FACE_U},    //FRU
-    {FACE_U, FACE_R, FACE_F},    //UFR
-    {FACE_F, FACE_U, FACE_R},    //RUF
+    {FACE_U, FACE_F, FACE_R},    //UFR
+    {FACE_R, FACE_U, FACE_F},    //RUF
     {FACE_L, FACE_F, FACE_U},    //LFU
     {FACE_U, FACE_L, FACE_F},    //ULF
-    {FACE_F, FACE_L, FACE_U},    //FLU
+    {FACE_F, FACE_U, FACE_L},    //FUL
     {FACE_B, FACE_L, FACE_U},    //BLU
     {FACE_U, FACE_B, FACE_L},    //UBL
     {FACE_L, FACE_U, FACE_B},    //LUB
     {FACE_R, FACE_B, FACE_U},    //RBU
     {FACE_U, FACE_R, FACE_B},    //URB
     {FACE_B, FACE_U, FACE_R},    //BUR
-    {FACE_F, FACE_D, FACE_R},   //FDR
-    {FACE_D, FACE_R, FACE_F},   //DRF
-    {FACE_R, FACE_F, FACE_D},   //RFD
-    {FACE_L, FACE_D, FACE_F},   //LDF
-    {FACE_D, FACE_F, FACE_L},   //DFL
-    {FACE_F, FACE_L, FACE_D},   //FLD
-    {FACE_B, FACE_D, FACE_L},   //BDL
-    {FACE_D, FACE_L, FACE_B},   //DLB
-    {FACE_L, FACE_B, FACE_D},   //LBD
-    {FACE_R, FACE_D, FACE_B},   //RDB
-    {FACE_D, FACE_B, FACE_R},   //DBR
-    {FACE_B, FACE_R, FACE_D},   //BRD
+    {FACE_F, FACE_D, FACE_R},    //FDR
+    {FACE_D, FACE_R, FACE_F},    //DRF
+    {FACE_R, FACE_F, FACE_D},    //RFD
+    {FACE_L, FACE_D, FACE_F},    //LDF
+    {FACE_D, FACE_F, FACE_L},    //DFL
+    {FACE_F, FACE_L, FACE_D},    //FLD
+    {FACE_B, FACE_D, FACE_L},    //BDL
+    {FACE_D, FACE_L, FACE_B},    //DLB
+    {FACE_L, FACE_B, FACE_D},    //LBD
+    {FACE_R, FACE_D, FACE_B},    //RDB
+    {FACE_D, FACE_B, FACE_R},    //DBR
+    {FACE_B, FACE_R, FACE_D},    //BRD
 };
 static const face_e faceAfterMove[NUM_FACES][NUM_FACES][4] = {
     {// U
