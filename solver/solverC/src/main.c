@@ -54,8 +54,7 @@ int main(int argc, char *argv[]) {
         printf("Average solve length: %f\n", sum / NUM_TESTS);
 
 
-
-        alg = alg_from_alg_str("F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
+        alg = alg_from_alg_str("F");
         init_all_tables_in_cube18Bc();
         shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
         cube18B_s cube18B = SOLVED_CUBE18B;
@@ -63,7 +62,8 @@ int main(int argc, char *argv[]) {
         //print_cube18B(&cube18B);
         //printf("FACE_NULL is %d\n", FACE_NULL);
 
-        int apply_alg_times = 0;
+        int apply_alg_times = 1;
+        printf("alg to stress test %zu times: %s\n", apply_alg_times, "F");
         printf("Stress-testing cube18B with %zu moves...\n", apply_alg_times*(alg->length));
         for (int i = 0; i < apply_alg_times; i++) {
             cube18B_apply_alg(&cube18B, alg);
@@ -77,11 +77,15 @@ int main(int argc, char *argv[]) {
 
         cube18B_s translated_cube18B = cube18B_from_shiftCube(&shiftcube);
         if (!compare_cube18Bs(&translated_cube18B, &cube18B)) {
-            printf("cube18B moves were done incorrectly!\n");
-            printf("translatedcube18B: \n");
+            printf("cube18B_from_shiftCube(shiftcube) and cube18B don't match!\n");
+            printf("shiftcube: \n");
+            print_cube_map_colors(shiftcube);
+            printf("shiftcube translated to cube18B: \n");
             print_cube18B(&translated_cube18B);
             printf("cube18B: \n");
             print_cube18B(&cube18B);
+            printf("solved_cube18B: \n");
+            print_cube18B(&SOLVED_CUBE18B);
         }
 
         shift_cube_s translated_shiftcube = shiftCube_from_cube18B(&cube18B);

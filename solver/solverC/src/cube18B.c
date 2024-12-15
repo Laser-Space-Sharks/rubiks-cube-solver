@@ -318,7 +318,7 @@ void init_all_tables_in_cube18Bc() {
 //    print_colorsAtCornerPosInd_to_cubieAndSolvedCubie();    // p6
 
     init_cubieAndSolvedCubieInd_to_colorsAtPosInd();        // i7
-    print_cubieAndSolvedCubieInd_to_colorsAtPosInd();       // p7
+//    print_cubieAndSolvedCubieInd_to_colorsAtPosInd();       // p7
 }
 
 void init_cubieDefinition_to_cubie() {
@@ -813,7 +813,7 @@ void print_cubieAndSolvedCubieInd_to_colorsAtPosInd() {
                     PosInd
                 );
             } else {
-                printf("\t<cubie>%s of <solved>%s -> <color>(%c, %c, N), <Pos>(%c, %c, N) at PosInd%hhu\n", 
+                printf("\t<cubie>%s of <solved>%s -> <color>(%c, %c, N), <Pos>(%c, %c, N) at PosInd %hhu\n", 
                     cubiePrints[cubie], 
                     cubiePrints[solved_cubie], 
                     facePrints[colorDef[0]], 
@@ -848,6 +848,7 @@ cube18B_s cube18B_from_shiftCube(const shift_cube_s* shiftcube) {
             facelet_at_facelet_pos(shiftcube, edge_pieces[i][1]),
             FACE_NULL
         };
+        if (facelet_colors[0] == 0 && facelet_colors[1] == 0) continue;
         cubie_e colorsequence = cubieDefinition_to_cubie[facelet_colors[0]][facelet_colors[1]][facelet_colors[2]];
         cubie_e cubie = colorsAtEdgePosInd_to_cubieAndSolvedCubie[colorsequence][i][0];
         uint8_t solved_cubieInd = colorsAtEdgePosInd_to_cubieAndSolvedCubie[colorsequence][i][1];
@@ -858,6 +859,7 @@ cube18B_s cube18B_from_shiftCube(const shift_cube_s* shiftcube) {
             facelet_at_facelet_pos(shiftcube, corner_pieces[i][1]),
             facelet_at_facelet_pos(shiftcube, corner_pieces[i][2]),
         };
+        if (facelet_colors[0] == 0 && facelet_colors[1] == 0 && facelet_colors[2] == 0) continue;
         cubie_e colorsequence = cubieDefinition_to_cubie[facelet_colors[0]][facelet_colors[1]][facelet_colors[2]];
         cubie_e cubie = colorsAtCornerPosInd_to_cubieAndSolvedCubie[colorsequence-24][i][0];
         uint8_t solved_cubieInd = colorsAtCornerPosInd_to_cubieAndSolvedCubie[colorsequence-24][i][1];
