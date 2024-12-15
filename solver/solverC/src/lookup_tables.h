@@ -149,10 +149,10 @@ static const facelet_pos_s edge_pieces[NUM_EDGES][2] = {
     {{FACE_R, 7}, {FACE_F, 3}},
     {{FACE_F, 7}, {FACE_L, 3}},
     {{FACE_L, 7}, {FACE_B, 3}},
-    {{FACE_D, 1}, {FACE_F,5}},
-    {{FACE_D, 3}, {FACE_R,5}},
-    {{FACE_D, 5}, {FACE_B,5}},
-    {{FACE_D, 7}, {FACE_L,5}},
+    {{FACE_D, 1}, {FACE_F, 5}},
+    {{FACE_D, 3}, {FACE_R, 5}},
+    {{FACE_D, 5}, {FACE_B, 5}},
+    {{FACE_D, 7}, {FACE_L, 5}},
 };
 
 static const face_e f2l_edge_colors[4][2] = {

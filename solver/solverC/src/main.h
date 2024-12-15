@@ -110,7 +110,7 @@ typedef enum : uint8_t {
     CUBIE_BRD = 71,
     NUM_CUBIES = 48,
     NUM_SEQUENCES = 72,
-    CUBIE_NULL = 73
+    CUBIE_NULL = 72
 } cubie_e;
 
 /* Each element of a cube_s is a bitfield representing the state of a cube face,

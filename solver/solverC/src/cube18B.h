@@ -17,6 +17,7 @@
 void init_all_tables_in_cube18Bc();
 void init_cubieDefinition_to_cubie();                    // do not share
 void init_colorSequence_to_solvedCubieInd();             // do not share
+void init_cubieAndSolvedCubieInd_to_colorsAtPosInd();
 void init_cubieToOrderedPositions();                     // do not share
 void init_cubieAfterMove();                              // do not share
 void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie();   // do not share
@@ -25,7 +26,7 @@ cubie_e cubie_from_cubieDefinition(const face_e* cubieDef);
 uint8_t solvedCubieInd_from_colorSequence(const face_e* colorsArr); // do not share
 cube18B_s cube18B_from_shiftCube(const shift_cube_s* shiftcube);
 void paint_facelet_onto_shiftCube(shift_cube_s* shiftcube, facelet_pos_s pos, face_e color); // do not share
-void paint_cubie_onto_shiftCube(shift_cube_s* shiftcube, cubie_e cubie, cubie_e solved_cubie); // do not share
+void paint_cubie_onto_shiftCube(shift_cube_s* shiftcube, cubie_e cubie, uint8_t solvedCubieInd); // do not share
 shift_cube_s shiftCube_from_cube18B(const cube18B_s* cube18B);
 cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube);
 cube18B_1LLL_s cube18B_1LLL_from_cube18B(const cube18B_s* cube);
@@ -38,5 +39,13 @@ void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move);
 void cube18B_apply_alg(cube18B_s *cube, const alg_s *alg);
 void cube18B_xcross_apply_alg(cube18B_xcross_s *cube, const alg_s *alg);
 void cube18B_1LLL_apply_alg(cube18B_1LLL_s *cube, const alg_s *alg);
+void print_cubieDefinitions();
+void print_cubieDefinition_to_cubie();
+void print_colorSequence_to_solvedCubieInd();
+void print_cubie_to_orderedPositions();
+void print_cubieAfterMove();
+void print_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
+void print_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
+void print_cubieAndSolvedCubieInd_to_colorsAtPosInd();
 
 #endif // CUBE18B_H
