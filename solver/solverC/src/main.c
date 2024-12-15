@@ -55,20 +55,20 @@ int main(int argc, char *argv[]) {
 
 
 
-        //alg = alg_from_alg_str("F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
+        alg = alg_from_alg_str("F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
         init_all_tables_in_cube18Bc();
-        //shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
-        //cube18B_s cube18B = SOLVED_CUBE18B;
-        //print_cube_line_colors(shiftcube);
-        //print_cube18B(&cube18B);
-        //printf("FACE_NULL is %d\n", FACE_NULL);
-        /*
-        int apply_alg_times = 7894379;
+        shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
+        cube18B_s cube18B = SOLVED_CUBE18B;
+        print_cube_line_colors(shiftcube);
+        print_cube18B(&cube18B);
+        printf("FACE_NULL is %d\n", FACE_NULL);
+
+        int apply_alg_times = 0;
         printf("Stress-testing cube18B with %zu moves...\n", apply_alg_times*(alg->length));
         for (int i = 0; i < apply_alg_times; i++) {
             cube18B_apply_alg(&cube18B, alg);
             //apply_alg(&shiftcube, alg);
-        } 
+        }
         printf("Stress-testing shiftcube with %zu moves...\n", apply_alg_times*(alg->length));
         for (int i = 0; i < apply_alg_times; i++) {
             //cube18B_apply_alg(&cube18B, alg);
@@ -82,17 +82,19 @@ int main(int argc, char *argv[]) {
             print_cube18B(&translated_cube18B);
             printf("cube18B: \n");
             print_cube18B(&cube18B);
-        }*/
-        /*
+        }
+
         shift_cube_s translated_shiftcube = shiftCube_from_cube18B(&cube18B);
         cube18B_s translated_translated_cube18B = cube18B_from_shiftCube(&translated_shiftcube);
         if (!compare_cube18Bs(&translated_translated_cube18B, &cube18B)) {
             printf("ohno, the shiftcube_from_cube18B isn't working\n");
             print_cube_map_colors(shiftcube);
+            print_cube18B(&cube18B);
             printf("\n");
             print_cube_map_colors(translated_shiftcube);
-        }*/
-        //alg_free(alg);
+            print_cube18B(&translated_translated_cube18B);
+        }
+        alg_free(alg);
         //print_cubieDefinitions();
         //print_cubieDefinition_to_cubie();
         //print_colorSequence_to_solvedCubieInd();

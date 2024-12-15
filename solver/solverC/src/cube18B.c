@@ -258,34 +258,37 @@ static const face_e faceAfterMove[NUM_FACES][NUM_FACES][4] = {
 };
 
 //                                                                                Initialization ordering:
-cubie_e cubieDefinition_to_cubie[NUM_FACES][NUM_FACES][NUM_FACES+1];             // 1
-uint8_t colorSequence_to_solvedCubieInd[NUM_FACES+1][NUM_FACES+1][NUM_FACES+1];  // 2
-facelet_pos_s cubie_to_orderedPositions[NUM_SEQUENCES][3];                       // 3
-cubie_e cubieAfterMove[NUM_FACES][NUM_SIDES][NUM_CUBIES];                        // 4: depends on 1
-uint8_t colorsAtEdgePosInd_to_cubieAndSolvedCubie[24][NUM_EDGES][2];             // 5: depends on 1 and 2
-uint8_t colorsAtCornerPosInd_to_cubieAndSolvedCubie[48][NUM_CORNERS][2];         // 6: depends on 1 and 2
-uint8_t cubieAndSolvedCubieInd_to_colorsAtPosInd[48][18][3];
+static cubie_e cubieDefinition_to_cubie[NUM_FACES][NUM_FACES][NUM_FACES+1];             // 1
+static uint8_t colorSequence_to_solvedCubieInd[NUM_FACES+1][NUM_FACES+1][NUM_FACES+1];  // 2
+static facelet_pos_s cubie_to_orderedPositions[NUM_SEQUENCES][3];                       // 3
+static cubie_e cubieAfterMove[NUM_FACES][NUM_SIDES][NUM_CUBIES];                        // 4: depends on 1
+static uint8_t colorsAtEdgePosInd_to_cubieAndSolvedCubie[24][NUM_EDGES][2];             // 5: depends on 1 and 2
+static uint8_t colorsAtCornerPosInd_to_cubieAndSolvedCubie[48][NUM_CORNERS][2];         // 6: depends on 1 and 2
+static uint8_t cubieAndSolvedCubieInd_to_colorsAtPosInd[48][18][3];
+
 void init_all_tables_in_cube18Bc() {
     init_cubieDefinition_to_cubie();
-    print_cubieDefinition_to_cubie();
+//    print_cubieDefinition_to_cubie();
 
     init_colorSequence_to_solvedCubieInd();
-    print_colorSequence_to_solvedCubieInd();
+//    print_colorSequence_to_solvedCubieInd();
 
     init_cubieToOrderedPositions();
-    print_cubie_to_orderedPositions();
+//    print_cubie_to_orderedPositions();
 
     init_cubieAfterMove();
-    print_cubieAfterMove();
+//    print_cubieAfterMove();
 
     init_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
-    print_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
+//    print_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
 
     init_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
-    print_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
+//    print_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
 
     init_cubieAndSolvedCubieInd_to_colorsAtPosInd();
+
     print_cubieAndSolvedCubieInd_to_colorsAtPosInd();
+
 }
 void init_cubieDefinition_to_cubie() {
     /*
@@ -351,6 +354,12 @@ void init_colorSequence_to_solvedCubieInd() {
     }//print_colorSequence_to_solvedCubieInd();
 }
 void init_cubieAndSolvedCubieInd_to_colorsAtPosInd() {
+    // <cubie>UR  of <solved>FRD -> <color>(R, D, F), <Pos>(U, R, F), at 2
+    cubie_e color = CUBIE_URF;
+    uint8_t pos_ind = 2;
+    cubie_e nine = colorsAtCornerPosInd_to_cubieAndSolvedCubie[color-24][pos_ind][0];
+    uint8_t solve_ind_nine = colorsAtCornerPosInd_to_cubieAndSolvedCubie[color-24][pos_ind][1];
+    printf("Color URF on pos URF -> <cubie>%s of <solved>%s\n", cubiePrints[nine], cubiePrints[SOLVED_CUBIES[solve_ind_nine]]);
     // edges
     for (cubie_e colors = 0; colors < 24; colors++) {
         for (uint8_t edgePosInd = 0; edgePosInd < NUM_EDGES; edgePosInd++) {
@@ -366,11 +375,13 @@ void init_cubieAndSolvedCubieInd_to_colorsAtPosInd() {
         for (uint8_t cornerPosInd = 0; cornerPosInd < NUM_CORNERS; cornerPosInd++) {
             cubie_e cubie = colorsAtCornerPosInd_to_cubieAndSolvedCubie[colors-24][cornerPosInd][0];
             uint8_t solvedCubieInd = colorsAtCornerPosInd_to_cubieAndSolvedCubie[colors-24][cornerPosInd][1];
+            printf("Cubie: %s, solved cubie index %hhu\n", cubiePrints[cubie], solvedCubieInd);
             cubieAndSolvedCubieInd_to_colorsAtPosInd[cubie][solvedCubieInd][0] = colors;
             cubieAndSolvedCubieInd_to_colorsAtPosInd[cubie][solvedCubieInd][1] = cornerPosInd;
             cubieAndSolvedCubieInd_to_colorsAtPosInd[cubie][solvedCubieInd][2] = 1;
         }
-    }//print_cubieAndSolvedCubieInd_to_colorsAtPosInd();
+    }
+
 }
 void init_cubieToOrderedPositions() {
     /*
@@ -555,27 +566,23 @@ void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie() {
         facelet_pos_s
     */
     //printf("cubie_to_orderedPositions[UR][1].index = %hhu\n", cubie_to_orderedPositions[CUBIE_UR][1].index);
-    for (int row = 0; row < NUM_CORNERS; row++) {
-        for (cubie_e colors = 24; colors < 72; colors++) {
-            face_e colorsArr[3] = {
-                cubieDefinitions[colors][0],
-                cubieDefinitions[colors][1],
-                cubieDefinitions[colors][2],
-            };
-            uint8_t solved_cubieInd = solvedCubieInd_from_colorSequence(colorsArr); //*********
-            cubie_e solvedCubie = SOLVED_CUBIES[solved_cubieInd];
-            face_e solvedCubieDef[3] = {
-                cubieDefinitions[solvedCubie][0],
-                cubieDefinitions[solvedCubie][1],
-                cubieDefinitions[solvedCubie][2],
-            };
-            //-------------------------------------------------
-            facelet_pos_s CornerLocs[3] = {
-                corner_pieces[row][0],
-                corner_pieces[row][1],
-                corner_pieces[row][2],
-            };
-            face_e PosCubieDef[3] = {CornerLocs[0].face, CornerLocs[1].face, CornerLocs[2].face};
+    //<color>(U, F, R), <Pos>(U, R, F) -> <cubie>UFR of <solved>URF
+
+    for (cubie_e colors = 24; colors < 72; colors++) {
+        face_e colorsArr[3] = {
+            cubieDefinitions[colors][0],
+            cubieDefinitions[colors][1],
+            cubieDefinitions[colors][2],
+        };
+        uint8_t solved_cubieInd = solvedCubieInd_from_colorSequence(colorsArr); //*********
+        cubie_e solvedCubie = SOLVED_CUBIES[solved_cubieInd];
+        face_e solvedCubieDef[3] = {
+            cubieDefinitions[solvedCubie][0],
+            cubieDefinitions[solvedCubie][1],
+            cubieDefinitions[solvedCubie][2],
+        };
+        for (int row = 0; row < NUM_CORNERS; row++) {
+            face_e PosCubieDef[3] = {corner_pieces[row][0].face, corner_pieces[row][1].face, corner_pieces[row][2].face};
             //-------------------------------------------------
             /*
             The colors on the colorsArr, will likely be a different ordering than the same colors on solvedCubieDef.
@@ -595,6 +602,7 @@ void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie() {
             colorsAtCornerPosInd_to_cubieAndSolvedCubie[colors-24][row][1] = solved_cubieInd;
         }
     }
+    printf("<color>(U, R, F) for <pos>(U, R, F) -> <cubie>%s\n", cubiePrints[colorsAtCornerPosInd_to_cubieAndSolvedCubie[CUBIE_URF-24][2][0]]);
     //printf("cubie_to_orderedPositions[UR][1].index = %hhu\n", cubie_to_orderedPositions[CUBIE_UR][1].index);
     //print_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
 }
@@ -705,6 +713,7 @@ void paint_cubie_onto_shiftCube(shift_cube_s* shiftcube, cubie_e cubie, uint8_t 
         positions[1] = edge_pieces[edgePosInd][1];
         positions[2] = NULL_POS;
     }
+
     paint_facelet_onto_shiftCube(shiftcube, positions[0], colorsDef[0]);
     paint_facelet_onto_shiftCube(shiftcube, positions[1], colorsDef[1]);
     if (!facelet_pos_eq(positions[2], NULL_POS)) {
@@ -744,9 +753,11 @@ shift_cube_s shiftCube_from_cube18B(const cube18B_s* cube18B) {
     */
     // those two cubies we omitted will be null on shiftcube.
     shift_cube_s shiftcube = NULL_CUBE; // must be completely 0s
+    // FD  RD  BD  LD  FR  FRD RB  RBD BL  BLD LF  LFD FU  RU  BU  URF UBR ULB
     for (uint8_t i = 0; i < 18; i++) {
         paint_cubie_onto_shiftCube(&shiftcube, cube18B->cubies[i], i);
-    } return shiftcube;
+    }
+    return shiftcube;
 }
 
 cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube) {
@@ -829,7 +840,7 @@ bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2) {
 }
 void print_cube18B(const cube18B_s* cube) {
     for (int i = 0; i < 18; i++) {
-        printf("%d ", cube->cubies[i]);
+        printf("%s ", cubiePrints[cube->cubies[i]]);
     } printf("\n");
 }
 
@@ -1043,7 +1054,7 @@ void print_colorsAtEdgePosInd_to_cubieAndSolvedCubie() {
 void print_colorsAtCornerPosInd_to_cubieAndSolvedCubie() {
     printf("colorsAtCornerPosInd_to_cubieAndSolvedCubie[][][]\n");
     for (cubie_e color = 24; color < 72; color++) {
-        for (uint8_t CornerPosInd = 0; CornerPosInd < NUM_EDGES; CornerPosInd++) {
+        for (uint8_t CornerPosInd = 0; CornerPosInd < NUM_CORNERS; CornerPosInd++) {
             cubie_e cubie = colorsAtCornerPosInd_to_cubieAndSolvedCubie[color-24][CornerPosInd][0];
             uint8_t solvedCubieInd  = colorsAtCornerPosInd_to_cubieAndSolvedCubie[color-24][CornerPosInd][1];
             cubie_e solved_cubie = SOLVED_CUBIES[solvedCubieInd];
@@ -1089,7 +1100,7 @@ void print_cubieAndSolvedCubieInd_to_colorsAtPosInd() {
                     corner_pieces[PosInd][1],
                     corner_pieces[PosInd][2],
                 };
-                printf("\t<cubie>%s of <solved>%s -> <color>(%c, %c, %c), <Pos>(%c, %c, %c)\n", 
+                printf("\t<cubie>%s of <solved>%s -> <color>(%c, %c, %c), <Pos>(%c, %c, %c), at %hhu\n", 
                     cubiePrints[cubie], 
                     cubiePrints[solved_cubie], 
                     facePrints[colorDef[0]], 
@@ -1097,20 +1108,22 @@ void print_cubieAndSolvedCubieInd_to_colorsAtPosInd() {
                     facePrints[colorDef[2]], 
                     facePrints[corner[0].face], 
                     facePrints[corner[1].face], 
-                    facePrints[corner[2].face]
+                    facePrints[corner[2].face],
+                    PosInd
                 );
             } else {
                 facelet_pos_s edge[2] = {
                     edge_pieces[PosInd][0],
                     edge_pieces[PosInd][1],
                 };
-                printf("\t<cubie>%s of <solved>%s -> <color>(%c, %c, N), <Pos>(%c, %c, N)\n", 
+                printf("\t<cubie>%s of <solved>%s -> <color>(%c, %c, N), <Pos>(%c, %c, N), at %hhu\n", 
                     cubiePrints[cubie], 
                     cubiePrints[solved_cubie], 
                     facePrints[colorDef[0]], 
                     facePrints[colorDef[1]], 
                     facePrints[edge[0].face], 
-                    facePrints[edge[1].face]
+                    facePrints[edge[1].face],
+                    PosInd
                 );
             }
         }
