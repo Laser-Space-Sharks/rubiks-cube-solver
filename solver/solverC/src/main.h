@@ -14,8 +14,8 @@ typedef enum : uint8_t {
     FACE_L = 3,
     FACE_B = 4,
     FACE_D = 5,
-    NUM_FACES,
-    FACE_NULL
+    NUM_FACES=6,
+    FACE_NULL=6
 } face_e;
 
 typedef enum : char {

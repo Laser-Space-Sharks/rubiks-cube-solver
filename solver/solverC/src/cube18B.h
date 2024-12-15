@@ -22,8 +22,6 @@ void init_cubieToOrderedPositions();                     // do not share
 void init_cubieAfterMove();                              // do not share
 void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie();   // do not share
 void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie(); // do not share
-cubie_e cubie_from_cubieDefinition(const face_e* cubieDef);
-uint8_t solvedCubieInd_from_colorSequence(const face_e* colorsArr); // do not share
 cube18B_s cube18B_from_shiftCube(const shift_cube_s* shiftcube);
 void paint_facelet_onto_shiftCube(shift_cube_s* shiftcube, facelet_pos_s pos, face_e color); // do not share
 void paint_cubie_onto_shiftCube(shift_cube_s* shiftcube, cubie_e cubie, uint8_t solvedCubieInd); // do not share
