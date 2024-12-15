@@ -59,9 +59,9 @@ int main(int argc, char *argv[]) {
         init_all_tables_in_cube18Bc();
         shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
         cube18B_s cube18B = SOLVED_CUBE18B;
-        print_cube_line_colors(shiftcube);
-        print_cube18B(&cube18B);
-        printf("FACE_NULL is %d\n", FACE_NULL);
+        //print_cube_line_colors(shiftcube);
+        //print_cube18B(&cube18B);
+        //printf("FACE_NULL is %d\n", FACE_NULL);
 
         int apply_alg_times = 0;
         printf("Stress-testing cube18B with %zu moves...\n", apply_alg_times*(alg->length));
