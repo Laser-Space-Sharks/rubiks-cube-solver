@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <sys/types.h>
 
-cube_table_s *xcross_start_ct = NULL;
-cube_table_s *xcross_end_ct   = NULL;
+static cube_table_s *xcross_start_ct = NULL;
+static cube_table_s *xcross_end_ct   = NULL;
 
 bool init_solver() {
     xcross_start_ct = cube_table_create(cube_table_depth_sizes[5]);

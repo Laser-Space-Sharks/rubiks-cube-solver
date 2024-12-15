@@ -2,6 +2,45 @@
 
 #include "lookup_tables.h"
 
+// lookup table for the faces that connect to a given face
+static const face_e side_faces[NUM_FACES][NUM_SIDES] = {
+    {FACE_B, FACE_R, FACE_F, FACE_L}, // FACE_U 
+    {FACE_U, FACE_B, FACE_D, FACE_F}, // FACE_R 
+    {FACE_U, FACE_R, FACE_D, FACE_L}, // FACE_F
+    {FACE_U, FACE_F, FACE_D, FACE_B}, // FACE_L
+    {FACE_U, FACE_L, FACE_D, FACE_R}, // FACE_B
+    {FACE_F, FACE_R, FACE_B, FACE_L}  // FACE_D
+};
+
+// bitmasks for masking a given side of a face
+static const uint32_t side_masks[NUM_SIDES] = {
+    0x00000FFF, // SIDE_U
+    0x000FFF00, // SIDE_R
+    0x0FFF0000, // SIDE_D
+    0xFF00000F  // SIDE_L
+};
+
+// lookup table for getting masks to the side pieces that a given face "sees"
+static const uint32_t move_side_masks[NUM_FACES][NUM_SIDES] = {
+    {side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U], side_masks[SIDE_U]}, // FACE_U
+    {side_masks[SIDE_R], side_masks[SIDE_L], side_masks[SIDE_R], side_masks[SIDE_R]}, // FACE_R
+    {side_masks[SIDE_D], side_masks[SIDE_L], side_masks[SIDE_U], side_masks[SIDE_R]}, // FACE F
+    {side_masks[SIDE_L], side_masks[SIDE_L], side_masks[SIDE_L], side_masks[SIDE_R]}, // FACE L
+    {side_masks[SIDE_U], side_masks[SIDE_L], side_masks[SIDE_D], side_masks[SIDE_R]}, // FACE B
+    {side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D], side_masks[SIDE_D]}  // FACE D
+};
+
+// lookup table for getting which side a given face sees in a given direction
+// e.g. the SIDE_U bits of FACE_F 'see' the bottom SIDE_D bits of FACE_U
+static const side_e move_sfaces[NUM_FACES][NUM_SIDES] = {
+    {SIDE_U, SIDE_U, SIDE_U, SIDE_U}, // FACE_U
+    {SIDE_R, SIDE_L, SIDE_R, SIDE_R}, // FACE_R
+    {SIDE_D, SIDE_L, SIDE_U, SIDE_R}, // FACE F
+    {SIDE_L, SIDE_L, SIDE_L, SIDE_R}, // FACE L
+    {SIDE_U, SIDE_L, SIDE_D, SIDE_R}, // FACE B
+    {SIDE_D, SIDE_D, SIDE_D, SIDE_D}  // FACE D
+};
+
 shift_cube_s* cube_copy(const shift_cube_s *cube) {
     if (cube == NULL) {
         return NULL;
@@ -126,6 +165,8 @@ shift_cube_s get_corners(const shift_cube_s *cube, face_e color1, face_e color2,
 // for insertion into the appropriate target side face
 static uint8_t move_bitrolls[NUM_FACES][NUM_SIDES][4];
 
+static uint8_t new_move_bitrolls[NUM_SIDES][NUM_SIDES];
+
 // a lookup table that given a side of a face and a number of turns of said
 // face (modulo 4) returns the 'target side' of the input side, i.e. which side
 // the facelets of the input side would end up after turning a face
@@ -143,6 +184,14 @@ void init_move_bitrolls() {
         move_bitrolls[f][s][turns] = mod4(move_sfaces[f][target_sides[s][turns]]
                                           - move_sfaces[f][s]) * 8;
     }}}
+}
+
+void init_new_move_bitrolls() {
+    for (side_e s1 = SIDE_U; s1 < NUM_SIDES; s1++) {
+        for (side_e s2 = SIDE_U; s2 < NUM_SIDES; s2++) {
+            new_move_bitrolls[s1][s2] = (s2 - s1) * 8;
+        }
+    }
 }
 
 // Apply a move to the cube using bit manipulations
@@ -178,6 +227,208 @@ void apply_move(shift_cube_s *c, move_s m) {
     c->state[target_sface(SIDE_R)] |= rolq(sfacelets[SIDE_R], side_roll(SIDE_R));
     c->state[target_sface(SIDE_D)] |= rolq(sfacelets[SIDE_D], side_roll(SIDE_D));
     c->state[target_sface(SIDE_L)] |= rolq(sfacelets[SIDE_L], side_roll(SIDE_L));
+}
+
+static inline void swap_sides(uint32_t *face1_bits, uint32_t *face2_bits,
+                              face_e face1, face_e face2,
+                              side_e face1_s, side_e face2_s) {
+    *face1_bits = rolq(*face1_bits, new_move_bitrolls[face1_s][face2_s]);
+    *face1_bits ^= *face2_bits & side_masks[face2_s];
+    *face2_bits ^= *face1_bits & side_masks[face2_s];
+    *face1_bits ^= *face2_bits & side_masks[face2_s];
+    *face1_bits = rolq(*face1_bits, -new_move_bitrolls[face1_s][face2_s]);
+}
+
+void new_apply_move(shift_cube_s *c, move_e m) {
+    switch (m) {
+        case MOVE_U:
+            c->state[FACE_U] = rolq(c->state[FACE_U], 8);
+            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_R]),
+                       FACE_B, FACE_R, SIDE_U, SIDE_U);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_B]),
+                       FACE_L, FACE_B, SIDE_U, SIDE_U);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_L]),
+                       FACE_F, FACE_L, SIDE_U, SIDE_U);
+            break;
+        case MOVE_U2:
+            c->state[FACE_U] = rolq(c->state[FACE_U], 16);
+            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_F]),
+                       FACE_B, FACE_F, SIDE_U, SIDE_U);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
+                       FACE_L, FACE_R, SIDE_U, SIDE_U);
+            break;
+        case MOVE_UPRIME:
+            c->state[FACE_U] = rolq(c->state[FACE_U], 24);
+            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_B]),
+                       FACE_R, FACE_B, SIDE_U, SIDE_U);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_R]),
+                       FACE_F, FACE_R, SIDE_U, SIDE_U);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_F]),
+                       FACE_L, FACE_F, SIDE_U, SIDE_U);
+            break;
+        case MOVE_R:
+            c->state[FACE_R] = rolq(c->state[FACE_R], 8);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_B]),
+                       FACE_U, FACE_B, SIDE_R, SIDE_L);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_U]),
+                       FACE_F, FACE_U, SIDE_R, SIDE_R);
+            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_F]),
+                       FACE_D, FACE_F, SIDE_R, SIDE_R);
+            break;
+        case MOVE_R2:
+            c->state[FACE_R] = rolq(c->state[FACE_R], 16);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
+                       FACE_U, FACE_D, SIDE_R, SIDE_R);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_B]),
+                       FACE_F, FACE_B, SIDE_R, SIDE_L);
+            break;
+        case MOVE_RPRIME:
+            c->state[FACE_R] = rolq(c->state[FACE_R], 24);
+            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_D]),
+                       FACE_B, FACE_D, SIDE_L, SIDE_R);
+            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_F]),
+                       FACE_D, FACE_F, SIDE_R, SIDE_R);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_U]),
+                       FACE_F, FACE_U, SIDE_R, SIDE_R);
+            break;
+        case MOVE_F:
+            c->state[FACE_F] = rolq(c->state[FACE_F], 8);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_R]),
+                       FACE_U, FACE_R, SIDE_D, SIDE_L);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_U]),
+                       FACE_L, FACE_U, SIDE_R, SIDE_D);
+            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_L]),
+                       FACE_D, FACE_L, SIDE_U, SIDE_R);
+            break;
+        case MOVE_F2:
+            c->state[FACE_F] = rolq(c->state[FACE_F], 16);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
+                       FACE_U, FACE_D, SIDE_D, SIDE_U);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
+                       FACE_L, FACE_R, SIDE_R, SIDE_L);
+            break;
+        case MOVE_FPRIME:
+            c->state[FACE_F] = rolq(c->state[FACE_F], 24);
+            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_D]),
+                       FACE_R, FACE_D, SIDE_L, SIDE_U);
+            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_L]),
+                       FACE_D, FACE_L, SIDE_U, SIDE_R);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_U]),
+                       FACE_L, FACE_U, SIDE_R, SIDE_D);
+            break;
+        case MOVE_L:
+            c->state[FACE_L] = rolq(c->state[FACE_L], 8);
+            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_F]),
+                       FACE_D, FACE_F, SIDE_L, SIDE_L);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_U]),
+                       FACE_U, FACE_F, SIDE_L, SIDE_L);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_B]),
+                       FACE_U, FACE_B, SIDE_L, SIDE_R);
+            break;
+        case MOVE_L2:
+            c->state[FACE_L] = rolq(c->state[FACE_L], 16);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
+                       FACE_U, FACE_D, SIDE_L, SIDE_L);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_B]),
+                       FACE_F, FACE_B, SIDE_L, SIDE_R);
+            break;
+        case MOVE_LPRIME:
+            c->state[FACE_L] = rolq(c->state[FACE_L], 24);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_F]),
+                       FACE_U, FACE_F, SIDE_L, SIDE_L);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_D]),
+                       FACE_F, FACE_D, SIDE_L, SIDE_L);
+            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_B]),
+                       FACE_D, FACE_B, SIDE_L, SIDE_R);
+            break;
+        case MOVE_B:
+            c->state[FACE_B] = rolq(c->state[FACE_B], 8);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_U]),
+                       FACE_L, FACE_U, SIDE_L, SIDE_U);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_R]),
+                       FACE_R, FACE_U, SIDE_U, SIDE_R);
+            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_D]),
+                       FACE_R, FACE_D, SIDE_R, SIDE_D);
+            break;
+        case MOVE_B2:
+            c->state[FACE_B] = rolq(c->state[FACE_B], 16);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
+                       FACE_U, FACE_D, SIDE_U, SIDE_D);
+            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_L]),
+                       FACE_R, FACE_L, SIDE_R, SIDE_L);
+            break;
+        case MOVE_BPRIME:
+            c->state[FACE_B] = rolq(c->state[FACE_B], 24);
+            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_L]),
+                       FACE_U, FACE_L, SIDE_U, SIDE_L);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_D]),
+                       FACE_L, FACE_D, SIDE_L, SIDE_D);
+            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_R]),
+                       FACE_D, FACE_R, SIDE_D, SIDE_R);
+
+            break;
+        case MOVE_D:
+            c->state[FACE_D] = rolq(c->state[FACE_D], 8);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_B]),
+                       FACE_L, FACE_B, SIDE_D, SIDE_D);
+            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_R]),
+                       FACE_B, FACE_R, SIDE_D, SIDE_D);
+            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_F]),
+                       FACE_R, FACE_F, SIDE_D, SIDE_D);
+            break;
+        case MOVE_D2:
+            c->state[FACE_D] = rolq(c->state[FACE_D], 16);
+            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_F]),
+                       FACE_B, FACE_F, SIDE_D, SIDE_D);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
+                       FACE_L, FACE_R, SIDE_D, SIDE_D);
+            break;
+        case MOVE_DPRIME:
+            c->state[FACE_D] = rolq(c->state[FACE_D], 24);
+            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_R]),
+                       FACE_B, FACE_R, SIDE_D, SIDE_D);
+            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_B]),
+                       FACE_L, FACE_B, SIDE_D, SIDE_D);
+            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_L]),
+                       FACE_F, FACE_L, SIDE_D, SIDE_D);
+            break;
+    }
+
+//    switch (m.turns) {
+//        case 1:
+//            // U <-> R => L <-> U => D <-> L
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_U]]), &(c->state[side_faces[m.face][SIDE_R]]),
+//                       side_faces[m.face][SIDE_U], side_faces[m.face][SIDE_R],
+//                       move_sfaces[m.face][SIDE_U], move_sfaces[m.face][SIDE_R]);
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_L]]), &(c->state[side_faces[m.face][SIDE_U]]),
+//                       side_faces[m.face][SIDE_L], side_faces[m.face][SIDE_U],
+//                       move_sfaces[m.face][SIDE_L], move_sfaces[m.face][SIDE_U]);
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_D]]), &(c->state[side_faces[m.face][SIDE_L]]),
+//                       side_faces[m.face][SIDE_D], side_faces[m.face][SIDE_L],
+//                       move_sfaces[m.face][SIDE_D], move_sfaces[m.face][SIDE_L]);
+//            break;
+//        case 2:
+//            // U <-> D => R <-> L
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_U]]), &(c->state[side_faces[m.face][SIDE_D]]),
+//                       side_faces[m.face][SIDE_U], side_faces[m.face][SIDE_D],
+//                       move_sfaces[m.face][SIDE_U], move_sfaces[m.face][SIDE_D]);
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_R]]), &(c->state[side_faces[m.face][SIDE_L]]),
+//                       side_faces[m.face][SIDE_R], side_faces[m.face][SIDE_L],
+//                       move_sfaces[m.face][SIDE_R], move_sfaces[m.face][SIDE_L]);
+//            break;
+//        case 3:
+//            // R <-> U => D <-> R => L <-> D
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_R]]), &(c->state[side_faces[m.face][SIDE_U]]),
+//                       side_faces[m.face][SIDE_R], side_faces[m.face][SIDE_U],
+//                       move_sfaces[m.face][SIDE_R], move_sfaces[m.face][SIDE_U]);
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_D]]), &(c->state[side_faces[m.face][SIDE_R]]),
+//                       side_faces[m.face][SIDE_D], side_faces[m.face][SIDE_R],
+//                       move_sfaces[m.face][SIDE_D], move_sfaces[m.face][SIDE_R]);
+//            swap_sides(&(c->state[side_faces[m.face][SIDE_L]]), &(c->state[side_faces[m.face][SIDE_D]]),
+//                       side_faces[m.face][SIDE_L], side_faces[m.face][SIDE_D],
+//                       move_sfaces[m.face][SIDE_L], move_sfaces[m.face][SIDE_D]);
+//            break;
+//    }
 }
 
 // Apply all the moves from a move_list on a cube

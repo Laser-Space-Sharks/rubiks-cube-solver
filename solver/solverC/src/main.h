@@ -35,6 +35,27 @@ typedef enum : uint8_t {
     NUM_SIDES
 } side_e;
 
+typedef enum {
+    MOVE_U,
+    MOVE_U2,
+    MOVE_UPRIME,
+    MOVE_R,
+    MOVE_R2,
+    MOVE_RPRIME,
+    MOVE_F,
+    MOVE_F2,
+    MOVE_FPRIME,
+    MOVE_L,
+    MOVE_L2,
+    MOVE_LPRIME,
+    MOVE_B,
+    MOVE_B2,
+    MOVE_BPRIME,
+    MOVE_D,
+    MOVE_D2,
+    MOVE_DPRIME,
+} move_e;
+
 typedef enum : uint8_t {
     CUBIE_UR  = 0,
     CUBIE_RU  = 1,
