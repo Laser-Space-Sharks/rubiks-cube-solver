@@ -230,62 +230,62 @@ void print_cubieDefinitions() {
     }
 }
 
-static const face_e faceAfterMove[NUM_FACES+1][NUM_FACES][4] = {
+static const face_e faceAfterMove[NUM_FACES+1][NUM_MOVES] = {
     {// U
-        {FACE_U, FACE_U, FACE_U, FACE_U}, // U
-        {FACE_U, FACE_B, FACE_D, FACE_F}, // R
-        {FACE_U, FACE_R, FACE_D, FACE_L}, // F
-        {FACE_U, FACE_F, FACE_D, FACE_B}, // L
-        {FACE_U, FACE_L, FACE_D, FACE_R}, // B
-        {FACE_U, FACE_U, FACE_U, FACE_U}, // D
+        FACE_U, FACE_U, FACE_U, // U
+        FACE_B, FACE_D, FACE_F, // R
+        FACE_R, FACE_D, FACE_L, // F
+        FACE_F, FACE_D, FACE_B, // L
+        FACE_L, FACE_D, FACE_R, // B
+        FACE_U, FACE_U, FACE_U, // D
     }, 
     { // R
-        {FACE_R, FACE_F, FACE_L, FACE_B}, // U
-        {FACE_R, FACE_R, FACE_R, FACE_R}, // R
-        {FACE_R, FACE_D, FACE_L, FACE_U}, // F
-        {FACE_R, FACE_R, FACE_R, FACE_R}, // L
-        {FACE_R, FACE_U, FACE_L, FACE_D}, // B
-        {FACE_R, FACE_B, FACE_L, FACE_F}, // D
+        FACE_F, FACE_L, FACE_B, // U
+        FACE_R, FACE_R, FACE_R, // R
+        FACE_D, FACE_L, FACE_U, // F
+        FACE_R, FACE_R, FACE_R, // L
+        FACE_U, FACE_L, FACE_D, // B
+        FACE_B, FACE_L, FACE_F, // D
     }, 
     { // F
-        {FACE_F, FACE_L, FACE_B, FACE_R}, // U
-        {FACE_F, FACE_U, FACE_B, FACE_D}, // R
-        {FACE_F, FACE_F, FACE_F, FACE_F}, // F
-        {FACE_F, FACE_D, FACE_B, FACE_U}, // L
-        {FACE_F, FACE_F, FACE_F, FACE_F}, // B
-        {FACE_F, FACE_R, FACE_B, FACE_L}, // D
+        FACE_L, FACE_B, FACE_R, // U
+        FACE_U, FACE_B, FACE_D, // R
+        FACE_F, FACE_F, FACE_F, // F
+        FACE_D, FACE_B, FACE_U, // L
+        FACE_F, FACE_F, FACE_F, // B
+        FACE_R, FACE_B, FACE_L, // D
     }, 
     { // L
-        {FACE_L, FACE_B, FACE_R, FACE_F}, // U
-        {FACE_L, FACE_L, FACE_L, FACE_L}, // R
-        {FACE_L, FACE_U, FACE_R, FACE_D}, // F
-        {FACE_L, FACE_L, FACE_L, FACE_L}, // L
-        {FACE_L, FACE_D, FACE_R, FACE_U}, // B
-        {FACE_L, FACE_F, FACE_R, FACE_B}, // D
+        FACE_B, FACE_R, FACE_F, // U
+        FACE_L, FACE_L, FACE_L, // R
+        FACE_U, FACE_R, FACE_D, // F
+        FACE_L, FACE_L, FACE_L, // L
+        FACE_D, FACE_R, FACE_U, // B
+        FACE_F, FACE_R, FACE_B, // D
     }, 
     { // B
-        {FACE_B, FACE_R, FACE_F, FACE_L}, // U
-        {FACE_B, FACE_D, FACE_F, FACE_U}, // R
-        {FACE_B, FACE_B, FACE_B, FACE_B}, // F
-        {FACE_B, FACE_U, FACE_F, FACE_D}, // L
-        {FACE_B, FACE_B, FACE_B, FACE_B}, // B
-        {FACE_B, FACE_L, FACE_F, FACE_R}, // D
+        FACE_R, FACE_F, FACE_L, // U
+        FACE_D, FACE_F, FACE_U, // R
+        FACE_B, FACE_B, FACE_B, // F
+        FACE_U, FACE_F, FACE_D, // L
+        FACE_B, FACE_B, FACE_B, // B
+        FACE_L, FACE_F, FACE_R, // D
     }, 
     { // D
-        {FACE_D, FACE_D, FACE_D, FACE_D}, // U
-        {FACE_D, FACE_F, FACE_U, FACE_B}, // R
-        {FACE_D, FACE_L, FACE_U, FACE_R}, // F
-        {FACE_D, FACE_B, FACE_U, FACE_F}, // L
-        {FACE_D, FACE_R, FACE_U, FACE_L}, // B
-        {FACE_D, FACE_D, FACE_D, FACE_D}, // D
+        FACE_D, FACE_D, FACE_D, // U
+        FACE_F, FACE_U, FACE_B, // R
+        FACE_L, FACE_U, FACE_R, // F
+        FACE_B, FACE_U, FACE_F, // L
+        FACE_R, FACE_U, FACE_L, // B
+        FACE_D, FACE_D, FACE_D, // D
     },
     { // N
-        {FACE_NULL, FACE_NULL, FACE_NULL, FACE_NULL}, // U
-        {FACE_NULL, FACE_NULL, FACE_NULL, FACE_NULL}, // R
-        {FACE_NULL, FACE_NULL, FACE_NULL, FACE_NULL}, // F
-        {FACE_NULL, FACE_NULL, FACE_NULL, FACE_NULL}, // L
-        {FACE_NULL, FACE_NULL, FACE_NULL, FACE_NULL}, // B
-        {FACE_NULL, FACE_NULL, FACE_NULL, FACE_NULL}, // D
+        FACE_NULL, FACE_NULL, FACE_NULL, // U
+        FACE_NULL, FACE_NULL, FACE_NULL, // R
+        FACE_NULL, FACE_NULL, FACE_NULL, // F
+        FACE_NULL, FACE_NULL, FACE_NULL, // L
+        FACE_NULL, FACE_NULL, FACE_NULL, // B
+        FACE_NULL, FACE_NULL, FACE_NULL, // D
     }
 };
 
@@ -293,7 +293,7 @@ static const face_e faceAfterMove[NUM_FACES+1][NUM_FACES][4] = {
 static cubie_e cubieDefinition_to_cubie[NUM_FACES][NUM_FACES][NUM_FACES+1];             // 1
 static uint8_t colorSequence_to_solvedCubieInd[NUM_FACES+1][NUM_FACES+1][NUM_FACES+1];  // 2
 static facelet_pos_s cubie_to_orderedPositions[NUM_SEQUENCES][3];                       // 3
-static cubie_e cubieAfterMove[NUM_FACES][NUM_SIDES][NUM_CUBIES];                        // 4: depends on 1
+static cubie_e cubieAfterMove[NUM_MOVES][NUM_CUBIES];                                   // 4: depends on 1
 static uint8_t colorsAtEdgePosInd_to_cubieAndSolvedCubie[24][NUM_EDGES][2];             // 5: depends on 1 and 2
 static uint8_t colorsAtCornerPosInd_to_cubieAndSolvedCubie[48][NUM_CORNERS][2];         // 6: depends on 1 and 2
 static uint8_t cubieAndSolvedCubieInd_to_colorsAtPosInd[72][20][3];                     // 7: depends on 5 and 6
@@ -559,41 +559,39 @@ void init_cubieAfterMove() {
     */
     //printf("cubie_to_orderedPositions[UR][1].index = %hhu\n", cubie_to_orderedPositions[CUBIE_UR][1].index);
     for (cubie_e cubie0 = 0; cubie0 < NUM_CUBIES; cubie0++) {
-        for (face_e move_face = FACE_U; move_face < NUM_FACES; move_face++) {
-            for (uint8_t move_count = 0; move_count < 4; move_count++) {
-                face_e cubie0def[3] = {
-                    cubieDefinitions[cubie0][0],
-                    cubieDefinitions[cubie0][1],
-                    cubieDefinitions[cubie0][2],
+        for (move_e move = 0; move < NUM_MOVES; move++) {
+            face_e cubie0def[3] = {
+                cubieDefinitions[cubie0][0],
+                cubieDefinitions[cubie0][1],
+                cubieDefinitions[cubie0][2],
+            };
+            if (cubie0def[0] >= 7) {
+                printf("Whoops! init_cubieAfterMove goofed up: cubie0def[0] = %hhu\n", cubie0def[0]);
+            }
+            if (cubie0def[1] >= 7) {
+                printf("Whoops! init_cubieAfterMove goofed up: cubie0def[1] = %hhu\n", cubie0def[1]);
+            }
+            if (cubie0def[2] >= 7) {
+                printf("Whoops! init_cubieAfterMove goofed up: cubie0def[2] = %hhu\n", cubie0def[2]);
+            }
+            if (find_face_in_3(cubie0def[0], cubie0def[1], cubie0def[2], move_face) == -1) {
+                cubieAfterMove[move][cubie0] = cubie0;
+            } else {
+                face_e cubie1def[3] = {
+                    faceAfterMove[cubie0def[0]][move],
+                    faceAfterMove[cubie0def[1]][move],
+                    faceAfterMove[cubie0def[2]][move],
                 };
-                if (cubie0def[0] >= 7) {
-                    printf("Whoops! init_cubieAfterMove goofed up: cubie0def[0] = %hhu\n", cubie0def[0]);
+                if (cubie1def[0] >= 6) {
+                    printf("Whoops! init_cubieAfterMove goofed up: cubie1def[0] = %hhu\n", cubie1def[0]);
                 }
-                if (cubie0def[1] >= 7) {
-                    printf("Whoops! init_cubieAfterMove goofed up: cubie0def[1] = %hhu\n", cubie0def[1]);
+                if (cubie1def[1] >= 6) {
+                    printf("Whoops! init_cubieAfterMove goofed up: cubie1def[1] = %hhu\n", cubie1def[1]);
                 }
-                if (cubie0def[2] >= 7) {
-                    printf("Whoops! init_cubieAfterMove goofed up: cubie0def[2] = %hhu\n", cubie0def[2]);
+                if (cubie1def[2] >= 7) {
+                    printf("Whoops! init_cubieAfterMove goofed up: cubie1def[2] = %hhu\n", cubie1def[2]);
                 }
-                if (find_face_in_3(cubie0def[0], cubie0def[1], cubie0def[2], move_face) == -1) {
-                    cubieAfterMove[move_face][move_count][cubie0] = cubie0;
-                } else {
-                    face_e cubie1def[3] = {
-                        faceAfterMove[cubie0def[0]][move_face][move_count],
-                        faceAfterMove[cubie0def[1]][move_face][move_count],
-                        faceAfterMove[cubie0def[2]][move_face][move_count],
-                    };
-                    if (cubie1def[0] >= 6) {
-                        printf("Whoops! init_cubieAfterMove goofed up: cubie1def[0] = %hhu\n", cubie1def[0]);
-                    }
-                    if (cubie1def[1] >= 6) {
-                        printf("Whoops! init_cubieAfterMove goofed up: cubie1def[1] = %hhu\n", cubie1def[1]);
-                    }
-                    if (cubie1def[2] >= 7) {
-                        printf("Whoops! init_cubieAfterMove goofed up: cubie1def[2] = %hhu\n", cubie1def[2]);
-                    }
-                    cubieAfterMove[move_face][move_count][cubie0] = cubieDefinition_to_cubie[cubie1def[0]][cubie1def[1]][cubie1def[2]];
-                }
+                cubieAfterMove[move][cubie0] = cubieDefinition_to_cubie[cubie1def[0]][cubie1def[1]][cubie1def[2]];
             }
         }
     } 
@@ -1136,7 +1134,7 @@ bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2) {
     } return res;
 }
 
-void cube18B_apply_move(cube18B_s* cube, move_s move) {
+void cube18B_apply_move(cube18B_s* cube, move_e move) {
     /*
     Tables Used: 
         cubieAfterMove[]
@@ -1145,28 +1143,26 @@ void cube18B_apply_move(cube18B_s* cube, move_s move) {
         move_s
         face_e
     */
-    uint8_t turns = move.turns & 3;
-    face_e face = move.face;
-    cube->cubies[0]  = cubieAfterMove[face][turns][cube->cubies[0]];
-    cube->cubies[1]  = cubieAfterMove[face][turns][cube->cubies[1]];
-    cube->cubies[2]  = cubieAfterMove[face][turns][cube->cubies[2]];
-    cube->cubies[3]  = cubieAfterMove[face][turns][cube->cubies[3]];
-    cube->cubies[4]  = cubieAfterMove[face][turns][cube->cubies[4]];
-    cube->cubies[5]  = cubieAfterMove[face][turns][cube->cubies[5]];
-    cube->cubies[6]  = cubieAfterMove[face][turns][cube->cubies[6]];
-    cube->cubies[7]  = cubieAfterMove[face][turns][cube->cubies[7]];
-    cube->cubies[8]  = cubieAfterMove[face][turns][cube->cubies[8]];
-    cube->cubies[9]  = cubieAfterMove[face][turns][cube->cubies[9]];
-    cube->cubies[10] = cubieAfterMove[face][turns][cube->cubies[10]];
-    cube->cubies[11] = cubieAfterMove[face][turns][cube->cubies[11]];
-    cube->cubies[12] = cubieAfterMove[face][turns][cube->cubies[12]];
-    cube->cubies[13] = cubieAfterMove[face][turns][cube->cubies[13]];
-    cube->cubies[14] = cubieAfterMove[face][turns][cube->cubies[14]];
-    cube->cubies[15] = cubieAfterMove[face][turns][cube->cubies[15]];
-    cube->cubies[16] = cubieAfterMove[face][turns][cube->cubies[16]];
-    cube->cubies[17] = cubieAfterMove[face][turns][cube->cubies[17]];
+    cube->cubies[0]  = cubieAfterMove[move][cube->cubies[0]];
+    cube->cubies[1]  = cubieAfterMove[move][cube->cubies[1]];
+    cube->cubies[2]  = cubieAfterMove[move][cube->cubies[2]];
+    cube->cubies[3]  = cubieAfterMove[move][cube->cubies[3]];
+    cube->cubies[4]  = cubieAfterMove[move][cube->cubies[4]];
+    cube->cubies[5]  = cubieAfterMove[move][cube->cubies[5]];
+    cube->cubies[6]  = cubieAfterMove[move][cube->cubies[6]];
+    cube->cubies[7]  = cubieAfterMove[move][cube->cubies[7]];
+    cube->cubies[8]  = cubieAfterMove[move][cube->cubies[8]];
+    cube->cubies[9]  = cubieAfterMove[move][cube->cubies[9]];
+    cube->cubies[10] = cubieAfterMove[move][cube->cubies[10]];
+    cube->cubies[11] = cubieAfterMove[move][cube->cubies[11]];
+    cube->cubies[12] = cubieAfterMove[move][cube->cubies[12]];
+    cube->cubies[13] = cubieAfterMove[move][cube->cubies[13]];
+    cube->cubies[14] = cubieAfterMove[move][cube->cubies[14]];
+    cube->cubies[15] = cubieAfterMove[move][cube->cubies[15]];
+    cube->cubies[16] = cubieAfterMove[move][cube->cubies[16]];
+    cube->cubies[17] = cubieAfterMove[move][cube->cubies[17]];
 }
-void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_s move) {
+void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_e move) {
     /*
     Tables Used: 
         cubieAfterMove[]
@@ -1175,22 +1171,20 @@ void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_s move) {
         move_s
         face_e
     */
-    uint8_t turns = move.turns & 3;
-    face_e face = move.face;
-    cube->cubies[0]  = cubieAfterMove[face][turns][cube->cubies[0]];
-    cube->cubies[1]  = cubieAfterMove[face][turns][cube->cubies[1]];
-    cube->cubies[2]  = cubieAfterMove[face][turns][cube->cubies[2]];
-    cube->cubies[3]  = cubieAfterMove[face][turns][cube->cubies[3]];
-    cube->cubies[4]  = cubieAfterMove[face][turns][cube->cubies[4]];
-    cube->cubies[5]  = cubieAfterMove[face][turns][cube->cubies[5]];
-    cube->cubies[6]  = cubieAfterMove[face][turns][cube->cubies[6]];
-    cube->cubies[7]  = cubieAfterMove[face][turns][cube->cubies[7]];
-    cube->cubies[8]  = cubieAfterMove[face][turns][cube->cubies[8]];
-    cube->cubies[9]  = cubieAfterMove[face][turns][cube->cubies[9]];
-    cube->cubies[10] = cubieAfterMove[face][turns][cube->cubies[10]];
-    cube->cubies[11] = cubieAfterMove[face][turns][cube->cubies[11]];
+    cube->cubies[0]  = cubieAfterMove[move][cube->cubies[0]];
+    cube->cubies[1]  = cubieAfterMove[move][cube->cubies[1]];
+    cube->cubies[2]  = cubieAfterMove[move][cube->cubies[2]];
+    cube->cubies[3]  = cubieAfterMove[move][cube->cubies[3]];
+    cube->cubies[4]  = cubieAfterMove[move][cube->cubies[4]];
+    cube->cubies[5]  = cubieAfterMove[move][cube->cubies[5]];
+    cube->cubies[6]  = cubieAfterMove[move][cube->cubies[6]];
+    cube->cubies[7]  = cubieAfterMove[move][cube->cubies[7]];
+    cube->cubies[8]  = cubieAfterMove[move][cube->cubies[8]];
+    cube->cubies[9]  = cubieAfterMove[move][cube->cubies[9]];
+    cube->cubies[10] = cubieAfterMove[move][cube->cubies[10]];
+    cube->cubies[11] = cubieAfterMove[move][cube->cubies[11]];
 }
-void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move) {
+void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_e move) {
     /*
     Tables Used: 
         cubieAfterMove[]
@@ -1199,14 +1193,12 @@ void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_s move) {
         move_s
         face_e
     */
-    uint8_t turns = move.turns & 3;
-    face_e face = move.face;
-    cube->cubies[0] = cubieAfterMove[face][turns][cube->cubies[0]];
-    cube->cubies[1] = cubieAfterMove[face][turns][cube->cubies[1]];
-    cube->cubies[2] = cubieAfterMove[face][turns][cube->cubies[2]];
-    cube->cubies[3] = cubieAfterMove[face][turns][cube->cubies[3]];
-    cube->cubies[4] = cubieAfterMove[face][turns][cube->cubies[4]];
-    cube->cubies[5] = cubieAfterMove[face][turns][cube->cubies[5]];
+    cube->cubies[0] = cubieAfterMove[move][cube->cubies[0]];
+    cube->cubies[1] = cubieAfterMove[move][cube->cubies[1]];
+    cube->cubies[2] = cubieAfterMove[move][cube->cubies[2]];
+    cube->cubies[3] = cubieAfterMove[move][cube->cubies[3]];
+    cube->cubies[4] = cubieAfterMove[move][cube->cubies[4]];
+    cube->cubies[5] = cubieAfterMove[move][cube->cubies[5]];
 }
 
 void cube18B_apply_alg(cube18B_s *cube, const alg_s *alg) {

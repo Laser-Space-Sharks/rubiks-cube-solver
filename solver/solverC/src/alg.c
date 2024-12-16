@@ -4,7 +4,7 @@
 alg_s *alg_create(size_t size) {
     alg_s *alg = (alg_s*)malloc(sizeof(alg_s));
 
-    alg->moves = (move_s*)malloc(size * sizeof(move_s));
+    alg->moves = (move_e*)malloc(size * sizeof(move_e));
     alg->length = 0;
     alg->size = size;
 
@@ -17,7 +17,7 @@ alg_s* alg_copy(const alg_s *src) {
 
     alg_s *copy = alg_create(src->length);
 
-    (void)memcpy(copy->moves, src->moves, src->length * sizeof(move_s));
+    (void)memcpy(copy->moves, src->moves, src->length * sizeof(move_e));
     copy->length = src->length;
 
     return copy;
@@ -25,8 +25,8 @@ alg_s* alg_copy(const alg_s *src) {
 
 alg_s alg_static_copy(const alg_s *src) {
     alg_s copy;
-    copy.moves = malloc(sizeof(move_s) * src->length);
-    (void)memcpy(copy.moves, src->moves, src->length * sizeof(move_s));
+    copy.moves = malloc(sizeof(move_e) * src->length);
+    (void)memcpy(copy.moves, src->moves, src->length * sizeof(move_e));
     copy.length = src->length;
     copy.size   = src->length;
 
@@ -42,7 +42,7 @@ void alg_free(alg_s *alg) {
     free(alg);
 }
 
-bool alg_insert(alg_s *alg, move_s move, size_t index) {
+bool alg_insert(alg_s *alg, move_e move, size_t index) {
     // don't try to insert if index is out of bounds
     if (index > alg->length) {
         return false;
@@ -51,14 +51,14 @@ bool alg_insert(alg_s *alg, move_s move, size_t index) {
 	// reallocate the move moves if needed
     if (alg->length == alg->size) {
         alg->size *= 2;
-        alg->moves = (move_s*)realloc(alg->moves,
-                                       alg->size * sizeof(move_s));
+        alg->moves = (move_e*)realloc(alg->moves,
+                                       alg->size * sizeof(move_e));
     }
 
     // if this isn't an append, move everything after index one space up
     if (index != alg->length) {
         (void)memmove(alg->moves + index + 1, alg->moves + index,
-                      (alg->length - index) * sizeof(move_s));
+                      (alg->length - index) * sizeof(move_e));
     }
 
     alg->moves[index] = move;
@@ -78,7 +78,7 @@ bool alg_delete(alg_s *alg, size_t index) {
     // and if it is, there's no need to do anything besides decrement length
     if (index != alg->length - 1) {
         (void)memmove(alg->moves + index, alg->moves + index + 1,
-                      sizeof(move_s) * (alg->length - (index + 1)));
+                      sizeof(move_e) * (alg->length - (index + 1)));
     }
     alg->length--;
 
@@ -86,7 +86,7 @@ bool alg_delete(alg_s *alg, size_t index) {
     // and the length is still greater than INIT_alg_SIZE
     if (alg->length >= MIN_LIST_RESIZE && alg->length <= alg->size/4) {
         alg->size /= 2;
-        alg->moves = (move_s*)realloc(alg->moves, sizeof(move_s) * alg->size);
+        alg->moves = (move_e*)realloc(alg->moves, sizeof(move_e) * alg->size);
     }
 
     // deletion was successful
@@ -104,30 +104,23 @@ void alg_invert(alg_s *alg) {
     }
 
     if (alg->length == 1) {
-        alg->moves[0].turns = mod4(-alg->moves[0].turns);
+        //alg->moves[0].turns = mod4(-alg->moves[0].turns);
+        alg->moves[0] = inverted_moves[alg->moves[0]];
         return;
     }
 
     for (size_t i = 0, j = alg->length-1; i <= j; i++, j--) {
-        move_s tmp  = alg->moves[i];
-        move_s tmp2 = alg->moves[j];
-
-        tmp.turns  = mod4(-tmp.turns);
-        tmp2.turns = mod4(-tmp2.turns);
-
+        move_e tmp  = inverted_moves[alg->moves[i]];
+        move_e tmp2 = inverted_moves[alg->moves[j]];
         alg->moves[i] = tmp2;
         alg->moves[j] = tmp;
     }
 }
 
-size_t alg_lookup(const alg_s *alg, move_s move) {
+size_t alg_lookup(const alg_s *alg, move_e move) {
     for (size_t i = 0; i < alg->length; i++) {
-        if (alg->moves[i].face == move.face &&
-            mod4(alg->moves[i].turns) == mod4(move.turns)) {
-            return i;
-        }
-    }
-    return -1;
+        if (alg->moves[i] == move) return i;
+    } return -1;
 }
 
 // simplify move sequences in the move moves
@@ -139,13 +132,14 @@ void alg_simplify(alg_s *alg) {
     size_t idx = 0;
     size_t idx2 = 1;
     while (idx2 < alg->length) {
-        while (alg->moves[idx2].face == opposite_faces[alg->moves[idx].face]
+        while (faces_moves[alg->moves[idx2]] == opposite_faces_moves[alg->moves[idx]]
             && idx2 < alg->length - 1 && idx2 > 0) {
             idx2 += 1;
         }
 
-        while (alg->moves[idx].face == alg->moves[idx2].face) {
-            alg->moves[idx].turns += alg->moves[idx2].turns;
+        while (faces_moves[alg->moves[idx]] == faces_moves[alg->moves[idx2]]) {
+            alg->moves[idx] = add_related_moves[alg->moves[idx]][alg->moves[idx2]];
+            //alg->moves[idx].turns += alg->moves[idx2].turns;
             alg_delete(alg, idx2);
 
             // if we can't delete any more alg after this, stop
@@ -163,8 +157,8 @@ void alg_simplify(alg_s *alg) {
         if (mod4(alg->moves[idx].turns) == 0) {
             alg_delete(alg, idx);
             while (--idx > 0) {
-                if (!(alg->moves[idx].face == opposite_faces[alg->moves[idx - 1].face] ||
-                    alg->moves[idx].face == alg->moves[idx-1].face)) {
+                if (!(faces_moves[alg->moves[idx]] == opposite_faces_moves[alg->moves[idx - 1]] ||
+                    faces_moves[alg->moves[idx]] == faces_moves[alg->moves[idx-1]])) {
                     break;
                 }
             }
@@ -176,7 +170,7 @@ void alg_simplify(alg_s *alg) {
         idx2 = idx + 1;
     }
 }
-
+///////////////////////////// MUST CONVERT TO MOVE_E /////////////////////////////
 alg_s* alg_from_alg_str(const char *alg_str) {
     if (alg_str == NULL) {
         return alg_create(0);
@@ -249,7 +243,7 @@ void alg_rotate_on_y(alg_s *alg, uint8_t y_turns) {
     }
 
     for (int i = 0; i < alg->length; i++) {
-        alg->moves[i].face = rotate_on_y[mod4(y_turns)][alg->moves[i].face];
+        alg->moves[i] = moves_rotate_on_y[mod4(y_turns)][alg->moves[i]];
     }
 }
 
@@ -260,7 +254,7 @@ move_s* alg_concat(alg_s *dest, const alg_s *src) {
 
     size_t new_len = dest->length + src->length;
     if (new_len > dest->size) {
-        move_s *tmp = (move_s*)realloc(dest->moves, sizeof(move_s)*new_len);
+        move_e *tmp = (move_e*)realloc(dest->moves, sizeof(move_e)*new_len);
         if (!tmp) {
             return NULL;
         }

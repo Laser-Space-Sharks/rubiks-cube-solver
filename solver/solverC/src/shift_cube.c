@@ -195,7 +195,7 @@ void init_new_move_bitrolls() {
 }
 
 // Apply a move to the cube using bit manipulations
-void apply_move(shift_cube_s *c, move_s m) {
+void old_apply_move(shift_cube_s *c, move_s m) {
     // make the turn count positive
     m.turns = mod4(m.turns);
 
@@ -239,7 +239,7 @@ static inline void swap_sides(uint32_t *face1_bits, uint32_t *face2_bits,
     *face1_bits = rolq(*face1_bits, -new_move_bitrolls[face1_s][face2_s]);
 }
 
-void new_apply_move(shift_cube_s *c, move_e m) {
+void apply_move(shift_cube_s *c, move_e m) {
     switch (m) {
         case MOVE_U:
             c->state[FACE_U] = rolq(c->state[FACE_U], 8);

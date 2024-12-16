@@ -133,10 +133,10 @@ int main(int argc, char *argv[]) {
 
     clock_t new_move_start = clock();
     for (int i = 0; i < 100000000; i++) {
-        new_apply_move(&cube, MOVE_D);
-        new_apply_move(&cube, MOVE_DPRIME);
-        new_apply_move(&cube, MOVE_D2);
-        new_apply_move(&cube, MOVE_D2);
+        apply_move(&cube, MOVE_D);
+        apply_move(&cube, MOVE_DPRIME);
+        apply_move(&cube, MOVE_D2);
+        apply_move(&cube, MOVE_D2);
     }
 
     clock_t new_move_end = clock();
@@ -144,10 +144,10 @@ int main(int argc, char *argv[]) {
 
     clock_t old_move_start = clock();
     for (int i = 0; i < 100000000; i++) {
-        apply_move(&cube, move_f);
-        apply_move(&cube, move_fprime);
-        apply_move(&cube, move_f2);
-        apply_move(&cube, move_f2);
+        old_apply_move(&cube, move_f);
+        old_apply_move(&cube, move_fprime);
+        old_apply_move(&cube, move_f2);
+        old_apply_move(&cube, move_f2);
     }
 
     clock_t old_move_end = clock();

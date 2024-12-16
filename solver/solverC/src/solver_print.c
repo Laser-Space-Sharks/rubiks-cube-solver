@@ -54,30 +54,8 @@ void print_piece(uint32_t face, uint8_t index) {
     }
 }
 
-void print_move(move_s move) {
-    char move_char = get_char(move.face);
-    char turn_char;
-
-    switch (positive_mod(move.turns, 4)) {
-        case 0:
-            turn_char = '0';
-            break;
-        case 2:
-            turn_char = '2';
-            break;
-        case 3:
-            turn_char = '\'';
-            break;
-    }
-
-    if (move.face >= NUM_FACES) {
-        printf("INVALID MOVE\n");
-    }
-
-    printf("%c", move_char);
-    if (move.turns != 1) {
-        printf("%c\n", turn_char);
-    }
+void print_move(move_e move) {
+    printf("%s", movePrints[move]);
 }
 
 void print_alg(const alg_s *alg) {
@@ -86,30 +64,12 @@ void print_alg(const alg_s *alg) {
     }
 
     for (size_t idx = 0; idx < alg->length; idx++) {
-        char move_char = get_char(alg->moves[idx].face);
-        char turn_char = '\0';
-
-        switch (positive_mod(alg->moves[idx].turns, 4)) {
-            case 0:
-                turn_char = '0';
-                break;
-            case 2:
-                turn_char = '2';
-                break;
-            case 3:
-                turn_char = '\'';
-                break;
-        }
-
-        if (alg->moves[idx].face >= NUM_FACES) {
+        if (alg->moves[idx] >= NUM_MOVES) {
             printf("Invalid move in move list\n");
             return;
         }
 
-        printf("%c", move_char);
-        if (turn_char) {
-            printf("%c", turn_char);
-        }
+        print_move(move);
         printf(" ");
     }
     printf("\n");
