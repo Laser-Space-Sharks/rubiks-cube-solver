@@ -51,7 +51,6 @@ int stage_recursion(shift_cube_s *cube, const shift_cube_s *mask, const shift_cu
     }
 
     // depth > 0
-    move_e move = MOVE_NULL;
     move_e prev_move = (alg->length >= 1) ? alg->moves[alg->length-1] : MOVE_NULL;
     move_e prev_prev_move = (alg->length >= 2) ? alg->moves[alg->length - 2] : MOVE_NULL;
 

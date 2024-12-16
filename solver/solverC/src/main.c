@@ -7,14 +7,16 @@
 #include <time.h>
 
 int main(int argc, char *argv[]) {
+    printf("Got to line 10 of main.c");
     init_move_bitrolls();
+    printf("Got to line 12 of main.c");
 
     shift_cube_s cube = SOLVED_SHIFTCUBE;
 
-    cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
-    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+    //cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
+    //cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
 
-    init_solver();
+    //init_solver();
 
     alg_s *alg = NULL;
     #define NUM_TESTS 9
@@ -33,31 +35,35 @@ int main(int argc, char *argv[]) {
     if (argc > 1) {
         alg = alg_from_alg_str(argv[1]);
     } else {
-        //printf("Performing tests\n");
-        //double sum = 0;
+        /*
+        printf("Performing tests\n");
+        double sum = 0;
 
-        //for (uint8_t test = 0; test < NUM_TESTS; test++) {
-        //    cube = SOLVED_SHIFTCUBE;
-        //    alg = alg_from_alg_str(scrambles[test]);
-        //    printf("Testing scramble: %s\n", scrambles[test]);
-        //    apply_alg(&cube, alg);
-        //    alg_s *solve = solve_cube(cube, f2l_table, last_layer_table);
-        //    apply_alg(&cube, solve);
-        //    if (!compare_cubes(&cube, &SOLVED_SHIFTCUBE)) {
-        //        printf("It didn't solve it, this is bad...\n");
-        //    }
-        //    cube = SOLVED_SHIFTCUBE;
-        //    printf("Solution (%zu moves): ", solve->length);
-        //    print_alg(solve);
-        //    sum += solve->length;
-        //    alg_free(solve);
-        //    alg_free(alg);
-        //}
-        //printf("Average solve length: %f\n", sum / NUM_TESTS);
+        for (uint8_t test = 0; test < NUM_TESTS; test++) {
+            cube = SOLVED_SHIFTCUBE;
+            alg = alg_from_alg_str(scrambles[test]);
+            printf("Testing scramble: %s\n", scrambles[test]);
+            apply_alg(&cube, alg);
+            alg_s *solve = solve_cube(cube, f2l_table, last_layer_table);
+            apply_alg(&cube, solve);
+            if (!compare_cubes(&cube, &SOLVED_SHIFTCUBE)) {
+                printf("It didn't solve it, this is bad...\n");
+            }
+            cube = SOLVED_SHIFTCUBE;
+            printf("Solution (%zu moves): ", solve->length);
+            print_alg(solve);
+            sum += solve->length;
+            alg_free(solve);
+            alg_free(alg);
+        }
+        printf("Average solve length: %f\n", sum / NUM_TESTS);
+        */
 
-
+        printf("Got to line 62 of main.c");
         alg = alg_from_alg_str("F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
+        printf("Got to line 64 of main.c");
         init_all_tables_in_cube18Bc();
+        printf("Got to line 66 of main.c");
         shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
         cube18B_s cube18B = SOLVED_CUBE18B;
         cube18B_xcross_s xcross = SOLVED_CUBE18B_XCROSS;
@@ -158,8 +164,8 @@ int main(int argc, char *argv[]) {
 
 
 
-    cube_table_free(f2l_table);
-    cube_table_free(last_layer_table);
+    //cube_table_free(f2l_table);
+    //cube_table_free(last_layer_table);
     cleanup_solver();
 
     return 0;

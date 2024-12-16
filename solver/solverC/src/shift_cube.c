@@ -392,6 +392,8 @@ void apply_move(shift_cube_s *c, move_e m) {
             swap_sides(&(c->state[FACE_F]), &(c->state[FACE_L]),
                        FACE_F, FACE_L, SIDE_D, SIDE_D);
             break;
+        case MOVE_NULL:
+            break;
     }
 
 //    switch (m.turns) {
