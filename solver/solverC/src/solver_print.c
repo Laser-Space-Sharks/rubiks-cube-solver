@@ -69,7 +69,7 @@ void print_alg(const alg_s *alg) {
             return;
         }
 
-        print_move(move);
+        print_move(alg->moves[idx]);
         printf(" ");
     }
     printf("\n");

@@ -35,27 +35,6 @@ typedef enum : uint8_t {
     NUM_SIDES
 } side_e;
 
-const char* movePrints[NUM_MOVES] = {
-    "U",
-    "U2",
-    "U'",
-    "R",
-    "R2",
-    "R'",
-    "F",
-    "F2",
-    "F'",
-    "L",
-    "L2",
-    "L'",
-    "B",
-    "B2",
-    "B'",
-    "D",
-    "D2",
-    "D'"
-};
-
 typedef enum {
     MOVE_U = 0,
     MOVE_U2 = 1,
@@ -78,8 +57,28 @@ typedef enum {
     MOVE_NULL = 18,
     NUM_MOVES = 18
 } move_e;
+static const char* movePrints[NUM_MOVES] = {
+    "U",
+    "U2",
+    "U'",
+    "R",
+    "R2",
+    "R'",
+    "F",
+    "F2",
+    "F'",
+    "L",
+    "L2",
+    "L'",
+    "B",
+    "B2",
+    "B'",
+    "D",
+    "D2",
+    "D'"
+};
 
-const move_e inverted_moves[NUM_MOVES+1] = {
+static const move_e inverted_moves[NUM_MOVES+1] = {
     MOVE_U3, MOVE_U2, MOVE_U,
     MOVE_R3, MOVE_R2, MOVE_R,
     MOVE_F3, MOVE_F2, MOVE_F,
@@ -88,7 +87,7 @@ const move_e inverted_moves[NUM_MOVES+1] = {
     MOVE_D3, MOVE_D2, MOVE_D,
     MOVE_NULL
 };
-const face_e faces_moves[NUM_MOVES+1] = {
+static const face_e faces_moves[NUM_MOVES+1] = {
     FACE_U, FACE_U, FACE_U,
     FACE_R, FACE_R, FACE_R,
     FACE_F, FACE_F, FACE_F,
@@ -97,7 +96,7 @@ const face_e faces_moves[NUM_MOVES+1] = {
     FACE_D, FACE_D, FACE_D,
     FACE_NULL
 };
-const face_e opposite_faces_moves[NUM_MOVES+1] = {
+static const face_e opposite_faces_moves[NUM_MOVES+1] = {
     FACE_D, FACE_D, FACE_D,
     FACE_L, FACE_L, FACE_L,
     FACE_B, FACE_B, FACE_B,
@@ -106,28 +105,17 @@ const face_e opposite_faces_moves[NUM_MOVES+1] = {
     FACE_U, FACE_U, FACE_U,
     FACE_NULL
 };
-const move_s move_definitions[NUM_MOVES+1] = {
-    {FACE_U, 1},
-    {FACE_U, 2},
-    {FACE_U, 3},
-    {FACE_R, 1},
-    {FACE_R, 2},
-    {FACE_R, 3},
-    {FACE_F, 1},
-    {FACE_F, 2},
-    {FACE_F, 3},
-    {FACE_L, 1},
-    {FACE_L, 2},
-    {FACE_L, 3},
-    {FACE_B, 1},
-    {FACE_B, 2},
-    {FACE_B, 3},
-    {FACE_D, 1},
-    {FACE_D, 2},
-    {FACE_D, 3},
-    {FACE_NULL, 0},
+static const uint8_t turns_moves[NUM_MOVES+1] = {
+    1, 2, 3,
+    1, 2, 3,
+    1, 2, 3,
+    1, 2, 3,
+    1, 2, 3,
+    1, 2, 3,
+    0
 };
-const move_e add_related_moves[NUM_MOVES][NUM_MOVES] = {
+
+static const move_e add_related_moves[NUM_MOVES][NUM_MOVES] = {
 //       U          U2         U3        R          R2          R3         F         F2         F3         L          L2         L3         B          B2         B3         D          D2         D3
     {MOVE_U2,   MOVE_U3,   MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL},
     {MOVE_U3,   MOVE_NULL, MOVE_U,    MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL},
@@ -148,7 +136,7 @@ const move_e add_related_moves[NUM_MOVES][NUM_MOVES] = {
     {MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_D3,   MOVE_NULL, MOVE_D},
     {MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_NULL, MOVE_D,    MOVE_D2},
 };
-const move_e moves_rotate_on_y[4][NUM_MOVES] = {
+static const move_e moves_rotate_on_y[4][NUM_MOVES] = {
     {MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3},
     {MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3},
     {MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3},

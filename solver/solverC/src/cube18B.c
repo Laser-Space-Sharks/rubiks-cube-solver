@@ -574,7 +574,7 @@ void init_cubieAfterMove() {
             if (cubie0def[2] >= 7) {
                 printf("Whoops! init_cubieAfterMove goofed up: cubie0def[2] = %hhu\n", cubie0def[2]);
             }
-            if (find_face_in_3(cubie0def[0], cubie0def[1], cubie0def[2], move_face) == -1) {
+            if (find_face_in_3(cubie0def[0], cubie0def[1], cubie0def[2], faces_moves[move]) == -1) {
                 cubieAfterMove[move][cubie0] = cubie0;
             } else {
                 face_e cubie1def[3] = {
@@ -603,11 +603,9 @@ void print_cubieAfterMove() {
     printf("\t      U1 , U2 , U3 , R1 , R2 , R3 , F1 , F2 , F3 , L1 , L2 , L3 , B1 , B2 , B3 , D1 , D2 , D3\n");
     for (cubie_e cubie = 0; cubie < 48; cubie++) {
         printf("\t%s : ", cubiePrints[cubie]);
-        for (face_e face = 0; face < NUM_FACES; face++) {
-            for (uint8_t count = 1; count < 4; count++) {
-                cubie_e nextcubie = cubieAfterMove[face][count][cubie];
-                printf("%s, ", cubiePrints[nextcubie]);
-            }
+        for (move_e move = 0; move < NUM_MOVES; move++) {
+            cubie_e nextcubie = cubieAfterMove[move][cubie];
+            printf("%s, ", cubiePrints[nextcubie]);
         } printf("\n");
     }
 }

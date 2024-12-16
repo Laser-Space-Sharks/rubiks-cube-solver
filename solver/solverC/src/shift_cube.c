@@ -257,7 +257,7 @@ void apply_move(shift_cube_s *c, move_e m) {
             swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
                        FACE_L, FACE_R, SIDE_U, SIDE_U);
             break;
-        case MOVE_UPRIME:
+        case MOVE_U3:
             c->state[FACE_U] = rolq(c->state[FACE_U], 24);
             swap_sides(&(c->state[FACE_R]), &(c->state[FACE_B]),
                        FACE_R, FACE_B, SIDE_U, SIDE_U);
@@ -282,7 +282,7 @@ void apply_move(shift_cube_s *c, move_e m) {
             swap_sides(&(c->state[FACE_F]), &(c->state[FACE_B]),
                        FACE_F, FACE_B, SIDE_R, SIDE_L);
             break;
-        case MOVE_RPRIME:
+        case MOVE_R3:
             c->state[FACE_R] = rolq(c->state[FACE_R], 24);
             swap_sides(&(c->state[FACE_B]), &(c->state[FACE_D]),
                        FACE_B, FACE_D, SIDE_L, SIDE_R);
@@ -307,7 +307,7 @@ void apply_move(shift_cube_s *c, move_e m) {
             swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
                        FACE_L, FACE_R, SIDE_R, SIDE_L);
             break;
-        case MOVE_FPRIME:
+        case MOVE_F3:
             c->state[FACE_F] = rolq(c->state[FACE_F], 24);
             swap_sides(&(c->state[FACE_R]), &(c->state[FACE_D]),
                        FACE_R, FACE_D, SIDE_L, SIDE_U);
@@ -332,7 +332,7 @@ void apply_move(shift_cube_s *c, move_e m) {
             swap_sides(&(c->state[FACE_F]), &(c->state[FACE_B]),
                        FACE_F, FACE_B, SIDE_L, SIDE_R);
             break;
-        case MOVE_LPRIME:
+        case MOVE_L3:
             c->state[FACE_L] = rolq(c->state[FACE_L], 24);
             swap_sides(&(c->state[FACE_U]), &(c->state[FACE_F]),
                        FACE_U, FACE_F, SIDE_L, SIDE_L);
@@ -357,7 +357,7 @@ void apply_move(shift_cube_s *c, move_e m) {
             swap_sides(&(c->state[FACE_R]), &(c->state[FACE_L]),
                        FACE_R, FACE_L, SIDE_R, SIDE_L);
             break;
-        case MOVE_BPRIME:
+        case MOVE_B3:
             c->state[FACE_B] = rolq(c->state[FACE_B], 24);
             swap_sides(&(c->state[FACE_U]), &(c->state[FACE_L]),
                        FACE_U, FACE_L, SIDE_U, SIDE_L);
@@ -383,7 +383,7 @@ void apply_move(shift_cube_s *c, move_e m) {
             swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
                        FACE_L, FACE_R, SIDE_D, SIDE_D);
             break;
-        case MOVE_DPRIME:
+        case MOVE_D3:
             c->state[FACE_D] = rolq(c->state[FACE_D], 24);
             swap_sides(&(c->state[FACE_B]), &(c->state[FACE_R]),
                        FACE_B, FACE_R, SIDE_D, SIDE_D);

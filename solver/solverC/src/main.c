@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
     clock_t new_move_start = clock();
     for (int i = 0; i < 100000000; i++) {
         apply_move(&cube, MOVE_D);
-        apply_move(&cube, MOVE_DPRIME);
+        apply_move(&cube, MOVE_D3);
         apply_move(&cube, MOVE_D2);
         apply_move(&cube, MOVE_D2);
     }

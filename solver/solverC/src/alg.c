@@ -154,7 +154,7 @@ void alg_simplify(alg_s *alg) {
          * consequtive same/opposite face alg, keep moving idx back
          * to account for new potential simplifications of earlier alg.
          */
-        if (mod4(alg->moves[idx].turns) == 0) {
+        if (turns_moves[alg->moves[idx]] == 0) {
             alg_delete(alg, idx);
             while (--idx > 0) {
                 if (!(faces_moves[alg->moves[idx]] == opposite_faces_moves[alg->moves[idx - 1]] ||
@@ -176,64 +176,50 @@ alg_s* alg_from_alg_str(const char *alg_str) {
         return alg_create(0);
     }
 
+    // This will get the length of the string.
+    size_t len = 0; 
+    while (alg_str[len]) len++;
+
+    // get faces
+    face_e chars_to_faces[128];
+    for (int i = 0; i < 128; i++) chars_to_faces[i] = FACE_NULL;
+    chars_to_faces['U'] = FACE_U;
+    chars_to_faces['R'] = FACE_R;
+    chars_to_faces['F'] = FACE_F;
+    chars_to_faces['L'] = FACE_L;
+    chars_to_faces['B'] = FACE_B;
+    chars_to_faces['D'] = FACE_D;
+
+    // declare alg (init not done yet)
     alg_s *alg = alg_create(2 * MIN_LIST_RESIZE);
 
-    move_s move = (move_s) {
-        .face = FACE_NULL,
-        .turns = 1
-    };
+    size_t idx = 0;
+    move_e move = MOVE_NULL;
+    while (idx < len) {
+        char c = alg_str[idx];
+        if (c == ' ') continue;
 
-    for (size_t idx = 0; alg_str[idx] != '\0'; idx++) {
-        if (alg_str[idx] == ' ' || alg_str[idx] == '\n' || alg_str[idx] == '\t') {
-            if (move.face != FACE_NULL && mod4(move.turns) != 0) {
-                alg_insert(alg, move, alg->length);
-
-                // reset the move to add
-                move.face = FACE_NULL;
-                move.turns = 1;
-            }
-            continue;
-        }
-
-        switch (alg_str[idx]) {
-            case 'U':
-                move.face = FACE_U;
-                break;
-            case 'R':
-                move.face = FACE_R;
-                break;
-            case 'F':
-                move.face = FACE_F;
-                break;
-            case 'L':
-                move.face = FACE_L;
-                break;
-            case 'B':
-                move.face = FACE_B;
-                break;
-            case 'D':
-                move.face = FACE_D;
-                break;
-            case '\'': // ' (prime) move
-                move.turns = -1;
-                break;
-            default:
-                if (alg_str[idx] >= '0' && alg_str[idx] <= '9') {
-                    move.turns = mod4(alg_str[idx] - '0');
-                    break;
-                }
-                // if we're here we've hit an invalid character, alg
-                // will store the generated move moves up until that character
-                return 0;
+        face_e face = chars_to_faces[c];
+        if (face == FACE_NULL) {
+            printf("AAAAAAAAAA, alg_from_alg_str goofed up!: %s", alg_str);
+            break;
+        } else {
+            if (idx+1 == len) {
+                move = face*3;
+                idx++;
+            } else if (alg_str[idx+1] == '2') {
+                move = face*3 + 1;
+                idx += 2;
+            } else if (alg_str[idx+1] == '\'' || alg_str[idx+1] == '3') {
+                move = face*3 + 2;
+                idx += 2;
+            } else {
+                move = face*3;
+                idx++;
+            } 
+            alg_insert(alg, move, alg->length);
         }
     }
-
-    // if we've processed a clockwise quarter turn that comes at the end of
-    // the move string we need to add it to the alg
-    if (move.face != FACE_NULL) {
-        alg_insert(alg, move, alg->length);
-    }
-
     return alg;
 }
 
@@ -247,7 +233,7 @@ void alg_rotate_on_y(alg_s *alg, uint8_t y_turns) {
     }
 }
 
-move_s* alg_concat(alg_s *dest, const alg_s *src) {
+move_e* alg_concat(alg_s *dest, const alg_s *src) {
     if (!dest || !src) {
         return NULL;
     }
