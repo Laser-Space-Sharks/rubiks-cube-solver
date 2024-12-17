@@ -1,5 +1,4 @@
 #include "alg.h"
-#include "lookup_tables.h"
 
 alg_s *alg_create(size_t size) {
     alg_s *alg = (alg_s*)malloc(sizeof(alg_s));
@@ -105,13 +104,13 @@ void alg_invert(alg_s *alg) {
 
     if (alg->length == 1) {
         //alg->moves[0].turns = mod4(-alg->moves[0].turns);
-        alg->moves[0] = inverted_moves[alg->moves[0]];
+        alg->moves[0] = move_inverted[alg->moves[0]];
         return;
     }
 
     for (size_t i = 0, j = alg->length-1; i <= j; i++, j--) {
-        move_e tmp  = inverted_moves[alg->moves[i]];
-        move_e tmp2 = inverted_moves[alg->moves[j]];
+        move_e tmp  = move_inverted[alg->moves[i]];
+        move_e tmp2 = move_inverted[alg->moves[j]];
         alg->moves[i] = tmp2;
         alg->moves[j] = tmp;
     }
@@ -132,13 +131,13 @@ void alg_simplify(alg_s *alg) {
     size_t idx = 0;
     size_t idx2 = 1;
     while (idx2 < alg->length) {
-        while (faces_moves[alg->moves[idx2]] == opposite_faces_moves[alg->moves[idx]]
-            && idx2 < alg->length - 1 && idx2 > 0) {
+        while (move_faces[alg->moves[idx2]] == opposite_faces[move_faces[alg->moves[idx]]]
+               && idx2 < alg->length - 1 && idx2 > 0) {
             idx2 += 1;
         }
 
-        while (faces_moves[alg->moves[idx]] == faces_moves[alg->moves[idx2]]) {
-            alg->moves[idx] = add_related_moves[alg->moves[idx]][alg->moves[idx2]];
+        while (move_faces[alg->moves[idx]] == move_faces[alg->moves[idx2]]) {
+            alg->moves[idx] = move_e_add(alg->moves[idx], alg->moves[idx2]);
             //alg->moves[idx].turns += alg->moves[idx2].turns;
             alg_delete(alg, idx2);
 
@@ -154,11 +153,11 @@ void alg_simplify(alg_s *alg) {
          * consequtive same/opposite face alg, keep moving idx back
          * to account for new potential simplifications of earlier alg.
          */
-        if (turns_moves[alg->moves[idx]] == 0) {
+        if (alg->moves[idx] == MOVE_NULL) {
             alg_delete(alg, idx);
             while (--idx > 0) {
-                if (!(faces_moves[alg->moves[idx]] == opposite_faces_moves[alg->moves[idx - 1]] ||
-                    faces_moves[alg->moves[idx]] == faces_moves[alg->moves[idx-1]])) {
+                if (!(move_faces[alg->moves[idx]] == opposite_faces[move_faces[alg->moves[idx - 1]]] ||
+                    move_faces[alg->moves[idx]] == move_faces[alg->moves[idx-1]])) {
                     break;
                 }
             }
@@ -170,6 +169,7 @@ void alg_simplify(alg_s *alg) {
         idx2 = idx + 1;
     }
 }
+
 ///////////////////////////// MUST CONVERT TO MOVE_E /////////////////////////////
 alg_s* alg_from_alg_str(const char *alg_str) {
     if (alg_str == NULL) {
@@ -177,12 +177,11 @@ alg_s* alg_from_alg_str(const char *alg_str) {
     }
 
     // This will get the length of the string.
-    size_t len = 0; 
+    size_t len = 0;
     while (alg_str[len]) len++;
 
     // get faces
-    face_e chars_to_faces[128];
-    for (int i = 0; i < 128; i++) chars_to_faces[i] = FACE_NULL;
+    face_e chars_to_faces[128] = { FACE_NULL };
     chars_to_faces['U'] = FACE_U;
     chars_to_faces['R'] = FACE_R;
     chars_to_faces['F'] = FACE_F;
@@ -196,8 +195,11 @@ alg_s* alg_from_alg_str(const char *alg_str) {
     size_t idx = 0;
     move_e move = MOVE_NULL;
     while (idx < len) {
-        char c = alg_str[idx];
-        if (c == ' ') continue;
+        uint8_t c = alg_str[idx];
+        if (c == ' ') {
+            idx++;
+            continue;
+        };
 
         face_e face = chars_to_faces[c];
         if (face == FACE_NULL) {
@@ -229,7 +231,7 @@ void alg_rotate_on_y(alg_s *alg, uint8_t y_turns) {
     }
 
     for (int i = 0; i < alg->length; i++) {
-        alg->moves[i] = moves_rotate_on_y[mod4(y_turns)][alg->moves[i]];
+        alg->moves[i] = move_rotated_on_y[mod4(y_turns)][alg->moves[i]];
     }
 }
 

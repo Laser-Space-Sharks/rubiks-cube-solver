@@ -1,11 +1,8 @@
 #ifndef ALG_H
 #define ALG_H
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <string.h>
-
 #include "main.h"
+#include "move.h"
 
 typedef struct {
     move_e *moves;
