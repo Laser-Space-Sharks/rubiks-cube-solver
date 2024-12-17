@@ -55,18 +55,18 @@ int stage_recursion(shift_cube_s *cube, const shift_cube_s *mask, const shift_cu
     move_e prev_prev_move = (alg->length >= 2) ? alg->moves[alg->length - 2] : MOVE_NULL;
 
     for (move_e move = 0; move < NUM_MOVES; move++) {
-        if (faces_moves[move] == faces_moves[prev_move]) {
+        if (move_faces[move] == move_faces[prev_move]) {
             continue;
         }
 
-        if (faces_moves[move] == opposite_faces_moves[prev_move] &&
-            (faces_moves[move] == faces_moves[prev_prev_move] || faces_moves[move] > faces_moves[prev_move])) {
+        if (move_faces[move] == opposite_faces[move_faces[prev_move]] &&
+            (move_faces[move] == move_faces[prev_prev_move] || move_faces[move] > move_faces[prev_move])) {
             continue;
         }
 
         alg_insert(alg, move, alg->length);
         apply_move(cube, move);
-        move_e inv_move = inverted_moves[move];
+        move_e inv_move = move_inverted[move];
         if (stage_recursion(cube, mask, goal, alg, depth - 1)) {
             // we did it! Begin undoing these cube moves we've accrewed
             apply_move(cube, inv_move);
@@ -121,12 +121,12 @@ int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table
     move_e prev_prev_move = (alg->length >= 2) ? alg->moves[alg->length - 2] : MOVE_NULL;
 
     for (move_e move = 0; move < NUM_MOVES; move++) {
-        if (faces_moves[move] == faces_moves[prev_move]) {
+        if (move_faces[move] == move_faces[prev_move]) {
             continue;
         }
 
-        if (faces_moves[move] == opposite_faces_moves[prev_move] &&
-            (faces_moves[move] == faces_moves[prev_prev_move] || faces_moves[move] > faces_moves[prev_move])) {
+        if (move_faces[move] == opposite_faces[move_faces[prev_move]] &&
+            (move_faces[move] == move_faces[prev_prev_move] || move_faces[move] > move_faces[prev_move])) {
             continue;
         }
 
@@ -139,7 +139,7 @@ int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table
 
         // keep going, move didn't pan out
         alg_delete(alg, alg->length-1);
-        apply_move(cube, inverted_moves[move]); // undo move
+        apply_move(cube, move_inverted[move]); // undo move
     }
     return 0;
 }

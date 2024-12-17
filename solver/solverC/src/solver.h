@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "alg.h"
+#include "shift_cube.h"
 #include "cube_table.h"
 
 bool init_solver();
