@@ -165,7 +165,12 @@ shift_cube_s get_corners(const shift_cube_s *cube, face_e color1, face_e color2,
 // for insertion into the appropriate target side face
 static uint8_t move_bitrolls[NUM_FACES][NUM_SIDES][4];
 
-static uint8_t new_move_bitrolls[NUM_SIDES][NUM_SIDES];
+static const uint8_t new_move_bitrolls[NUM_SIDES][NUM_SIDES] = {
+    {  0,   8, 16, 24}, // SIDE_U - SIDE_U = 0,  SIDE_R - SIDE_U = 8, SIDE_D - SIDE_U = 16, SIDE_L - SIDE_U = 24
+    {  24,  0,  8, 16}, // SIDE_U - SIDE_R = 24, SIDE_R - SIDE_R = 0, SIDE_D
+    {  16, 24,  0,  8},  // SIDE_U - SIDE_D = 16, SIDE_R - SIDE_D 
+    {   8, 16, 24,  0}
+};
 
 // a lookup table that given a side of a face and a number of turns of said
 // face (modulo 4) returns the 'target side' of the input side, i.e. which side
@@ -186,13 +191,13 @@ void init_move_bitrolls() {
     }}}
 }
 
-void init_new_move_bitrolls() {
-    for (side_e s1 = SIDE_U; s1 < NUM_SIDES; s1++) {
-        for (side_e s2 = SIDE_U; s2 < NUM_SIDES; s2++) {
-            new_move_bitrolls[s1][s2] = (s2 - s1) * 8;
-        }
-    }
-}
+//void init_new_move_bitrolls() {
+//    for (side_e s1 = SIDE_U; s1 < NUM_SIDES; s1++) {
+//        for (side_e s2 = SIDE_U; s2 < NUM_SIDES; s2++) {
+//            new_move_bitrolls[s1][s2] = (s2 - s1) * 8;
+//        }
+//    }
+//}
 
 // Apply a move to the cube using bit manipulations
 void old_apply_move(shift_cube_s *c, move_s m) {

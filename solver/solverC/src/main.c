@@ -8,12 +8,6 @@
 
 int main(int argc, char *argv[]) {
 
-    init_move_bitrolls();
-
-    printf("Got to line 12 of main.c");
-
-    shift_cube_s cube = SOLVED_SHIFTCUBE;
-
 //    cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
 //    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
 
@@ -122,43 +116,46 @@ int main(int argc, char *argv[]) {
         //print_cubieAndSolvedCubieInd_to_colorsAtPosInd();
     }
 
-    move_s move_f = {
-        FACE_F,
-        1
-    };
-    move_s move_fprime = {
-        FACE_F,
-        3
-    };
-    move_s move_f2 = {
-        FACE_F,
-        2
-    };
+//    move_s move_f = {
+//        FACE_F,
+//        1
+//    };
+//    move_s move_fprime = {
+//        FACE_F,
+//        3
+//    };
+//    move_s move_f2 = {
+//        FACE_F,
+//        2
+//    };
 
-    clock_t new_move_start = clock();
-    for (int i = 0; i < 100000000; i++) {
-        apply_move(&cube, MOVE_D);
-        apply_move(&cube, MOVE_D3);
-        apply_move(&cube, MOVE_D2);
-        apply_move(&cube, MOVE_D2);
-    }
-
-    clock_t new_move_end = clock();
-    print_cube_map_colors(cube);
-
-    clock_t old_move_start = clock();
-    for (int i = 0; i < 100000000; i++) {
-        old_apply_move(&cube, move_f);
-        old_apply_move(&cube, move_fprime);
-        old_apply_move(&cube, move_f2);
-        old_apply_move(&cube, move_f2);
-    }
-
-    clock_t old_move_end = clock();
-
-    printf("Old Shiftcube move time: %fs\t New Shiftcube move time: %fs\n",
-           (double)(old_move_end - old_move_start)/CLOCKS_PER_SEC,
-           (double)(new_move_end - new_move_start)/CLOCKS_PER_SEC);
+//
+//    clock_t new_move_start = clock();
+//    apply_move(&cube, MOVE_D);
+//    print_cube_map_colors(cube);
+//    apply_move(&cube, MOVE_F3);
+//    print_cube_map_colors(cube);
+//    apply_move(&cube, MOVE_U2);
+//    print_cube_map_colors(cube);
+//    apply_move(&cube, MOVE_R2);
+//    print_cube_map_colors(cube);
+//
+//    clock_t new_move_end = clock();
+//    print_cube_map_colors(cube);
+//
+//    clock_t old_move_start = clock();
+//    for (int i = 0; i < 100000000; i++) {
+//        old_apply_move(&cube, move_f);
+//        old_apply_move(&cube, move_fprime);
+//        old_apply_move(&cube, move_f2);
+//        old_apply_move(&cube, move_f2);
+//    }
+//
+//    clock_t old_move_end = clock();
+//
+//    printf("Old Shiftcube move time: %fs\t New Shiftcube move time: %fs\n",
+//           (double)(old_move_end - old_move_start)/CLOCKS_PER_SEC,
+//           (double)(new_move_end - new_move_start)/CLOCKS_PER_SEC);
 
 
 
