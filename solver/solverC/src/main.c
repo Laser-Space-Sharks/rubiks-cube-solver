@@ -163,8 +163,8 @@ int main(int argc, char *argv[]) {
 
 
 
-    //cube_table_free(f2l_table);
-    //cube_table_free(last_layer_table);
+    cube_table_free(f2l_table);
+    cube_table_free(last_layer_table);
     cleanup_solver();
 
     return 0;
