@@ -303,6 +303,12 @@ typedef struct {
     cubie_e cubieShift[48];
 } cubieTable_s;
 
+static const cubie_e SOLVED_CUBIES[20] = {
+    CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
+    CUBIE_FR, CUBIE_FRD, CUBIE_RB, CUBIE_RBD, CUBIE_BL, CUBIE_BLD, CUBIE_LF, CUBIE_LFD, 
+    CUBIE_FU, CUBIE_RU, CUBIE_BU, CUBIE_URF, CUBIE_UBR, CUBIE_ULB, CUBIE_LU, CUBIE_UFL
+};
+
 static const cube18B_s SOLVED_CUBE18B = {
     .cubies = {
         CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
