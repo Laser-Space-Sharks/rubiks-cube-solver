@@ -101,6 +101,9 @@ typedef struct {
 typedef struct {
     cubie_e cubies[6];
 } cube18B_1LLL_s;
+typedef struct {
+    cubie_e cubieShift[48];
+} cubieTable_s;
 
 static const cube18B_s SOLVED_CUBE18B = {
     .cubies = {
@@ -137,6 +140,10 @@ void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_e move);
 void cube18B_apply_alg(cube18B_s *cube, const alg_s *alg);
 void cube18B_xcross_apply_alg(cube18B_xcross_s *cube, const alg_s *alg);
 void cube18B_1LLL_apply_alg(cube18B_1LLL_s *cube, const alg_s *alg);
+cubie_e apply_alg_to_cubie(cubie_e cubie, const alg_s* alg);
+cubieTable_s alg_to_cubieTable(const alg_s* alg);
+void apply_cubieTable_to_cube(cube18B_s* cube, const cubieTable_s* table);
+cubieTable_s conjoin_cubeTables(const cubieTable_s* table1, const cubieTable_s* table2);
 void print_cubieDefinitions();
 void print_cubieDefinition_to_cubie();
 void print_colorSequence_to_solvedCubieInd();
@@ -145,5 +152,6 @@ void print_cubieAfterMove();
 void print_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
 void print_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
 void print_cubieAndSolvedCubieInd_to_colorsAtPosInd();
+
 
 #endif // CUBE18B_H

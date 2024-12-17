@@ -295,12 +295,32 @@ static const face_e faceAfterMove[NUM_FACES+1][NUM_MOVES] = {
         FACE_NULL, FACE_NULL, FACE_NULL, // D
     }
 };
+static const cubie_e cubieAfterMove[NUM_MOVES][NUM_CUBIES] = {
+	{CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_UR , CUBIE_RU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UB , CUBIE_BU , CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_BR , CUBIE_RB , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_RU , CUBIE_UR , CUBIE_RD , CUBIE_DR , CUBIE_RF , CUBIE_FR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_UBR, CUBIE_BRU, CUBIE_RUB, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RBD, CUBIE_BDR, CUBIE_DRB, CUBIE_URF, CUBIE_FUR, CUBIE_RFU, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RDF, CUBIE_FRD, CUBIE_DFR, },
+	{CUBIE_DR , CUBIE_RD , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_RB , CUBIE_BR , CUBIE_RF , CUBIE_FR , CUBIE_RU , CUBIE_UR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_BDR, CUBIE_DRB, CUBIE_RBD, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RDF, CUBIE_DFR, CUBIE_FRD, CUBIE_BRU, CUBIE_UBR, CUBIE_RUB, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RFU, CUBIE_URF, CUBIE_FUR, },
+	{CUBIE_FR , CUBIE_RF , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_RD , CUBIE_DR , CUBIE_RU , CUBIE_UR , CUBIE_RB , CUBIE_BR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_DFR, CUBIE_FRD, CUBIE_RDF, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RFU, CUBIE_FUR, CUBIE_URF, CUBIE_DRB, CUBIE_BDR, CUBIE_RBD, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RUB, CUBIE_BRU, CUBIE_UBR, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_RF , CUBIE_FR , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_DF , CUBIE_FD , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_FU , CUBIE_UF , CUBIE_FL , CUBIE_LF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_FRD, CUBIE_RDF, CUBIE_DFR, CUBIE_URF, CUBIE_RFU, CUBIE_FUR, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FDL, CUBIE_LFD, CUBIE_DLF, CUBIE_UFL, CUBIE_LUF, CUBIE_FLU, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_DF , CUBIE_FD , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_LF , CUBIE_FL , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_FR , CUBIE_RF , CUBIE_FU , CUBIE_UF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_FDL, CUBIE_DLF, CUBIE_LFD, CUBIE_RDF, CUBIE_DFR, CUBIE_FRD, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FLU, CUBIE_UFL, CUBIE_LUF, CUBIE_RFU, CUBIE_URF, CUBIE_FUR, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_LF , CUBIE_FL , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_UF , CUBIE_FU , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_FD , CUBIE_DF , CUBIE_FR , CUBIE_RF , CUBIE_LB , CUBIE_BL , CUBIE_LD , CUBIE_DL , CUBIE_BD , CUBIE_DB , CUBIE_FLU, CUBIE_LUF, CUBIE_UFL, CUBIE_DLF, CUBIE_LFD, CUBIE_FDL, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FUR, CUBIE_RFU, CUBIE_URF, CUBIE_DFR, CUBIE_RDF, CUBIE_FRD, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_FL , CUBIE_LF , CUBIE_UB , CUBIE_BU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_DL , CUBIE_LD , CUBIE_FD , CUBIE_DF , CUBIE_LU , CUBIE_UL , CUBIE_LB , CUBIE_BL , CUBIE_BD , CUBIE_DB , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LFD, CUBIE_FDL, CUBIE_DLF, CUBIE_UFL, CUBIE_FLU, CUBIE_LUF, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LDB, CUBIE_BLD, CUBIE_DBL, CUBIE_ULB, CUBIE_BUL, CUBIE_LBU, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_DL , CUBIE_LD , CUBIE_UB , CUBIE_BU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_BL , CUBIE_LB , CUBIE_FD , CUBIE_DF , CUBIE_LF , CUBIE_FL , CUBIE_LU , CUBIE_UL , CUBIE_BD , CUBIE_DB , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LDB, CUBIE_DBL, CUBIE_BLD, CUBIE_FDL, CUBIE_DLF, CUBIE_LFD, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LBU, CUBIE_ULB, CUBIE_BUL, CUBIE_FLU, CUBIE_UFL, CUBIE_LUF, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_BL , CUBIE_LB , CUBIE_UB , CUBIE_BU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_RD , CUBIE_DR , CUBIE_UL , CUBIE_LU , CUBIE_FD , CUBIE_DF , CUBIE_LD , CUBIE_DL , CUBIE_LF , CUBIE_FL , CUBIE_BD , CUBIE_DB , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LBU, CUBIE_BUL, CUBIE_ULB, CUBIE_DBL, CUBIE_BLD, CUBIE_LDB, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LUF, CUBIE_FLU, CUBIE_UFL, CUBIE_DLF, CUBIE_FDL, CUBIE_LFD, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_LB , CUBIE_BL , CUBIE_RF , CUBIE_FR , CUBIE_UB , CUBIE_BU , CUBIE_RD , CUBIE_DR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_DB , CUBIE_BD , CUBIE_LD , CUBIE_DL , CUBIE_BR , CUBIE_RB , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BLD, CUBIE_LDB, CUBIE_DBL, CUBIE_ULB, CUBIE_LBU, CUBIE_BUL, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BDR, CUBIE_RBD, CUBIE_DRB, CUBIE_UBR, CUBIE_RUB, CUBIE_BRU, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_DB , CUBIE_BD , CUBIE_RF , CUBIE_FR , CUBIE_LB , CUBIE_BL , CUBIE_RD , CUBIE_DR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_RB , CUBIE_BR , CUBIE_LD , CUBIE_DL , CUBIE_BU , CUBIE_UB , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BDR, CUBIE_DRB, CUBIE_RBD, CUBIE_LDB, CUBIE_DBL, CUBIE_BLD, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BRU, CUBIE_UBR, CUBIE_RUB, CUBIE_LBU, CUBIE_ULB, CUBIE_BUL, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_RB , CUBIE_BR , CUBIE_RF , CUBIE_FR , CUBIE_DB , CUBIE_BD , CUBIE_RD , CUBIE_DR , CUBIE_FL , CUBIE_LF , CUBIE_FD , CUBIE_DF , CUBIE_UB , CUBIE_BU , CUBIE_LD , CUBIE_DL , CUBIE_BL , CUBIE_LB , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BRU, CUBIE_RUB, CUBIE_UBR, CUBIE_DRB, CUBIE_RBD, CUBIE_BDR, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BUL, CUBIE_LBU, CUBIE_ULB, CUBIE_DBL, CUBIE_LDB, CUBIE_BLD, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_BD , CUBIE_DB , CUBIE_FL , CUBIE_LF , CUBIE_RD , CUBIE_DR , CUBIE_LB , CUBIE_BL , CUBIE_FD , CUBIE_DF , CUBIE_LD , CUBIE_DL , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_LD , CUBIE_DL , CUBIE_FL , CUBIE_LF , CUBIE_BD , CUBIE_DB , CUBIE_LB , CUBIE_BL , CUBIE_RD , CUBIE_DR , CUBIE_FD , CUBIE_DF , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, },
+	{CUBIE_UR , CUBIE_RU , CUBIE_UF , CUBIE_FU , CUBIE_UL , CUBIE_LU , CUBIE_UB , CUBIE_BU , CUBIE_RF , CUBIE_FR , CUBIE_RB , CUBIE_BR , CUBIE_FD , CUBIE_DF , CUBIE_FL , CUBIE_LF , CUBIE_LD , CUBIE_DL , CUBIE_LB , CUBIE_BL , CUBIE_BD , CUBIE_DB , CUBIE_RD , CUBIE_DR , CUBIE_FUR, CUBIE_URF, CUBIE_RFU, CUBIE_LUF, CUBIE_UFL, CUBIE_FLU, CUBIE_BUL, CUBIE_ULB, CUBIE_LBU, CUBIE_RUB, CUBIE_UBR, CUBIE_BRU, CUBIE_LFD, CUBIE_DLF, CUBIE_FDL, CUBIE_BLD, CUBIE_DBL, CUBIE_LDB, CUBIE_RBD, CUBIE_DRB, CUBIE_BDR, CUBIE_FRD, CUBIE_DFR, CUBIE_RDF, },
+};
 
 //                                                                                Initialization ordering:
 static cubie_e cubieDefinition_to_cubie[NUM_FACES][NUM_FACES][NUM_FACES+1];             // 1
 static uint8_t colorSequence_to_solvedCubieInd[NUM_FACES+1][NUM_FACES+1][NUM_FACES+1];  // 2
 static facelet_pos_s cubie_to_orderedPositions[NUM_SEQUENCES][3];                       // 3
-static cubie_e cubieAfterMove[NUM_MOVES][NUM_CUBIES];                                   // 4: depends on 1
+//static cubie_e cubieAfterMove[NUM_MOVES][NUM_CUBIES];                                   // 4: depends on 1
 static uint8_t colorsAtEdgePosInd_to_cubieAndSolvedCubie[24][NUM_EDGES][2];             // 5: depends on 1 and 2
 static uint8_t colorsAtCornerPosInd_to_cubieAndSolvedCubie[48][NUM_CORNERS][2];         // 6: depends on 1 and 2
 static uint8_t cubieAndSolvedCubieInd_to_colorsAtPosInd[72][20][3];                     // 7: depends on 5 and 6
@@ -322,7 +342,7 @@ void init_all_tables_in_cube18Bc() {
     init_cubieToOrderedPositions();                         // i3
 //    print_cubie_to_orderedPositions();                      // p3
 
-    init_cubieAfterMove();                                  // i4
+//    init_cubieAfterMove();                                  // i4
 //    print_colorSequence_to_solvedCubieInd();                // p2
 //    print_cubieAfterMove();                                 // p4
 
@@ -563,9 +583,10 @@ void print_cubie_to_orderedPositions() {
         }
     }
 }
+/*
 // mainly for apply_move
 static void init_cubieAfterMove() {
-    /*
+    
     Tables Used:
         cubieDefinitions[]
         faceAfterMove[]
@@ -574,7 +595,7 @@ static void init_cubieAfterMove() {
         find_face_in_3
     External Types Used:
         face_e
-    */
+    
     //printf("cubie_to_orderedPositions[UR][1].index = %hhu\n", cubie_to_orderedPositions[CUBIE_UR][1].index);
     for (cubie_e cubie0 = 0; cubie0 < NUM_CUBIES; cubie0++) {
         for (move_e move = 0; move < NUM_MOVES; move++) {
@@ -612,22 +633,23 @@ static void init_cubieAfterMove() {
                 cubieAfterMove[move][cubie0] = cubieDefinition_to_cubie[cubie1def[0]][cubie1def[1]][cubie1def[2]];
             }
         }
-    } 
+    } print_cubieAfterMove();
     //printf("cubieAfterMove[U][3][UR] = %s\n", cubiePrints[cubieAfterMove[FACE_U][3][CUBIE_UR]]);
     //print_cubieAfterMove();
 }
 
 void print_cubieAfterMove() {
-    printf("cubieAfterMove[][][]:\n");
-    printf("\t      U1 , U2 , U3 , R1 , R2 , R3 , F1 , F2 , F3 , L1 , L2 , L3 , B1 , B2 , B3 , D1 , D2 , D3\n");
-    for (cubie_e cubie = 0; cubie < 48; cubie++) {
-        printf("\t%s : ", cubiePrints[cubie]);
-        for (move_e move = 0; move < NUM_MOVES; move++) {
+    printf("static const cubie_e cubieAfterMove[NUM_MOVES][NUM_CUBIES] = {\n");
+    //printf("\t      U1 , U2 , U3 , R1 , R2 , R3 , F1 , F2 , F3 , L1 , L2 , L3 , B1 , B2 , B3 , D1 , D2 , D3\n");
+    for (move_e move = 0; move < NUM_MOVES; move++) {
+        printf("\t{");
+        for (cubie_e cubie = 0; cubie < 48; cubie++) {
             cubie_e nextcubie = cubieAfterMove[move][cubie];
-            printf("%s, ", cubiePrints[nextcubie]);
-        } printf("\n");
-    }
+            printf("CUBIE_%s, ", cubiePrints[nextcubie]);
+        } printf("},\n");
+    } printf("};\n");
 }
+*/
 // mainly for cube18B_from_shiftcube()
 static void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie() {
     /*
@@ -1240,4 +1262,30 @@ void cube18B_1LLL_apply_alg(cube18B_1LLL_s *cube, const alg_s *alg) {
     for (size_t i = 0; i < alg->length; i++) {
         cube18B_1LLL_apply_move(cube, alg->moves[i]);
     }
+}
+
+cubie_e apply_alg_to_cubie(cubie_e cubie, const alg_s* alg) {
+    for (int i = 0; i < alg->length; i++) {
+        cubie = cubieAfterMove[alg->moves[i]][cubie];
+    } return cubie;
+}
+
+cubieTable_s alg_to_cubieTable(const alg_s* alg) {
+    cubieTable_s table;
+    for (cubie_e i = 0; i < NUM_CUBIES; i++) {
+        table.cubieShift[i] = apply_alg_to_cubie(i, alg);
+    } return table;
+}
+
+void apply_cubieTable_to_cube(cube18B_s* cube, const cubieTable_s* table) {
+    for (int i = 0; i < 18; i++) {
+        cube->cubies[i] = table->cubieShift[cube->cubies[i]];
+    }
+}
+
+cubieTable_s conjoin_cubeTables(const cubieTable_s* table1, const cubieTable_s* table2) {
+    cubieTable_s table;
+    for (cubie_e i = 0; i < NUM_CUBIES; i++) {
+        table.cubieShift[i] = table2->cubieShift[table1->cubieShift[i]];
+    } return table;
 }
