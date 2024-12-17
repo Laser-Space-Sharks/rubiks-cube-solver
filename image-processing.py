@@ -298,7 +298,7 @@ def convertToShiftCube(cubeArray):
 ####### Testing #######################################
 #######################################################
 
-def test(frontCenterColor, upCenterColor, testImgFilename):
+def testScan(frontCenterColor, upCenterColor):
     print("------------------------------")
     print("Starting Test!")
     print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
@@ -310,6 +310,7 @@ def test(frontCenterColor, upCenterColor, testImgFilename):
     print("face scanned!")
     print(faceArray)
     print(translateToColors(faceArray, colorsArray))
+    return faceArray
 
 def testImgNormal():
     print("Starting Test!")
@@ -322,3 +323,24 @@ def testColorBoundries(imagePath):
     image = imread(f"{imagePath}.jpg", IMREAD_COLOR)
     color = colorAnalysis(image)
     print(COLORS[color])
+
+def test(frontCenterColor, upCenterColor):
+    print("------------------------------")
+    print("Starting Test!")
+    print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
+    colorsArray = genColorsArray(frontCenterColor, upCenterColor)
+    print("colors array generated")
+    print(f"Colors array: {colorsArray}")
+    print("Starting Cube Scan!")
+    cubeArray = []
+    for i in range(6):
+        faceArray = scanFace(colorsArray)
+        print(f"face {i} scanned!")
+        print(faceArray)
+        print(translateToColors(faceArray, colorsArray))
+        cubeArray.append(faceArray)
+    print("Cube Scanned!!")
+    print(cubeArray)
+    print(f"Converted to shift cube: {bin(convertToShiftCube(cubeArray))}")
+
+test(2, 0) # blue, yellow
