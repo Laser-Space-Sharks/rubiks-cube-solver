@@ -277,19 +277,19 @@ def convertToShiftCube(cubeArray):
     faceOrder = [0, 1, 2, 3, 4, 5]
     for i in range(6):
         face = faceSearch(faceOrder[i])
-        faceNum = 0; i = 1; j = 0
-        while i!=0 or j!=0:
+        faceNum = 0; k = 1; j = 0
+        while k!=0 or j!=0:
             peice = face[i][j]
             faceNum << (4) # move over a nibble
             faceNum += peice
             # traverse in loop around center
-            if j == 0 and i != 2:
-                i+=1
-            if i == 2 and j != 2:
+            if j == 0 and k != 2:
+                k+=1
+            if k == 2 and j != 2:
                 j+=1
-            if j == 2 and i !=0:
-                i-=1
-            if i == 0:
+            if j == 2 and k !=0:
+                k-=1
+            if k == 0:
                 j-=1
         shiftCube[i] = faceNum 
     return shiftCube
@@ -298,7 +298,7 @@ def convertToShiftCube(cubeArray):
 ####### Testing #######################################
 #######################################################
 
-def test(frontCenterColor, upCenterColor, testImgFilename):
+def testScan(frontCenterColor, upCenterColor):
     print("------------------------------")
     print("Starting Test!")
     print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
@@ -310,6 +310,7 @@ def test(frontCenterColor, upCenterColor, testImgFilename):
     print("face scanned!")
     print(faceArray)
     print(translateToColors(faceArray, colorsArray))
+    return faceArray
 
 def testImgNormal():
     print("Starting Test!")
@@ -322,3 +323,24 @@ def testColorBoundries(imagePath):
     image = imread(f"{imagePath}.jpg", IMREAD_COLOR)
     color = colorAnalysis(image)
     print(COLORS[color])
+
+def test(frontCenterColor, upCenterColor):
+    print("------------------------------")
+    print("Starting Test!")
+    print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
+    colorsArray = genColorsArray(frontCenterColor, upCenterColor)
+    print("colors array generated")
+    print(f"Colors array: {colorsArray}")
+    print("Starting Cube Scan!")
+    cubeArray = []
+    for i in range(6):
+        faceArray = scanFace(colorsArray)
+        print(f"face {i} scanned!")
+        print(faceArray)
+        print(translateToColors(faceArray, colorsArray))
+        cubeArray.append(faceArray)
+    print("Cube Scanned!!")
+    print(cubeArray)
+    print(f"Converted to shift cube: {bin(convertToShiftCube(cubeArray))}")
+
+test(2, 0) # blue, yellow
