@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 
         int apply_alg_times = 1000000;
         printf("alg to stress test %d times: %s\n", apply_alg_times, "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
-        printf("Stress-testing cube18B_xcross with %zu moves...\n", apply_alg_times*(alg->length));
+        printf("Stress-testing cube18B with %zu moves...\n", apply_alg_times*(alg->length));
         clock_t start_cube18b = clock();
         for (int i = 0; i < apply_alg_times; i++) {
             cube18B_apply_alg(&cube18B, alg);
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
             print_cube_map_colors(translated_shiftcube);
             print_cube18B(&translated_translated_cube18B);
         }
-        printf("Cube18B_xcross time: %fs\nShiftcube time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC, (double)(end_shiftcube - start_shiftcube)/CLOCKS_PER_SEC);
+        printf("Cube18B time: %fs\nShiftcube time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC, (double)(end_shiftcube - start_shiftcube)/CLOCKS_PER_SEC);
         alg_free(alg);
         //print_cubieDefinitions();
         //print_cubieDefinition_to_cubie();
