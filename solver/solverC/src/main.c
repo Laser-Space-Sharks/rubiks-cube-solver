@@ -1,19 +1,24 @@
 #include "main.h"
-#include "cube.h"
-#include "move_list.h"
+#include "shift_cube.h"
+#include "cube18B.h"
+#include "alg.h"
 #include "solver.h"
 
+#include <time.h>
+
 int main(int argc, char *argv[]) {
+    printf("Got to line 10 of main.c");
     init_move_bitrolls();
+    printf("Got to line 12 of main.c");
 
-    cube_s cube = SOLVED_SHIFTCUBE;
+    shift_cube_s cube = SOLVED_SHIFTCUBE;
 
-    cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
-    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+    //cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
+    //cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
 
-    init_solver();
+    //init_solver();
 
-    move_list_s *moves = NULL;
+    alg_s *alg = NULL;
     #define NUM_TESTS 9
     char *scrambles[] = {
         "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2",
@@ -28,28 +33,139 @@ int main(int argc, char *argv[]) {
     };
 
     if (argc > 1) {
-        moves = move_list_from_move_str(argv[1]);
+        alg = alg_from_alg_str(argv[1]);
     } else {
+        /*
         printf("Performing tests\n");
         double sum = 0;
 
         for (uint8_t test = 0; test < NUM_TESTS; test++) {
             cube = SOLVED_SHIFTCUBE;
-            moves = move_list_from_move_str(scrambles[test]);
+            alg = alg_from_alg_str(scrambles[test]);
             printf("Testing scramble: %s\n", scrambles[test]);
-            apply_move_list(&cube, moves);
-            move_list_s *solve = solve_cube(cube, f2l_table, last_layer_table);
+            apply_alg(&cube, alg);
+            alg_s *solve = solve_cube(cube, f2l_table, last_layer_table);
+            apply_alg(&cube, solve);
+            if (!compare_cubes(&cube, &SOLVED_SHIFTCUBE)) {
+                printf("It didn't solve it, this is bad...\n");
+            }
+            cube = SOLVED_SHIFTCUBE;
             printf("Solution (%zu moves): ", solve->length);
-            print_move_list(solve);
+            print_alg(solve);
             sum += solve->length;
-            move_list_free(solve);
-            move_list_free(moves);
+            alg_free(solve);
+            alg_free(alg);
         }
         printf("Average solve length: %f\n", sum / NUM_TESTS);
+        */
+
+        printf("Got to line 62 of main.c");
+        alg = alg_from_alg_str("F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
+        printf("Got to line 64 of main.c");
+        init_all_tables_in_cube18Bc();
+        printf("Got to line 66 of main.c");
+        shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
+        cube18B_s cube18B = SOLVED_CUBE18B;
+        cube18B_xcross_s xcross = SOLVED_CUBE18B_XCROSS;
+        print_cube_line_colors(shiftcube);
+        print_cube18B(&cube18B);
+        printf("FACE_NULL is %d\n", FACE_NULL);
+
+        int apply_alg_times = 1000000;
+        printf("alg to stress test %d times: %s\n", apply_alg_times, "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
+        printf("Stress-testing cube18B with %zu moves...\n", apply_alg_times*(alg->length));
+        clock_t start_cube18b = clock();
+        for (int i = 0; i < apply_alg_times; i++) {
+            cube18B_apply_alg(&cube18B, alg);
+//            cube18B_xcross_apply_alg(&xcross, alg);
+            //apply_alg(&shiftcube, alg);
+        }
+        clock_t end_cube18b = clock();
+        printf("Stress-testing shiftcube with %zu moves...\n", apply_alg_times*(alg->length));
+        clock_t start_shiftcube = clock();
+        for (int i = 0; i < apply_alg_times; i++) {
+            //cube18B_apply_alg(&cube18B, alg);
+            apply_alg(&shiftcube, alg);
+        }
+        clock_t end_shiftcube = clock();
+        printf("Finished stress-testing!\n");
+//        cube18B_s translated_cube18B = cube18B_from_shiftCube(&shiftcube);
+//        if (!compare_cube18Bs(&translated_cube18B, &cube18B)) {
+//            printf("cube18B_from_shiftCube(shiftcube) and cube18B don't match!\n");
+//            printf("shiftcube: \n");
+//            print_cube_map_colors(shiftcube);
+//            printf("shiftcube translated to cube18B: \n");
+//            print_cube18B(&translated_cube18B);
+//            printf("cube18B: \n");
+//            print_cube18B(&cube18B);
+//            printf("solved_cube18B: \n");
+//            print_cube18B(&SOLVED_CUBE18B);
+//        }
+
+//        shift_cube_s translated_shiftcube = shiftCube_from_cube18B(&cube18B);
+//        cube18B_s translated_translated_cube18B = cube18B_from_shiftCube(&translated_shiftcube);
+//        if (!compare_cube18Bs(&translated_translated_cube18B, &cube18B)) {
+//            printf("ohno, the shiftcube_from_cube18B isn't working\n");
+//            print_cube_map_colors(shiftcube);
+//            print_cube18B(&cube18B);
+//            printf("\n");
+//            print_cube_map_colors(translated_shiftcube);
+//            print_cube18B(&translated_translated_cube18B);
+//        }
+        printf("Cube 18B time: %fs\nShiftcube time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC, (double)(end_shiftcube - start_shiftcube)/CLOCKS_PER_SEC);
+        alg_free(alg);
+        //print_cubieDefinitions();
+        //print_cubieDefinition_to_cubie();
+        //print_colorSequence_to_solvedCubieInd();
+        //print_cubie_to_orderedPositions();
+        //print_cubieAfterMove();
+        //print_colorsAtEdgePosInd_to_cubieAndSolvedCubie();
+        //print_colorsAtCornerPosInd_to_cubieAndSolvedCubie();
+        //print_cubieAndSolvedCubieInd_to_colorsAtPosInd();
     }
 
-    cube_table_free(f2l_table);
-    cube_table_free(last_layer_table);
+    move_s move_f = {
+        FACE_F,
+        1
+    };
+    move_s move_fprime = {
+        FACE_F,
+        3
+    };
+    move_s move_f2 = {
+        FACE_F,
+        2
+    };
+
+    clock_t new_move_start = clock();
+    for (int i = 0; i < 100000000; i++) {
+        apply_move(&cube, MOVE_D);
+        apply_move(&cube, MOVE_D3);
+        apply_move(&cube, MOVE_D2);
+        apply_move(&cube, MOVE_D2);
+    }
+
+    clock_t new_move_end = clock();
+    print_cube_map_colors(cube);
+
+    clock_t old_move_start = clock();
+    for (int i = 0; i < 100000000; i++) {
+        old_apply_move(&cube, move_f);
+        old_apply_move(&cube, move_fprime);
+        old_apply_move(&cube, move_f2);
+        old_apply_move(&cube, move_f2);
+    }
+
+    clock_t old_move_end = clock();
+
+    printf("Old Shiftcube move time: %fs\t New Shiftcube move time: %fs\n",
+           (double)(old_move_end - old_move_start)/CLOCKS_PER_SEC,
+           (double)(new_move_end - new_move_start)/CLOCKS_PER_SEC);
+
+
+
+    //cube_table_free(f2l_table);
+    //cube_table_free(last_layer_table);
     cleanup_solver();
 
     return 0;
