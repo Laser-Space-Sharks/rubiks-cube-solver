@@ -2,11 +2,7 @@
 #define LOOKUP_TABLES_H
 
 #include "main.h"
-
-// lookup table for getting the opposite side of a face
-static const face_e opposite_faces[NUM_FACES] = {
-    FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U,
-};
+#include "shift_cube.h"
 
 static const shift_cube_s cross_mask = {
     .state[FACE_U] = 0x00000000,
