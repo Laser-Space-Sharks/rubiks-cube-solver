@@ -20,6 +20,9 @@ typedef enum : uint8_t {
     FACE_NULL=6
 } face_e;
 
+static const char facePrints[7] = {'U', 'R', 'F', 'L', 'B', 'D', 'N'};
+
+
 typedef enum : char {
     CHAR_U = 'U',
     CHAR_R = 'R',
@@ -44,6 +47,33 @@ typedef struct {
 
 static inline uint8_t mod4(int64_t n) {
     return n & 3;
+}
+
+static bool unordered_match_faces_2x2(face_e a1, face_e a2, face_e b1, face_e b2) {
+    return ((a1 == b1 || a1 == b2) &&
+            (a2 == b1 || a2 == b2));
+}
+static bool unordered_match_faces_3x3(face_e a1, face_e a2, face_e a3, face_e b1, face_e b2, face_e b3) {
+    return ((a1 == b1 || a1 == b2 || a1 == b3) &&
+            (a2 == b1 || a2 == b2 || a2 == b3) &&
+            (a3 == b1 || a3 == b2 || a3 == b3));
+}
+
+static int8_t find_face_in_2(face_e a1, face_e a2, face_e b) {
+    uint8_t ind;
+    if (b == a1) ind = 0;
+    else if (b == a2) ind = 1;
+    else ind = -1;
+    return ind;
+}
+
+static int8_t find_face_in_3(face_e a1, face_e a2, face_e a3, face_e b) {
+    uint8_t ind;
+    if (b == a1) ind = 0;
+    else if (b == a2) ind = 1;
+    else if (b == a3) ind = 2;
+    else ind = -1;
+    return ind;
 }
 
 #endif // MAIN_H
