@@ -1,11 +1,12 @@
-#ifndef CUBE_HASH_H
-#define CUBE_HASH_H
+#ifndef CUBE_TABLE_H
+#define CUBE_TABLE_H
 
 #include <stdbool.h>
 #include <stddef.h>
 
 #include "main.h"
 #include "alg.h"
+#include "shift_cube.h"
 
 typedef struct cube_table cube_table_s;
 
@@ -19,4 +20,4 @@ void cube_table_print(cube_table_s *ct);
 size_t cube_table_entries(const cube_table_s *ct);
 size_t cube_table_size(const cube_table_s *ct);
 
-#endif // CUBE_HASH_H
+#endif // CUBE_TABLE_H
