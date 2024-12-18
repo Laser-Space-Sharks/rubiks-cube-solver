@@ -60,19 +60,19 @@ int main(int argc, char *argv[]) {
         //init_all_tables_in_cube18Bc();
 //        cubieTable_s cubieTable = alg_to_cubieTable(alg);
         shift_cube_s shiftcube = SOLVED_SHIFTCUBE;
-        cube18B_s cube18B = SOLVED_CUBE18B;
-//        cube18B_xcross_s xcross = SOLVED_CUBE18B_XCROSS;
+//        cube18B_s cube18B = SOLVED_CUBE18B;
+        cube18B_xcross_s xcross = SOLVED_CUBE18B_XCROSS;
 //        print_cube_line_colors(shiftcube);
 //        print_cube18B(&cube18B);
         //printf("FACE_NULL is %d\n", FACE_NULL);
 
         int apply_alg_times = 1000000;
         printf("alg to stress test %d times: %s\n", apply_alg_times, "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
-        printf("Stress-testing cube18B with %zu moves...\n", apply_alg_times*(alg->length));
+        printf("Stress-testing cube18B_xcross with %zu moves...\n", apply_alg_times*(alg->length));
         clock_t start_cube18b = clock();
         for (int i = 0; i < apply_alg_times; i++) {
-            cube18B_apply_alg(&cube18B, alg);
-//            cube18B_xcross_apply_alg(&xcross, alg);
+//            cube18B_apply_alg(&cube18B, alg);
+            cube18B_xcross_apply_alg(&xcross, alg);
 //            apply_cubieTable_to_cube(&cube18B, &cubieTable);
             //apply_alg(&shiftcube, alg);
         }
@@ -85,6 +85,7 @@ int main(int argc, char *argv[]) {
         }
         clock_t end_shiftcube = clock();
         printf("Finished stress-testing!\n");
+        /*
         cube18B_s translated_cube18B = cube18B_from_shiftCube(&shiftcube);
         if (!compare_cube18Bs(&translated_cube18B, &cube18B)) {
             printf("cube18B_from_shiftCube(shiftcube) and cube18B don't match!\n");
@@ -107,9 +108,10 @@ int main(int argc, char *argv[]) {
             printf("\n");
             print_cube_map_colors(translated_shiftcube);
             print_cube18B(&translated_translated_cube18B);
-        }
-        printf("Cube18B time: %fs\nShiftcube time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC, (double)(end_shiftcube - start_shiftcube)/CLOCKS_PER_SEC);
+        }*/
+        printf("Cube18B_xcross time: %fs\nShiftcube time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC, (double)(end_shiftcube - start_shiftcube)/CLOCKS_PER_SEC);
         alg_free(alg);
+
         //print_cubieDefinitions();
         //print_cubieDefinition_to_cubie();
         //print_colorSequence_to_solvedCubieInd();

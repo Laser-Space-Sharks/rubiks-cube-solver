@@ -22,7 +22,6 @@ typedef enum : uint8_t {
 
 static const char facePrints[7] = {'U', 'R', 'F', 'L', 'B', 'D', 'N'};
 
-
 typedef enum : char {
     CHAR_U = 'U',
     CHAR_R = 'R',
@@ -36,7 +35,6 @@ typedef enum : char {
 static const face_e opposite_faces[NUM_FACES] = {
     FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U,
 };
-
 #define NUM_EDGES   12
 #define NUM_CORNERS  8
 
