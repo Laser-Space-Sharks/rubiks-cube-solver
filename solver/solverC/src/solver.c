@@ -201,19 +201,34 @@ static alg_s* xcross_search(const shift_cube_s *start, const shift_cube_s *goal)
 
     shift_cube_s start_cube = *start;
     shift_cube_s end_cube   = *goal;
+    printf("=============STARTING XCROSS===========\n");
+    printf("START_CUBE: \n");
+    print_cube_map_colors(start_cube);
+    printf("END_CUBE: \n");
+    print_cube_map_colors(end_cube);
 
     for (uint8_t depth = 0; depth < 5; depth++) {
         if (bidirectional_recursion(&start_cube, xcross_start_ct, xcross_end_ct, start_alg, depth)) {
             alg_free(end_alg);
             end_alg = alg_copy(&cube_table_lookup(xcross_end_ct, &start_cube)->list[0]);
+            printf("START ALG WAS: ");
+            print_alg(start_alg);
+            printf("END ALG WAS: ");
+            print_alg(end_alg);
             break;
         }
+        if (!compare_cubes(start, &start_cube) || !compare_cubes(goal, &end_cube)) printf("BIDIRECTIONAL RECURSION FAILED TO UNDO ITS MOVES\n");
 
         if (bidirectional_recursion(&end_cube, xcross_end_ct, xcross_start_ct, end_alg, depth)) {
             alg_free(start_alg);
             start_alg = alg_copy(&cube_table_lookup(xcross_start_ct, &end_cube)->list[0]);
+            printf("START ALG WAS: ");
+            print_alg(start_alg);
+            printf("END ALG WAS: ");
+            print_alg(end_alg);
             break;
         }
+        if (!compare_cubes(start, &start_cube) || !compare_cubes(goal, &end_cube)) printf("BIDIRECTIONAL RECURSION FAILED TO UNDO ITS MOVES\n");
     }
 
     alg_invert(end_alg);
@@ -273,6 +288,10 @@ static void f2l_stage(shift_cube_s cube, alg_s **best, const alg_s *xsolve,
 
         const alg_list_s *pair_algs = cube_table_lookup(f2l_table, &pair_mask);
         if (!pair_algs) {
+            //printf("THERE ARE NO PAIR ALGS FOR PAIR %hhu\n", pair);
+            //print_cube_map_colors(cube);
+            //printf("THE XCROSS SOLVE WAS: ");
+            //print_alg(xsolve);
             return;
         }
 

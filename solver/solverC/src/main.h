@@ -32,8 +32,8 @@ typedef enum : char {
 } char_e;
 
 // lookup table for getting the opposite side of a face
-static const face_e opposite_faces[NUM_FACES] = {
-    FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U,
+static const face_e opposite_faces[NUM_FACES+1] = {
+    FACE_D, FACE_L, FACE_B, FACE_R, FACE_F, FACE_U, FACE_NULL
 };
 #define NUM_EDGES   12
 #define NUM_CORNERS  8
