@@ -66,7 +66,8 @@ static void stress_test_cube18B_xcross(size_t apply_alg_times, const alg_s* alg)
 
     printf("Cube18B_xcross time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC);
 }
-static void stress_test(size_t apply_alg_times, const alg_s* alg) {
+static void stress_test(size_t apply_alg_times, const char* algstr) {
+    alg_s* alg = alg_from_alg_str(algstr);
     printf("alg to stress test %d times: \n", apply_alg_times);
     print_alg(alg);
     stress_test_shiftcube(apply_alg_times, alg);
@@ -74,6 +75,7 @@ static void stress_test(size_t apply_alg_times, const alg_s* alg) {
     stress_test_cube18B_xcross(apply_alg_times, alg);
     printf("Finished stress-testing!\n");
     printf("\n");
+    alg_free(alg);
 }
 static void test_shiftcube_moves() {
     shift_cube_s cube = SOLVED_SHIFTCUBE;
@@ -192,9 +194,6 @@ static void test_simplifier_1case(char* algstr, char* simplifiedalgstr) {
         print_alg(alg);
         printf("Length of simplified: %d\n", simplified->length);
         print_alg(simplified);
-        alg_free(alg);
-        alg_free(simplified);
-        return;
     } else {
         shift_cube_s cube1 = SOLVED_SHIFTCUBE, cube2 = SOLVED_SHIFTCUBE;
         apply_alg(&cube1, alg);
@@ -204,15 +203,19 @@ static void test_simplifier_1case(char* algstr, char* simplifiedalgstr) {
             print_alg(alg);
             print_alg(simplified);
         }
-        alg_free(alg);
-        alg_free(simplified);
     }
+    alg_free(alg);
+    alg_free(simplified);
 }
 
 static void test_simplifer() {
-    test_simplifier_1case("U U'", "");
-    test_simplifier_1case("F U R3 L R2 L3 D", "F U R D");
-    test_simplifier_1case("R L' R2 L3 U L L2 L3 D' U3 D2", "R3 L2 U L2 D U3");
+    // can cancel out moves to result in a null alg
+    test_simplifier_1case("U U'", "");                                          
+    // can utilize the F B F -> F2 B simplification rule multiple times
+    test_simplifier_1case("F U R3 L R2 L3 D", "F U R D");                       
+    // heftier case with lots of simplification to really make sure these simplifications can happen repeatedly without inherent limit
+    test_simplifier_1case("R L' R2 L3 U L L2 L3 D' U3 D2", "R3 L2 U L2 D U3");  
+    // can recognize irreducibility
     test_simplifier_1case("R3 L2 U L2 D U3", "R3 L2 U L2 D U3");
 }
 
@@ -241,10 +244,7 @@ int main(int argc, char *argv[]) {
         //test_shiftcube_moves();
         //test_cube18B_moves();
 
-        alg_s* alg = alg_from_alg_str("F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2");
-        stress_test(1000000, alg);
-        
-        alg_free(alg);
+        stress_test(40000, scrambles[0]);
 
         test_simplifer();
     }
