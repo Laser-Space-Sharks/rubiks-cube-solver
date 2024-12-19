@@ -216,7 +216,6 @@ static void test_simplifer() {
     test_simplifier_1case("R3 L2 U L2 D U3", "R3 L2 U L2 D U3");
 }
 
-
 int main(int argc, char *argv[]) {
     shift_cube_s cube = SOLVED_SHIFTCUBE;
 

@@ -101,13 +101,7 @@ int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table
             cube_table_insert(our_ct, cube, alg);
         }
 
-        if (cube_table_lookup(other_ct, cube) != NULL) {
-            // holy crap, we did it!
-            return 1;
-        }
-
-        // no dice
-        return 0;
+        return (cube_table_lookup(other_ct, cube) != NULL);
     }
 
     // depth > 0
@@ -201,20 +195,20 @@ static alg_s* xcross_search(const shift_cube_s *start, const shift_cube_s *goal)
 
     shift_cube_s start_cube = *start;
     shift_cube_s end_cube   = *goal;
-    printf("=============STARTING XCROSS===========\n");
-    printf("START_CUBE: \n");
-    print_cube_map_colors(start_cube);
-    printf("END_CUBE: \n");
-    print_cube_map_colors(end_cube);
+    //printf("=============STARTING XCROSS===========\n");
+    //printf("START_CUBE: \n");
+    //print_cube_map_colors(start_cube);
+    //printf("END_CUBE: \n");
+    //print_cube_map_colors(end_cube);
 
-    for (uint8_t depth = 0; depth < 5; depth++) {
+    for (uint8_t depth = 0; depth <= 5; depth++) {
         if (bidirectional_recursion(&start_cube, xcross_start_ct, xcross_end_ct, start_alg, depth)) {
             alg_free(end_alg);
             end_alg = alg_copy(&cube_table_lookup(xcross_end_ct, &start_cube)->list[0]);
-            printf("START ALG WAS: ");
-            print_alg(start_alg);
-            printf("END ALG WAS: ");
-            print_alg(end_alg);
+            //printf("START ALG WAS: ");
+            //print_alg(start_alg);
+            //printf("END ALG WAS: ");
+            //print_alg(end_alg);
             break;
         }
         if (!compare_cubes(start, &start_cube) || !compare_cubes(goal, &end_cube)) printf("BIDIRECTIONAL RECURSION FAILED TO UNDO ITS MOVES\n");
@@ -222,10 +216,10 @@ static alg_s* xcross_search(const shift_cube_s *start, const shift_cube_s *goal)
         if (bidirectional_recursion(&end_cube, xcross_end_ct, xcross_start_ct, end_alg, depth)) {
             alg_free(start_alg);
             start_alg = alg_copy(&cube_table_lookup(xcross_start_ct, &end_cube)->list[0]);
-            printf("START ALG WAS: ");
-            print_alg(start_alg);
-            printf("END ALG WAS: ");
-            print_alg(end_alg);
+            //printf("START ALG WAS: ");
+            //print_alg(start_alg);
+            //printf("END ALG WAS: ");
+            //print_alg(end_alg);
             break;
         }
         if (!compare_cubes(start, &start_cube) || !compare_cubes(goal, &end_cube)) printf("BIDIRECTIONAL RECURSION FAILED TO UNDO ITS MOVES\n");
@@ -248,7 +242,6 @@ alg_s* solve_cross(shift_cube_s cube) {
 
 static void last_layer_stage(const shift_cube_s *cube, alg_s **best, const alg_s *xsolve,
                              const alg_s *f2l_solve, const cube_table_s *ll_table) {
-
     alg_s *solve = alg_copy(xsolve);
     alg_concat(solve, f2l_solve);
 
@@ -270,7 +263,7 @@ static void last_layer_stage(const shift_cube_s *cube, alg_s **best, const alg_s
 
 static void f2l_stage(shift_cube_s cube, alg_s **best, const alg_s *xsolve,
                       alg_s *f2l_solve, const cube_table_s *f2l_table,
-                      const cube_table_s *ll_table) {
+                      const cube_table_s *ll_table, uint8_t depth) {
 
     const shift_cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
     shift_cube_s cube_f2l_bits = masked_cube(&cube, &f2l_4mask);
@@ -280,6 +273,7 @@ static void f2l_stage(shift_cube_s cube, alg_s **best, const alg_s *xsolve,
         last_layer_stage(&cube, best, xsolve, f2l_solve, ll_table);
         return;
     }
+    if (depth == 0) printf("5TH PAIR?!\n");
 
     for (uint8_t pair = 0; pair < 4; pair++) {
         shift_cube_s pair_mask = get_f2l_pair(&cube, pair);
@@ -296,11 +290,15 @@ static void f2l_stage(shift_cube_s cube, alg_s **best, const alg_s *xsolve,
         }
 
         for (size_t alg = 0; alg < pair_algs->num_algs; alg++) {
+            //if (compare_algs(xsolve, "B2 R B' L' F L F") && compare_algs(f2l_solve, "L2 B L U' B' L B2 D B' U B D' B2")) {
+            //    print_cube_map_colors(cube);
+            //    print_alg(&(pair_algs->list[alg]));
+            //}
             shift_cube_s new_cube = cube;
             apply_alg(&new_cube, &pair_algs->list[alg]);
             size_t old_len = f2l_solve->length;
             alg_concat(f2l_solve, &pair_algs->list[alg]);
-            f2l_stage(new_cube, best, xsolve, f2l_solve, f2l_table, ll_table);
+            f2l_stage(new_cube, best, xsolve, f2l_solve, f2l_table, ll_table, depth-1);
             f2l_solve->length -= f2l_solve->length - old_len;
         }
     }
@@ -321,7 +319,7 @@ static void xcross_stage(shift_cube_s cube, alg_s **best,
         shift_cube_s new_cube = cube;
         apply_alg(&new_cube, xcross_alg);
         alg_s *f2l_solve = alg_create(10);
-        f2l_stage(new_cube, best, xcross_alg, f2l_solve, f2l_table, ll_table);
+        f2l_stage(new_cube, best, xcross_alg, f2l_solve, f2l_table, ll_table, 3);
         alg_free(f2l_solve);
         alg_free(xcross_alg);
     }

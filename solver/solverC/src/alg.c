@@ -1,4 +1,5 @@
 #include "alg.h"
+#include "shift_cube.h"
 
 alg_s *alg_create(size_t size) {
     alg_s *alg = (alg_s*)malloc(sizeof(alg_s));
@@ -9,7 +10,6 @@ alg_s *alg_create(size_t size) {
 
     return alg;
 }
-
 // return a pointer to a new alg_s with a distinct yet identical array of the alg from src
 alg_s* alg_copy(const alg_s *src) {
     if (!src) return NULL;
@@ -196,7 +196,7 @@ alg_s* alg_from_alg_str(const char *alg_str) {
     move_e move = MOVE_NULL;
     while (idx < len) {
         uint8_t c = alg_str[idx];
-        if (c == ' ') {
+        if (c == ' ' || c == '\n' || c == '\t') {
             idx++;
             continue;
         };
