@@ -1,5 +1,4 @@
 #include "alg.h"
-#include "shift_cube.h"
 
 alg_s *alg_create(size_t size) {
     alg_s *alg = (alg_s*)malloc(sizeof(alg_s));

@@ -7,6 +7,21 @@ void print_cube18B(const cube18B_s* cube) {
         printf("%s ", cubiePrints[cube->cubies[i]]);
     } printf("\n");
 }
+void print_cube18B_xcross(const cube18B_xcross_s* cube) {
+    for (int i = 0; i < 12; i++) {
+        printf("%s ", cubiePrints[cube->cubies[i]]);
+    } printf("\n");
+}
+void print_cube18B_1LLL(const cube18B_1LLL_s* cube) {
+    for (int i = 0; i < 6; i++) {
+        printf("%s ", cubiePrints[cube->cubies[i]]);
+    } printf("\n");
+}
+void print_cube18B_F2L(const cube18B_F2L_s* cube) {
+    for (int i = 0; i < 8; i++) {
+        printf("%s ", cubiePrints[cube->cubies[i]]);
+    } printf("\n");
+}
 
 static const face_e faceAfterMove[NUM_FACES+1][NUM_MOVES] = {
     {// U
@@ -427,6 +442,33 @@ cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cub
 bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2) {
     bool res = true;
     for (int i = 0; i < 18; i++) {
+        if (cube1->cubies[i] != cube2->cubies[i]) {
+            res = false;
+            break;
+        }
+    } return res;
+}
+bool compare_cube18B_xcross(const cube18B_xcross_s* cube1, const cube18B_xcross_s* cube2) {
+    bool res = true;
+    for (int i = 0; i < 12; i++) {
+        if (cube1->cubies[i] != cube2->cubies[i]) {
+            res = false;
+            break;
+        }
+    } return res;
+}
+bool compare_cube18B_1LLL(const cube18B_1LLL_s* cube1, const cube18B_1LLL_s* cube2) {
+    bool res = true;
+    for (int i = 0; i < 6; i++) {
+        if (cube1->cubies[i] != cube2->cubies[i]) {
+            res = false;
+            break;
+        }
+    } return res;
+}
+bool compare_cube18B_F2L(const cube18B_F2L_s* cube1, const cube18B_F2L_s* cube2) {
+    bool res = true;
+    for (int i = 0; i < 8; i++) {
         if (cube1->cubies[i] != cube2->cubies[i]) {
             res = false;
             break;

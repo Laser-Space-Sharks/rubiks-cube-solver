@@ -300,6 +300,9 @@ typedef struct {
     cubie_e cubies[6];
 } cube18B_1LLL_s;
 typedef struct {
+    cubie_e cubies[8];
+} cube18B_F2L_s;
+typedef struct {
     cubie_e cubieShift[48];
 } cubieTable_s;
 
@@ -334,7 +337,13 @@ cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube);
 cube18B_1LLL_s cube18B_1LLL_from_cube18B(const cube18B_s* cube);
 cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cube18B_1LLL_s* LL);
 bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2);
+bool compare_cube18B_xcross(const cube18B_xcross_s* cube1, const cube18B_xcross_s* cube2);
+bool compare_cube18B_1LLL(const cube18B_1LLL_s* cube1, const cube18B_1LLL_s* cube2);
+bool compare_cube18B_F2L(const cube18B_F2L_s* cube1, const cube18B_F2L_s* cube2);
 void print_cube18B(const cube18B_s* cube);
+void print_cube18B_xcross(const cube18B_xcross_s* cube);
+void print_cube18B_1LLL(const cube18B_1LLL_s* cube);
+void print_cube18B_F2L(const cube18B_F2L_s* cube);
 void cube18B_apply_move(cube18B_s* cube, move_e move);
 void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_e move);
 void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_e move);
