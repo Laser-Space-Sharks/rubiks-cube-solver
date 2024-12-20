@@ -282,6 +282,9 @@ static const char* cubiePrints[73] = {
     "BRD",
     "NULL"
 };
+// what we want on right side of equals:   0             2                4               6
+// Pair:                                   0             3                2               1
+// 2(3-mod4(pair-1)):                      0             2                4               6  
 //####################################################################################################################################################
 // The cube can be defined in 18 bytes, where each byte is a cubie.
 // |           CROSS              |                               F2L                             |                        1LLL                   |
@@ -336,6 +339,8 @@ static const cube18B_1LLL_s SOLVED_CUBE18B_1LLL = {
 cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube);
 cube18B_1LLL_s cube18B_1LLL_from_cube18B(const cube18B_s* cube);
 cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cube18B_1LLL_s* LL);
+void cube18B_xcross_maskOnPair(cube18B_xcross_s* cube, uint8_t pair);
+void cube18B_F2L_maskOnPair(cube18B_F2L_s* cube, uint8_t pair);
 bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2);
 bool compare_cube18B_xcross(const cube18B_xcross_s* cube1, const cube18B_xcross_s* cube2);
 bool compare_cube18B_1LLL(const cube18B_1LLL_s* cube1, const cube18B_1LLL_s* cube2);

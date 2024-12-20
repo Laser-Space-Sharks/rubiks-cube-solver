@@ -439,6 +439,23 @@ cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cub
     }; return cube;
 }
 
+void cube18B_xcross_maskOnPair(cube18B_xcross_s* cube, uint8_t pair) {
+    for (int i = 4; i < 12; i += 2) {
+        if (i-4 != 6-2*mod4(pair+3)) {
+            cube->cubies[i] = CUBIE_NULL;
+            cube->cubies[i+1] = CUBIE_NULL;
+        }
+    }
+}
+void cube18B_F2L_maskOnPair(cube18B_F2L_s* cube, uint8_t pair) {
+    for (int i = 0; i < 8; i+= 2) {
+        if (i != 6-2*mod4(pair+3)) {
+            cube->cubies[i] = CUBIE_NULL;
+            cube->cubies[i+1] = CUBIE_NULL;
+        }
+    }
+}
+
 bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2) {
     bool res = true;
     for (int i = 0; i < 18; i++) {

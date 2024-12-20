@@ -150,25 +150,25 @@ static void test_cube18B_moves() {
 static void test_cube_solve(const char** scrambles, int NUM_TESTS) {
     init_solver();
 
-    cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
-    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+    F2L_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
+    LL_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
 
     alg_s *alg = NULL;
-    shift_cube_s cube = SOLVED_SHIFTCUBE;
+    cube18B_s cube = SOLVED_CUBE18B;
 
     printf("Performing tests\n");
     double sum = 0;
     for (uint8_t test = 0; test < NUM_TESTS; test++) {
-        cube = SOLVED_SHIFTCUBE;
+        cube = SOLVED_CUBE18B;
         alg = alg_from_alg_str(scrambles[test]);
         printf("Testing scramble: %s\n", scrambles[test]);
-        apply_alg(&cube, alg);
+        cube18B_apply_alg(&cube, alg);
         alg_s *solve = solve_cube(cube, f2l_table, last_layer_table);
-        apply_alg(&cube, solve);
-        if (!compare_cubes(&cube, &SOLVED_SHIFTCUBE)) {
+        cube18B_apply_alg(&cube, solve);
+        if (!compare_cube18Bs(&cube, &SOLVED_CUBE18B)) {
             printf("It didn't solve it, this is bad...\n");
         }
-        cube = SOLVED_SHIFTCUBE;
+        cube = SOLVED_CUBE18B;
         printf("Solution (%zu moves): ", solve->length);
         print_alg(solve);
         sum += solve->length;

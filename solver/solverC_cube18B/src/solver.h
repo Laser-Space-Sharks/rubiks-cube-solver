@@ -5,22 +5,18 @@
 #include "alg.h"
 #include "shift_cube.h"
 #include "cube_table.h"
+#include "xcross_table.h"
+#include "F2L_table.h"
+#include "LL_table.h"
 
 bool init_solver();
 void cleanup_solver();
 
-int stage_recursion(shift_cube_s *cube, const shift_cube_s *mask, const shift_cube_s *goal, alg_s *moves, uint8_t depth);
-alg_s* solve_stage(shift_cube_s cube, shift_cube_s mask);
+int bidirectional_recursion(cube18B_xcross_s *cube, xcross_table_s *our_ct, xcross_table_s *other_ct, alg_s *moves, uint8_t depth);
 
-int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table_s *other_ct, alg_s *moves, uint8_t depth);
-alg_s* bidirectional_search(const shift_cube_s *start, const shift_cube_s *goal, uint8_t max_depth);
+alg_s* solve_cube(cube18B_s cube, const F2L_table_s *f2l_table, const LL_table_s *ll_table);
 
-alg_s* solve_cross(shift_cube_s cube);
-
-alg_s* solve_cube(shift_cube_s cube, const cube_table_s *f2l_table, const cube_table_s *ll_table);
-alg_s* solve_f2l(shift_cube_s cube);
-
-cube_table_s* generate_last_layer_table(char *filename);
-cube_table_s* generate_f2l_table(char *filename);
+LL_table_s* generate_last_layer_table(char *filename);
+F2L_table_s* generate_f2l_table(char *filename);
 
 #endif // SOLVER_H

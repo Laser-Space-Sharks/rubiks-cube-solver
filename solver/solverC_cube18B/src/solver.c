@@ -8,12 +8,12 @@
 #include <stdio.h>
 #include <sys/types.h>
 
-static cube_table_s *xcross_start_ct = NULL;
-static cube_table_s *xcross_end_ct   = NULL;
+static xcross_table_s *xcross_start_ct = NULL;
+static xcross_table_s *xcross_end_ct   = NULL;
 
 bool init_solver() {
-    xcross_start_ct = cube_table_create(cube_table_depth_sizes[5]);
-    xcross_end_ct   = cube_table_create(cube_table_depth_sizes[5]);
+    xcross_start_ct = xcross_table_create(cube_table_depth_sizes[5]);
+    xcross_end_ct   = xcross_table_create(cube_table_depth_sizes[5]);
     if (!xcross_start_ct || !xcross_end_ct) {
         return false;
     }
@@ -22,93 +22,32 @@ bool init_solver() {
 }
 
 void cleanup_solver() {
-    cube_table_free(xcross_start_ct);
-    cube_table_free(xcross_end_ct);
+    xcross_table_free(xcross_start_ct);
+    xcross_table_free(xcross_end_ct);
 }
 
-shift_cube_s get_f2l_pair(const shift_cube_s *cube, uint8_t pair) {
-    if (pair >= 4) {
-        return NULL_CUBE;
-    }
-
-    shift_cube_s pair_edge = get_edges(cube, f2l_edge_colors[pair][0], f2l_edge_colors[pair][1]);
-    shift_cube_s pair_corner = get_corners(cube, f2l_corner_colors[pair][0], f2l_corner_colors[pair][1], f2l_corner_colors[pair][2]);
-
-    return ored_cube(&pair_edge, &pair_corner);
-}
-
-int stage_recursion(shift_cube_s *cube, const shift_cube_s *mask, const shift_cube_s *goal, alg_s *alg, uint8_t depth) {
+int bidirectional_recursion(cube18B_xcross_s *cube, xcross_table_s *our_ct, xcross_table_s *other_ct, alg_s *alg, uint8_t depth) {
     if (depth == 0) {
-        shift_cube_s test = masked_cube(cube, mask);
-
-        if (compare_cubes(&test, goal)) {
-            // holy crap, we did it!
-            return 1;
-        }
-
-        // no dice
+        cube18B_xcross_s f2l1 = *cube;
+        cube18B_xcross_s f2l2 = *cube;
+        cube18B_xcross_s f2l3 = *cube;
+        cube18B_xcross_s f2l4 = *cube;
+        cube18B_xcross_maskOnPair(&f2l1, 0);
+        cube18B_xcross_maskOnPair(&f2l2, 1);
+        cube18B_xcross_maskOnPair(&f2l3, 2);
+        cube18B_xcross_maskOnPair(&f2l4, 3);
+        xcross_table_insert(our_ct, &f2l1, alg);
+        xcross_table_insert(our_ct, &f2l2, alg);
+        xcross_table_insert(our_ct, &f2l3, alg);
+        xcross_table_insert(our_ct, &f2l4, alg);
+        xcross_table_insert(our_ct, cube, alg);
         return 0;
-    }
-
-    // depth > 0
-    move_e prev_move = (alg->length >= 1) ? alg->moves[alg->length-1] : MOVE_NULL;
-    move_e prev_prev_move = (alg->length >= 2) ? alg->moves[alg->length - 2] : MOVE_NULL;
-
-    for (move_e move = 0; move < NUM_MOVES; move++) {
-        if (move_faces[move] == move_faces[prev_move]) {
-            continue;
-        }
-
-        if (move_faces[move] == opposite_faces[move_faces[prev_move]] &&
-            (move_faces[move] == move_faces[prev_prev_move] || move_faces[move] > move_faces[prev_move])) {
-            continue;
-        }
-
-        alg_insert(alg, move, alg->length);
-        apply_move(cube, move);
-        move_e inv_move = move_inverted[move];
-        if (stage_recursion(cube, mask, goal, alg, depth - 1)) {
-            // we did it! Begin undoing these cube moves we've accrewed
-            apply_move(cube, inv_move);
-            return 1;
-        }
-        // keep going, move didn't pan out
-        alg_delete(alg, alg->length-1);
-        apply_move(cube, inv_move); // undo move
-    }
-
-    return 0;
-}
-
-
-// Iterative deepening depth-first search
-alg_s* solve_stage(shift_cube_s cube, shift_cube_s mask) {
-    alg_s *alg = alg_create(8);
-    shift_cube_s goal = masked_cube(&SOLVED_SHIFTCUBE, &mask);
-
-    for (uint8_t depth = 1; depth <= 10; depth++) {
-        if (stage_recursion(&cube, &mask, &goal, alg, depth)) {
-            break;
-        }
-    }
-
-    return alg;
-}
-
-int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table_s *other_ct, alg_s *alg, uint8_t depth) {
-    if (depth == 0) {
-        if (!cube_table_lookup(our_ct, cube)) {
-            cube_table_insert(our_ct, cube, alg);
-        }
-
-        return (cube_table_lookup(other_ct, cube) != NULL);
     }
 
     // depth > 0
     if (cube_table_lookup(our_ct, cube) != NULL &&
         cube_table_lookup(our_ct, cube)->list[0].length < alg->length) {
         return 0;
-
     }
 
     move_e prev_move = (alg->length >= 1) ? alg->moves[alg->length-1] : MOVE_NULL;
@@ -125,63 +64,14 @@ int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table
         }
 
         alg_insert(alg, move, alg->length);
-        apply_move(cube, move);
-        if (bidirectional_recursion(cube, our_ct, other_ct, alg, depth - 1)) {
-            // we did it!
-            return 1;
-        }
+        cube18B_xcross_apply_move(cube, move);
 
-        // keep going, move didn't pan out
+        bidirectional_recursion(cube, our_ct, other_ct, alg, depth - 1);
+        
         alg_delete(alg, alg->length-1);
         apply_move(cube, move_inverted[move]); // undo move
     }
     return 0;
-}
-
-alg_s* bidirectional_search(const shift_cube_s *start, const shift_cube_s *goal, uint8_t max_depth) {
-    uint8_t start_depth, end_depth;
-    start_depth = end_depth = max_depth/2;
-
-    if (max_depth % 2 == 1) {
-        start_depth++;
-    }
-
-    if (start_depth > MAX_CUBE_TABLE_DEPTH) {
-        printf("Attempted to recurse too deep for cube_table\n");
-        return NULL;
-    }
-
-    cube_table_s *start_ct = cube_table_create(cube_table_depth_sizes[start_depth]);
-    cube_table_s *end_ct   = cube_table_create(cube_table_depth_sizes[end_depth]);
-
-    alg_s *start_alg = alg_create(start_depth);
-    alg_s *end_alg   = alg_create(end_depth);
-
-    shift_cube_s start_cube = *start;
-    shift_cube_s end_cube   = *goal;
-
-    for (uint8_t depth = 0; depth < start_depth; depth++) {
-        if (bidirectional_recursion(&start_cube, start_ct, end_ct, start_alg, depth)) {
-            alg_free(end_alg);
-            end_alg = alg_copy(&cube_table_lookup(end_ct, &start_cube)->list[0]);
-            break;
-        }
-
-        if (bidirectional_recursion(&end_cube, end_ct, start_ct, end_alg, depth)) {
-            alg_free(start_alg);
-            start_alg = alg_copy(&cube_table_lookup(start_ct, &end_cube)->list[0]);
-            break;
-        }
-    }
-
-    alg_invert(end_alg);
-    alg_concat(start_alg, end_alg);
-
-    alg_free(end_alg);
-    cube_table_free(start_ct);
-    cube_table_free(end_ct);
-
-    return start_alg;
 }
 
 static alg_s* xcross_search(const shift_cube_s *start, const shift_cube_s *goal) {
