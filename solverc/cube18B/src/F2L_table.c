@@ -1,6 +1,7 @@
 #include "cube18B.h"
 #include "solver_print.h"
 #include "F2L_table.h"
+#include "shift_cube.h"
 
 typedef struct {
     cube18B_F2L_s key;

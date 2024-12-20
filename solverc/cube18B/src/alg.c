@@ -256,3 +256,29 @@ move_e* alg_concat(alg_s *dest, const alg_s *src) {
     dest->length = new_len;
     return dest->moves;
 }
+
+alg_list_s* alg_list_create(size_t size) {
+    alg_list_s* alg_list = (alg_list_s*)malloc(sizeof(alg_list_s));
+
+    alg_list->list = (alg_s*)malloc(size * sizeof(alg_s));
+    alg_list->num_algs = 0;
+    alg_list->size = size;
+
+    return alg_list;
+}
+void alg_list_append(alg_list_s *alg_list, alg_s* alg) {
+    if (alg_list->num_algs == alg_list->size) {
+        alg_list->size *= 2;
+        alg_list->list = (alg_s*)realloc(alg_list->list,
+                                              alg_list->size * sizeof(alg_s));
+    }
+    alg_list->list[alg_list->num_algs] = alg_static_copy(alg);
+    alg_list->num_algs++;
+}
+void alg_list_free(alg_list_s *alg_list) {
+    for (size_t index = 0; index < alg_list->num_algs; index++) {
+        free(alg_list->list[index].moves);
+    }
+    free(alg_list->list);
+    free(alg_list);
+}

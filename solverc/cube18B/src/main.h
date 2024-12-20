@@ -46,7 +46,7 @@ typedef struct {
 static inline uint8_t mod4(int64_t n) {
     return n & 3;
 }
-
+/*
 static bool unordered_match_faces_2x2(face_e a1, face_e a2, face_e b1, face_e b2) {
     return ((a1 == b1 || a1 == b2) &&
             (a2 == b1 || a2 == b2));
@@ -72,6 +72,6 @@ static int8_t find_face_in_3(face_e a1, face_e a2, face_e a3, face_e b) {
     else if (b == a3) ind = 2;
     else ind = -1;
     return ind;
-}
+}*/
 
 #endif // MAIN_H

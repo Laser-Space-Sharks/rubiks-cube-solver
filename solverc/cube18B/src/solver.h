@@ -3,16 +3,23 @@
 
 #include "main.h"
 #include "alg.h"
-#include "shift_cube.h"
 #include "cube_table.h"
 #include "xcross_table.h"
 #include "F2L_table.h"
 #include "LL_table.h"
+#include "move.h"
 
 bool init_solver();
 void cleanup_solver();
 
-int bidirectional_recursion(cube18B_xcross_s *cube, xcross_table_s *our_ct, xcross_table_s *other_ct, alg_s *moves, uint8_t depth);
+int bidirectional_recursion(
+    cube18B_xcross_s *cube, 
+    xcross_table_s *our_ct, 
+    const xcross_table_s *other_ct, 
+    alg_s *alg, 
+    cube_list_s* cube_list,
+    uint8_t depth
+);
 
 alg_s* solve_cube(cube18B_s cube, const F2L_table_s *f2l_table, const LL_table_s *ll_table);
 

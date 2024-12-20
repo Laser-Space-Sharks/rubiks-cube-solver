@@ -68,7 +68,7 @@ static void stress_test_cube18B_xcross(size_t apply_alg_times, const alg_s* alg)
 }
 static void stress_test(size_t apply_alg_times, const char* algstr) {
     alg_s* alg = alg_from_alg_str(algstr);
-    printf("alg to stress test %d times: \n", apply_alg_times);
+    printf("alg to stress test %zu times: \n", apply_alg_times);
     print_alg(alg);
     stress_test_shiftcube(apply_alg_times, alg);
     stress_test_cube18B(apply_alg_times, alg);
@@ -178,8 +178,8 @@ static void test_cube_solve(const char** scrambles, int NUM_TESTS) {
     printf("Average solve length: %f\n", sum / NUM_TESTS);
     printf("\n");
 
-    cube_table_free(f2l_table);
-    cube_table_free(last_layer_table);
+    F2L_table_free(f2l_table);
+    LL_table_free(last_layer_table);
 
     cleanup_solver();
 }
@@ -190,9 +190,9 @@ static void test_simplifier_1case(char* algstr, char* simplifiedalgstr) {
     alg_s* simplified = alg_from_alg_str(simplifiedalgstr);
     if (alg->length != simplified->length) {
         printf("ALGS DON'T MATCH:\n");
-        printf("Length of alg: %d\n", alg->length);
+        printf("Length of alg: %zu\n", alg->length);
         print_alg(alg);
-        printf("Length of simplified: %d\n", simplified->length);
+        printf("Length of simplified: %zu\n", simplified->length);
         print_alg(simplified);
     } else {
         shift_cube_s cube1 = SOLVED_SHIFTCUBE, cube2 = SOLVED_SHIFTCUBE;
@@ -220,7 +220,6 @@ static void test_simplifer() {
 }
 
 int main(int argc, char *argv[]) {
-    shift_cube_s cube = SOLVED_SHIFTCUBE;
 
     #define NUM_TESTS 9
     const char* scrambles[NUM_TESTS] = {
@@ -244,9 +243,9 @@ int main(int argc, char *argv[]) {
         //test_shiftcube_moves();
         //test_cube18B_moves();
 
-        stress_test(40000, scrambles[0]);
+        //stress_test(40000, scrambles[0]);
 
-        test_simplifer();
+        //test_simplifer();
     }
 
     return 0;

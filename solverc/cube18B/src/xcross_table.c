@@ -1,6 +1,7 @@
 #include "cube18B.h"
 #include "solver_print.h"
 #include "xcross_table.h"
+#include "shift_cube.h"
 
 typedef struct {
     cube18B_xcross_s key;
