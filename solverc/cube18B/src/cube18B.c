@@ -7,8 +7,13 @@ void print_cube18B(const cube18B_s* cube) {
         printf("%s ", cubiePrints[cube->cubies[i]]);
     } printf("\n");
 }
-void print_cube18B_xcross(const cube18B_xcross_s* cube) {
+void print_cube18B_xcross4(const cube18B_xcross4_s* cube) {
     for (int i = 0; i < 12; i++) {
+        printf("%s ", cubiePrints[cube->cubies[i]]);
+    } printf("\n");
+}
+void print_cube18B_xcross1(const cube18B_xcross1_s* cube) {
+    for (int i = 0; i < 6; i++) {
         printf("%s ", cubiePrints[cube->cubies[i]]);
     } printf("\n");
 }
@@ -348,18 +353,18 @@ void print_cubieAfterMove() {
 cube_list_s* cube_list_create(size_t size) {
     cube_list_s *list = (cube_list_s*)malloc(sizeof(cube_list_s));
 
-    list->cubes = (cube18B_xcross_s*)malloc(size * sizeof(cube18B_xcross_s));
+    list->cubes = (cube18B_xcross4_s*)malloc(size * sizeof(cube18B_xcross4_s));
     list->length = 0;
     list->size = size;
 
     return list;
 }
-void cube_list_append(cube_list_s* cube_list, const cube18B_xcross_s* cube) {
+void cube_list_append(cube_list_s* cube_list, const cube18B_xcross4_s* cube) {
 	// reallocate if needed
     if (cube_list->length == cube_list->size) {
         cube_list->size *= 2;
-        cube_list->cubes = (cube18B_xcross_s*)realloc(cube_list->cubes,
-                                                      cube_list->size * sizeof(cube18B_xcross_s));
+        cube_list->cubes = (cube18B_xcross4_s*)realloc(cube_list->cubes,
+                                                      cube_list->size * sizeof(cube18B_xcross4_s));
     }
     cube_list->cubes[cube_list->length] = *cube;
     cube_list->length++;
@@ -372,13 +377,13 @@ void cube_list_free(cube_list_s* cube_list) {
     free(cube_list);
 }
 
-cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube) {
+cube18B_xcross4_s cube18B_xcross4_from_cube18B(const cube18B_s* cube) {
     /*
     Tables Used: None
     Functions Used: None
     External Types Used: None
     */
-    cube18B_xcross_s xcross_portion = {
+    cube18B_xcross4_s xcross4_portion = {
         .cubies = {
             cube->cubies[0],
             cube->cubies[1],
@@ -393,7 +398,7 @@ cube18B_xcross_s cube18B_xcross_from_cube18B(const cube18B_s* cube) {
             cube->cubies[10],
             cube->cubies[11]
         }
-    }; return xcross_portion;
+    }; return xcross4_portion;
 }
 
 cube18B_1LLL_s cube18B_1LLL_from_cube18B(const cube18B_s* cube) {
@@ -428,7 +433,7 @@ cube18B_F2L_s cube18B_F2L_from_cube18B(const cube18B_s* cube) {
     }; return F2L_portion;
 }
 
-cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cube18B_1LLL_s* LL) {
+cube18B_s cube18B_from_xcross4_and_1LLL(const cube18B_xcross4_s* xcross4, const cube18B_1LLL_s* LL) {
     /*
     Tables Used: None
     Functions Used: None
@@ -436,18 +441,18 @@ cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cub
     */
     cube18B_s cube = {
         .cubies = {
-            xcross->cubies[0],
-            xcross->cubies[1],
-            xcross->cubies[2],
-            xcross->cubies[3],
-            xcross->cubies[4],
-            xcross->cubies[5],
-            xcross->cubies[6],
-            xcross->cubies[7],
-            xcross->cubies[8],
-            xcross->cubies[9],
-            xcross->cubies[10],
-            xcross->cubies[11],
+            xcross4->cubies[0],
+            xcross4->cubies[1],
+            xcross4->cubies[2],
+            xcross4->cubies[3],
+            xcross4->cubies[4],
+            xcross4->cubies[5],
+            xcross4->cubies[6],
+            xcross4->cubies[7],
+            xcross4->cubies[8],
+            xcross4->cubies[9],
+            xcross4->cubies[10],
+            xcross4->cubies[11],
             LL->cubies[0],
             LL->cubies[1],
             LL->cubies[2],
@@ -458,21 +463,41 @@ cube18B_s cube18B_from_xcross_and_1LLL(const cube18B_xcross_s* xcross, const cub
     }; return cube;
 }
 
-void cube18B_xcross_maskOnPair(cube18B_xcross_s* cube, uint8_t pair) {
-    for (int i = 4; i < 12; i += 2) {
-        if (i-4 != 6-2*mod4(pair+3)) {
-            cube->cubies[i] = CUBIE_NULL;
-            cube->cubies[i+1] = CUBIE_NULL;
+void cube18B_xcross4_maskOnPair(cube18B_xcross4_s* cube, uint8_t pair) {
+    uint8_t forbiddenI = 6-2*mod4(pair+3)+4;
+    cubie_e f2lpairE = cube->cubies[forbiddenI];
+    cubie_e f2lpairC = cube->cubies[forbiddenI+1];
+
+    for (int i = 4; i < 12; i++) cube->cubies[i] = CUBIE_NULL;
+    cube->cubies[forbiddenI] = f2lpairE;
+    cube->cubies[forbiddenI+1] = f2lpairC;
+}
+cube18B_xcross1_s cube18B_xcross4_to_xcross1(const cube18B_xcross4_s* cube, uint8_t pair) {
+    // i-4 == 6-2*mod4(pair+3)
+    // i == 6-2*mod4(pair+3)+4
+    // i-4 == 6-2*mod4(pair+3)
+    // i-4 == 6-2*mod4(pair+3)
+    
+    cube18B_xcross1_s xcross1 = {
+        .cubies = {
+            cube->cubies[0],
+            cube->cubies[1],
+            cube->cubies[2],
+            cube->cubies[3],
+            cube->cubies[6-2*mod4(pair+3)+4],
+            cube->cubies[6-2*mod4(pair+3)+5],
         }
-    }
+    };
+    return xcross1;
 }
 void cube18B_F2L_maskOnPair(cube18B_F2L_s* cube, uint8_t pair) {
-    for (int i = 0; i < 8; i+= 2) {
-        if (i != 6-2*mod4(pair+3)) {
-            cube->cubies[i] = CUBIE_NULL;
-            cube->cubies[i+1] = CUBIE_NULL;
-        }
-    }
+    uint8_t forbiddenI = 6-2*mod4(pair+3);
+    cubie_e f2lpairE = cube->cubies[forbiddenI];
+    cubie_e f2lpairC = cube->cubies[forbiddenI+1];
+
+    for (int i = 0; i < 8; i++) cube->cubies[i] = CUBIE_NULL;
+    cube->cubies[forbiddenI] = f2lpairE;
+    cube->cubies[forbiddenI+1] = f2lpairC;
 }
 
 bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2) {
@@ -484,9 +509,18 @@ bool compare_cube18Bs(const cube18B_s* cube1, const cube18B_s* cube2) {
         }
     } return res;
 }
-bool compare_cube18B_xcross(const cube18B_xcross_s* cube1, const cube18B_xcross_s* cube2) {
+bool compare_cube18B_xcross4(const cube18B_xcross4_s* cube1, const cube18B_xcross4_s* cube2) {
     bool res = true;
     for (int i = 0; i < 12; i++) {
+        if (cube1->cubies[i] != cube2->cubies[i]) {
+            res = false;
+            break;
+        }
+    } return res;
+}
+bool compare_cube18B_xcross1(const cube18B_xcross1_s* cube1, const cube18B_xcross1_s* cube2) {
+    bool res = true;
+    for (int i = 0; i < 6; i++) {
         if (cube1->cubies[i] != cube2->cubies[i]) {
             res = false;
             break;
@@ -541,7 +575,7 @@ void cube18B_apply_move(cube18B_s* cube, move_e move) {
     cube->cubies[17] = cubieAfterMove[move][cube->cubies[17]];
 }
 
-void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_e move) {
+void cube18B_xcross4_apply_move(cube18B_xcross4_s* cube, move_e move) {
     /*
     Tables Used: 
         cubieAfterMove[]
@@ -563,7 +597,14 @@ void cube18B_xcross_apply_move(cube18B_xcross_s* cube, move_e move) {
     cube->cubies[10] = cubieAfterMove[move][cube->cubies[10]];
     cube->cubies[11] = cubieAfterMove[move][cube->cubies[11]];
 }
-
+void cube18B_xcross1_apply_move(cube18B_xcross1_s* cube, move_e move) {
+    cube->cubies[0] = cubieAfterMove[move][cube->cubies[0]];
+    cube->cubies[1] = cubieAfterMove[move][cube->cubies[1]];
+    cube->cubies[2] = cubieAfterMove[move][cube->cubies[2]];
+    cube->cubies[3] = cubieAfterMove[move][cube->cubies[3]];
+    cube->cubies[4] = cubieAfterMove[move][cube->cubies[4]];
+    cube->cubies[5] = cubieAfterMove[move][cube->cubies[5]]; 
+}
 void cube18B_1LLL_apply_move(cube18B_1LLL_s* cube, move_e move) {
     /*
     Tables Used: 
@@ -596,9 +637,14 @@ void cube18B_apply_alg(cube18B_s *cube, const alg_s *alg) {
         cube18B_apply_move(cube, alg->moves[i]);
     }
 }
-void cube18B_xcross_apply_alg(cube18B_xcross_s *cube, const alg_s *alg) {
+void cube18B_xcross4_apply_alg(cube18B_xcross4_s *cube, const alg_s *alg) {
     for (size_t i = 0; i < alg->length; i++) {
-        cube18B_xcross_apply_move(cube, alg->moves[i]);
+        cube18B_xcross4_apply_move(cube, alg->moves[i]);
+    }
+}
+void cube18B_xcross1_apply_alg(cube18B_xcross1_s *cube, const alg_s *alg) {
+    for (size_t i = 0; i < alg->length; i++) {
+        cube18B_xcross1_apply_move(cube, alg->moves[i]);
     }
 }
 void cube18B_1LLL_apply_alg(cube18B_1LLL_s *cube, const alg_s *alg) {

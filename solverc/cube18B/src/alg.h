@@ -37,7 +37,7 @@ move_e* alg_concat(alg_s *dest, const alg_s *src);
 
 
 alg_list_s* alg_list_create(size_t size);
-void alg_list_append(alg_list_s *alg_list, alg_s* alg);
+void alg_list_append(alg_list_s *alg_list, const alg_s* alg);
 void alg_list_free(alg_list_s *alg_list);
 
 #endif // ALG_H

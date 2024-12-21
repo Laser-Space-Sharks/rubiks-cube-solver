@@ -266,7 +266,7 @@ alg_list_s* alg_list_create(size_t size) {
 
     return alg_list;
 }
-void alg_list_append(alg_list_s *alg_list, alg_s* alg) {
+void alg_list_append(alg_list_s *alg_list, const alg_s* alg) {
     if (alg_list->num_algs == alg_list->size) {
         alg_list->size *= 2;
         alg_list->list = (alg_s*)realloc(alg_list->list,

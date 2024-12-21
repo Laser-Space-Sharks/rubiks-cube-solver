@@ -55,13 +55,13 @@ static void stress_test_cube18B(size_t apply_alg_times, const alg_s* alg) {
 
     printf("Cube18B time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC);
 }
-static void stress_test_cube18B_xcross(size_t apply_alg_times, const alg_s* alg) {
-    cube18B_xcross_s xcross = SOLVED_CUBE18B_XCROSS;
+static void stress_test_cube18B_xcross4(size_t apply_alg_times, const alg_s* alg) {
+    cube18B_xcross4_s xcross = SOLVED_CUBE18B_XCROSS4;
     printf("Stress-testing cube18B_xcross with %zu moves...\n", apply_alg_times*(alg->length));
 
     clock_t start_cube18b = clock();
     for (int i = 0; i < apply_alg_times; i++) {
-        cube18B_xcross_apply_alg(&xcross, alg);
+        cube18B_xcross4_apply_alg(&xcross, alg);
     } clock_t end_cube18b = clock();
 
     printf("Cube18B_xcross time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC);
@@ -72,7 +72,7 @@ static void stress_test(size_t apply_alg_times, const char* algstr) {
     print_alg(alg);
     stress_test_shiftcube(apply_alg_times, alg);
     stress_test_cube18B(apply_alg_times, alg);
-    stress_test_cube18B_xcross(apply_alg_times, alg);
+    stress_test_cube18B_xcross4(apply_alg_times, alg);
     printf("Finished stress-testing!\n");
     printf("\n");
     alg_free(alg);
@@ -148,7 +148,7 @@ static void test_cube18B_moves() {
     printf("\n");
 }
 static void test_cube_solve(const char** scrambles, int NUM_TESTS) {
-    init_solver();
+    init_solver1();
 
     F2L_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
     LL_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
@@ -181,7 +181,7 @@ static void test_cube_solve(const char** scrambles, int NUM_TESTS) {
     F2L_table_free(f2l_table);
     LL_table_free(last_layer_table);
 
-    cleanup_solver();
+    cleanup_solver1();
 }
 
 static void test_simplifier_1case(char* algstr, char* simplifiedalgstr) {
