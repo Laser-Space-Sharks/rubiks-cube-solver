@@ -2,6 +2,8 @@ from bisect import bisect_left
 from dataclasses import dataclass
 from itertools import product
 import numpy as np
+import sys
+sys.setrecursionlimit(100000)
 '''
 -----------------------------------------------------
 Control Panel:                 |        n
@@ -323,6 +325,15 @@ UNEXTENDED_ARMS = [ArmState(0, 0), ArmState(0, 1), ArmState(0, 2)]
 EXTENDED_ARMS = [ArmState(1, 0), ArmState(1, 1), ArmState(1, 2)]
 ALL_ARM_STATES = [ArmState(0, 0), ArmState(0, 1), ArmState(0, 2),
                 ArmState(1, 0), ArmState(1, 1), ArmState(1, 2)]
+
+def edge_exists(startState, endState, TOTAL_STATES):
+    if startState not in TOTAL_STATES: return False
+    for _, state in TOTAL_STATES[startState]:
+        if state == endState: return True
+    return False
+
+#BADSTART = State(Orientation('D', 3), RobotState(ArmState(1, 2), ArmState(1, 2), ArmState(1, 2), ArmState(1, 2)))
+#BADEND = State(Orientation('R', 1), RobotState(ArmState(1, 2), ArmState(0, 2), ArmState(1, 1), ArmState(0, 1)))
 #########################################################
 ##                      FUNCTIONS                      ##
 #########################################################
@@ -415,16 +426,21 @@ for persp, armU, armR, armD, armL in product(ALLPERSPS, [ArmState(1, 1), ArmStat
                                                         UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in y1(startState):
-        TOTAL_STATES[state].append((max(calc_weight(startState, endState), Y1time), endState))
-
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y1time), endState))
+#    if edge_exists(BADSTART, BADEND, TOTAL_STATES):
+#        print(BADSTART)
+#        print(startState)
+#        exit()
+#print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
+#print(y1(BADSTART))
 # y2
 for persp, armR, armL, (armU, armD) in product(ALLPERSPS, UNEXTENDED_ARMS,
                                                           UNEXTENDED_ARMS,
                                                           [(ArmState(1, 0), ArmState(1, 2)), (ArmState(1, 2), ArmState(1, 0))]):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in y2(startState):
-        TOTAL_STATES[state].append((max(calc_weight(startState, endState), Y2time), endState))
-
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y2time), endState))
+#print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 # y3
 for persp, armU, armR, armD, armL in product(ALLPERSPS, [ArmState(1, 1), ArmState(1, 2)],
                                                         UNEXTENDED_ARMS,
@@ -432,24 +448,24 @@ for persp, armU, armR, armD, armL in product(ALLPERSPS, [ArmState(1, 1), ArmStat
                                                         UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in y3(startState):
-        TOTAL_STATES[state].append((max(calc_weight(startState, endState), Y3time), endState))
-
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y3time), endState))
+#print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 # x1
 for persp, (armR, armL), armU, armD in product(ALLPERSPS, [(ArmState(1, 1), ArmState(1, 2)), (ArmState(1, 0), ArmState(1, 1))],
                                                           UNEXTENDED_ARMS,
                                                           UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in x1(startState):
-        TOTAL_STATES[state].append((max(calc_weight(startState, endState), X1time), endState))
-
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), X1time), endState))
+#print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 # x3
 for persp, (armR, armL), armU, armD in product(ALLPERSPS, [(ArmState(1, 1), ArmState(1, 0)), (ArmState(1, 2), ArmState(1, 1))],
                                                           UNEXTENDED_ARMS,
                                                           UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in x3(startState):
-        TOTAL_STATES[state].append((max(calc_weight(startState, endState), X3time), endState))
-
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), X3time), endState))
+#print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 '''
 Before, We created empty nodes to address every possible servo state.
 We then connected all the nodes we could with all the cube rotations we could.
@@ -465,7 +481,7 @@ for startState in TOTAL_STATES.keys():
         endState = State(startState.persp, RobotState(armU, armR, armD, armL))
         if is_valid_state(endState) and is_valid_step(startState, endState):
             TOTAL_STATES[startState].append((calc_weight(startState, endState), endState))
-
+#print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 print(f"# of possible servo states: {len(list(TOTAL_STATES.keys()))}")
 print(f"# of edges in graph: {sum(len(i) for i in TOTAL_STATES.values())/2}")
 print(f"-------------------------------------")
@@ -497,6 +513,55 @@ print(len(ROBOT_MOVE_STATES))
 
 
 
+#######################################################################################################
+######                                                                                           ######
+######                                         ANALYZE GRAPH                                     ######
+######                                                                                           ######
+######                                                                                           ######
+#######################################################################################################
+#########################################################
+##                      FUNCTIONS                      ##
+#########################################################
+def check_connection(node, already_checked: set[State]):
+    for _, node2 in TOTAL_STATES[node]:
+        if node2 not in already_checked:
+            already_checked.add(node2)
+            check_connection(node2, already_checked)
+#########################################################
+##                         GO                          ##
+#########################################################
+# We will now separate the total graph into its separate connected components, if there are any.
+CONNECTED_COMPONENTS = []
+for i in TOTAL_STATES:
+    good = False
+    for space in CONNECTED_COMPONENTS:
+        if i in space:
+            good = True
+            break
+    if not good:
+        newspace = set()
+        check_connection(i, newspace)
+        CONNECTED_COMPONENTS.append(newspace)
+
+SEPARATED_TOTAL_STATES = [{key: TOTAL_STATES[key] for key in Connected_component} for Connected_component in CONNECTED_COMPONENTS]
+
+print(f"There are {len(CONNECTED_COMPONENTS)} separate connected components in the graph")
+for i, v in enumerate(CONNECTED_COMPONENTS):
+    print(f"nodes in servospace{i+1}: {len(v)}")
+for i, STATES in enumerate(SEPARATED_TOTAL_STATES):
+    for v in STATES.values():
+        for w, node in v:
+            if node not in STATES:
+                print(f"{node} not in SEPARATED_TOTAL_STATES[{i}]")
+
+print(f"-------------------------------------")
+
+#######################################################################################################
+######                                                                                           ######
+######                                         USE DIJKSTRA                                      ######
+######                                                                                           ######
+######                                                                                           ######
+#######################################################################################################
 def Dijkstra(source: State, graph_dict: dict[State, list[float, State]]):
     distances = {key: np.inf for key in graph_dict.keys()}
     distances[source] = 0
@@ -530,16 +595,24 @@ def trace_path(state1: State, parents: dict[State, State], state2):
         parent = parents[parent]
     return [state1] + e[::-1] + [state2]
 
+
+
 PATHS = []
 count = 0
 for Rstate1 in ROBOT_MOVE_STATES:
-    _, parents = Dijkstra(State(Orientation('F', 0), Rstate1), TOTAL_STATES)
-    count += 1
-    print(f"\r\tDijkstra finished! {count}/{len(ROBOT_MOVE_STATES)}", end='', flush=True)
-    for persp, Rstate2 in product(ALLPERSPS, ROBOT_MOVE_STATES):
-        if persp == Orientation('F', 0) and Rstate1 == Rstate2: continue
-        if State(persp, Rstate2) not in parents: continue
-        PATHS.append(trace_path(State(Orientation('F', 0), Rstate1), parents, State(persp, Rstate2)))
+    startState = State(Orientation('F', 0), Rstate1)
+    for Connected_graph in SEPARATED_TOTAL_STATES:
+        if startState not in Connected_graph: continue
+
+        _, parents = Dijkstra(startState, Connected_graph)
+        count += 1
+        print(f"\rDijkstra finished! {count}/{len(ROBOT_MOVE_STATES)}", end='', flush=True)
+        for persp, Rstate2 in product(ALLPERSPS, ROBOT_MOVE_STATES):
+            endState = State(persp, Rstate2)
+            if endState == startState: continue
+            if endState not in Connected_graph: continue
+            PATHS.append(trace_path(startState, parents, endState))
+        break
 print()
 print(len(PATHS))
 
