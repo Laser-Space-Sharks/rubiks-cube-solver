@@ -242,14 +242,14 @@ class RobotState:
     #    self.L: ArmState = armL
     def as2B(self) -> int:
         bitmask = 0
-        bitmask *= 2; bitmask |= self.U.e
-        bitmask *= 2; bitmask |= self.R.e
-        bitmask *= 2; bitmask |= self.D.e
-        bitmask *= 2; bitmask |= self.L.e
-        bitmask *= 3; bitmask |= self.U.rot
-        bitmask *= 3; bitmask |= self.R.rot
-        bitmask *= 3; bitmask |= self.D.rot
-        bitmask *= 3; bitmask |= self.L.rot
+        bitmask *= 2; bitmask += self.U.e
+        bitmask *= 2; bitmask += self.R.e
+        bitmask *= 2; bitmask += self.D.e
+        bitmask *= 2; bitmask += self.L.e
+        bitmask *= 3; bitmask += self.U.rot
+        bitmask *= 3; bitmask += self.R.rot
+        bitmask *= 3; bitmask += self.D.rot
+        bitmask *= 3; bitmask += self.L.rot
         return bitmask
     #def __eq__(self, other: 'RobotState'):
     #    if (not isinstance(other, RobotState)): return False
