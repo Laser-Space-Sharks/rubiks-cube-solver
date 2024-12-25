@@ -184,6 +184,14 @@ class RobotState:
         bitmask <<= 2; bitmask |= self.D.rot
         bitmask <<= 2; bitmask |= self.L.rot
         return bitmask
+    def asCommand(self):
+        string = ""
+        string += ("N" if self.U.e else "n") + "."
+        string += ("E" if self.R.e else "e") + "."
+        string += ("S" if self.D.e else "s") + "."
+        string += ("W" if self.L.e else "w") + "."
+        string += f"U{self.U.rot}.R{self.R.rot}.D{self.D.rot}.L{self.L.rot}"
+        return string
     #def __eq__(self, other: 'RobotState'):
     #    if (not isinstance(other, RobotState)): return False
     #    return (self.as2B == other.as2B())

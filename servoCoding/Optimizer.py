@@ -1,8 +1,6 @@
 from bisect import bisect_left
-from itertools import product
 from Robot_values import *
 from DataTypes import *
-import numpy as np
 import sys
 sys.setrecursionlimit(100000)
 '''
@@ -142,72 +140,46 @@ INTER_MOVE_TABLE: dict[State, list[tuple[float, State, list[State]]]] = get_inte
 print(f"WE GOT THE INTER_MOVE_TABLE: length {len(INTER_MOVE_TABLE)}")
 
 def state_after_move(move: Move, state: State) -> list[State]|None:
-    robotmove = 0
-    if move_from_orientation(state.persp, RoboMove('U', 1)).face == move.face: robotmove = RoboMove('U', move.turns)
-    elif move_from_orientation(state.persp, RoboMove('R', 1)).face == move.face: robotmove = RoboMove('R', move.turns)
-    elif move_from_orientation(state.persp, RoboMove('D', 1)).face == move.face: robotmove = RoboMove('D', move.turns)
-    elif move_from_orientation(state.persp, RoboMove('L', 1)).face == move.face: robotmove = RoboMove('L', move.turns)
-    else: return None
+    temp = Orientation_to_arr6[state.persp][faces_to_nums[move.face]]
+    if (temp == 'F' or temp == 'B'): return None
+    robotmove = RoboMove(temp, move.turns)
 
+    def ArmAfterMove(turns, rot): 
+        if turns == 1: return ArmState(1, rot+1)
+        if turns == 2: return ArmState(1, 2-rot)
+        if turns == 3: return ArmState(1, rot-1)
 
     if robotmove.face == 'U':
         if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return None
         if state.servos.R.rot == 1 or state.servos.L.rot == 1: return None
-        if robotmove.turns == 1:
-            if state.servos.U.rot < 2: return [State(state.persp, RobotState(ArmState(1, state.servos.U.rot+1), state.servos.R, state.servos.D, state.servos.L))]
-            else: return None
-        if robotmove.turns == 2:
-            if state.servos.U.rot == 1: return None
-            else: return [State(state.persp, RobotState(ArmState(1, 2-state.servos.U.rot), state.servos.R, state.servos.D, state.servos.L))]
-        if robotmove.turns == 3:
-            if state.servos.U.rot > 0: return [State(state.persp, RobotState(ArmState(1, state.servos.U.rot-1), state.servos.R, state.servos.D, state.servos.L))]
-            else: return None
+        if state.servos.U.rot == 3-robotmove.turns: return None
+        endStateOfU = ArmAfterMove(robotmove.turns, state.servos.U.rot)
+        return [State(state.persp, RobotState(endStateOfU, state.servos.R, state.servos.D, state.servos.L))]
     if robotmove.face == 'R':
         if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return None
         if state.servos.U.rot == 1 or state.servos.D.rot == 1: return None
-        if robotmove.turns == 1:
-            if state.servos.R.rot < 2: return [State(state.persp, RobotState(state.servos.U, ArmState(1, state.servos.R.rot+1), state.servos.D, state.servos.L))]
-            else: return None
-        if robotmove.turns == 2:
-            if state.servos.R.rot == 1: return None
-            else: return [State(state.persp, RobotState(state.servos.U, ArmState(1, 2-state.servos.R.rot), state.servos.D, state.servos.L))]
-        if robotmove.turns == 3:
-            if state.servos.R.rot > 0: return [State(state.persp, RobotState(state.servos.U, ArmState(1, state.servos.R.rot-1), state.servos.D, state.servos.L))]
-            else: return None
+        if state.servos.R.rot == 3-robotmove.turns: return None
+        endStateOfR = ArmAfterMove(robotmove.turns, state.servos.R.rot)
+        return [State(state.persp, RobotState(state.servos.U, endStateOfR, state.servos.D, state.servos.L))]
     if robotmove.face == 'L':
         if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return None
         if state.servos.U.rot == 1 or state.servos.D.rot == 1: return None
-        if robotmove.turns == 1:
-            if state.servos.L.rot < 2: return [State(state.persp, RobotState(state.servos.U, state.servos.R, state.servos.D, ArmState(1, state.servos.L.rot+1)))]
-            else: return None
-        if robotmove.turns == 2:
-            if state.servos.L.rot == 1: return None
-            else: return [State(state.persp, RobotState(state.servos.U, state.servos.R, state.servos.D, ArmState(1, 2-state.servos.L.rot)))]
-        if robotmove.turns == 3:
-            if state.servos.L.rot > 0: return [State(state.persp, RobotState(state.servos.U, state.servos.R, state.servos.D, ArmState(1, state.servos.L.rot-1)))]
-            else: return None
+        if state.servos.L.rot == 3-robotmove.turns: return None
+        endStateOfL = ArmAfterMove(robotmove.turns, state.servos.L.rot)
+        return [State(state.persp, RobotState(state.servos.U, state.servos.R, state.servos.D, endStateOfL))]
     if robotmove.face == 'D':
         if not (state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return None
         if state.servos.R.rot == 1 or state.servos.L.rot == 1: return None
-        endStateOfD = None
-        if robotmove.turns == 1:
-            if state.servos.L.rot < 2: endStateOfD = ArmState(1, state.servos.D.rot+1)
-            else: return None
-        if robotmove.turns == 2:
-            if state.servos.L.rot == 1: return None
-            else: endStateOfD = ArmState(1, 2-state.servos.D.rot)
-        if robotmove.turns == 3:
-            if state.servos.L.rot > 0: endStateOfD = ArmState(1, state.servos.L.rot-1)
-            else: return None
+        if state.servos.D.rot == 3-robotmove.turns: return None
+        endStateOfD = ArmAfterMove(robotmove.turns, state.servos.D.rot)
         
         if (state.servos.U.e):
             return [State(state.persp, RobotState(state.servos.U, state.servos.R, endStateOfD, state.servos.L)),
                     State(state.persp, RobotState(ArmState(0, state.servos.U.rot), state.servos.R, endStateOfD, state.servos.L))]
-        else:
-            return [State(state.persp, RobotState(ArmState(1, state.servos.U.rot), state.servos.R, endStateOfD, state.servos.L)),
-                    State(state.persp, RobotState(ArmState(0, 0), state.servos.R, endStateOfD, state.servos.L)),
-                    State(state.persp, RobotState(ArmState(0, 1), state.servos.R, endStateOfD, state.servos.L)),
-                    State(state.persp, RobotState(ArmState(0, 2), state.servos.R, endStateOfD, state.servos.L))]
+        return [State(state.persp, RobotState(ArmState(1, state.servos.U.rot), state.servos.R, endStateOfD, state.servos.L)),
+                State(state.persp, RobotState(ArmState(0, 0), state.servos.R, endStateOfD, state.servos.L)),
+                State(state.persp, RobotState(ArmState(0, 1), state.servos.R, endStateOfD, state.servos.L)),
+                State(state.persp, RobotState(ArmState(0, 2), state.servos.R, endStateOfD, state.servos.L))]
 def state_after_opposite_moves_pair(move1: Move, move2: Move, state: State):
     if move1.face != opposites[move2.face]: return None
     if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return None
@@ -231,17 +203,32 @@ def algstr_to_alg(algstr: str):
         for mv in algstr.strip().split()
     ]
 
+def is_valid_step(state: State, state2: State):
+    if state == state2: return False
+    U, R, D, L = state.unpackServos()
+    U2, R2, D2, L2 = state2.unpackServos()
+    for v1, v2 in zip(state.unpackServos(), state2.unpackServos()):
+        if v1.rot != v2.rot and (v1.e or v2.e): return False
+
+    Etoggling = [(U.e!=U2.e), (R.e!=R2.e), (D.e!=D2.e), (L.e!=L2.e)]
+    if Etoggling[0] and Etoggling[1] and U.rot == R.rot == 1: return False
+    if Etoggling[1] and Etoggling[2] and R.rot == D.rot == 1: return False
+    if Etoggling[2] and Etoggling[3] and D.rot == L.rot == 1: return False
+    if Etoggling[3] and Etoggling[0] and L.rot == U.rot == 1: return False
+    if Etoggling[2] and (Etoggling[1] or Etoggling[3]): return False
+    return True
+
 def Optimize_for_alg(alg: list[tuple[str, int]]):
-    alg_sections = [[Move(alg[0][0], alg[0][1])]]
+    alg_sections = []
     for mv in alg:
-        if len(alg_sections[-1]) == 1 and alg_sections[-1][0].face == opposites[mv[0]]:
+        if alg_sections and len(alg_sections[-1]) == 1 and alg_sections[-1][0].face == opposites[mv[0]]:
             alg_sections[-1].append(Move(mv[0], mv[1]))
         else: alg_sections.append([Move(mv[0], mv[1])])
-
+    print(alg_sections)
     ############################################ SUMMON Edsger W. Dijkstra ###############################################
     def update_key(priority_queue_nodes, priority_queue_nums, parent, neighbor, dist):
         if neighbor not in distances:
-            p = bisect_left(priority_queue_nums, dist)+1
+            p = bisect_left(priority_queue_nums, dist)
             priority_queue_nodes.insert(p, neighbor)
             priority_queue_nums.insert(p, dist)
             distances[neighbor] = dist
@@ -265,7 +252,7 @@ def Optimize_for_alg(alg: list[tuple[str, int]]):
     priority_queue_nodes = [Robot_start_state]
     priority_queue_nums = [0]
     
-    solved = False
+    Robot_end_state = None
     starting_index = 0
     record_depth = 0
 
@@ -300,7 +287,7 @@ def Optimize_for_alg(alg: list[tuple[str, int]]):
         elif current_node[1] == "after":
             N = current_node[0]
             if (N == len(alg_sections)-1): 
-                solved = True
+                Robot_end_state = current_node
                 print(f"WE SOLVED IT!!!! DISTANCE: {distances[current_node]}")
                 break
             if (N == record_depth):
@@ -322,13 +309,38 @@ def Optimize_for_alg(alg: list[tuple[str, int]]):
                 update_key(priority_queue_nodes, priority_queue_nums, current_node, neighbor2, dist)
         starting_index += 1
     #########################################################################################################
-    
-    def trace_path(state1: State, parents: dict[State, State], state2):
-        e = []
-        parent = parents[state2]
-        while parent != state1: 
-            e.append(parent)
-            parent = parents[parent]
-        return [state1] + e[::-1] + [state2]
+    e = []
+    parent = parents[Robot_end_state]
+    while parent != Robot_start_state: 
+        e.append(parent)
+        parent = parents[parent]
+    pathWithGaps = [Robot_start_state] + e[::-1] + [Robot_end_state]
 
-Optimize_for_alg(algstr_to_alg("F' D' L2 R U' R"))
+    pathWithoutGaps = [pathWithGaps[0]]
+    for i in range(len(pathWithGaps)-1):
+        if pathWithGaps[i] == Robot_start_state:
+            for weight, node, interpath in INTER_MOVE_TABLE[Robot_start_state]:
+                if node == pathWithGaps[i+1][2]:
+                    pathWithoutGaps.extend(interpath)
+                    break
+            pathWithoutGaps.append(pathWithGaps[i+1][2])
+        elif pathWithGaps[i][1] == 'before':
+            pathWithoutGaps.append(pathWithGaps[i+1][2])
+        elif pathWithGaps[i][1] == 'after':
+            for weight, node, interpath in INTER_MOVE_TABLE[State(Default_Persp, pathWithGaps[i][2].servos)]:
+                new_persp = arr6_to_Orientation[Multiply_arr6s(Orientation_to_arr6[pathWithGaps[i][2].persp], Orientation_to_arr6[node.persp])]
+                node2 = State(new_persp, node.servos)
+                if node2 == pathWithGaps[i+1][2]:
+                    for subnode in interpath:
+                        new_persp = arr6_to_Orientation[Multiply_arr6s(Orientation_to_arr6[pathWithGaps[i][2].persp], Orientation_to_arr6[subnode.persp])]
+                        subnode2 = State(new_persp, subnode.servos)
+                        pathWithoutGaps.append(subnode2)
+                    break
+            pathWithoutGaps.append(pathWithGaps[i+1][2])
+    
+    return pathWithoutGaps
+            
+solution = Optimize_for_alg(algstr_to_alg("F' D' L2 R U' R"))
+print(len(solution)-1)
+for node in solution:
+    print(f"{node.servos.asCommand()} : {node.servos.as2B()}")
