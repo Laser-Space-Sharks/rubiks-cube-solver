@@ -220,7 +220,9 @@ def is_valid_step(state: State, state2: State):
     if Etoggling[2] and (Etoggling[1] or Etoggling[3]): return False
     return True
 
-def Optimize_for_alg(alg: list[tuple[str, int]]):
+def Optimize_for_alg(algstr: str):
+    print(algstr)
+    alg = algstr_to_alg(algstr)
     alg_sections = []
     for mv in alg:
         if alg_sections and len(alg_sections[-1]) == 1 and alg_sections[-1][0].face == opposites[mv[0]]:
@@ -355,12 +357,11 @@ def Optimize_for_alg(alg: list[tuple[str, int]]):
                             pathWithoutGaps.append(subnode2)
                         break
             pathWithoutGaps.append(pathWithGaps[i+1][2])
-    
+    print(len(pathWithoutGaps)-1)
+    for node in pathWithoutGaps:
+        print(f"{node.servos.asCommand()} : {node.servos.as2B()}")
     return pathWithoutGaps
 
-Algorithm = "F' D' L2 R U' R"
-print(Algorithm)
-servoCode = Optimize_for_alg(algstr_to_alg(Algorithm))
-print(len(servoCode)-1)
-for node in servoCode:
-    print(f"{node.servos.asCommand()} : {node.servos.as2B()}")
+
+Algorithm = "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2"
+Optimize_for_alg(sys.argv[1])
