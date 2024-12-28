@@ -126,8 +126,8 @@ def state_can_do_move(move: Move, state: State):
     if (face == 'F' or face == 'B'): return False
     if face == 'U':
         if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return False
-        if state.servos.R.rot == 1 or state.servos.L.rot == 1: return None
-        if state.servos.U.rot == 3-move.turns: return None
+        if state.servos.R.rot == 1 or state.servos.L.rot == 1: return False
+        if state.servos.U.rot == 3-move.turns: return False
     if face == 'R':
         if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return False
         if state.servos.U.rot == 1 or state.servos.D.rot == 1: return False

@@ -50,7 +50,7 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
     //////////////////////////// GET ARRAY OF STATES FROM STRING OF SPACE-SEPARATED NUMBERS ////////////////////
 
     size_t len = strlen(line);
-    while (line[len-1] != '\0' && line[len-1] != ' ') --len;
+    while (line[len-1] == '\0' || line[len-1] == ' ' || line[len-1] == '\n') --len;
 
     size_t space_count = 0;
     for (size_t i = 0; i < len; ++i) space_count += (line[i] == ' ');
@@ -121,7 +121,7 @@ bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
     //////////////////////////// GET ARRAY OF STATES FROM STRING OF SPACE-SEPARATED NUMBERS ////////////////////
     
     size_t len = strlen(line);
-    while (line[len-1] != '\0' && line[len-1] != ' ') --len;
+     while (line[len-1] == '\0' || line[len-1] == ' ' || line[len-1] == '\n') --len;
 
     size_t space_count = 0;
     for (size_t i = 0; i < len; ++i) space_count += (line[i] == ' ');

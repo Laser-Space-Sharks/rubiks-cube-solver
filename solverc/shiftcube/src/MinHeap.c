@@ -52,9 +52,10 @@ MinHeapMap_insertMessage MinHeapMap_insert(MinHeapMap *map, const MinHeapNode* k
 
     while (!compare_states(&(map->nodes[index].state), &(NULL_STATE))) {
         if (compare_MinHeapNodes(&(map->nodes[index]), key)) {
-            map->nodes[index].weight = key->weight;
-            map->nodes[index].parent = key->parent;
-
+            if (map->nodes[index].weight > key->weight) {
+                map->nodes[index].weight = key->weight;
+                map->nodes[index].parent = key->parent;
+            }
             return (MinHeapMap_insertMessage) {
                 .ptr = &(map->nodes[index]),
                 .NodeIsNew = false
