@@ -78,26 +78,6 @@ cL' : (R-)       (N.E.S.W), (U0)|(U2), (D0)|(D2), (L1)|(L2)      2x2x2x3 = 24
 ----------------------------------------------------------
 '''
 
-ROT_TRAINS: dict[str, tuple[tuple[str, int]]] = {
-    'U': (('B', 2), ('R', 1), ('F', 0), ('L', 3)),
-    'R': (('U', 3), ('B', 0), ('D', 1), ('F', 0)),
-    'F': (('U', 0), ('R', 0), ('D', 0), ('L', 0)),
-    'L': (('U', 1), ('F', 0), ('D', 3), ('B', 0)),
-    'B': (('U', 2), ('L', 0), ('D', 2), ('R', 0)),
-    'D': (('F', 0), ('R', 3), ('B', 2), ('L', 1)),
-}
-
-def reorientation(O: Orientation, move: CubeRotation) -> Orientation:
-    if move.rotation == "X":   thing = ROT_TRAINS[O.face][(2+O.rot)%4]; return Orientation(thing[0], (O.rot + thing[1])%4)
-    elif move.rotation == "X'":  thing = ROT_TRAINS[O.face][(0+O.rot)%4]; return Orientation(thing[0], (O.rot + thing[1])%4)
-    elif move.rotation == "Y":   thing = ROT_TRAINS[O.face][(1+O.rot)%4]; return Orientation(thing[0], (O.rot + thing[1])%4)
-    elif move.rotation == "Y2":  thing = ROT_TRAINS[O.face][(1+O.rot)%4]; return reorientation(Orientation(thing[0], (O.rot + thing[1])%4), CubeRotation("Y"))
-    elif move.rotation == "Y2'": thing = ROT_TRAINS[O.face][(1+O.rot)%4]; return reorientation(Orientation(thing[0], (O.rot + thing[1])%4), CubeRotation("Y"))
-    elif move.rotation == "Y'":  thing = ROT_TRAINS[O.face][(3+O.rot)%4]; return Orientation(thing[0], (O.rot + thing[1])%4)
-
-def move_from_orientation(O: Orientation, move: RoboMove) -> Move:
-    return Move(ROT_TRAINS[O.face][(O.rot + move.turns)%4][0], move.turns)
-
 def stateNum_to_state(stateNum) -> State:
     cpy = stateNum
     Lrot = cpy%3; cpy //= 3
@@ -132,6 +112,8 @@ def get_inter_move_table():
                 inter_move_table[path[0]] = []
             
             inter_move_table[path[0]].append((calc_weight_of_path(path), path[-1], [path[i] for i in range(1, len(path)-1)]))
+
+    print(f"maximum edges for default node in inter_move_table: {max(len(value) for value in inter_move_table.values())}")
         
     return inter_move_table
 
@@ -204,21 +186,6 @@ def algstr_to_alg(algstr: str):
         (mv[0], {"'": 3, "2": 2}.get(mv[-1], 1))
         for mv in algstr.strip().split()
     ]
-
-def is_valid_step(state: State, state2: State):
-    if state == state2: return False
-    U, R, D, L = state.unpackServos()
-    U2, R2, D2, L2 = state2.unpackServos()
-    for v1, v2 in zip(state.unpackServos(), state2.unpackServos()):
-        if v1.rot != v2.rot and (v1.e != v2.e): return False
-
-    Etoggling = [(U.e!=U2.e), (R.e!=R2.e), (D.e!=D2.e), (L.e!=L2.e)]
-    if Etoggling[0] and Etoggling[1] and U.rot == R.rot == 1: return False
-    if Etoggling[1] and Etoggling[2] and R.rot == D.rot == 1: return False
-    if Etoggling[2] and Etoggling[3] and D.rot == L.rot == 1: return False
-    if Etoggling[3] and Etoggling[0] and L.rot == U.rot == 1: return False
-    if Etoggling[2] and (Etoggling[1] or Etoggling[3]): return False
-    return True
 
 def Optimize_for_alg(algstr: str):
     print(algstr)

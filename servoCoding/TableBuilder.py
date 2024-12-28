@@ -392,21 +392,26 @@ def Dijkstra_to_all_MOVE_STATES(startStates: State, paths):
                 endState = State(persp, Rstate2)
                 if endState == startState: continue
                 if endState not in Connected_graph: continue
-                paths.add(tuple(trace_path(startState, parents, endState)))
+                paths.append(tuple(trace_path(startState, parents, endState)))
             break
+    print()
 
 
-PATHS = {}
-
+PATHS = []
 states = [State(Orientation('F', 0), Rstate1) for Rstate1 in ROBOT_MOVE_STATES]
-states.append(Robot_start_state)
 
 Dijkstra_to_all_MOVE_STATES(states, PATHS)
+ROOT_PATHS = []
+Dijkstra_to_all_MOVE_STATES([Robot_start_state], ROOT_PATHS)
 
-print()
 print(len(PATHS))
+print(len(ROOT_PATHS))
 
 with open("ServoOptimizationTable.txt", "w") as file:
     for path in PATHS:
+        line = ' '.join([str(i.asNum()) for i in path])
+        file.write(f"{line}\n")
+with open("ServoOptimizationTable_rootpaths.txt", "w") as file:
+    for path in ROOT_PATHS:
         line = ' '.join([str(i.asNum()) for i in path])
         file.write(f"{line}\n")
