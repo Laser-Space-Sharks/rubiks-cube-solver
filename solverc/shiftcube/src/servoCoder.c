@@ -1,58 +1,320 @@
+#define _GNU_SOURCE
 #include "servoCoder.h"
 #include "main.h"
-#include "inter_move_table.h"
 #include "alg.h"
 #include "move.h"
 #include "MinHeap.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include "solver_print.h"
+
+#define INTER_MOVE_TABLE_CAPACITY 162
+#define INTER_MOVE_TABLE_PATHS_PER_NODE 735
 
 #define Etime 1
 #define dEtime 1
 #define rot1time 1
 #define rot2time 1
 
-typedef struct {
-    face_e face;
-    side_e rot;
-} Orientation_s; // 2 Bytes
+void print_RobotState(RobotState_s servos) {
+    printf("%c.%c.%c.%c.U%hhu.R%hhu.D%hhu.L%hhu",
+        ((servos.n) ? 'N' : 'n'),
+        ((servos.e) ? 'E' : 'e'),
+        ((servos.s) ? 'S' : 's'),
+        ((servos.w) ? 'W' : 'w'),
+        servos.U,
+        servos.R,
+        servos.D,
+        servos.L
+    );
+}
+void print_State(State_s state) {
+    printf("((%c, %hhu), ", 
+        facePrints[state.persp.face], 
+        state.persp.rot
+    );
+    print_RobotState(state.servos);
+    printf(")");
+}
+
+typedef struct inter_move_table {
+    RSS_entry_s RSS;
+
+    size_t size;
+    inter_move_entry_s *table;
+} inter_move_table_s;
+
+size_t inter_move_table_hash(const RobotState_s *key) {
+    size_t hash = 0;
+    hash += key->n;
+    hash *= 3;
+    hash += key->U;
+    hash *= 3;
+    hash += key->R;
+    hash *= 3;
+    hash += key->D;
+    hash *= 3;
+    hash += key->L;
+    return hash;
+}
+
+bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
+    if (ht == NULL || line == NULL) {
+        return false;
+    }
+    //printf("----------------------------\nLine was : %s", line);
+    //////////////////////////// GET ARRAY OF STATES FROM STRING OF SPACE-SEPARATED NUMBERS ////////////////////
+
+    size_t len = 0; while(line[len]) len++;
+    while (len-1 >= 0 && (line[len-1] == '\0' || line[len-1] == ' ' || line[len-1] == '\n')) --len;
+    //printf("Decided that len was %zu\n", len);
+
+    size_t space_count = 0;
+    for (size_t i = 0; i < len; ++i) space_count += (line[i] == ' ');
+    //printf("Decided that space_count was %zu\n", space_count);
+
+    uint8_t stateNumStrLengths[space_count+1];
+    for (int i = 0; i < space_count+1; i++) stateNumStrLengths[i] = 0;
+    //printf("Decided that there were %zu numbers in the string\n", space_count+1);
+    size_t index = 0;
+    for (size_t i = 0; i < len; ++i) {
+        if (line[i] == ' ') index++;
+        else stateNumStrLengths[index]++;
+    }
+    //printf("Decided that the lengths of the numstrs were: ");
+    //for (int i = 0; i < space_count+1; i++) printf("%hhu, ", stateNumStrLengths[i]);
+    //printf("\n");
+    char* arr_of_stateNumStrs[space_count+1];
+    for (int i = 0; i < space_count+1; ++i) {
+        arr_of_stateNumStrs[i] = (char*)calloc(sizeof(char), stateNumStrLengths[i]+1);
+    }
+    index = 0;
+    size_t last_set = 0;
+    for (size_t i = 0; i < len; ++i) {
+        if (line[i] == ' ') {index++; last_set = i+1;}
+        else {
+            arr_of_stateNumStrs[index][i-last_set] = line[i];
+        }
+    }
+    //printf("Decided that the numstrs were: ");
+    //for (int i = 0; i < space_count+1; i++) printf("%s, ", arr_of_stateNumStrs[i]);
+    //printf("\n");
+    uint16_t arr_of_stateNums[space_count+1];
+    for (int i = 0; i < space_count+1; ++i) {
+        arr_of_stateNums[i] = (uint16_t)atoi(arr_of_stateNumStrs[i]);
+        free(arr_of_stateNumStrs[i]);
+    }
+
+    State_s arr_of_states[space_count+1];
+    for (int i = 0; i < space_count+1; ++i) {
+        arr_of_states[i] = stateNum_to_state(arr_of_stateNums[i]);
+    }
+    double total_weight = 0;
+    for (int i = 0; i < space_count; ++i) {
+        total_weight += calc_weight_of_step(&arr_of_states[i], &arr_of_states[i+1]);
+    }
+
+    ///////////////////////////////////// INSERT NEW PATH ONTO NODE //////////////////////////////
+
+    index = inter_move_table_hash(&(arr_of_states[0].servos));
+
+    if (ht->table[index].paths == NULL) {
+        ht->table[index].startState = arr_of_states[0].servos;
+        ht->table[index].paths = (sub_entry_s*)malloc(INTER_MOVE_TABLE_PATHS_PER_NODE*sizeof(sub_entry_s));
+        ht->table[index].length = 0;
+        ht->table[index].size = INTER_MOVE_TABLE_PATHS_PER_NODE;
+    }
+
+    sub_entry_s sub_entry = {
+        .endState = arr_of_states[space_count],
+        .weight = total_weight,
+        .path = (RobotState_s*)malloc(sizeof(RobotState_s)*(space_count-1)),
+        .size = space_count-1
+    }; 
+    for (int i = 1; i < space_count; ++i) {
+        sub_entry.path[i-1] = arr_of_states[i].servos;
+    }
+
+    ht->table[index].startState  = arr_of_states[0].servos;
+    ht->table[index].paths[ht->table[index].length]    = sub_entry;
+
+    ht->table[index].length++;
+
+    return true;
+}
+bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
+    if (ht == NULL || line == NULL) {
+        return false;
+    }
+    //printf("----------------------------\nLine was : %s", line);
+    //////////////////////////// GET ARRAY OF STATES FROM STRING OF SPACE-SEPARATED NUMBERS ////////////////////
+
+    size_t len = 0; while(line[len]) len++;
+    while (len-1 >= 0 && (line[len-1] == '\0' || line[len-1] == ' ' || line[len-1] == '\n')) --len;
+    //printf("Decided that len was %zu\n", len);
+
+    size_t space_count = 0;
+    for (size_t i = 0; i < len; ++i) space_count += (line[i] == ' ');
+    //printf("Decided that space_count was %zu\n", space_count);
+
+    uint8_t stateNumStrLengths[space_count+1];
+    for (int i = 0; i < space_count+1; i++) stateNumStrLengths[i] = 0;
+    //printf("Decided that there were %zu numbers in the string\n", space_count+1);
+    size_t index = 0;
+    for (size_t i = 0; i < len; ++i) {
+        if (line[i] == ' ') index++;
+        else stateNumStrLengths[index]++;
+    }
+    //printf("Decided that the lengths of the numstrs were: ");
+    //for (int i = 0; i < space_count+1; i++) printf("%hhu, ", stateNumStrLengths[i]);
+    //printf("\n");
+    char* arr_of_stateNumStrs[space_count+1];
+    for (int i = 0; i < space_count+1; ++i) {
+        arr_of_stateNumStrs[i] = (char*)calloc(sizeof(char), stateNumStrLengths[i]+1);
+    }
+    index = 0;
+    size_t last_set = 0;
+    for (size_t i = 0; i < len; ++i) {
+        if (line[i] == ' ') {index++; last_set = i+1;}
+        else {
+            arr_of_stateNumStrs[index][i-last_set] = line[i];
+        }
+    }
+    //printf("Decided that the numstrs were: ");
+    //for (int i = 0; i < space_count+1; i++) printf("%s, ", arr_of_stateNumStrs[i]);
+    //printf("\n");
+    uint16_t arr_of_stateNums[space_count+1];
+    for (int i = 0; i < space_count+1; ++i) {
+        arr_of_stateNums[i] = (uint16_t)atoi(arr_of_stateNumStrs[i]);
+        free(arr_of_stateNumStrs[i]);
+    }
+
+    State_s arr_of_states[space_count+1];
+    for (int i = 0; i < space_count+1; ++i) {
+        arr_of_states[i] = stateNum_to_state(arr_of_stateNums[i]);
+    }
+    double total_weight = 0;
+    for (int i = 0; i < space_count; ++i) {
+        total_weight += calc_weight_of_step(&arr_of_states[i], &arr_of_states[i+1]);
+    }
+
+    ///////////////////////////////////// INSERT NEW PATH ONTO NODE //////////////////////////////
+    ht->RSS.paths[ht->RSS.length] = (RSS_sub_entry_s) {
+        .endState = arr_of_states[space_count],
+        .weight = total_weight,
+        .path = (State_s*)malloc(sizeof(State_s)*(space_count-1)),
+        .size = space_count-1
+    };
+    for (int i = 1; i < space_count; ++i) {
+        ht->RSS.paths[ht->RSS.length].path[i-1] = arr_of_states[i];
+    } ht->RSS.length++;
+
+    return true;
+}
+void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename) {
+    //printf("starting 'insert_normal_lines_into_inter_move_table'\n");
+    FILE *file = fopen(filename, "rb");
+    //printf("opened the file...\n");
+    if (file == NULL) return;
+
+    char *line = NULL;
+    size_t len;
+    ssize_t read;
+
+    //printf("inserting lines...\n");
+
+    while ((read = getline(&line, &len, file)) != -1) {
+        inter_move_table_insert(INTER_MOVE_TABLE, line);
+    }
+    //printf("finished inserting lines...\n");
+
+    free(line);
+    fclose(file);
+    //printf("finished 'insert_normal_lines_into_inter_move_table'\n");
+}
+
+void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename) {
+    //printf("starting 'insert_root_lines_into_inter_move_table'\n");
+    FILE *file = fopen(filename, "rb");
+    if (file == NULL) return;
+
+    char *line = NULL;
+    size_t len;
+    ssize_t read;
+
+    while ((read = getline(&line, &len, file)) != -1) {
+        inter_move_table_RSS_insert(INTER_MOVE_TABLE, line);
+    }
+
+    free(line);
+    fclose(file);
+    //printf("finished 'insert_root_lines_into_inter_move_table'\n");
+}
+
+inter_move_table_s* inter_move_table_create() {
+    inter_move_table_s *ht = (inter_move_table_s*)malloc(sizeof(inter_move_table_s));
+    ht->table = (inter_move_entry_s*)calloc(INTER_MOVE_TABLE_CAPACITY, sizeof(inter_move_entry_s));
+    ht->RSS.paths = (RSS_sub_entry_s*)calloc(INTER_MOVE_TABLE_PATHS_PER_NODE, sizeof(RSS_sub_entry_s));
+
+    ht->RSS.length = 0;
+    ht->RSS.size = INTER_MOVE_TABLE_PATHS_PER_NODE;
+    ht->RSS.startState = ROBOT_START_STATE;
+    ht->size = INTER_MOVE_TABLE_CAPACITY;
+
+    insert_normal_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable.txt");
+    insert_root_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable_rootpaths.txt");
+
+    //printf("RSS.length: %zu\n", ht->RSS.length);
+    return ht;
+}
+
+static inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key) {
+    if (ht == NULL || key == NULL) {
+        return ht->size;
+    }
+
+    size_t hash = inter_move_table_hash(key);
+    size_t index = hash;
+
+    if (ht->table[index].paths == NULL) return ht->size;
+
+    return index;
+}
+
+const RSS_entry_s* inter_move_table_get_RSS(const inter_move_table_s *ht) {
+    return &(ht->RSS);
+}
+
+const inter_move_entry_s* inter_move_table_lookup(const inter_move_table_s *ht, const RobotState_s *key) {
+    size_t index = inter_move_table_get_index(ht, key);
+
+    return (index == ht->size) ? NULL : &ht->table[index];
+}
+
+void inter_move_table_free(inter_move_table_s *ht) {
+    if (ht == NULL || ht->table == NULL) {
+        free(ht);
+        return;
+    }
+    //printf("freeing RSS.paths..\n");
+    for (size_t subEntryInd = 0; subEntryInd < ht->RSS.length; subEntryInd++) {
+        free(ht->RSS.paths[subEntryInd].path);
+    } free(ht->RSS.paths);
+    //printf("freeing table stuff..\n");
+    for (size_t entryInd = 0; entryInd < ht->size; entryInd++) {
+        for (size_t subEntryInd = 0; subEntryInd < ht->table[entryInd].length; subEntryInd++) {
+            free(ht->table[entryInd].paths[subEntryInd].path);
+        } free(ht->table[entryInd].paths);
+    } //printf("freeing table..\n");
+    free(ht->table);
+    //printf("freeing ht..\n");
+    free(ht);
+}
 
 typedef struct {
     face_e faces[6];
 } Orientation_arr6_s; // 6 Bytes
-
-typedef struct {
-    uint16_t n : 1;
-    uint16_t e : 1;
-    uint16_t s : 1;
-    uint16_t w : 1;
-    uint16_t U : 2;
-    uint16_t R : 2;
-    uint16_t D : 2;
-    uint16_t L : 2;
-} RobotState_s; // 2 Bytes
-
-typedef struct {
-    Orientation_s persp;
-    RobotState_s servos;
-} State_s; // 4 Bytes
-
-static const State_s ROBOT_START_STATE = {
-    .persp = (Orientation_s) {
-        FACE_F, 0
-    },
-    .servos = (RobotState_s) {
-        1,1,1,1,0,0,0,0
-    }
-};
-
-static const State_s NULL_STATE = {
-    .persp = {
-        .face = FACE_NULL,
-        .rot = 0
-    },
-    .servos = {
-        0,0,0,0,0,0,0,0
-    }
-};
 
 /*
 ROT_TRAINS: dict[str, tuple[tuple[str, int]]] = {
@@ -64,7 +326,7 @@ ROT_TRAINS: dict[str, tuple[tuple[str, int]]] = {
     'D': (('F', 0), ('R', 3), ('B', 2), ('L', 1)),
 }
 */
-static const face_e ROT_TRAINS[6][4] {
+static const face_e ROT_TRAINS[6][4] = {
     {FACE_B, FACE_R, FACE_F, FACE_L},
     {FACE_U, FACE_B, FACE_D, FACE_F},
     {FACE_U, FACE_R, FACE_D, FACE_L},
@@ -183,10 +445,12 @@ def calc_weight_of_step(state: State, state2: State) -> float:
     return MAX
 */
 double calc_weight_of_armstep(bool e1, uint8_t rot1, bool e2, uint8_t rot2) {
-    if (e1 == 0 && e2 == 1) return (double)Etime;
-    if (e1 == 1 && e2 == 0) return (double)dEtime;
-    if (abs(rot2 - rot1) == 1) return (double)rot1time;
-    if (abs(rot2 - rot1) == 2) return (double)rot2time;
+    double ret;
+    if (e1 == 0 && e2 == 1) ret = (double)Etime;
+    if (e1 == 1 && e2 == 0) ret = (double)dEtime;
+    if (abs(rot2 - rot1) == 1) ret = (double)rot1time;
+    if (abs(rot2 - rot1) == 2) ret = (double)rot2time;
+    return ret;
 }
 double calc_weight_of_step(const State_s* state1, const State_s* state2) {
     double maxWeight = 0;
@@ -338,7 +602,6 @@ def state_after_opposite_moves_pair(move1: Move, move2: Move, state: State):
     return state_after_move(move2, state_after_move(move1, state)[0])
 */
 void state_after_opposite_moves_pair(move_s move1, move_s move2, State_s state, uint8_t *len, State_s* ret) {
-    RobotState_s servos = state.servos;
     if (move1.face == FACE_D) {
         state_after_move(move1, state, len, ret);
         state_after_move(move2, ret[0], len, ret);
@@ -358,17 +621,52 @@ typedef struct {
     move_s move1;
     move_s move2;
 } MovePair;
-typedef struct RobotSolution {
-    RobotState_s* solution;
-    size_t size;
-} RobotSolution;
+static inline bool MovePair_is_singleMove(MovePair pair) {
+    return (pair.move2.face == NULL_MOVE.face && pair.move2.turns == NULL_MOVE.turns);
+}
+bool state_can_do_MovePair(MovePair pair, State_s state) {
+    if (MovePair_is_singleMove(pair)) {
+        return state_can_do_move(pair.move1, state);
+    } else {
+        return state_can_do_opposite_move_pair(pair.move1, pair.move2, state);
+    }
+}
+void state_after_MovePair(MovePair pair, State_s state, uint8_t* len, State_s* ret) {
+    if (MovePair_is_singleMove(pair)) {
+        state_after_move(pair.move1, state, len, ret);
+    } else {
+        state_after_opposite_moves_pair(pair.move1, pair.move2, state, len, ret);
+    }
+}
+bool push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr) {
+    state_after_MovePair(pair, current_node->state, stateAfterMove_len, stateAfterMove_arr);
+    for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < *stateAfterMove_len; stateAfterMoveInd++) {
+        if (!MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], childN, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node)) {
+            return false;
+        }
+    } return true;
+}
+State_s Undefault_EndState(State_s origin, State_s OGendState) {
+    State_s true_endState = OGendState;
+    true_endState.persp = Orientation_from_Arr6(multiply_arr6s(Arr6_from_Orientation(origin.persp), Arr6_from_Orientation(OGendState.persp)));
+    return true_endState;
+}
+
+static const RobotSolution NULL_RobotSolution = {
+    .solution = NULL,
+    .size = 0
+};
+
 RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_table_s* INTER_MOVE_TABLE) {
     /////////////////////////////////  LOAD ALG_CHUNKS  //////////////////////////////
+    print_alg(alg);
     MovePair alg_sections[alg->length];
     uint8_t numAlgSecs = 0;
     for (int i = 0; i < alg->length; i++) {
-        move_s movestruct = move_as_struct(alg->moves[i]);
-        if (numAlgSecs != 0 && alg_sections[numAlgSecs-1].move1.face == opposite_faces[movestruct.face]) {
+        //if (numAlgSecs >= alg->length) printf("servoCode_compiler_Ofastest() done goofed up yo, numAlgSecs=%zu, alg->length=%zu\n", numAlgSecs, alg->length);
+        move_s movestruct = move_as_struct[alg->moves[i]];
+        //if (movestruct.face >= 6) printf("servoCode_compiler_Ofastest() done goofed up yo, movestruct.face=%zu\n", movestruct.face);
+        if (numAlgSecs > 0 && alg_sections[numAlgSecs-1].move1.face == opposite_faces[movestruct.face]) {
             alg_sections[numAlgSecs-1].move2 = movestruct;
         } else {
             alg_sections[numAlgSecs] = (MovePair) {
@@ -377,188 +675,74 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
             }; numAlgSecs++;
         }
     }
+    size_t numSingleMoves = 0;
+    size_t numOppPairs = 0;
+    for (size_t i = 0; i < numAlgSecs; i++) {
+        if (MovePair_is_singleMove(alg_sections[i])) {
+            numSingleMoves++;
+        } else numOppPairs++;
+    }
     
     //////////////////////////// SUMMON EDSGAR W. DIJKSTRA ////////////////////////////
-/*
-    ############################################ SUMMON Edsger W. Dijkstra ###############################################
-    def update_key(priority_queue_nodes, priority_queue_nums, parent, neighbor, dist):
-        if neighbor not in distances:
-            p = bisect_left(priority_queue_nums, dist)
-            priority_queue_nodes.insert(p, neighbor)
-            priority_queue_nums.insert(p, dist)
-            distances[neighbor] = dist
-            parents[neighbor] = parent
-
-        elif dist < distances[neighbor]:
-            p1 = priority_queue_nodes.index(neighbor)
-            p2 = bisect_left(priority_queue_nums, dist)
-            priority_queue_nodes.pop(p1)
-            priority_queue_nodes.insert(p2, neighbor)
-            priority_queue_nums.pop(p1)
-            priority_queue_nums.insert(p2, dist)
-            distances[neighbor] = dist
-            parents[neighbor] = parent
-
-
-    Default_Persp = Orientation('F', 0)
-
-    distances = {Robot_start_state: 0}
-    parents = {Robot_start_state: None}
-    priority_queue_nodes = [Robot_start_state]
-    priority_queue_nums = [0]
-    
-    Robot_end_state = None
-    starting_index = 0
-    record_depth = 0
-
-    while starting_index < len(priority_queue_nodes):
-        current_node = priority_queue_nodes[starting_index]
-        if current_node == Robot_start_state:
-            for weight, neighbor0, _ in INTER_MOVE_TABLE[Robot_start_state]:
-                if ((len(alg_sections[0]) == 1 and state_can_do_move(alg_sections[0][0], neighbor0)) or 
-                    (len(alg_sections[0]) == 2 and state_can_do_opposite_move_pair(alg_sections[0][0], alg_sections[0][1], neighbor0))): 
-                    neighbor = (0, 'before', neighbor0)
-                    dist = weight
-                    update_key(priority_queue_nodes, priority_queue_nums, Robot_start_state, neighbor, dist)
-            if ((len(alg_sections[0]) == 1 and state_can_do_move(alg_sections[0][0], Robot_start_state)) or 
-                (len(alg_sections[0]) == 2 and state_can_do_opposite_move_pair(alg_sections[0][0], alg_sections[0][1], Robot_start_state))): 
-                if len(alg_sections[0]) == 1: 
-                    for state in state_after_move(alg_sections[0][0], Robot_start_state):
-                        neighbor = (0, 'after', state)
-                        dist = calc_weight_of_step(Robot_start_state, state)
-                        update_key(priority_queue_nodes, priority_queue_nums, Robot_start_state, neighbor, dist)
-                if len(alg_sections[0]) == 2:
-                    state = state_after_opposite_moves_pair(alg_sections[0][0], alg_sections[0][1], Robot_start_state)[0]
-                    neighbor = (0, 'after', state)
-                    dist = calc_weight_of_step(Robot_start_state, state)
-                    update_key(priority_queue_nodes, priority_queue_nums, Robot_start_state, neighbor, dist)
-        elif current_node[1] == "before":
-            N = current_node[0]
-            
-            if len(alg_sections[N]) == 1: 
-                for state in state_after_move(alg_sections[N][0], current_node[2]):
-                    neighbor = (N, 'after', state)
-                    dist = distances[current_node] + calc_weight_of_step(current_node[2], state)
-                    update_key(priority_queue_nodes, priority_queue_nums, current_node, neighbor, dist)
-            else: 
-                state = state_after_opposite_moves_pair(alg_sections[N][0], alg_sections[N][1], current_node[2])[0]
-                neighbor = (N, 'after', state)
-                dist = distances[current_node] + calc_weight_of_step(current_node[2], state)
-                update_key(priority_queue_nodes, priority_queue_nums, current_node, neighbor, dist)
-        elif current_node[1] == "after":
-            N = current_node[0]
-            if (N == len(alg_sections)-1): 
-                Robot_end_state = current_node
-                print(f"WE SOLVED IT!!!! DISTANCE: {distances[current_node]}")
-                break
-            if (N == record_depth):
-                print(f"WE GOT TO THE END OF MOVE {record_depth}")
-                record_depth += 1
-    
-            for weight, neighbor0, _ in INTER_MOVE_TABLE[State(Default_Persp, current_node[2].servos)]:
-                new_persp = arr6_to_Orientation[Multiply_arr6s(Orientation_to_arr6[current_node[2].persp], Orientation_to_arr6[neighbor0.persp])]
-                neighbor = State(new_persp, neighbor0.servos)
-                if ((len(alg_sections[N+1]) == 1 and state_can_do_move(alg_sections[N+1][0], neighbor)) or 
-                    (len(alg_sections[N+1]) == 2 and state_can_do_opposite_move_pair(alg_sections[N+1][0], alg_sections[N+1][1], neighbor))): 
-                    neighbor2 = (N+1, 'before', neighbor)
-                    dist = distances[current_node] + weight
-                    update_key(priority_queue_nodes, priority_queue_nums, current_node, neighbor2, dist)
-            if ((len(alg_sections[N+1]) == 1 and state_can_do_move(alg_sections[N+1][0], current_node[2])) or 
-                (len(alg_sections[N+1]) == 2 and state_can_do_opposite_move_pair(alg_sections[N+1][0], alg_sections[N+1][1], current_node[2]))): 
-                if len(alg_sections[N+1]) == 1: 
-                    for state in state_after_move(alg_sections[N+1][0], current_node[2]):
-                        neighbor = (N+1, 'after', state)
-                        dist = distances[current_node] + calc_weight_of_step(current_node[2], state)
-                        update_key(priority_queue_nodes, priority_queue_nums, current_node, neighbor, dist)
-                else: 
-                    state = state_after_opposite_moves_pair(alg_sections[N+1][0], alg_sections[N+1][1], current_node[2])[0]
-                    neighbor = (N+1, 'after', state)
-                    dist = distances[current_node] + calc_weight_of_step(current_node[2], state)
-                    update_key(priority_queue_nodes, priority_queue_nums, current_node, neighbor, dist)
-        starting_index += 1
-*/
-    MinHeap* minheap = MinHeap_create(numAlgSecs);
+    //printf("Entering MinHeap_create()...\n");
+    MinHeap* minheap = MinHeap_create(numSingleMoves, numOppPairs);
+    //printf("Finished MinHeap_create(), Updating MinHeap with ROBOT_START_STATE...\n");
     MinHeap_update_key(minheap, &ROBOT_START_STATE, -1, 0, 0, NULL);
-    Orientation_s Default_Persp = {
-        .face = FACE_F,
-        .rot = 0
-    };
+    //printf("Finished updating MinHeap with ROBOT_START_STATE\n");
     State_s Robot_end_state;
-    State_s* stateAfterMove_arr = malloc(5*sizeof(State_s));
+    State_s* stateAfterMove_arr = malloc(4*sizeof(State_s));
     uint8_t stateAfterMove_len;
 
     MinHeapNode* current_node = MinHeap_pluck_min(minheap);
+
+    const RSS_entry_s* RSS = inter_move_table_get_RSS(INTER_MOVE_TABLE);
+    for (size_t pathInd = 0; pathInd < RSS->length; pathInd++) {
+        const RSS_sub_entry_s* path = &RSS->paths[pathInd];
+        State_s endState = path->endState;
+        if (state_can_do_MovePair(alg_sections[0], endState)) {
+            if (!MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node)) {
+                return NULL_RobotSolution;
+            }
+        }
+    }
+    if (state_can_do_MovePair(alg_sections[0], current_node->state)) {
+        if (!push_move_edges(minheap, alg_sections[0], current_node, 0, &stateAfterMove_len, stateAfterMove_arr)) {
+            return NULL_RobotSolution;
+        }
+    }
+    
+    int record = 0;
+    current_node = MinHeap_pluck_min(minheap);
     while (current_node->algorithm_index != numAlgSecs-1 || current_node->isBefore) {
-        if (State_is_ROBOT_START_STATE(&current_node->state) && current_node->algorithm_index == -1) {
-            const RSS_entry_s* RSS = inter_move_table_get_RSS(INTER_MOVE_TABLE);
-            for (size_t pathInd = 0; pathInd < RSS->length; pathInd++) {
-                const RSS_sub_entry_s* path = &RSS->paths[pathInd];
-                if (alg_sections[0].move2.face == NULL_MOVE.face && alg_sections[0].move2.turns == NULL_MOVE.turns) {
-                    if (state_can_do_move(alg_sections[0].move1, path->endState)) {
-                        MinHeap_update_key(minheap, &path->endState, 0, true, path->weight, current_node);
-                    }
-                } else if (state_can_do_opposite_move_pair(alg_sections[0].move1, alg_sections[0].move2, path->endState)) {
-                    MinHeap_update_key(minheap, &path->endState, 0, true, path->weight, current_node);
-                }
-            }
-            if (alg_sections[0].move2.face == NULL_MOVE.face && alg_sections[0].move2.turns == NULL_MOVE.turns) {
-                if (state_can_do_move(alg_sections[0].move1, current_node->state)) {
-                    state_after_move(alg_sections[0].move1, current_node->state, stateAfterMove_len, stateAfterMove_arr);
-                    for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < stateAfterMove_len; stateAfterMoveInd++) {
-                        MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], 0, false, calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
-                    }
-                }
-            } else if (state_can_do_opposite_move_pair(alg_sections[0].move1, alg_sections[0].move2, current_node->state)) {
-                state_after_opposite_moves_pair(alg_sections[0].move1, alg_sections[0].move2, current_node->state, stateAfterMove_len, stateAfterMove_arr);
-                for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < stateAfterMove_len; stateAfterMoveInd++) {
-                    MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], 0, false, calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
-                }
-            }
-        } else if (current_node->isBefore) { // state is immediately before the move
-            uint8_t N = current_node->algorithm_index;
-            if (alg_sections[N].move2.face == NULL_MOVE.face && alg_sections[N].move2.turns == NULL_MOVE.turns) {
-                state_after_move(alg_sections[N].move1, current_node->state, stateAfterMove_len, stateAfterMove_arr);
-                for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < stateAfterMove_len; stateAfterMoveInd++) {
-                    MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], N, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
-                }
-            } else {
-                state_after_opposite_moves_pair(alg_sections[N].move1, alg_sections[N].move2, current_node->state, stateAfterMove_len, stateAfterMove_arr);
-                for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < stateAfterMove_len; stateAfterMoveInd++) {
-                    MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], N, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
-                }
+        //if (current_node->algorithm_index == record && !current_node->isBefore) {
+        //    printf("WE GOT TO END OF MOVE CHUNK %d\n", record++);
+        //}
+        uint8_t N = current_node->algorithm_index;
+        if (current_node->isBefore) { // state is immediately before the move
+            if (!push_move_edges(minheap, alg_sections[N], current_node, N, &stateAfterMove_len, stateAfterMove_arr)) {
+                return NULL_RobotSolution;
             }
         } else if (!current_node->isBefore) { // state is immediately after the move
             const inter_move_entry_s* entry = inter_move_table_lookup(INTER_MOVE_TABLE, &current_node->state.servos);
-            Orientation_arr6_s current_node_arr6 = Arr6_from_Orientation(current_node->state.persp);
-            uint8_t N = current_node->algorithm_index;
             for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                 const sub_entry_s* path = &entry->paths[pathInd];
-                State_s true_endState = path->endState;
-                true_endState.persp = Orientation_from_Arr6(multiply_arr6s(current_node_arr6, Arr6_from_Orientation(true_endState.persp)));
-                if (alg_sections[N+1].move2.face == NULL_MOVE.face && alg_sections[N+1].move2.turns == NULL_MOVE.turns) {
-                    if (state_can_do_move(alg_sections[N+1].move1, true_endState)) {
-                        MinHeap_update_key(minheap, &true_endState, N+1, true, current_node->weight + path->weight, current_node);
-                    }
-                } else if (state_can_do_opposite_move_pair(alg_sections[N+1].move1, alg_sections[N+1].move2, true_endState)) {
-                    MinHeap_update_key(minheap, &true_endState, N+1, true, current_node->weight + path->weight, current_node);
-                }
-            } 
-            if (alg_sections[N+1].move2.face == NULL_MOVE.face && alg_sections[N+1].move2.turns == NULL_MOVE.turns) {
-                if (state_can_do_move(alg_sections[N+1].move1, current_node->state)) {
-                    state_after_move(alg_sections[N+1].move1, current_node->state, stateAfterMove_len, stateAfterMove_arr);
-                    for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < stateAfterMove_len; stateAfterMoveInd++) {
-                        MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], N+1, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
+                State_s endState = Undefault_EndState(current_node->state, path->endState);
+                if (state_can_do_MovePair(alg_sections[N+1], endState)) {
+                    if (!MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node)) {
+                        return NULL_RobotSolution;
                     }
                 }
-            } else if (state_can_do_opposite_move_pair(alg_sections[N+1].move1, alg_sections[N+1].move2, current_node->state)) {
-                state_after_opposite_moves_pair(alg_sections[N+1].move1, alg_sections[N+1].move2, current_node->state, stateAfterMove_len, stateAfterMove_arr);
-                for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < stateAfterMove_len; stateAfterMoveInd++) {
-                    MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], N+1, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
+            }
+            if (state_can_do_MovePair(alg_sections[N+1], current_node->state)) {
+                if (!push_move_edges(minheap, alg_sections[N+1], current_node, N+1, &stateAfterMove_len, stateAfterMove_arr)) {
+                    return NULL_RobotSolution;
                 }
             }
         }
         current_node = MinHeap_pluck_min(minheap);
     } free(stateAfterMove_arr);
+    printf("DIJKSTRA FINISHED!: Min Distance: %lf\n", current_node->weight);
+
     ///////////// Trace and Save Dijkstra Solve //////////////
     size_t solve_path_length = 1;
     MinHeapNode* node = current_node;
@@ -567,56 +751,21 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
         solve_path_length++;
     }
     MinHeapNode DijkstraPath[solve_path_length];
-    size_t index = solve_path_length-1;
+    int index = solve_path_length-1;
     node = current_node;
-    DijkstraPath[index] = *node;
+    DijkstraPath[index--] = *node;
     while(node->parent != NULL) {
-        index--;
         node = node->parent;
-        DijkstraPath[index] = *node;
+        DijkstraPath[index--] = *node;
     }
+    //printf("Finished saving DijkstraPath.\n");
     /////////////////////// Free the heap ////////////////////
     MinHeap_free(minheap);
     //////////////////// Fill in Gaps ///////////////////////
-/*
-    e = []
-    parent = parents[Robot_end_state]
-    while parent != Robot_start_state: 
-        e.append(parent)
-        parent = parents[parent]
-    pathWithGaps = [Robot_start_state] + e[::-1] + [Robot_end_state]
-
-
-    pathWithoutGaps = [pathWithGaps[0]]
-    for i in range(len(pathWithGaps)-1):
-        if pathWithGaps[i] == Robot_start_state:
-            if pathWithGaps[i+1][1] != "after":
-                for weight, node, interpath in INTER_MOVE_TABLE[Robot_start_state]:
-                    if node == pathWithGaps[i+1][2] and node != Robot_start_state:
-                        pathWithoutGaps.extend(interpath)
-                        break
-            pathWithoutGaps.append(pathWithGaps[i+1][2])
-        elif pathWithGaps[i][1] == 'before':
-            pathWithoutGaps.append(pathWithGaps[i+1][2])
-        elif pathWithGaps[i][1] == 'after':
-            if pathWithGaps[i+1][1] != "after":
-                for weight, node, interpath in INTER_MOVE_TABLE[State(Default_Persp, pathWithGaps[i][2].servos)]:
-                    new_persp = arr6_to_Orientation[Multiply_arr6s(Orientation_to_arr6[pathWithGaps[i][2].persp], Orientation_to_arr6[node.persp])]
-                    node2 = State(new_persp, node.servos)
-                    if node2 == pathWithGaps[i+1][2]:
-                        for subnode in interpath:
-                            new_persp = arr6_to_Orientation[Multiply_arr6s(Orientation_to_arr6[pathWithGaps[i][2].persp], Orientation_to_arr6[subnode.persp])]
-                            subnode2 = State(new_persp, subnode.servos)
-                            pathWithoutGaps.append(subnode2)
-                        break
-            pathWithoutGaps.append(pathWithGaps[i+1][2])
-    print(len(pathWithoutGaps)-1)
-    for node in pathWithoutGaps:
-        print(f"{node.servos.asCommand()} : {node.servos.as2B()}")
-    return pathWithoutGaps
-*/
-    RobotState_s* interpaths_paths[solve_path_length] = { NULL };
-    size_t interpaths_lengths[solve_path_length] = { 0 };
+    RobotState_s* interpaths_paths[solve_path_length];
+    for (size_t i = 0; i < solve_path_length; i++) interpaths_paths[i] = NULL;
+    size_t interpaths_lengths[solve_path_length];
+    for (size_t i = 0; i < solve_path_length; i++) interpaths_lengths[i] = 0;
 
 
     for (size_t i = 0; i < solve_path_length-1; i++) {
@@ -626,7 +775,7 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
                 for (size_t pathInd = 0; pathInd < RSS->length; pathInd++) {
                     if (compare_states(&DijkstraPath[i+1].state, &RSS->paths[pathInd].endState)) {
                         interpaths_lengths[i] = RSS->paths[pathInd].size;
-                        interpaths_paths[i] = (State_s*)malloc((interpaths_lengths[i])*sizeof(State_s));
+                        interpaths_paths[i] = (RobotState_s*)malloc((interpaths_lengths[i])*sizeof(RobotState_s));
                         for (int j = 0; j < interpaths_lengths[i]; j++) {
                             interpaths_paths[i][j] = RSS->paths[pathInd].path[j].servos;
                         }
@@ -639,11 +788,10 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
             Orientation_arr6_s Arr6 = Arr6_from_Orientation(DijkstraPath[i].state.persp);
             for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                 Orientation_arr6_s nextArr6 = Arr6_from_Orientation(entry->paths[pathInd].endState.persp);
-                State_s true_endState = entry->paths[pathInd].endState;
-                true_endState.persp = Orientation_from_Arr6(multiply_arr6s(Arr6, nextArr6));
-                if (compare_states(&DijkstraPath[i+1].state, &true_endState)) {
+                State_s endState = Undefault_EndState(DijkstraPath[i].state, entry->paths[pathInd].endState);
+                if (compare_states(&DijkstraPath[i+1].state, &endState)) {
                     interpaths_lengths[i] = entry->paths[pathInd].size;
-                    interpaths_paths[i] = (State_s*)malloc((interpaths_lengths[i])*sizeof(State_s));
+                    interpaths_paths[i] = (RobotState_s*)malloc((interpaths_lengths[i])*sizeof(RobotState_s));
                     for (int j = 0; j < interpaths_lengths[i]; j++) {
                         interpaths_paths[i][j] = entry->paths[pathInd].path[j];
                     }
@@ -660,7 +808,7 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
 
 
     RobotState_s* ROBOT_SOLUTION = (RobotState_s*)malloc(ROBOT_SOLUTION_LENGTH * sizeof(RobotState_s));
-    size_t index = 0;
+    index = 0;
     for (size_t i = 0; i < solve_path_length; i++) {
         ROBOT_SOLUTION[index++] = DijkstraPath[i].state.servos;
         for (size_t j = 0; j < interpaths_lengths[i]; j++) {

@@ -1,16 +1,33 @@
 #include "servoCoder.h"
-#include "inter_move_table.h"
+#include "MinHeap.h"
 
 typedef struct MinHeapMap {
     size_t length;
     size_t size;
     MinHeapNode* nodes;
 } MinHeapMap;
-
 typedef struct MinHeapMap_insertMessage {
     MinHeapNode* ptr;
     bool NodeIsNew;
 } MinHeapMap_insertMessage;
+
+static const MinHeapNode TEST_CASE = {
+    // (State: ((U, 0), n.E.S.W.U0.R2.D1.L2), algInd: 0, isBefore: 0)
+    .state = {
+        .persp = {
+            .face = FACE_U,
+            .rot = 0
+        },
+        .servos = {
+            0,1,1,1,0,2,1,2
+        }
+    },
+    .algorithm_index = 0,
+    .isBefore = 0,
+    .weight = 0,
+    .parent = NULL,
+    .heapIndex = 0
+};
 
 /*
 typedef struct MinHeapNode {
@@ -38,42 +55,32 @@ size_t MinHeapMap_hash(const MinHeapMap* map, const MinHeapNode* key) {
     size_t hash = 0;
     hash += key->algorithm_index;
     hash *= 2;
-    hash |= key->isBefore;
+    hash += key->isBefore;
     hash *= 24;
     hash += (key->state.persp.face)*4 + key->state.persp.rot;
     hash *= 162;
-    hash += inter_move_table_hash(&(key->state.servos));
-    return (hash % (map->size - 1)) + 1;
+    hash += inter_move_table_hash(&(key->state.servos)) + 1;
+    //return (hash % (map->size - 1)) + 1;
+    return hash;
 }
 MinHeapMap_insertMessage MinHeapMap_insert(MinHeapMap *map, const MinHeapNode* key) {
-
     size_t hash = MinHeapMap_hash(map, key);
-    size_t index = hash;
-
-    while (!compare_states(&(map->nodes[index].state), &(NULL_STATE))) {
-        if (compare_MinHeapNodes(&(map->nodes[index]), key)) {
-            if (map->nodes[index].weight > key->weight) {
-                map->nodes[index].weight = key->weight;
-                map->nodes[index].parent = key->parent;
-            }
-            return (MinHeapMap_insertMessage) {
-                .ptr = &(map->nodes[index]),
-                .NodeIsNew = false
-            };
+    if (map->nodes[hash].algorithm_index == 0 && map->nodes[hash].parent == NULL) {
+        map->nodes[hash] = *key;
+        return (MinHeapMap_insertMessage) {
+            .ptr = &(map->nodes[hash]),
+            .NodeIsNew = true
+        };
+    } else {
+        if (map->nodes[hash].weight > key->weight) {
+            map->nodes[hash].weight = key->weight;
+            map->nodes[hash].parent = key->parent;
         }
-
-        if (index + 1 == hash) {
-            break;
-        }
-
-        index = (index + 1 >= map->size) ? 0 : index + 1;
+        return (MinHeapMap_insertMessage) {
+            .ptr = &(map->nodes[hash]),
+            .NodeIsNew = false
+        };
     }
-
-    map->nodes[index] = *key;
-    return (MinHeapMap_insertMessage) {
-        .ptr = &(map->nodes[index]),
-        .NodeIsNew = true
-    };
 }
 
 void MinHeapMap_free(MinHeapMap *map) {
@@ -84,16 +91,6 @@ void MinHeapMap_free(MinHeapMap *map) {
     free(map->nodes);
     free(map);
 }
-
-
-typedef struct MinHeapNode {
-    State_s state;
-    size_t algorithm_index;
-    bool isBefore;
-    double weight;
-    struct MinHeapNode* parent;
-    size_t heapIndex;
-} MinHeapNode;
 
 bool compare_MinHeapNodes(const MinHeapNode* node1, const MinHeapNode* node2) {
     return (
@@ -108,18 +105,45 @@ typedef struct MinHeap {
     MinHeapMap* nodes_to_indexes;
     size_t size;
     size_t capacity;
+    size_t SupposedSize;
 } MinHeap;
 
-MinHeap* MinHeap_create(size_t N) {
-    size_t size = 960*N + 1;
+void print_MinHeapNode(const MinHeapNode* node) {
+    if (node->parent == NULL) {
+        printf("("); print_State(node->state);
+        printf(", algInd: %d, isBefore: %hhu), weight=%lf, parent=NULL\n",
+            node->algorithm_index,
+            node->isBefore,
+            node->weight
+        );
+    } else {
+        printf("(");
+        print_State(node->state);
+        printf(", algInd: %d, isBefore: %hhu), weight=%lf, parent=(",
+            node->algorithm_index,
+            node->isBefore,
+            node->weight
+        );
+        print_State(node->parent->state);
+        printf(", algInd: %d, isBefore: %hhu)\n", 
+            node->parent->algorithm_index,
+            node->parent->isBefore
+        );
+    }
+}
+
+MinHeap* MinHeap_create(size_t numSingleMoves, size_t numOppPairs) {
+    size_t size = (480*2*numSingleMoves) + (256*2*numOppPairs) + 1;
     MinHeap* minheap = (MinHeap*)malloc(sizeof(MinHeap));
     minheap->heap = (MinHeapNode**)calloc(size, sizeof(MinHeapNode*));
-    minheap->nodes_to_indexes = MinHeapMap_create(size*2);
+    minheap->nodes_to_indexes = MinHeapMap_create(7776*(numSingleMoves+numOppPairs) + 1);
     minheap->size = 0;
     minheap->capacity = size;
+    minheap->SupposedSize = 0;
+    return minheap;
 }
 static inline size_t parent_index(size_t i) {
-    return (i - 1) >> 1;
+    return ((i - 1) >> 1);
 }
 static inline size_t left_child_index(size_t i) {
     return ((2 * i) + 1);
@@ -141,12 +165,17 @@ void MinHeap_bubble_up(MinHeap* minheap, size_t curr_index) {
     minheap->heap[curr_index] = this_node;
 }
 MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) {
+    //printf("This plucking time... minheap size was (%zu,%zu), and min was: ", minheap->size, minheap->SupposedSize);
+    //print_MinHeapNode(minheap->heap[0]);
+
     // save minnode
     MinHeapNode* minnode = minheap->heap[0];
     // move last into root
     MinHeapNode* curr_node = minheap->heap[minheap->size-1];
     minheap->heap[minheap->size-1] = NULL;
     minheap->size--;
+    if (minheap->size == 0) return minnode;
+
 
     // bubble down
     size_t curr_index = 0;
@@ -168,9 +197,10 @@ MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) {
     minheap->heap[curr_index] = curr_node;
     curr_node->heapIndex = curr_index;
 
+    minheap->SupposedSize--;
     return minnode;
 }
-bool MinHeap_update_key(MinHeap* minheap, const State_s* state, size_t algorithm_index, bool isBefore, double weight, MinHeapNode* parent) {
+bool MinHeap_update_key(MinHeap* minheap, const State_s* state, int algorithm_index, bool isBefore, double weight, MinHeapNode* parent) {
     MinHeapNode query = {
         .state = *state,
         .algorithm_index = algorithm_index,
@@ -179,15 +209,25 @@ bool MinHeap_update_key(MinHeap* minheap, const State_s* state, size_t algorithm
         .parent = parent,
         .heapIndex = minheap->size
     };
+    //printf("Entering MinHeapMap_insert()\n");
     MinHeapMap_insertMessage message = MinHeapMap_insert(minheap->nodes_to_indexes, &query);
+    //printf("Finished MinHeapMap_insert()\n");
     MinHeapNode* node = message.ptr; // This ptr points to the actual node stored the map.
     bool nodeWasNew = message.NodeIsNew;
+    //printf("insert()'s message was:\n");
+    //printf("\tptr: %zu\n", node);
+    //printf("\nodeIsNew: %hhu\n", nodeWasNew);
 
     if (nodeWasNew) { // If node was new, we need to insert
-        if (minheap->size == minheap->capacity) return false;
-        minheap->heap[node->heapIndex] = node;
+        if (minheap->size >= minheap->capacity) return false;
+        minheap->SupposedSize++;
         minheap->size++;
-    } MinHeap_bubble_up(minheap, node->heapIndex);
+        minheap->heap[node->heapIndex] = node;
+        MinHeap_bubble_up(minheap, node->heapIndex);
+    } // The condition we don't like here, is where we re-encounter a node that we already plucked as min.
+    else if (!(minheap->heap[0] == node && node->heapIndex == 0)) {
+        MinHeap_bubble_up(minheap, node->heapIndex);
+    }
     return true;
 }
 void MinHeap_free(MinHeap* minheap) {

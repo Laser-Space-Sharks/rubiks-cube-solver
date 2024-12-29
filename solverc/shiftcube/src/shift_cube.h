@@ -30,14 +30,6 @@ typedef struct {
     uint32_t state[NUM_FACES];
 } shift_cube_s;
 
-typedef enum : uint8_t {
-    SIDE_U = 0,
-    SIDE_R = 1,
-    SIDE_D = 2,
-    SIDE_L = 3,
-    NUM_SIDES
-} side_e;
-
 static const shift_cube_s SOLVED_SHIFTCUBE = {
     .state = {
         (uint32_t)FACE_U        | (uint32_t)FACE_U <<  4 | (uint32_t)FACE_U <<  8 |

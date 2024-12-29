@@ -4,6 +4,7 @@
 #include "cube18B.h"
 #include "translators.h"
 #include "solver.h"
+#include "servoCoder.h"
 
 #include <time.h>
 
@@ -239,14 +240,26 @@ int main(int argc, char *argv[]) {
         alg_s* alg = alg_from_alg_str(argv[1]);
         alg_free(alg);
     } else {
-        test_cube_solve(scrambles, NUM_TESTS);
+        //test_cube_solve(scrambles, NUM_TESTS);
 
         //test_shiftcube_moves();
         //test_cube18B_moves();
 
-        stress_test(40000, scrambles[0]);
+        //stress_test(40000, scrambles[0]);
 
-        test_simplifer();
+        //test_simplifer();
+
+        const inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
+        for (size_t i = 0; i < NUM_TESTS; i++) {
+            const alg_s* alg = alg_from_alg_str(scrambles[i]);
+            RobotSolution robosolution = servoCode_compiler_Ofastest(alg, INTER_MOVE_TABLE);
+            //for (size_t i = 0; i < robosolution.size; i++) {
+            //    print_RobotState(robosolution.solution[i]);
+            //    printf("\n");
+            //}
+            free(robosolution.solution);
+        }
+        inter_move_table_free(INTER_MOVE_TABLE);
     }
 
     return 0;

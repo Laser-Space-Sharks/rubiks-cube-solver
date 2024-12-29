@@ -32,10 +32,11 @@ typedef enum : char {
 } char_e;
 
 typedef enum : uint8_t {
-    SIDE_U,
-    SIDE_R,
-    SIDE_D,
-    SIDE_L
+    SIDE_U = 0,
+    SIDE_R = 1,
+    SIDE_D = 2,
+    SIDE_L = 3,
+    NUM_SIDES
 } side_e;
 
 // lookup table for getting the opposite side of a face
