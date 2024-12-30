@@ -114,9 +114,9 @@ static const move_s move_as_struct[NUM_MOVES+1] = {
     NULL_MOVE
 };
 
-//static move_e move_as_enum(move_s move_as_struct) {
-//    return (move_e)((move_as_struct.face * 3) + (mod4(move_as_struct.turns) - 1));
-//}
+static move_e move_as_enum(move_s move_as_struct) {
+    return (move_e)((move_as_struct.face * 3) + (mod4(move_as_struct.turns) - 1));
+}
 
 //static move_s move_s_add(move_s m1, move_s m2) {
 //    if (m1.face != m2.face) {

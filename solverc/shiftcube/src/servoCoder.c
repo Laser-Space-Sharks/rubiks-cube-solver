@@ -121,13 +121,21 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
 
     sub_entry_s sub_entry = {
         .endState = arr_of_states[space_count],
+        .singleMoveQualifications = 0,
         .weight = total_weight,
         .path = (RobotState_s*)malloc(sizeof(RobotState_s)*(space_count-1)),
         .size = space_count-1
-    }; 
+    };
     for (int i = 1; i < space_count; ++i) {
         sub_entry.path[i-1] = arr_of_states[i].servos;
     }
+    for (move_e move = 0; move < 18; move++) {
+        move_s movestruct = move_as_struct[move];
+        if (state_can_do_move(movestruct, sub_entry.endState)) {
+            sub_entry.singleMoveQualifications |= (1<<move);
+        }
+    }
+
 
     ht->table[index].startState  = arr_of_states[0].servos;
     ht->table[index].paths[ht->table[index].length]    = sub_entry;
@@ -195,10 +203,17 @@ bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
     ///////////////////////////////////// INSERT NEW PATH ONTO NODE //////////////////////////////
     ht->RSS.paths[ht->RSS.length] = (RSS_sub_entry_s) {
         .endState = arr_of_states[space_count],
+        .singleMoveQualifications = 0,
         .weight = total_weight,
         .path = (State_s*)malloc(sizeof(State_s)*(space_count-1)),
         .size = space_count-1
     };
+    for (move_e move = 0; move < 18; move++) {
+        move_s movestruct = move_as_struct[move];
+        if (state_can_do_move(movestruct, ht->RSS.paths[ht->RSS.length].endState)) {
+            ht->RSS.paths[ht->RSS.length].singleMoveQualifications |= (1<<move);
+        }
+    }
     for (int i = 1; i < space_count; ++i) {
         ht->RSS.paths[ht->RSS.length].path[i-1] = arr_of_states[i];
     } ht->RSS.length++;
@@ -342,6 +357,34 @@ ROT_TRAINS: dict[str, tuple[tuple[str, int]]] = {
     'D': (('F', 0), ('R', 3), ('B', 2), ('L', 1)),
 }
 */
+
+static const uint8_t multiplied_orientations[24][24] = {
+	{18, 19, 16, 17, 5, 6, 7, 4, 0, 1, 2, 3, 15, 12, 13, 14, 22, 23, 20, 21, 8, 9, 10, 11},
+	{6, 7, 4, 5, 9, 10, 11, 8, 1, 2, 3, 0, 19, 16, 17, 18, 21, 22, 23, 20, 12, 13, 14, 15},
+	{10, 11, 8, 9, 13, 14, 15, 12, 2, 3, 0, 1, 7, 4, 5, 6, 20, 21, 22, 23, 16, 17, 18, 19},
+	{14, 15, 12, 13, 17, 18, 19, 16, 3, 0, 1, 2, 11, 8, 9, 10, 23, 20, 21, 22, 4, 5, 6, 7},
+	{3, 0, 1, 2, 16, 17, 18, 19, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 20},
+	{17, 18, 19, 16, 22, 23, 20, 21, 5, 6, 7, 4, 0, 1, 2, 3, 15, 12, 13, 14, 9, 10, 11, 8},
+	{23, 20, 21, 22, 10, 11, 8, 9, 6, 7, 4, 5, 18, 19, 16, 17, 14, 15, 12, 13, 1, 2, 3, 0},
+	{11, 8, 9, 10, 2, 3, 0, 1, 7, 4, 5, 6, 20, 21, 22, 23, 13, 14, 15, 12, 19, 16, 17, 18},
+	{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23},
+	{5, 6, 7, 4, 21, 22, 23, 20, 9, 10, 11, 8, 1, 2, 3, 0, 19, 16, 17, 18, 13, 14, 15, 12},
+	{22, 23, 20, 21, 14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 18, 19, 16, 17, 2, 3, 0, 1},
+	{15, 12, 13, 14, 3, 0, 1, 2, 11, 8, 9, 10, 23, 20, 21, 22, 17, 18, 19, 16, 7, 4, 5, 6},
+	{1, 2, 3, 0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 4, 5, 6, 7, 23, 20, 21, 22},
+	{9, 10, 11, 8, 20, 21, 22, 23, 13, 14, 15, 12, 2, 3, 0, 1, 7, 4, 5, 6, 17, 18, 19, 16},
+	{21, 22, 23, 20, 18, 19, 16, 17, 14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 3, 0, 1, 2},
+	{19, 16, 17, 18, 0, 1, 2, 3, 15, 12, 13, 14, 22, 23, 20, 21, 5, 6, 7, 4, 11, 8, 9, 10},
+	{2, 3, 0, 1, 12, 13, 14, 15, 16, 17, 18, 19, 4, 5, 6, 7, 8, 9, 10, 11, 22, 23, 20, 21},
+	{13, 14, 15, 12, 23, 20, 21, 22, 17, 18, 19, 16, 3, 0, 1, 2, 11, 8, 9, 10, 5, 6, 7, 4},
+	{20, 21, 22, 23, 6, 7, 4, 5, 18, 19, 16, 17, 14, 15, 12, 13, 10, 11, 8, 9, 0, 1, 2, 3},
+	{7, 4, 5, 6, 1, 2, 3, 0, 19, 16, 17, 18, 21, 22, 23, 20, 9, 10, 11, 8, 15, 12, 13, 14},
+	{8, 9, 10, 11, 7, 4, 5, 6, 20, 21, 22, 23, 13, 14, 15, 12, 2, 3, 0, 1, 18, 19, 16, 17},
+	{4, 5, 6, 7, 19, 16, 17, 18, 21, 22, 23, 20, 9, 10, 11, 8, 1, 2, 3, 0, 14, 15, 12, 13},
+	{16, 17, 18, 19, 15, 12, 13, 14, 22, 23, 20, 21, 5, 6, 7, 4, 0, 1, 2, 3, 10, 11, 8, 9},
+	{12, 13, 14, 15, 11, 8, 9, 10, 23, 20, 21, 22, 17, 18, 19, 16, 3, 0, 1, 2, 6, 7, 4, 5}
+};
+
 static const face_e ROT_TRAINS[6][4] = {
     {FACE_B, FACE_R, FACE_F, FACE_L},
     {FACE_U, FACE_B, FACE_D, FACE_F},
@@ -389,6 +432,16 @@ Orientation_arr6_s multiply_arr6s(Orientation_arr6_s arr1, Orientation_arr6_s ar
             arr2.faces[arr1.faces[5]],
         }
     };
+}
+
+State_s Undefault_EndState(State_s origin, State_s OGendState) {
+    //printf("3\n");
+    State_s true_endState1 = OGendState;
+    uint8_t a = multiplied_orientations[origin.persp.face*4 + origin.persp.rot][OGendState.persp.face*4 + OGendState.persp.rot];
+    true_endState1.persp.face = a>>2;
+    true_endState1.persp.rot = a&3;
+    //printf("4\n");
+    return true_endState1;
 }
 
 State_s stateNum_to_state(uint16_t stateNum) {
@@ -632,13 +685,59 @@ void state_after_opposite_moves_pair(move_s move1, move_s move2, State_s state, 
         *len = 1;
     }
 }
-
+static inline face_e thing(Orientation_s O, face_e face) {
+    Orientation_arr6_s arr6 = Arr6_from_Orientation(O);
+    for (face_e i = 0; i < 6; i++) {
+        if (arr6.faces[i] == face) return i;
+    }
+}
+bool endstate_can_do_MovePair_RSS(MovePair pair, uint32_t singleMoveQualifications) {
+    if (MovePair_is_singleMove(pair)) {
+        return (singleMoveQualifications>>(pair.move1.face*4 + (pair.move1.turns-1)))&1;
+    } else {
+        return (((singleMoveQualifications>>(pair.move1.face*4 + (pair.move1.turns-1)))&1) && 
+               ((singleMoveQualifications>>(pair.move2.face*4 + (pair.move2.turns-1)))&1));
+    }
+}
+bool endstate_can_do_move_nonRSS(move_s move, Orientation_s current_node_persp, Orientation_s endState_persp, uint32_t singleMoveQualifications) {
+    uint8_t true_endState_perspNum = multiplied_orientations[current_node_persp.face*4 + current_node_persp.rot][endState_persp.face*4 + endState_persp.rot];
+    face_e face = true_endState_perspNum>>2;
+    uint8_t rot = true_endState_perspNum&3;
+    Orientation_s O = {
+        .face = face,
+        .rot = rot
+    };
+    Orientation_arr6_s true_endState_arr6  = Arr6_from_Orientation(O);
+    face_e facepos = true_endState_arr6.faces[move.face];
+    face_e endState_moveface = thing(endState_persp, facepos);
+    move_s movestruct = {.face = endState_moveface, .turns = move.turns};
+    move_e moveenum = move_as_enum(movestruct);
+    return ((singleMoveQualifications >> moveenum)&1);
+}
 bool state_can_do_MovePair(MovePair pair, State_s state) {
     if (MovePair_is_singleMove(pair)) {
         return state_can_do_move(pair.move1, state);
     } else {
         return state_can_do_opposite_move_pair(pair.move1, pair.move2, state);
     }
+}
+bool endstate_can_do_MovePair_nonRSS(MovePair pair, State_s current_node, State_s endState, uint32_t singleMoveQualifications) {
+    /*
+    Orientation_s current_node_persp = current_node.persp;
+    Orientation_s endState_persp = endState.persp;
+    bool ret;
+    if (MovePair_is_singleMove(pair)) {
+        ret = endstate_can_do_move_nonRSS(pair.move1, current_node_persp, endState_persp, singleMoveQualifications);
+    } else {
+        ret =  (endstate_can_do_move_nonRSS(pair.move1, current_node_persp, endState_persp, singleMoveQualifications) &&
+                endstate_can_do_move_nonRSS(pair.move2, current_node_persp, endState_persp, singleMoveQualifications));
+    }*/
+    bool other = state_can_do_MovePair(pair, Undefault_EndState(current_node, endState));
+    //if (other != ret) {
+    //    print_State(current_node);
+    //    printf("\n"); print_State(endState);
+    //}
+    return other;
 }
 void state_after_MovePair(MovePair pair, State_s state, uint8_t* len, State_s* ret) {
     if (MovePair_is_singleMove(pair)) {
@@ -652,11 +751,6 @@ void push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current
     for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < *stateAfterMove_len; stateAfterMoveInd++) {
         MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], childN, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
     }
-}
-State_s Undefault_EndState(State_s origin, State_s OGendState) {
-    State_s true_endState = OGendState;
-    true_endState.persp = Orientation_from_Arr6(multiply_arr6s(Arr6_from_Orientation(origin.persp), Arr6_from_Orientation(OGendState.persp)));
-    return true_endState;
 }
 
 RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_table_s* INTER_MOVE_TABLE) {
@@ -687,6 +781,10 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
     State_s Robot_end_state;
     State_s* stateAfterMove_arr = malloc(4*sizeof(State_s));
     uint8_t stateAfterMove_len;
+    Orientation_s DefaultOrientation = {
+        .face = FACE_F,
+        .rot = 0
+    };
 
     MinHeapNode* current_node = MinHeap_pluck_min(minheap);
 
@@ -694,7 +792,7 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
     for (size_t pathInd = 0; pathInd < RSS->length; pathInd++) {
         const RSS_sub_entry_s* path = &RSS->paths[pathInd];
         State_s endState = path->endState;
-        if (state_can_do_MovePair(alg_sections[0], endState)) {
+        if (endstate_can_do_MovePair_RSS(alg_sections[0], path->singleMoveQualifications)) {
             MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node);
         }
     }
@@ -716,7 +814,7 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
             for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                 const sub_entry_s* path = &entry->paths[pathInd];
                 State_s endState = Undefault_EndState(current_node->state, path->endState);
-                if (state_can_do_MovePair(alg_sections[N+1], endState)) {
+                if (endstate_can_do_MovePair_nonRSS(alg_sections[N+1], current_node->state, path->endState, path->singleMoveQualifications)) {
                     MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node);
                 }
             }
