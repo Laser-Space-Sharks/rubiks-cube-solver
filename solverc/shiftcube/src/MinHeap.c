@@ -1,9 +1,12 @@
-#include "servoCoder.h"
 #include "MinHeap.h"
+#include "servoCoder.h"
+#include "move.h"
 
 typedef struct MinHeapMap {
     size_t length;
     size_t size;
+    face_e* movefaces;
+    int8_t numMoves;
     MinHeapNode* nodes;
 } MinHeapMap;
 typedef struct MinHeapMap_insertMessage {
@@ -32,15 +35,24 @@ static const MinHeapNode TEST_CASE = {
 /*
 typedef struct MinHeapNode {
     State_s state;
-    int algorithm_index;
+    int8_t algorithm_index;
     bool isBefore;
-    double weight;
+    float weight;
     struct MinHeapNode* parent;
 } MinHeapNode;
 */
 
-MinHeapMap* MinHeapMap_create(size_t size) {
+MinHeapMap* MinHeapMap_create(MovePair* alg_sections, size_t numAlgSecs) {
     MinHeapMap* map = (MinHeapMap*)malloc(sizeof(MinHeapMap));
+    map->numMoves = numAlgSecs;
+    map->movefaces = (face_e*)malloc(numAlgSecs*sizeof(face_e));
+    for (int i = 0; i < numAlgSecs; i++) {
+        map->movefaces[i] = alg_sections[i].move1.face;
+    }
+
+
+    size_t size = 5184*numAlgSecs + 1;
+
     map->length = 0;
     map->size = size;
 
@@ -50,14 +62,17 @@ MinHeapMap* MinHeapMap_create(size_t size) {
 }
 
 size_t MinHeapMap_hash(const MinHeapMap* map, const MinHeapNode* key) {
-    // Hash could be any of 7776*N + 1 different numbers.
+    // Hash could be any of (2*16*162*N + 1 = 5184*N + 1) different numbers.
     if (State_is_ROBOT_START_STATE(&(key->state)) && key->algorithm_index == -1) return 0;
+    size_t hashface = key->state.persp.face;
+    hashface -= ((hashface > map->movefaces[key->algorithm_index]) + (hashface > opposite_faces[map->movefaces[key->algorithm_index]]));
+
     size_t hash = 0;
     hash += key->algorithm_index;
     hash *= 2;
     hash += key->isBefore;
-    hash *= 24;
-    hash += (key->state.persp.face)*4 + key->state.persp.rot;
+    hash *= 16;
+    hash += (hashface)*4 + key->state.persp.rot;
     hash *= 162;
     hash += inter_move_table_hash(&(key->state.servos)) + 1;
     //return (hash % (map->size - 1)) + 1;
@@ -89,6 +104,7 @@ void MinHeapMap_free(MinHeapMap *map) {
         return;
     };
     free(map->nodes);
+    free(map->movefaces);
     free(map);
 }
 
@@ -132,11 +148,18 @@ void print_MinHeapNode(const MinHeapNode* node) {
     }
 }
 
-MinHeap* MinHeap_create(size_t numSingleMoves, size_t numOppPairs) {
+MinHeap* MinHeap_create(MovePair* alg_sections, size_t numAlgSecs) {
+    size_t numSingleMoves = 0;
+    size_t numOppPairs = 0;
+    for (size_t i = 0; i < numAlgSecs; i++) {
+        if (MovePair_is_singleMove(alg_sections[i])) {
+            numSingleMoves++;
+        } else numOppPairs++;
+    }
     size_t size = (480*2*numSingleMoves) + (256*2*numOppPairs) + 1;
     MinHeap* minheap = (MinHeap*)malloc(sizeof(MinHeap));
     minheap->heap = (MinHeapNode**)calloc(size, sizeof(MinHeapNode*));
-    minheap->nodes_to_indexes = MinHeapMap_create(7776*(numSingleMoves+numOppPairs) + 1);
+    minheap->nodes_to_indexes = MinHeapMap_create(alg_sections, numAlgSecs);
     minheap->size = 0;
     minheap->capacity = size;
     minheap->SupposedSize = 0;
@@ -200,7 +223,7 @@ MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) {
     minheap->SupposedSize--;
     return minnode;
 }
-bool MinHeap_update_key(MinHeap* minheap, const State_s* state, int algorithm_index, bool isBefore, double weight, MinHeapNode* parent) {
+void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm_index, bool isBefore, float weight, MinHeapNode* parent) {
     MinHeapNode query = {
         .state = *state,
         .algorithm_index = algorithm_index,
@@ -219,7 +242,6 @@ bool MinHeap_update_key(MinHeap* minheap, const State_s* state, int algorithm_in
     //printf("\nodeIsNew: %hhu\n", nodeWasNew);
 
     if (nodeWasNew) { // If node was new, we need to insert
-        if (minheap->size >= minheap->capacity) return false;
         minheap->SupposedSize++;
         minheap->size++;
         minheap->heap[node->heapIndex] = node;
@@ -228,7 +250,7 @@ bool MinHeap_update_key(MinHeap* minheap, const State_s* state, int algorithm_in
     else if (!(minheap->heap[0] == node && node->heapIndex == 0)) {
         MinHeap_bubble_up(minheap, node->heapIndex);
     }
-    return true;
+    return;
 }
 void MinHeap_free(MinHeap* minheap) {
     if (minheap == NULL) return;

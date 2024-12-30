@@ -38,13 +38,6 @@ void print_State(State_s state) {
     printf(")");
 }
 
-typedef struct inter_move_table {
-    RSS_entry_s RSS;
-
-    size_t size;
-    inter_move_entry_s *table;
-} inter_move_table_s;
-
 size_t inter_move_table_hash(const RobotState_s *key) {
     size_t hash = 0;
     hash += key->n;
@@ -110,7 +103,7 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
     for (int i = 0; i < space_count+1; ++i) {
         arr_of_states[i] = stateNum_to_state(arr_of_stateNums[i]);
     }
-    double total_weight = 0;
+    float total_weight = 0;
     for (int i = 0; i < space_count; ++i) {
         total_weight += calc_weight_of_step(&arr_of_states[i], &arr_of_states[i+1]);
     }
@@ -194,7 +187,7 @@ bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
     for (int i = 0; i < space_count+1; ++i) {
         arr_of_states[i] = stateNum_to_state(arr_of_stateNums[i]);
     }
-    double total_weight = 0;
+    float total_weight = 0;
     for (int i = 0; i < space_count; ++i) {
         total_weight += calc_weight_of_step(&arr_of_states[i], &arr_of_states[i+1]);
     }
@@ -264,6 +257,29 @@ inter_move_table_s* inter_move_table_create() {
 
     insert_normal_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable.txt");
     insert_root_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable_rootpaths.txt");
+
+    size_t numSubEntries = 0;
+    size_t numRSSSubEntries = 0;
+    size_t numInterPathNodes = 0;
+    size_t numRSSInterPathNodes = 0;
+    for (int i = 0; i < ht->size; i++) {
+        if (ht->table[i].length == 0) continue;
+        numSubEntries += ht->table[i].length;
+        for (int j = 0; j < ht->table[i].length; j++) {
+            numInterPathNodes += ht->table[i].paths[j].size;
+        }
+    }
+    numRSSSubEntries += ht->RSS.length;
+    for (int j = 0; j < ht->RSS.length; j++) {
+        numRSSInterPathNodes += ht->RSS.paths[j].size;
+    }
+    printf("In the INTER_MOVE_TABLE, there are %zu SubEntries, %zu RSSSubEntries, %zu InterPathNodes, %zu RSSInterPathNodes", 
+        numSubEntries,
+        numRSSSubEntries,
+        numInterPathNodes,
+        numRSSInterPathNodes
+    );
+
 
     //printf("RSS.length: %zu\n", ht->RSS.length);
     return ht;
@@ -444,20 +460,20 @@ def calc_weight_of_step(state: State, state2: State) -> float:
         elif abs(v1.rot - v2.rot) == 2: MAX = max(MAX, rot2time)
     return MAX
 */
-double calc_weight_of_armstep(bool e1, uint8_t rot1, bool e2, uint8_t rot2) {
-    double ret;
-    if (e1 == 0 && e2 == 1) ret = (double)Etime;
-    if (e1 == 1 && e2 == 0) ret = (double)dEtime;
-    if (abs(rot2 - rot1) == 1) ret = (double)rot1time;
-    if (abs(rot2 - rot1) == 2) ret = (double)rot2time;
+float calc_weight_of_armstep(bool e1, uint8_t rot1, bool e2, uint8_t rot2) {
+    float ret;
+    if (e1 == 0 && e2 == 1) ret = (float)Etime;
+    if (e1 == 1 && e2 == 0) ret = (float)dEtime;
+    if (abs(rot2 - rot1) == 1) ret = (float)rot1time;
+    if (abs(rot2 - rot1) == 2) ret = (float)rot2time;
     return ret;
 }
-double calc_weight_of_step(const State_s* state1, const State_s* state2) {
-    double maxWeight = 0;
-    double arm1 = calc_weight_of_armstep(state1->servos.n, state1->servos.U, state2->servos.n, state2->servos.U);
-    double arm2 = calc_weight_of_armstep(state1->servos.e, state1->servos.R, state2->servos.e, state2->servos.R);
-    double arm3 = calc_weight_of_armstep(state1->servos.s, state1->servos.D, state2->servos.s, state2->servos.D);
-    double arm4 = calc_weight_of_armstep(state1->servos.w, state1->servos.L, state2->servos.w, state2->servos.L);
+float calc_weight_of_step(const State_s* state1, const State_s* state2) {
+    float maxWeight = 0;
+    float arm1 = calc_weight_of_armstep(state1->servos.n, state1->servos.U, state2->servos.n, state2->servos.U);
+    float arm2 = calc_weight_of_armstep(state1->servos.e, state1->servos.R, state2->servos.e, state2->servos.R);
+    float arm3 = calc_weight_of_armstep(state1->servos.s, state1->servos.D, state2->servos.s, state2->servos.D);
+    float arm4 = calc_weight_of_armstep(state1->servos.w, state1->servos.L, state2->servos.w, state2->servos.L);
     maxWeight = (maxWeight > arm1) ? maxWeight : arm1;
     maxWeight = (maxWeight > arm2) ? maxWeight : arm2;
     maxWeight = (maxWeight > arm3) ? maxWeight : arm3;
@@ -617,13 +633,6 @@ void state_after_opposite_moves_pair(move_s move1, move_s move2, State_s state, 
     }
 }
 
-typedef struct {
-    move_s move1;
-    move_s move2;
-} MovePair;
-static inline bool MovePair_is_singleMove(MovePair pair) {
-    return (pair.move2.face == NULL_MOVE.face && pair.move2.turns == NULL_MOVE.turns);
-}
 bool state_can_do_MovePair(MovePair pair, State_s state) {
     if (MovePair_is_singleMove(pair)) {
         return state_can_do_move(pair.move1, state);
@@ -638,24 +647,17 @@ void state_after_MovePair(MovePair pair, State_s state, uint8_t* len, State_s* r
         state_after_opposite_moves_pair(pair.move1, pair.move2, state, len, ret);
     }
 }
-bool push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr) {
+void push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr) {
     state_after_MovePair(pair, current_node->state, stateAfterMove_len, stateAfterMove_arr);
     for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < *stateAfterMove_len; stateAfterMoveInd++) {
-        if (!MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], childN, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node)) {
-            return false;
-        }
-    } return true;
+        MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], childN, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
+    }
 }
 State_s Undefault_EndState(State_s origin, State_s OGendState) {
     State_s true_endState = OGendState;
     true_endState.persp = Orientation_from_Arr6(multiply_arr6s(Arr6_from_Orientation(origin.persp), Arr6_from_Orientation(OGendState.persp)));
     return true_endState;
 }
-
-static const RobotSolution NULL_RobotSolution = {
-    .solution = NULL,
-    .size = 0
-};
 
 RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_table_s* INTER_MOVE_TABLE) {
     /////////////////////////////////  LOAD ALG_CHUNKS  //////////////////////////////
@@ -675,17 +677,10 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
             }; numAlgSecs++;
         }
     }
-    size_t numSingleMoves = 0;
-    size_t numOppPairs = 0;
-    for (size_t i = 0; i < numAlgSecs; i++) {
-        if (MovePair_is_singleMove(alg_sections[i])) {
-            numSingleMoves++;
-        } else numOppPairs++;
-    }
     
     //////////////////////////// SUMMON EDSGAR W. DIJKSTRA ////////////////////////////
     //printf("Entering MinHeap_create()...\n");
-    MinHeap* minheap = MinHeap_create(numSingleMoves, numOppPairs);
+    MinHeap* minheap = MinHeap_create(alg_sections, numAlgSecs);
     //printf("Finished MinHeap_create(), Updating MinHeap with ROBOT_START_STATE...\n");
     MinHeap_update_key(minheap, &ROBOT_START_STATE, -1, 0, 0, NULL);
     //printf("Finished updating MinHeap with ROBOT_START_STATE\n");
@@ -700,15 +695,11 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
         const RSS_sub_entry_s* path = &RSS->paths[pathInd];
         State_s endState = path->endState;
         if (state_can_do_MovePair(alg_sections[0], endState)) {
-            if (!MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node)) {
-                return NULL_RobotSolution;
-            }
+            MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node);
         }
     }
     if (state_can_do_MovePair(alg_sections[0], current_node->state)) {
-        if (!push_move_edges(minheap, alg_sections[0], current_node, 0, &stateAfterMove_len, stateAfterMove_arr)) {
-            return NULL_RobotSolution;
-        }
+        push_move_edges(minheap, alg_sections[0], current_node, 0, &stateAfterMove_len, stateAfterMove_arr);
     }
     
     int record = 0;
@@ -719,24 +710,18 @@ RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_tab
         //}
         uint8_t N = current_node->algorithm_index;
         if (current_node->isBefore) { // state is immediately before the move
-            if (!push_move_edges(minheap, alg_sections[N], current_node, N, &stateAfterMove_len, stateAfterMove_arr)) {
-                return NULL_RobotSolution;
-            }
+            push_move_edges(minheap, alg_sections[N], current_node, N, &stateAfterMove_len, stateAfterMove_arr);
         } else if (!current_node->isBefore) { // state is immediately after the move
             const inter_move_entry_s* entry = inter_move_table_lookup(INTER_MOVE_TABLE, &current_node->state.servos);
             for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                 const sub_entry_s* path = &entry->paths[pathInd];
                 State_s endState = Undefault_EndState(current_node->state, path->endState);
                 if (state_can_do_MovePair(alg_sections[N+1], endState)) {
-                    if (!MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node)) {
-                        return NULL_RobotSolution;
-                    }
+                    MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node);
                 }
             }
             if (state_can_do_MovePair(alg_sections[N+1], current_node->state)) {
-                if (!push_move_edges(minheap, alg_sections[N+1], current_node, N+1, &stateAfterMove_len, stateAfterMove_arr)) {
-                    return NULL_RobotSolution;
-                }
+                push_move_edges(minheap, alg_sections[N+1], current_node, N+1, &stateAfterMove_len, stateAfterMove_arr);
             }
         }
         current_node = MinHeap_pluck_min(minheap);

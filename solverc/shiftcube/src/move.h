@@ -138,4 +138,13 @@ static inline move_e move_e_add(move_e m1, move_e m2) {
     return (move_e)(move_base[m1] + turns-1);
 }
 
+typedef struct {
+    move_s move1;
+    move_s move2;
+} MovePair;
+
+static inline bool MovePair_is_singleMove(MovePair pair) {
+    return (pair.move2.face == NULL_MOVE.face && pair.move2.turns == NULL_MOVE.turns);
+}
+
 #endif // MOVE_H
