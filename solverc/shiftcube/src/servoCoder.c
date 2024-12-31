@@ -18,26 +18,180 @@
 #define rot1time 1
 #define rot2time 1
 
-void print_RobotState(RobotState_s servos) {
-    printf("%c.%c.%c.%c.U%hhu.R%hhu.D%hhu.L%hhu",
-        ((servos.n) ? 'N' : 'n'),
-        ((servos.e) ? 'E' : 'e'),
-        ((servos.s) ? 'S' : 's'),
-        ((servos.w) ? 'W' : 'w'),
-        servos.U,
-        servos.R,
-        servos.D,
-        servos.L
-    );
-}
-void print_State(State_s state) {
-    printf("((%c, %hhu), ", 
-        facePrints[state.persp.face], 
-        state.persp.rot
-    );
-    print_RobotState(state.servos);
-    printf(")");
-}
+typedef struct {
+    face_e faces[6];
+} Orientation_arr6_s; // 6 Bytes
+typedef struct DijkstraPath {
+    MinHeapNode* path;
+    size_t size;
+} DijkstraPath_s;
+
+typedef struct {                                                  // There will be 735 of these lying around
+    State_s endState; // 4 bytes
+    uint32_t singleMoveQualifications; // 4 bytes
+    float weight; // 4 bytes
+    State_s* path; // 4 on 32-bit and 8 on 64-bit
+    size_t size; // 4 on 32-bit and 8 on 64-bit                          // In total, these sizes will amount to 6672  ****CHANGE THIS AFTER PROTOCOL_SEARCH
+} RSS_sub_entry_s; // 16 on 32-bit and 24 on 64-bit
+typedef struct {                                                  // There will be 1 of these lying around
+    State_s startState; // 4 bytes
+    RSS_sub_entry_s* paths; // // 4 on 32-bit and 8 on 64-bit
+    size_t length; // 4 on 32-bit and 8 on 64-bit
+    size_t size;// 4 on 32-bit and 8 on 64-bit
+} RSS_entry_s; // 16 on 32-bit and 28 on 64-bit
+
+typedef struct {                                                  // There will be 67620 of these lying around
+    State_s endState; // 4 bytes
+    uint32_t singleMoveQualifications; // 4 bytes
+    float weight; // 4 bytes
+    RobotState_s* path; // 4 on 32-bit and 8 on 64-bit
+    size_t size; // 4 on 32-bit and 8 on 64-bit                          // In total, these sizes will amount to 587364
+} sub_entry_s; // 16 on 32-bit and 24 on 64-bit
+typedef struct {                                                  // There will be 162 of these lying around
+    RobotState_s startState; // 2 bytes
+    sub_entry_s* paths; // 4 on 32-bit and 8 on 64-bit
+    size_t length; // 4 on 32-bit and 8 on 64-bit
+    size_t size; // 4 on 32-bit and 8 on 64-bit
+} inter_move_entry_s; // 14 on 32-bit and 26 on 64-bit
+
+typedef struct inter_move_table {
+    RSS_entry_s RSS; // already counted for
+    size_t size; // 4 on 32-bit and 8 on 64-bit
+    inter_move_entry_s *table; // 4 on 32-bit and 8 on 64-bit
+} inter_move_table_s; // 8 new bytes on 32-bit and 16 new bytes on 64-bit
+//    So on total, this inter-move-table will take up:                  *                                             *
+//                                                on 32-bit, (11760 + 26688 + 16 + 1081920 + 1174728 + 2268 + 8)  = 2297388 bytes
+//                                                on 64-bit, (17640 + 26688 + 28 + 1622880 + 1174728 + 4212 + 16) = 2846192 bytes
+
+//////////////////////////////////////////////////// CONSTANTS ////////////////////////////////////////////
+static const State_s ROBOT_START_STATE = {
+    .persp = (Orientation_s) {
+        FACE_F, 0
+    },
+    .servos = (RobotState_s) {
+        1,1,1,1,0,0,0,0
+    }
+};
+
+static const State_s NULL_STATE = {
+    .persp = {
+        .face = FACE_NULL,
+        .rot = 0
+    },
+    .servos = {
+        0,0,0,0,0,0,0,0
+    }
+};
+//////////////////////////////////////////////////// TABLES ////////////////////////////////////////////
+static const move_e move_through_orientationNum[24][18] = {
+	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3},
+	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3},
+	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3},
+	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3},
+	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3},
+	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3},
+	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3},
+	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3},
+	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3},
+	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3},
+	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3},
+	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3},
+	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3},
+	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3},
+	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3},
+	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3},
+	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3},
+	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3},
+	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3},
+	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3},
+	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3},
+	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3},
+	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3},
+	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3},
+};
+static const uint8_t multiplied_orientations[24][24] = {
+	{18, 19, 16, 17, 5, 6, 7, 4, 0, 1, 2, 3, 15, 12, 13, 14, 22, 23, 20, 21, 8, 9, 10, 11},
+	{6, 7, 4, 5, 9, 10, 11, 8, 1, 2, 3, 0, 19, 16, 17, 18, 21, 22, 23, 20, 12, 13, 14, 15},
+	{10, 11, 8, 9, 13, 14, 15, 12, 2, 3, 0, 1, 7, 4, 5, 6, 20, 21, 22, 23, 16, 17, 18, 19},
+	{14, 15, 12, 13, 17, 18, 19, 16, 3, 0, 1, 2, 11, 8, 9, 10, 23, 20, 21, 22, 4, 5, 6, 7},
+	{3, 0, 1, 2, 16, 17, 18, 19, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 20},
+	{17, 18, 19, 16, 22, 23, 20, 21, 5, 6, 7, 4, 0, 1, 2, 3, 15, 12, 13, 14, 9, 10, 11, 8},
+	{23, 20, 21, 22, 10, 11, 8, 9, 6, 7, 4, 5, 18, 19, 16, 17, 14, 15, 12, 13, 1, 2, 3, 0},
+	{11, 8, 9, 10, 2, 3, 0, 1, 7, 4, 5, 6, 20, 21, 22, 23, 13, 14, 15, 12, 19, 16, 17, 18},
+	{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23},
+	{5, 6, 7, 4, 21, 22, 23, 20, 9, 10, 11, 8, 1, 2, 3, 0, 19, 16, 17, 18, 13, 14, 15, 12},
+	{22, 23, 20, 21, 14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 18, 19, 16, 17, 2, 3, 0, 1},
+	{15, 12, 13, 14, 3, 0, 1, 2, 11, 8, 9, 10, 23, 20, 21, 22, 17, 18, 19, 16, 7, 4, 5, 6},
+	{1, 2, 3, 0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 4, 5, 6, 7, 23, 20, 21, 22},
+	{9, 10, 11, 8, 20, 21, 22, 23, 13, 14, 15, 12, 2, 3, 0, 1, 7, 4, 5, 6, 17, 18, 19, 16},
+	{21, 22, 23, 20, 18, 19, 16, 17, 14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 3, 0, 1, 2},
+	{19, 16, 17, 18, 0, 1, 2, 3, 15, 12, 13, 14, 22, 23, 20, 21, 5, 6, 7, 4, 11, 8, 9, 10},
+	{2, 3, 0, 1, 12, 13, 14, 15, 16, 17, 18, 19, 4, 5, 6, 7, 8, 9, 10, 11, 22, 23, 20, 21},
+	{13, 14, 15, 12, 23, 20, 21, 22, 17, 18, 19, 16, 3, 0, 1, 2, 11, 8, 9, 10, 5, 6, 7, 4},
+	{20, 21, 22, 23, 6, 7, 4, 5, 18, 19, 16, 17, 14, 15, 12, 13, 10, 11, 8, 9, 0, 1, 2, 3},
+	{7, 4, 5, 6, 1, 2, 3, 0, 19, 16, 17, 18, 21, 22, 23, 20, 9, 10, 11, 8, 15, 12, 13, 14},
+	{8, 9, 10, 11, 7, 4, 5, 6, 20, 21, 22, 23, 13, 14, 15, 12, 2, 3, 0, 1, 18, 19, 16, 17},
+	{4, 5, 6, 7, 19, 16, 17, 18, 21, 22, 23, 20, 9, 10, 11, 8, 1, 2, 3, 0, 14, 15, 12, 13},
+	{16, 17, 18, 19, 15, 12, 13, 14, 22, 23, 20, 21, 5, 6, 7, 4, 0, 1, 2, 3, 10, 11, 8, 9},
+	{12, 13, 14, 15, 11, 8, 9, 10, 23, 20, 21, 22, 17, 18, 19, 16, 3, 0, 1, 2, 6, 7, 4, 5}
+};
+static const face_e ROT_TRAINS[6][4] = {
+    {FACE_B, FACE_R, FACE_F, FACE_L},
+    {FACE_U, FACE_B, FACE_D, FACE_F},
+    {FACE_U, FACE_R, FACE_D, FACE_L},
+    {FACE_U, FACE_F, FACE_D, FACE_B},
+    {FACE_U, FACE_L, FACE_D, FACE_R},
+    {FACE_F, FACE_R, FACE_B, FACE_L},
+};
+static bool RobotStateNum_can_do_move[18][1296];
+
+/////////////////////////////////////////////// PRIVATE FUNCTION PROTOTYPES /////////////////////////////////////////
+bool inter_move_table_insert(inter_move_table_s *ht, const char* line);
+bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line);
+void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename);
+void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename);
+inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key);
+const RSS_entry_s* inter_move_table_get_RSS(const inter_move_table_s *ht);
+const inter_move_entry_s* inter_move_table_lookup(const inter_move_table_s *ht, const RobotState_s *key);
+
+Orientation_arr6_s Arr6_from_Orientation(Orientation_s O);
+Orientation_s Orientation_from_Arr6(Orientation_arr6_s arr6);
+Orientation_arr6_s multiply_arr6s(Orientation_arr6_s arr1, Orientation_arr6_s arr2);
+inline uint8_t orientationNum(Orientation_s O);
+inline Orientation_s orientation_from_num(uint8_t num);
+State_s Undefault_EndState(State_s origin, State_s OGendState);
+State_s stateNum_to_state(uint16_t stateNum);
+void print_RobotState(RobotState_s servos);
+uint16_t RobotState_to_2B(const RobotState_s* state);
+RobotState_s RobotStateNum_to_RobotState(uint16_t RobotStateNum);
+uint16_t RobotState_to_RobotStateNum(const RobotState_s* state);
+bool compare_RobotStates(const RobotState_s* state1, const RobotState_s* state2);
+bool State_is_ROBOT_START_STATE(const State_s* state);
+
+bool is_valid_state(const State_s* state);
+float calc_weight_of_armstep(bool e1, uint8_t rot1, bool e2, uint8_t rot2);
+float calc_weight_of_step(const State_s* state1, const State_s* state2);
+
+inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5);
+inline bool allequal4(bool a1, bool a2, bool a3, bool a4);
+
+bool can_defaultState_do_move(move_e move, RobotState_s servos);
+void init_RobotStateNum_can_do_move();
+bool state_can_do_move(move_e move, State_s state);
+bool endstate_can_do_MovePair_RSS(MovePair pair, uint32_t singleMoveQualifications);
+bool state_can_do_MovePair(MovePair pair, State_s state);
+void state_after_move(move_e move, State_s state, uint8_t *len, State_s* ret);
+bool state_can_do_opposite_move_pair(move_e move1, move_e move2, State_s state);
+void state_after_opposite_moves_pair(move_e move1, move_e move2, State_s state, uint8_t *len, State_s* ret);
+void state_after_MovePair(MovePair pair, State_s state, uint8_t* len, State_s* ret);
+
+void push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr);
+void Load_alg_chunks(const alg_s* alg, MovePair* alg_sections, uint8_t* numAlgSecs);
+void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8_t numAlgSecs, const inter_move_table_s* INTER_MOVE_TABLE, MinHeapNode** EndNode);
+DijkstraPath_s Form_DijkstraPath_from_EndNode(const MinHeapNode* EndNode);
+RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, const inter_move_table_s* INTER_MOVE_TABLE);
+
+/////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
 
 size_t inter_move_table_hash(const RobotState_s *key) {
     size_t hash = 0;
@@ -52,7 +206,6 @@ size_t inter_move_table_hash(const RobotState_s *key) {
     hash += key->L;
     return hash;
 }
-
 bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
     if (ht == NULL || line == NULL) {
         return false;
@@ -240,7 +393,6 @@ void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TA
     fclose(file);
     //printf("finished 'insert_normal_lines_into_inter_move_table'\n");
 }
-
 void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename) {
     //printf("starting 'insert_root_lines_into_inter_move_table'\n");
     FILE *file = fopen(filename, "rb");
@@ -258,7 +410,6 @@ void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABL
     fclose(file);
     //printf("finished 'insert_root_lines_into_inter_move_table'\n");
 }
-
 inter_move_table_s* inter_move_table_create() {
     inter_move_table_s *ht = (inter_move_table_s*)malloc(sizeof(inter_move_table_s));
     ht->table = (inter_move_entry_s*)calloc(INTER_MOVE_TABLE_CAPACITY, sizeof(inter_move_entry_s));
@@ -298,8 +449,7 @@ inter_move_table_s* inter_move_table_create() {
 
     return ht;
 }
-
-static inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key) {
+inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key) {
     if (ht == NULL || key == NULL) {
         return ht->size;
     }
@@ -311,17 +461,14 @@ static inline size_t inter_move_table_get_index(const inter_move_table_s *ht, co
 
     return index;
 }
-
 const RSS_entry_s* inter_move_table_get_RSS(const inter_move_table_s *ht) {
     return &(ht->RSS);
 }
-
 const inter_move_entry_s* inter_move_table_lookup(const inter_move_table_s *ht, const RobotState_s *key) {
     size_t index = inter_move_table_get_index(ht, key);
 
     return (index == ht->size) ? NULL : &ht->table[index];
 }
-
 void inter_move_table_free(inter_move_table_s *ht) {
     if (ht == NULL || ht->table == NULL) {
         free(ht);
@@ -341,82 +488,6 @@ void inter_move_table_free(inter_move_table_s *ht) {
     //printf("freeing ht..\n");
     free(ht);
 }
-
-typedef struct {
-    face_e faces[6];
-} Orientation_arr6_s; // 6 Bytes
-
-/*
-ROT_TRAINS: dict[str, tuple[tuple[str, int]]] = {
-    'U': (('B', 2), ('R', 1), ('F', 0), ('L', 3)),
-    'R': (('U', 3), ('B', 0), ('D', 1), ('F', 0)),
-    'F': (('U', 0), ('R', 0), ('D', 0), ('L', 0)),
-    'L': (('U', 1), ('F', 0), ('D', 3), ('B', 0)),
-    'B': (('U', 2), ('L', 0), ('D', 2), ('R', 0)),
-    'D': (('F', 0), ('R', 3), ('B', 2), ('L', 1)),
-}
-*/
-static const move_e move_through_orientationNum[24][18] = {
-	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, },
-	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, },
-	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, },
-	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, },
-	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, },
-	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, },
-	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, },
-	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, },
-	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, },
-	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, },
-	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, },
-	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, },
-	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, },
-	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, },
-	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, },
-	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, },
-	{MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_D, MOVE_D2, MOVE_D3, },
-	{MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, },
-	{MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, },
-	{MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, },
-	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_F, MOVE_F2, MOVE_F3, },
-	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, },
-	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_F, MOVE_F2, MOVE_F3, },
-	{MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_F, MOVE_F2, MOVE_F3, },
-};
-static const uint8_t multiplied_orientations[24][24] = {
-	{18, 19, 16, 17, 5, 6, 7, 4, 0, 1, 2, 3, 15, 12, 13, 14, 22, 23, 20, 21, 8, 9, 10, 11},
-	{6, 7, 4, 5, 9, 10, 11, 8, 1, 2, 3, 0, 19, 16, 17, 18, 21, 22, 23, 20, 12, 13, 14, 15},
-	{10, 11, 8, 9, 13, 14, 15, 12, 2, 3, 0, 1, 7, 4, 5, 6, 20, 21, 22, 23, 16, 17, 18, 19},
-	{14, 15, 12, 13, 17, 18, 19, 16, 3, 0, 1, 2, 11, 8, 9, 10, 23, 20, 21, 22, 4, 5, 6, 7},
-	{3, 0, 1, 2, 16, 17, 18, 19, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 20},
-	{17, 18, 19, 16, 22, 23, 20, 21, 5, 6, 7, 4, 0, 1, 2, 3, 15, 12, 13, 14, 9, 10, 11, 8},
-	{23, 20, 21, 22, 10, 11, 8, 9, 6, 7, 4, 5, 18, 19, 16, 17, 14, 15, 12, 13, 1, 2, 3, 0},
-	{11, 8, 9, 10, 2, 3, 0, 1, 7, 4, 5, 6, 20, 21, 22, 23, 13, 14, 15, 12, 19, 16, 17, 18},
-	{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23},
-	{5, 6, 7, 4, 21, 22, 23, 20, 9, 10, 11, 8, 1, 2, 3, 0, 19, 16, 17, 18, 13, 14, 15, 12},
-	{22, 23, 20, 21, 14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 18, 19, 16, 17, 2, 3, 0, 1},
-	{15, 12, 13, 14, 3, 0, 1, 2, 11, 8, 9, 10, 23, 20, 21, 22, 17, 18, 19, 16, 7, 4, 5, 6},
-	{1, 2, 3, 0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 4, 5, 6, 7, 23, 20, 21, 22},
-	{9, 10, 11, 8, 20, 21, 22, 23, 13, 14, 15, 12, 2, 3, 0, 1, 7, 4, 5, 6, 17, 18, 19, 16},
-	{21, 22, 23, 20, 18, 19, 16, 17, 14, 15, 12, 13, 10, 11, 8, 9, 6, 7, 4, 5, 3, 0, 1, 2},
-	{19, 16, 17, 18, 0, 1, 2, 3, 15, 12, 13, 14, 22, 23, 20, 21, 5, 6, 7, 4, 11, 8, 9, 10},
-	{2, 3, 0, 1, 12, 13, 14, 15, 16, 17, 18, 19, 4, 5, 6, 7, 8, 9, 10, 11, 22, 23, 20, 21},
-	{13, 14, 15, 12, 23, 20, 21, 22, 17, 18, 19, 16, 3, 0, 1, 2, 11, 8, 9, 10, 5, 6, 7, 4},
-	{20, 21, 22, 23, 6, 7, 4, 5, 18, 19, 16, 17, 14, 15, 12, 13, 10, 11, 8, 9, 0, 1, 2, 3},
-	{7, 4, 5, 6, 1, 2, 3, 0, 19, 16, 17, 18, 21, 22, 23, 20, 9, 10, 11, 8, 15, 12, 13, 14},
-	{8, 9, 10, 11, 7, 4, 5, 6, 20, 21, 22, 23, 13, 14, 15, 12, 2, 3, 0, 1, 18, 19, 16, 17},
-	{4, 5, 6, 7, 19, 16, 17, 18, 21, 22, 23, 20, 9, 10, 11, 8, 1, 2, 3, 0, 14, 15, 12, 13},
-	{16, 17, 18, 19, 15, 12, 13, 14, 22, 23, 20, 21, 5, 6, 7, 4, 0, 1, 2, 3, 10, 11, 8, 9},
-	{12, 13, 14, 15, 11, 8, 9, 10, 23, 20, 21, 22, 17, 18, 19, 16, 3, 0, 1, 2, 6, 7, 4, 5}
-};
-static const face_e ROT_TRAINS[6][4] = {
-    {FACE_B, FACE_R, FACE_F, FACE_L},
-    {FACE_U, FACE_B, FACE_D, FACE_F},
-    {FACE_U, FACE_R, FACE_D, FACE_L},
-    {FACE_U, FACE_F, FACE_D, FACE_B},
-    {FACE_U, FACE_L, FACE_D, FACE_R},
-    {FACE_F, FACE_R, FACE_B, FACE_L},
-};
-static bool RobotStateNum_can_do_move[18][1296];
 
 Orientation_arr6_s Arr6_from_Orientation(Orientation_s O) {
     Orientation_arr6_s wheres06;
@@ -457,10 +528,10 @@ Orientation_arr6_s multiply_arr6s(Orientation_arr6_s arr1, Orientation_arr6_s ar
         }
     };
 }
-static inline uint8_t orientationNum(Orientation_s O) {
+inline uint8_t orientationNum(Orientation_s O) {
     return O.face*4 + O.rot;
 }
-static inline Orientation_s orientation_from_num(uint8_t num) {
+inline Orientation_s orientation_from_num(uint8_t num) {
     return (Orientation_s) {
         .face = num>>2,
         .rot = num&3
@@ -502,7 +573,26 @@ State_s stateNum_to_state(uint16_t stateNum) {
         }
     };    
 }
-
+void print_RobotState(RobotState_s servos) {
+    printf("%c.%c.%c.%c.U%hhu.R%hhu.D%hhu.L%hhu",
+        ((servos.n) ? 'N' : 'n'),
+        ((servos.e) ? 'E' : 'e'),
+        ((servos.s) ? 'S' : 's'),
+        ((servos.w) ? 'W' : 'w'),
+        servos.U,
+        servos.R,
+        servos.D,
+        servos.L
+    );
+}
+void print_State(State_s state) {
+    printf("((%c, %hhu), ", 
+        facePrints[state.persp.face], 
+        state.persp.rot
+    );
+    print_RobotState(state.servos);
+    printf(")");
+}
 uint16_t RobotState_to_2B(const RobotState_s* state) {
     uint16_t bitmask = 0;
     bitmask <<= 1; bitmask |= state->n;
@@ -558,15 +648,6 @@ bool compare_states(const State_s* state1, const State_s* state2) {
 bool State_is_ROBOT_START_STATE(const State_s* state) {
     return compare_states(state, &ROBOT_START_STATE);
 }
-/*
-def is_valid_state(state: State):
-    U, R, D, L = state.servos.U, state.servos.R, state.servos.D, state.servos.L
-    if R == ArmState(1, 1) == D: return False
-    if L == ArmState(1, 1) == D: return False
-    if R == ArmState(1, 1) == U: return False
-    if L == ArmState(1, 1) == U: return False
-    return (D.e == 1 or (R == ArmState(1, 1) and L.e == 1) or (L == ArmState(1, 1) and R.e == 1))
-*/
 bool is_valid_state(const State_s* state) {
     if (state->servos.R == 1 && 1 == state->servos.D && state->servos.e == 1 && 1 == state->servos.s) return false;
     if (state->servos.L == 1 && 1 == state->servos.D && state->servos.w == 1 && 1 == state->servos.s) return false;
@@ -577,17 +658,6 @@ bool is_valid_state(const State_s* state) {
            ((state->servos.L == 1 && state->servos.w == 1) && state->servos.e == 1));
 }
 
-
-/*
-def calc_weight_of_step(state: State, state2: State) -> float:
-    MAX = 0
-    for v1, v2 in zip(state.unpackServos(), state2.unpackServos()):
-        if (v1.e, v2.e) == (0, 1): MAX = max(MAX, Etime)
-        elif (v1.e, v2.e) == (1, 0): MAX = max(MAX, dEtime)
-        elif abs(v1.rot - v2.rot) == 1: MAX = max(MAX, rot1time)
-        elif abs(v1.rot - v2.rot) == 2: MAX = max(MAX, rot2time)
-    return MAX
-*/
 float calc_weight_of_armstep(bool e1, uint8_t rot1, bool e2, uint8_t rot2) {
     float ret;
     if (e1 == 0 && e2 == 1) ret = (float)Etime;
@@ -610,34 +680,12 @@ float calc_weight_of_step(const State_s* state1, const State_s* state2) {
     return maxWeight;
 }
 
-/*
-def state_can_do_move(move: Move, state: State):
-    face = Orientation_to_arr6[state.persp][faces_to_nums[move.face]]
-    if (face == 'F' or face == 'B'): return False
-    if face == 'U':
-        if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return False
-        if state.servos.R.rot == 1 or state.servos.L.rot == 1: return False
-        if state.servos.U.rot == 3-move.turns: return False
-    if face == 'R':
-        if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return False
-        if state.servos.U.rot == 1 or state.servos.D.rot == 1: return False
-        if state.servos.R.rot == 3-move.turns: return False
-    if face == 'L':
-        if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return False
-        if state.servos.U.rot == 1 or state.servos.D.rot == 1: return False
-        if state.servos.L.rot == 3-move.turns: return False
-    if face == 'D':
-        if not (state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return False
-        if state.servos.R.rot == 1 or state.servos.L.rot == 1: return False
-        if state.servos.D.rot == 3-move.turns: return False
-    return True
-*/
-static inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5) {
+inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5) {
     return (
         a1 == a2 && a2 == a3 && a3 == a4 && a4 == a5
     );
 }
-static inline bool allequal4(bool a1, bool a2, bool a3, bool a4) {
+inline bool allequal4(bool a1, bool a2, bool a3, bool a4) {
     return (
         a1 == a2 && a2 == a3 && a3 == a4
     );
@@ -672,34 +720,7 @@ void init_RobotStateNum_can_do_move() {
 bool state_can_do_move(move_e move, State_s state) {
     return RobotStateNum_can_do_move[move_through_orientationNum[orientationNum(state.persp)][move]][RobotState_to_RobotStateNum(&state.servos)];
 }
-/*
-def state_after_move(move: Move, state: State) -> list[State]|None:
-    face = Orientation_to_arr6[state.persp][faces_to_nums[move.face]]
 
-    if move.turns == 1: ArmAfterMove = lambda rot: ArmState(1, rot+1)
-    if move.turns == 2: ArmAfterMove = lambda rot: ArmState(1, 2-rot)
-    if move.turns == 3: ArmAfterMove = lambda rot: ArmState(1, rot-1)
-    
-    if face == 'U':
-        endStateOfU = ArmAfterMove(state.servos.U.rot)
-        return [State(state.persp, RobotState(endStateOfU, state.servos.R, state.servos.D, state.servos.L))]
-    if face == 'R':
-        endStateOfR = ArmAfterMove(state.servos.R.rot)
-        return [State(state.persp, RobotState(state.servos.U, endStateOfR, state.servos.D, state.servos.L))]
-    if face == 'L':
-        endStateOfL = ArmAfterMove(state.servos.L.rot)
-        return [State(state.persp, RobotState(state.servos.U, state.servos.R, state.servos.D, endStateOfL))]
-    if face == 'D':
-        endStateOfD = ArmAfterMove(state.servos.D.rot)
-        
-        if (state.servos.U.e):
-            return [State(state.persp, RobotState(state.servos.U, state.servos.R, endStateOfD, state.servos.L)),
-                    State(state.persp, RobotState(ArmState(0, state.servos.U.rot), state.servos.R, endStateOfD, state.servos.L))]
-        return [State(state.persp, RobotState(ArmState(1, state.servos.U.rot), state.servos.R, endStateOfD, state.servos.L)),
-                State(state.persp, RobotState(ArmState(0, 0), state.servos.R, endStateOfD, state.servos.L)),
-                State(state.persp, RobotState(ArmState(0, 1), state.servos.R, endStateOfD, state.servos.L)),
-                State(state.persp, RobotState(ArmState(0, 2), state.servos.R, endStateOfD, state.servos.L))]
-*/
 void state_after_move(move_e move, State_s state, uint8_t *len, State_s* ret) {
     face_e face = move_faces[move_through_orientationNum[orientationNum(state.persp)][move]];
     RobotState_s servos = state.servos;
@@ -738,28 +759,14 @@ void state_after_move(move_e move, State_s state, uint8_t *len, State_s* ret) {
         }
     }
 }
-/*
-def state_can_do_opposite_move_pair(move1: Move, move2: Move, state: State):
-    face1 = Orientation_to_arr6[state.persp][faces_to_nums[move1.face]]
-    if (face1 == 'F' or face1 == 'B'): return False
-    if not (state.servos.U.e == state.servos.R.e == state.servos.D.e == state.servos.L.e == 1): return False
-    if face1 == 'U': return (state.servos.R.rot != 1 and state.servos.L.rot != 1 and state.servos.U.rot != 3-move1.turns and state.servos.D.rot != 3-move2.turns)
-    if face1 == 'R': return (state.servos.U.rot != 1 and state.servos.D.rot != 1 and state.servos.R.rot != 3-move1.turns and state.servos.L.rot != 3-move2.turns)
-    if face1 == 'L': return (state.servos.U.rot != 1 and state.servos.D.rot != 1 and state.servos.L.rot != 3-move1.turns and state.servos.R.rot != 3-move2.turns)
-    if face1 == 'D': return (state.servos.R.rot != 1 and state.servos.L.rot != 1 and state.servos.D.rot != 3-move1.turns and state.servos.U.rot != 3-move2.turns)
-*/
+
 bool state_can_do_opposite_move_pair(move_e move1, move_e move2, State_s state) {
     uint16_t RobotStateNum = RobotState_to_RobotStateNum(&state.servos);
     uint8_t perspNum = orientationNum(state.persp);
     return (RobotStateNum_can_do_move[move_through_orientationNum[perspNum][move1]][RobotStateNum] &&
             RobotStateNum_can_do_move[move_through_orientationNum[perspNum][move2]][RobotStateNum]);
 }
-/*
-def state_after_opposite_moves_pair(move1: Move, move2: Move, state: State):
-    if move1.face == 'D': return state_after_move(move2, state_after_move(move1, state)[0])
-    if move2.face == 'D': return state_after_move(move1, state_after_move(move2, state)[0])
-    return state_after_move(move2, state_after_move(move1, state)[0])
-*/
+
 void state_after_opposite_moves_pair(move_e move1, move_e move2, State_s state, uint8_t *len, State_s* ret) {
     if (move_faces[move1] == FACE_D) {
         state_after_move(move1, state, len, ret);
@@ -889,10 +896,6 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
     printf("DIJKSTRA FINISHED!: Min Distance: %lf\n", current_node->weight);
     *EndNode = current_node; //printf("\tline 860\n");
 }
-typedef struct DijkstraPath {
-    MinHeapNode* path;
-    size_t size;
-} DijkstraPath_s;
 DijkstraPath_s Form_DijkstraPath_from_EndNode(const MinHeapNode* EndNode) {
     size_t solve_path_length = 1;
     MinHeapNode* node = EndNode;
