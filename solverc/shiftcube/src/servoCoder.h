@@ -90,7 +90,8 @@ const RSS_entry_s* inter_move_table_get_RSS(const inter_move_table_s *ht);
 const inter_move_entry_s* inter_move_table_lookup(const inter_move_table_s *ht, const RobotState_s *key);
 void inter_move_table_free(inter_move_table_s *ht);
 
-bool state_can_do_move(move_s move, State_s state);
+void init_RobotStateNum_can_do_move();
+bool state_can_do_move(move_e move, State_s state);
 void print_RobotState(RobotState_s state);
 void print_State(State_s state);
 State_s stateNum_to_state(uint16_t stateNum);

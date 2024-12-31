@@ -47,7 +47,7 @@ MinHeapMap* MinHeapMap_create(MovePair* alg_sections, size_t numAlgSecs) {
     map->numMoves = numAlgSecs;
     map->movefaces = (face_e*)malloc(numAlgSecs*sizeof(face_e));
     for (int i = 0; i < numAlgSecs; i++) {
-        map->movefaces[i] = alg_sections[i].move1.face;
+        map->movefaces[i] = move_faces[alg_sections[i].move1];
     }
 
 
@@ -185,10 +185,11 @@ void MinHeap_bubble_up(MinHeap* minheap, size_t curr_index) {
     this_node->heapIndex = curr_index;
     minheap->heap[curr_index] = this_node;
 }
-MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) {
+MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) { //printf("\t\tMinHeap_pluck_min() was called!: \n");
+    if (minheap->size == 0) return NULL; 
     //printf("This plucking time... minheap size was (%zu,%zu), and min was: ", minheap->size, minheap->SupposedSize);
     //print_MinHeapNode(minheap->heap[0]);
-
+    //printf("\t\tline 191: minheap->capacity: %zu\n", minheap->capacity);
     // save minnode
     MinHeapNode* minnode = minheap->heap[0];
     // move last into root
@@ -196,31 +197,34 @@ MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) {
     minheap->heap[minheap->size-1] = NULL;
     minheap->size--;
     if (minheap->size == 0) return minnode;
-
+    //printf("\t\tline 199\n");
 
     // bubble down
     size_t curr_index = 0;
     size_t left_child_ind = left_child_index(curr_index);
     size_t right_child_ind = right_child_index(curr_index);
     while (left_child_ind < minheap->size) {
-        size_t smaller_child_ind = left_child_ind;
+        size_t smaller_child_ind = left_child_ind; //printf("\t\t\tline 206: right_child_ind: %zu, left_child_ind: %zu\n", right_child_ind, left_child_ind);
+        //if (minheap->heap[right_child_ind] == NULL) printf("\t\t\tminheap->heap[right_child_ind] == NULL\n");
+        //if (minheap->heap[left_child_ind] == NULL) printf("\t\t\tminheap->heap[left_child_ind] == NULL\n");
         if (right_child_ind < minheap->size && minheap->heap[right_child_ind]->weight < minheap->heap[left_child_ind]->weight) {
             smaller_child_ind = right_child_ind;
-        }
-        if (minheap->heap[smaller_child_ind]->weight < curr_node->weight) {
+        } //printf("\t\t\tline 211\n");
+        if (minheap->heap[smaller_child_ind]->weight < curr_node->weight) { //printf("\t\t\tline 212\n");
             minheap->heap[smaller_child_ind]->heapIndex = curr_index;
             minheap->heap[curr_index] = minheap->heap[smaller_child_ind];
             curr_index = smaller_child_ind;
             left_child_ind = left_child_index(curr_index);
-            right_child_ind = right_child_index(curr_index);
+            right_child_ind = right_child_index(curr_index); //printf("\t\t\tline 217\n");
         } else break;
-    }
+    } //printf("\t\tline 217\n");
     minheap->heap[curr_index] = curr_node;
     curr_node->heapIndex = curr_index;
-
+    //printf("\t\tline 220\n");
     return minnode;
 }
 void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm_index, bool isBefore, float weight, MinHeapNode* parent) {
+    //printf("\t\tMinHeap_update_key() was called to insert: "); print_State(*state); printf("\n");
     MinHeapNode query = {
         .state = *state,
         .algorithm_index = algorithm_index,
@@ -230,7 +234,7 @@ void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm
         .heapIndex = minheap->size
     };
     //printf("Entering MinHeapMap_insert()\n");
-    MinHeapMap_insertMessage message = MinHeapMap_insert(minheap->nodes_to_indexes, &query);
+    MinHeapMap_insertMessage message = MinHeapMap_insert(minheap->nodes_to_indexes, &query); //printf("\t\tline 236\n");
     //printf("Finished MinHeapMap_insert()\n");
     MinHeapNode* node = message.ptr; // This ptr points to the actual node stored the map.
     bool nodeWasNew = message.NodeIsNew;
@@ -239,11 +243,12 @@ void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm
     //printf("\nodeIsNew: %hhu\n", nodeWasNew);
 
     if (nodeWasNew) { // If node was new, we need to insert
+        //printf("\t\tline 245\n"); if (node == NULL) printf("\t\t\tnode == NULL\n");
         minheap->size++;
         minheap->heap[node->heapIndex] = node;
         MinHeap_bubble_up(minheap, node->heapIndex);
     } // The condition we don't like here, is where we re-encounter a node that we already plucked as min.
-    else if (!(minheap->heap[0] == node && node->heapIndex == 0)) {
+    else if (!(minheap->heap[0] == node && node->heapIndex == 0)) { //printf("\t\tline 250\n");
         MinHeap_bubble_up(minheap, node->heapIndex);
     }
     return;

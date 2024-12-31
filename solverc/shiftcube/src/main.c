@@ -219,6 +219,22 @@ static void test_simplifer() {
     // can recognize irreducibility
     test_simplifier_1case("R3 L2 U L2 D U3", "R3 L2 U L2 D U3");
 }
+static void test_servoCoderC(const char** scrambles, size_t NUM_TESTS) {
+    const inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
+    alg_s* alg = NULL;
+    for (size_t i = 0; i < NUM_TESTS; i++) {
+        alg = alg_from_alg_str(scrambles[i]);
+        RobotSolution robosolution = servoCode_compiler_Ofastest(alg, INTER_MOVE_TABLE);
+        //for (size_t i = 0; i < robosolution.size; i++) {
+        //    print_RobotState(robosolution.solution[i]);
+        //    printf("\n");
+        //}
+        alg_free(alg);
+        alg = NULL;
+        free(robosolution.solution);
+    }
+    inter_move_table_free(INTER_MOVE_TABLE);
+}
 
 int main(int argc, char *argv[]) {
     shift_cube_s cube = SOLVED_SHIFTCUBE;
@@ -249,20 +265,7 @@ int main(int argc, char *argv[]) {
 
         //test_simplifer();
 
-        const inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
-        alg_s* alg = NULL;
-        for (size_t i = 0; i < 1; i++) {
-            alg = alg_from_alg_str(scrambles[i]);
-            RobotSolution robosolution = servoCode_compiler_Ofastest(alg, INTER_MOVE_TABLE);
-            //for (size_t i = 0; i < robosolution.size; i++) {
-            //    print_RobotState(robosolution.solution[i]);
-            //    printf("\n");
-            //}
-            alg_free(alg);
-            alg = NULL;
-            free(robosolution.solution);
-        }
-        inter_move_table_free(INTER_MOVE_TABLE);
+        test_servoCoderC(scrambles, NUM_TESTS);
     }
 
     return 0;

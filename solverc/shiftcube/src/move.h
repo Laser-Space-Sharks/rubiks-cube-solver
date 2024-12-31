@@ -139,12 +139,12 @@ static inline move_e move_e_add(move_e m1, move_e m2) {
 }
 
 typedef struct {
-    move_s move1;
-    move_s move2;
+    move_e move1;
+    move_e move2;
 } MovePair;
 
 static inline bool MovePair_is_singleMove(MovePair pair) {
-    return (pair.move2.face == NULL_MOVE.face && pair.move2.turns == NULL_MOVE.turns);
+    return (pair.move2 == MOVE_NULL);
 }
 
 #endif // MOVE_H

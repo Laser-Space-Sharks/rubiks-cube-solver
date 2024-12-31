@@ -90,7 +90,7 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
         else {
             arr_of_stateNumStrs[index][i-last_set] = line[i];
         }
-    } assert(index == space_count);
+    }
     //printf("Decided that the numstrs were: ");
     //for (int i = 0; i < space_count+1; i++) printf("%s, ", arr_of_stateNumStrs[i]);
     //printf("\n");
@@ -131,8 +131,7 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
         sub_entry.path[i-1] = arr_of_states[i].servos;
     }
     for (move_e move = 0; move < 18; move++) {
-        move_s movestruct = move_as_struct[move];
-        if (state_can_do_move(movestruct, sub_entry.endState)) {
+        if (state_can_do_move(move, sub_entry.endState)) {
             sub_entry.singleMoveQualifications |= (1<<move);
         }
     }
@@ -210,8 +209,7 @@ bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
         .size = space_count-1
     };
     for (move_e move = 0; move < 18; move++) {
-        move_s movestruct = move_as_struct[move];
-        if (state_can_do_move(movestruct, ht->RSS.paths[ht->RSS.length].endState)) {
+        if (state_can_do_move(move, ht->RSS.paths[ht->RSS.length].endState)) {
             ht->RSS.paths[ht->RSS.length].singleMoveQualifications |= (1<<move);
         }
     }
@@ -271,8 +269,32 @@ inter_move_table_s* inter_move_table_create() {
     ht->RSS.startState = ROBOT_START_STATE;
     ht->size = INTER_MOVE_TABLE_CAPACITY;
 
+    init_RobotStateNum_can_do_move();
+
     insert_normal_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable.txt");
     insert_root_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable_rootpaths.txt");
+
+    size_t numSubEntries = 0;
+    size_t numRSSSubEntries = 0;
+    size_t numInterPathNodes = 0;
+    size_t numRSSInterPathNodes = 0;
+    for (int i = 0; i < ht->size; i++) {
+        if (ht->table[i].length == 0) continue;
+        numSubEntries += ht->table[i].length;
+        for (int j = 0; j < ht->table[i].length; j++) {
+            numInterPathNodes += ht->table[i].paths[j].size;
+        }
+    }
+    numRSSSubEntries += ht->RSS.length;
+    for (int j = 0; j < ht->RSS.length; j++) {
+        numRSSInterPathNodes += ht->RSS.paths[j].size;
+    }
+    printf("In the INTER_MOVE_TABLE, there are %zu SubEntries, %zu RSSSubEntries, %zu InterPathNodes, %zu RSSInterPathNodes\n", 
+        numSubEntries,
+        numRSSSubEntries,
+        numInterPathNodes,
+        numRSSInterPathNodes
+    );
 
     return ht;
 }
@@ -334,7 +356,7 @@ ROT_TRAINS: dict[str, tuple[tuple[str, int]]] = {
     'D': (('F', 0), ('R', 3), ('B', 2), ('L', 1)),
 }
 */
-static const move_through_orientationNum[24][18] = {
+static const move_e move_through_orientationNum[24][18] = {
 	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, },
 	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, },
 	{MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_D, MOVE_D2, MOVE_D3, MOVE_B, MOVE_B2, MOVE_B3, },
@@ -394,6 +416,7 @@ static const face_e ROT_TRAINS[6][4] = {
     {FACE_U, FACE_L, FACE_D, FACE_R},
     {FACE_F, FACE_R, FACE_B, FACE_L},
 };
+static bool RobotStateNum_can_do_move[18][1296];
 
 Orientation_arr6_s Arr6_from_Orientation(Orientation_s O) {
     Orientation_arr6_s wheres06;
@@ -434,14 +457,19 @@ Orientation_arr6_s multiply_arr6s(Orientation_arr6_s arr1, Orientation_arr6_s ar
         }
     };
 }
+static inline uint8_t orientationNum(Orientation_s O) {
+    return O.face*4 + O.rot;
+}
+static inline Orientation_s orientation_from_num(uint8_t num) {
+    return (Orientation_s) {
+        .face = num>>2,
+        .rot = num&3
+    };
 
+}
 State_s Undefault_EndState(State_s origin, State_s OGendState) {
-    //printf("3\n");
     State_s true_endState1 = OGendState;
-    uint8_t a = multiplied_orientations[origin.persp.face*4 + origin.persp.rot][OGendState.persp.face*4 + OGendState.persp.rot];
-    true_endState1.persp.face = a>>2;
-    true_endState1.persp.rot = a&3;
-    //printf("4\n");
+    true_endState1.persp = orientation_from_num(multiplied_orientations[orientationNum(origin.persp)][orientationNum(OGendState.persp)]);
     return true_endState1;
 }
 
@@ -487,6 +515,32 @@ uint16_t RobotState_to_2B(const RobotState_s* state) {
     bitmask <<= 2; bitmask |= state->L;
     return bitmask;
 }
+RobotState_s RobotStateNum_to_RobotState(uint16_t RobotStateNum) {
+    RobotState_s RobotState;
+    uint16_t copy = RobotStateNum;
+    RobotState.L = copy%3; copy /= 3;
+    RobotState.D = copy%3; copy /= 3;
+    RobotState.R = copy%3; copy /= 3;
+    RobotState.U = copy%3; copy /= 3;
+
+    RobotState.w = copy%2; copy /= 2;
+    RobotState.s = copy%2; copy /= 2;
+    RobotState.e = copy%2; copy /= 2;
+    RobotState.n = copy%2; copy /= 2;
+    return RobotState;
+}
+uint16_t RobotState_to_RobotStateNum(const RobotState_s* state) {
+    uint16_t bitmask = 0;
+    bitmask <<= 1; bitmask |= state->n;
+    bitmask <<= 1; bitmask |= state->e;
+    bitmask <<= 1; bitmask |= state->s;
+    bitmask <<= 1; bitmask |= state->w;
+    bitmask *= 3; bitmask += state->U;
+    bitmask *= 3; bitmask += state->R;
+    bitmask *= 3; bitmask += state->D;
+    bitmask *= 3; bitmask += state->L;
+    return bitmask;
+}
 
 bool compare_RobotStates(const RobotState_s* state1, const RobotState_s* state2) {
     return (
@@ -494,19 +548,15 @@ bool compare_RobotStates(const RobotState_s* state1, const RobotState_s* state2)
     );
 }
 
-bool State_is_ROBOT_START_STATE(const State_s* state) {
-    return (
-        compare_RobotStates(&(state->servos), &(ROBOT_START_STATE.servos)) &&
-        state->persp.face == ROBOT_START_STATE.persp.face &&
-        state->persp.rot == ROBOT_START_STATE.persp.rot
-    );
-}
 bool compare_states(const State_s* state1, const State_s* state2) {
     return (
         compare_RobotStates(&(state1->servos), &(state2->servos)) &&
         state1->persp.face == state2->persp.face &&
         state1->persp.rot == state2->persp.rot
     );
+}
+bool State_is_ROBOT_START_STATE(const State_s* state) {
+    return compare_states(state, &ROBOT_START_STATE);
 }
 /*
 def is_valid_state(state: State):
@@ -592,14 +642,35 @@ static inline bool allequal4(bool a1, bool a2, bool a3, bool a4) {
         a1 == a2 && a2 == a3 && a3 == a4
     );
 }
-bool state_can_do_move(move_s move, State_s state) {
-    face_e face = Arr6_from_Orientation(state.persp).faces[move.face];
-    if (face == FACE_F || face == FACE_B) return false;
-    RobotState_s servos = state.servos;
-    if (face == FACE_U) return (allequal5(servos.n, servos.e, servos.s, servos.w, 1)) && (servos.R != 1 && servos.L != 1) && (servos.U != 3-move.turns);
-    if (face == FACE_R) return (allequal5(servos.n, servos.e, servos.s, servos.w, 1)) && (servos.U != 1 && servos.D != 1) && (servos.R != 3-move.turns);
-    if (face == FACE_D) return (allequal4(servos.e, servos.s, servos.w, 1)) && (servos.R != 1 && servos.L != 1) && (servos.D != 3-move.turns);
-    if (face == FACE_L) return (allequal5(servos.n, servos.e, servos.s, servos.w, 1)) && (servos.U != 1 && servos.D != 1) && (servos.L != 3-move.turns);
+bool can_defaultState_do_move(move_e move, RobotState_s servos) {
+    face_e face = move_faces[move];
+    if (face == FACE_F || face == FACE_B || face == FACE_NULL) return false;
+    bool ret = false;
+    if (face == FACE_U) ret = ((allequal5(servos.n, servos.e, servos.s, servos.w, 1)) && (servos.R != 1 && servos.L != 1) && (servos.U != 3-move_turns[move]));
+    if (face == FACE_R) ret = ((allequal5(servos.n, servos.e, servos.s, servos.w, 1)) && (servos.U != 1 && servos.D != 1) && (servos.R != 3-move_turns[move]));
+    if (face == FACE_D) ret = ((allequal4(servos.e, servos.s, servos.w, 1)) && (servos.R != 1 && servos.L != 1) && (servos.D != 3-move_turns[move]));
+    if (face == FACE_L) ret = ((allequal5(servos.n, servos.e, servos.s, servos.w, 1)) && (servos.U != 1 && servos.D != 1) && (servos.L != 3-move_turns[move]));
+    return ret;
+}
+void init_RobotStateNum_can_do_move() {
+    for (int RobotStateNum = 0; RobotStateNum < 1296; RobotStateNum++) {
+        State_s state = {.persp = {.face = FACE_F, .rot = 0}, .servos = RobotStateNum_to_RobotState(RobotStateNum)};
+        if (!is_valid_state(&state)) continue;
+        for (move_e move = 0; move < 18; move++) {
+            //printf("we reached this point!\n");
+            RobotStateNum_can_do_move[move][RobotStateNum] = can_defaultState_do_move(move, state.servos);
+        }
+    }/*
+    printf("static const bool RobotStateNum_can_do_move[18][1296] = {\n");
+    for (int i = 0; i < 18; i++) {
+        printf("\t{");
+        for (int j = 0; j < 1296; j++) {
+            printf("%hhu,", RobotStateNum_can_do_move[i][j]);
+        } printf("},\n");
+    } printf("};");*/
+}
+bool state_can_do_move(move_e move, State_s state) {
+    return RobotStateNum_can_do_move[move_through_orientationNum[orientationNum(state.persp)][move]][RobotState_to_RobotStateNum(&state.servos)];
 }
 /*
 def state_after_move(move: Move, state: State) -> list[State]|None:
@@ -629,8 +700,8 @@ def state_after_move(move: Move, state: State) -> list[State]|None:
                 State(state.persp, RobotState(ArmState(0, 1), state.servos.R, endStateOfD, state.servos.L)),
                 State(state.persp, RobotState(ArmState(0, 2), state.servos.R, endStateOfD, state.servos.L))]
 */
-void state_after_move(move_s move, State_s state, uint8_t *len, State_s* ret) {
-    face_e face = Arr6_from_Orientation(state.persp).faces[move.face];
+void state_after_move(move_e move, State_s state, uint8_t *len, State_s* ret) {
+    face_e face = move_faces[move_through_orientationNum[orientationNum(state.persp)][move]];
     RobotState_s servos = state.servos;
     uint8_t RotAfterMove[3][3] = {
         {1, 2, 4},
@@ -638,22 +709,22 @@ void state_after_move(move_s move, State_s state, uint8_t *len, State_s* ret) {
         {4, 0, 1}
     };
     if (face == FACE_U) {
-        uint8_t nextU = RotAfterMove[move.turns-1][servos.U];
+        uint8_t nextU = RotAfterMove[move_turns[move]-1][servos.U];
         ret[0] = state;
         ret[0].servos.U = nextU;
         *len = 1;
     } else if (face == FACE_R) {
-        uint8_t nextR = RotAfterMove[move.turns-1][servos.R];
+        uint8_t nextR = RotAfterMove[move_turns[move]-1][servos.R];
         ret[0] = state;
         ret[0].servos.R = nextR;
         *len = 1;
     } else if (face == FACE_L) {
-        uint8_t nextL = RotAfterMove[move.turns-1][servos.L];
+        uint8_t nextL = RotAfterMove[move_turns[move]-1][servos.L];
         ret[0] = state;
         ret[0].servos.L = nextL;
         *len = 1;
     } else if (face == FACE_D) {
-        uint8_t nextD = RotAfterMove[move.turns-1][servos.D];
+        uint8_t nextD = RotAfterMove[move_turns[move]-1][servos.D];
         if (servos.n) {
             ret[0] = state; ret[0].servos.D = nextD;
             ret[1] = ret[0]; ret[1].servos.n = 0;
@@ -677,16 +748,11 @@ def state_can_do_opposite_move_pair(move1: Move, move2: Move, state: State):
     if face1 == 'L': return (state.servos.U.rot != 1 and state.servos.D.rot != 1 and state.servos.L.rot != 3-move1.turns and state.servos.R.rot != 3-move2.turns)
     if face1 == 'D': return (state.servos.R.rot != 1 and state.servos.L.rot != 1 and state.servos.D.rot != 3-move1.turns and state.servos.U.rot != 3-move2.turns)
 */
-bool state_can_do_opposite_move_pair(move_s move1, move_s move2, State_s state) {
-    face_e face1 = Arr6_from_Orientation(state.persp).faces[move1.face];
-    RobotState_s servos = state.servos;
-    return (
-        face1 != FACE_F && face1 != FACE_B && allequal5(servos.n, servos.e, servos.s, servos.w, 1) &&
-        ((face1 == FACE_U && servos.R != 1 && servos.L != 1 && servos.U != 3-move1.turns && servos.D != 3-move2.turns) ||
-        (face1 == FACE_R && servos.U != 1 && servos.D != 1 && servos.R != 3-move1.turns && servos.L != 3-move2.turns) ||
-        (face1 == FACE_D && servos.R != 1 && servos.L != 1 && servos.D != 3-move1.turns && servos.U != 3-move2.turns) ||
-        (face1 == FACE_L && servos.U != 1 && servos.D != 1 && servos.L != 3-move1.turns && servos.R != 3-move2.turns))
-    );
+bool state_can_do_opposite_move_pair(move_e move1, move_e move2, State_s state) {
+    uint16_t RobotStateNum = RobotState_to_RobotStateNum(&state.servos);
+    uint8_t perspNum = orientationNum(state.persp);
+    return (RobotStateNum_can_do_move[move_through_orientationNum[perspNum][move1]][RobotStateNum] &&
+            RobotStateNum_can_do_move[move_through_orientationNum[perspNum][move2]][RobotStateNum]);
 }
 /*
 def state_after_opposite_moves_pair(move1: Move, move2: Move, state: State):
@@ -694,12 +760,12 @@ def state_after_opposite_moves_pair(move1: Move, move2: Move, state: State):
     if move2.face == 'D': return state_after_move(move1, state_after_move(move2, state)[0])
     return state_after_move(move2, state_after_move(move1, state)[0])
 */
-void state_after_opposite_moves_pair(move_s move1, move_s move2, State_s state, uint8_t *len, State_s* ret) {
-    if (move1.face == FACE_D) {
+void state_after_opposite_moves_pair(move_e move1, move_e move2, State_s state, uint8_t *len, State_s* ret) {
+    if (move_faces[move1] == FACE_D) {
         state_after_move(move1, state, len, ret);
         state_after_move(move2, ret[0], len, ret);
         *len = 1;
-    } else if (move2.face == FACE_D) {
+    } else if (move_faces[move2] == FACE_D) {
         state_after_move(move2, state, len, ret);
         state_after_move(move1, ret[0], len, ret);
         *len = 1;
@@ -711,10 +777,10 @@ void state_after_opposite_moves_pair(move_s move1, move_s move2, State_s state, 
 }
 bool endstate_can_do_MovePair_RSS(MovePair pair, uint32_t singleMoveQualifications) {
     if (MovePair_is_singleMove(pair)) {
-        return (singleMoveQualifications>>(pair.move1.face*3 + (pair.move1.turns-1)))&1;
+        return (singleMoveQualifications>>pair.move1)&1;
     } else {
-        return (((singleMoveQualifications>>(pair.move1.face*3 + (pair.move1.turns-1)))&1) && 
-               ((singleMoveQualifications>>(pair.move2.face*3 + (pair.move2.turns-1)))&1));
+        return (((singleMoveQualifications>>pair.move1)&1) && 
+               ((singleMoveQualifications>>pair.move2)&1));
     }
 }
 bool state_can_do_MovePair(MovePair pair, State_s state) {
@@ -742,56 +808,47 @@ void Load_alg_chunks(const alg_s* alg, MovePair* alg_sections, uint8_t* numAlgSe
     /////////////////////////////////  LOAD ALG_CHUNKS  //////////////////////////////
     print_alg(alg);
     for (int i = 0; i < alg->length; i++) {
-        //if (numAlgSecs >= alg->length) printf("servoCode_compiler_Ofastest() done goofed up yo, numAlgSecs=%zu, alg->length=%zu\n", numAlgSecs, alg->length);
-        move_s movestruct = move_as_struct[alg->moves[i]];
-        //if (movestruct.face >= 6) printf("servoCode_compiler_Ofastest() done goofed up yo, movestruct.face=%zu\n", movestruct.face);
-        if (*numAlgSecs > 0 && alg_sections[*numAlgSecs-1].move1.face == opposite_faces[movestruct.face]) {
-            alg_sections[*numAlgSecs-1].move2 = movestruct;
+        if (*numAlgSecs > 0 && move_faces[alg_sections[*numAlgSecs-1].move1] == opposite_faces[move_faces[alg->moves[i]]]) {
+            alg_sections[*numAlgSecs-1].move2 = alg->moves[i];
         } else {
             alg_sections[*numAlgSecs] = (MovePair) {
-                .move1 = movestruct,
-                .move2 = NULL_MOVE
+                .move1 = alg->moves[i],
+                .move2 = MOVE_NULL
             }; (*numAlgSecs)++;
         }
     }
 }
 
 void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8_t numAlgSecs, const inter_move_table_s* INTER_MOVE_TABLE, MinHeapNode** EndNode) {
-    //printf("Finished MinHeap_create(), Updating MinHeap with ROBOT_START_STATE...\n");
-    MinHeap_update_key(minheap, &ROBOT_START_STATE, -1, 0, 0, NULL);
-    //printf("Finished updating MinHeap with ROBOT_START_STATE\n");
-    State_s Robot_end_state;
+    MinHeap_update_key(minheap, &ROBOT_START_STATE, -1, 0, 0, NULL); //printf("\tline 793\n");
     State_s* stateAfterMove_arr = malloc(4*sizeof(State_s));
     uint8_t stateAfterMove_len;
 
-    MinHeapNode* current_node = MinHeap_pluck_min(minheap);
+    MinHeapNode* current_node = MinHeap_pluck_min(minheap); //printf("\tline 797\n");
 
     const RSS_entry_s* RSS = inter_move_table_get_RSS(INTER_MOVE_TABLE);
-    if (MovePair_is_singleMove(alg_sections[0])) {
-        move_e move1enum = move_as_enum(alg_sections[0].move1);
+    if (MovePair_is_singleMove(alg_sections[0])) { //printf("\tline 822\n");
         for (size_t pathInd = 0; pathInd < RSS->length; pathInd++) {
             const RSS_sub_entry_s* path = &RSS->paths[pathInd];
-            State_s endState = path->endState;
-            if ((((path->singleMoveQualifications)>>move1enum)&1)) {
+            State_s endState = path->endState; //printf("\t\t\tsingleMoveQualifications was %zu\n", path->singleMoveQualifications);
+            if ((((path->singleMoveQualifications)>>(alg_sections[0].move1))&1)) {
                 MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node);
             }
         }
-    } else {
-        move_e move1enum = move_as_enum(alg_sections[0].move1);
-        move_e move2enum = move_as_enum(alg_sections[0].move2);
+    } else { //printf("\tline 830\n");
         for (size_t pathInd = 0; pathInd < RSS->length; pathInd++) {
             const RSS_sub_entry_s* path = &RSS->paths[pathInd];
             State_s endState = path->endState;
-            if ((((path->singleMoveQualifications)>>move1enum)&1) && (((path->singleMoveQualifications)>>move2enum)&1)) {
+            if ((((path->singleMoveQualifications)>>alg_sections[0].move1)&1) && (((path->singleMoveQualifications)>>alg_sections[0].move2)&1)) {
                 MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node);
             }
         }
     }
     if (state_can_do_MovePair(alg_sections[0], current_node->state)) {
         push_move_edges(minheap, alg_sections[0], current_node, 0, &stateAfterMove_len, stateAfterMove_arr);
-    }
+    } //printf("\tline 819\n");
     
-    current_node = MinHeap_pluck_min(minheap);
+    current_node = MinHeap_pluck_min(minheap); //printf("\tline 821\n");
     while (current_node->algorithm_index != numAlgSecs-1 || current_node->isBefore) {
         //if (current_node->algorithm_index == record && !current_node->isBefore) {
         //    printf("WE GOT TO END OF MOVE CHUNK %d\n", record++);
@@ -800,29 +857,25 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
         if (current_node->isBefore) { // state is immediately before the move
             push_move_edges(minheap, alg_sections[N], current_node, N, &stateAfterMove_len, stateAfterMove_arr);
         } else if (!current_node->isBefore) { // state is immediately after the move
-            Orientation_arr6_s Arr6 = Arr6_from_Orientation(current_node->state.persp);
             MovePair pair = alg_sections[N+1];
             const inter_move_entry_s* entry = inter_move_table_lookup(INTER_MOVE_TABLE, &current_node->state.servos);
 
             if (MovePair_is_singleMove(pair)) {
-                pair.move1.face = Arr6.faces[pair.move1.face];
-                move_e moveenum1 = move_as_enum(pair.move1);
+                pair.move1 = move_through_orientationNum[orientationNum(current_node->state.persp)][pair.move1];
                 for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                     const sub_entry_s* path = &entry->paths[pathInd];
                     State_s endState = Undefault_EndState(current_node->state, path->endState);
-                    if ((((path->singleMoveQualifications)>>moveenum1)&1)) {
+                    if ((((path->singleMoveQualifications)>>pair.move1)&1)) {
                         MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node);
                     }
-                }move_through_orientationNum
+                }
             } else {
-                pair.move1.face = Arr6.faces[pair.move1.face];
-                pair.move2.face = Arr6.faces[pair.move2.face];
-                move_e moveenum1 = move_as_enum(pair.move1);
-                move_e moveenum2 = move_as_enum(pair.move2);
+                pair.move1 = move_through_orientationNum[orientationNum(current_node->state.persp)][pair.move1];
+                pair.move2 = move_through_orientationNum[orientationNum(current_node->state.persp)][pair.move2];
                 for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                     const sub_entry_s* path = &entry->paths[pathInd];
                     State_s endState = Undefault_EndState(current_node->state, path->endState);
-                    if ((((path->singleMoveQualifications)>>moveenum1)&1) && (((path->singleMoveQualifications)>>moveenum2)&1)) {
+                    if ((((path->singleMoveQualifications)>>pair.move1)&1) && (((path->singleMoveQualifications)>>pair.move2)&1)) {
                         MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node);
                     }
                 }
@@ -834,7 +887,7 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
         current_node = MinHeap_pluck_min(minheap);
     } free(stateAfterMove_arr);
     printf("DIJKSTRA FINISHED!: Min Distance: %lf\n", current_node->weight);
-    *EndNode = current_node;
+    *EndNode = current_node; //printf("\tline 860\n");
 }
 typedef struct DijkstraPath {
     MinHeapNode* path;
@@ -916,23 +969,29 @@ RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, cons
 }
 
 RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_table_s* INTER_MOVE_TABLE) {
-    init_face_through_orientationNum();
     //////////////////////////// BUILD ALG_SECTIONS/////////////////////////////
+    //printf("line 943\n");
     MovePair alg_sections[alg->length];
     uint8_t numAlgSecs = 0;
     Load_alg_chunks(alg, alg_sections, &numAlgSecs);
+    //printf("line 947: numAlgSecs: %hhu\n", numAlgSecs);
 
     //////////////////////////// SUMMON EDSGAR W. DIJKSTRA ////////////////////////////
     MinHeap* minheap = MinHeap_create(alg_sections, numAlgSecs);
+    //printf("line 951\n");
     MinHeapNode* EndNode;
     servoCode_compiler_Dijkstra(minheap, alg_sections, numAlgSecs, INTER_MOVE_TABLE, &EndNode);
+    //printf("line 954\n");
 
     ///////////// Trace and Save Dijkstra Solve //////////////
     DijkstraPath_s Dijkstra = Form_DijkstraPath_from_EndNode(EndNode);
+    //printf("line 958\n");
     /////////////////////// Free the heap ////////////////////
     MinHeap_free(minheap);
+    //printf("line 961\n");
     //////////////////// Fill in Gaps ///////////////////////
     RobotSolution SOLUTION = Form_RobotSolution_from_DijkstraPath(Dijkstra, INTER_MOVE_TABLE);
+    //printf("line 964\n");
     free(Dijkstra.path);
     return SOLUTION;
 }
