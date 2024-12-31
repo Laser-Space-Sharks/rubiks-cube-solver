@@ -309,7 +309,15 @@ def Optimize_for_alg(algstr: str):
                     if node == pathWithGaps[i+1][2] and node != Robot_start_state:
                         pathWithoutGaps.extend(interpath)
                         break
-            pathWithoutGaps.append(pathWithGaps[i+1][2])
+            pathWithoutGaps.append(pathWithGaps[i+1][2]
+        state1->n == state2->n &&
+        state1->e == state2->n &&
+        state1->s == state2->n &&
+        state1->w == state2->w &&
+        state1->U == state2->U &&
+        state1->R == state2->R &&
+        state1->D == state2->D &&
+        state1->L == state2->L)
         elif pathWithGaps[i][1] == 'before':
             pathWithoutGaps.append(pathWithGaps[i+1][2])
         elif pathWithGaps[i][1] == 'after':

@@ -63,7 +63,7 @@ MinHeapMap* MinHeapMap_create(MovePair* alg_sections, size_t numAlgSecs) {
 
 size_t MinHeapMap_hash(const MinHeapMap* map, const MinHeapNode* key) {
     // Hash could be any of (2*16*162*N + 1 = 5184*N + 1) different numbers.
-    if (State_is_ROBOT_START_STATE(&(key->state)) && key->algorithm_index == -1) return 0;
+    if (key->algorithm_index == -1) return 0;
     size_t hashface = key->state.persp.face;
     hashface -= ((hashface > map->movefaces[key->algorithm_index]) + (hashface > opposite_faces[map->movefaces[key->algorithm_index]]));
 
@@ -121,7 +121,6 @@ typedef struct MinHeap {
     MinHeapMap* nodes_to_indexes;
     size_t size;
     size_t capacity;
-    size_t SupposedSize;
 } MinHeap;
 
 void print_MinHeapNode(const MinHeapNode* node) {
@@ -162,7 +161,6 @@ MinHeap* MinHeap_create(MovePair* alg_sections, size_t numAlgSecs) {
     minheap->nodes_to_indexes = MinHeapMap_create(alg_sections, numAlgSecs);
     minheap->size = 0;
     minheap->capacity = size;
-    minheap->SupposedSize = 0;
     return minheap;
 }
 static inline size_t parent_index(size_t i) {
@@ -220,7 +218,6 @@ MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) {
     minheap->heap[curr_index] = curr_node;
     curr_node->heapIndex = curr_index;
 
-    minheap->SupposedSize--;
     return minnode;
 }
 void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm_index, bool isBefore, float weight, MinHeapNode* parent) {
@@ -242,7 +239,6 @@ void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm
     //printf("\nodeIsNew: %hhu\n", nodeWasNew);
 
     if (nodeWasNew) { // If node was new, we need to insert
-        minheap->SupposedSize++;
         minheap->size++;
         minheap->heap[node->heapIndex] = node;
         MinHeap_bubble_up(minheap, node->heapIndex);

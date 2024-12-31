@@ -250,13 +250,16 @@ int main(int argc, char *argv[]) {
         //test_simplifer();
 
         const inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
-        for (size_t i = 0; i < NUM_TESTS; i++) {
-            const alg_s* alg = alg_from_alg_str(scrambles[i]);
+        alg_s* alg = NULL;
+        for (size_t i = 0; i < 1; i++) {
+            alg = alg_from_alg_str(scrambles[i]);
             RobotSolution robosolution = servoCode_compiler_Ofastest(alg, INTER_MOVE_TABLE);
             //for (size_t i = 0; i < robosolution.size; i++) {
             //    print_RobotState(robosolution.solution[i]);
             //    printf("\n");
             //}
+            alg_free(alg);
+            alg = NULL;
             free(robosolution.solution);
         }
         inter_move_table_free(INTER_MOVE_TABLE);

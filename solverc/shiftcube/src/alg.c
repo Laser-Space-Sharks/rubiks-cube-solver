@@ -1,5 +1,6 @@
 #include "alg.h"
 #include "shift_cube.h"
+#include "move.h"
 
 alg_s *alg_create(size_t size) {
     alg_s *alg = (alg_s*)malloc(sizeof(alg_s));
@@ -50,8 +51,9 @@ bool alg_insert(alg_s *alg, move_e move, size_t index) {
 	// reallocate the move moves if needed
     if (alg->length == alg->size) {
         alg->size *= 2;
-        alg->moves = (move_e*)realloc(alg->moves,
-                                       alg->size * sizeof(move_e));
+        alg->moves = (move_e*)realloc(
+            alg->moves, alg->size * sizeof(move_e)
+        );
     }
 
     // if this isn't an append, move everything after index one space up
@@ -170,7 +172,6 @@ void alg_simplify(alg_s *alg) {
     }
 }
 
-///////////////////////////// MUST CONVERT TO MOVE_E /////////////////////////////
 alg_s* alg_from_alg_str(const char *alg_str) {
     if (alg_str == NULL) {
         return alg_create(0);
