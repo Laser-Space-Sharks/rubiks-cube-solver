@@ -235,6 +235,46 @@ static void test_servoCoderC(const char** scrambles, size_t NUM_TESTS) {
     }
     inter_move_table_free(INTER_MOVE_TABLE);
 }
+static void test_solve_and_compile(const char** scrambles, size_t NUM_TESTS) {
+    init_solver();
+    const inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
+
+    cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
+    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+
+    alg_s *alg = NULL;
+    shift_cube_s cube = SOLVED_SHIFTCUBE;
+
+    printf("Performing tests\n");
+    double sum_algLengths = 0;
+    for (uint8_t test = 0; test < NUM_TESTS; test++) {
+        cube = SOLVED_SHIFTCUBE;
+        alg = alg_from_alg_str(scrambles[test]);
+        printf("Testing scramble: %s\n", scrambles[test]);
+        apply_alg(&cube, alg);
+        alg_s *solve = solve_cube(cube, f2l_table, last_layer_table);
+        apply_alg(&cube, solve);
+        if (!compare_cubes(&cube, &SOLVED_SHIFTCUBE)) {
+            printf("It didn't solve it, this is bad...\n");
+        }
+        cube = SOLVED_SHIFTCUBE;
+        printf("Solution (%zu moves): ", solve->length);
+        print_alg(solve);
+        RobotSolution robosolution = servoCode_compiler_Ofastest(solve, INTER_MOVE_TABLE);
+        sum_algLengths += solve->length;
+        alg_free(solve);
+        alg_free(alg);
+        free(robosolution.solution);
+    }
+    printf("Average solve length: %f\n", sum_algLengths / NUM_TESTS);
+    printf("\n");
+
+    cube_table_free(f2l_table);
+    cube_table_free(last_layer_table);
+
+    cleanup_solver();
+    inter_move_table_free(INTER_MOVE_TABLE);
+}
 
 int main(int argc, char *argv[]) {
     shift_cube_s cube = SOLVED_SHIFTCUBE;
@@ -265,7 +305,9 @@ int main(int argc, char *argv[]) {
 
         //test_simplifer();
 
-        test_servoCoderC(scrambles, NUM_TESTS);
+        //test_servoCoderC(scrambles, NUM_TESTS);
+
+        test_solve_and_compile(scrambles, NUM_TESTS);
     }
 
     return 0;

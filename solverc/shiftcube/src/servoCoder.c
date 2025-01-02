@@ -11,12 +11,18 @@
 #include <assert.h>
 
 #define INTER_MOVE_TABLE_CAPACITY 162
-#define INTER_MOVE_TABLE_PATHS_PER_NODE 735
+#define INTER_MOVE_TABLE_PATHS_PER_NODE_NONRSS 735
+#define INTER_MOVE_TABLE_PATHS_PER_NODE_RSS 736
 
-#define Etime 1
-#define dEtime 1
-#define rot1time 1
-#define rot2time 1
+/*
+#define halfTurn 500 //in Milliseconds
+#define quarterTurn 350 //in Milliseconds
+#define engageTime 375 //in Milliseconds
+*/
+#define Etime 0.375
+#define dEtime 0.375
+#define rot1time 0.35
+#define rot2time 0.5
 
 typedef struct {
     face_e faces[6];
@@ -64,12 +70,14 @@ typedef struct inter_move_table {
 //                                                on 64-bit, (17640 + 26688 + 28 + 1622880 + 1174728 + 4212 + 16) = 2846192 bytes
 
 //////////////////////////////////////////////////// CONSTANTS ////////////////////////////////////////////
+//               R        L        U         D
+// (('R', 2), (90, 1), (90, 1), (180, 0), (0, 0))    
 static const State_s ROBOT_START_STATE = {
     .persp = (Orientation_s) {
-        FACE_F, 0
+        FACE_R, 2
     },
     .servos = (RobotState_s) {
-        1,1,1,1,0,0,0,0
+        0,1,0,1,2,1,0,1
     }
 };
 
@@ -268,9 +276,9 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
 
     if (ht->table[index].paths == NULL) {
         ht->table[index].startState = arr_of_states[0].servos;
-        ht->table[index].paths = (sub_entry_s*)malloc(INTER_MOVE_TABLE_PATHS_PER_NODE*sizeof(sub_entry_s));
+        ht->table[index].paths = (sub_entry_s*)malloc(INTER_MOVE_TABLE_PATHS_PER_NODE_NONRSS*sizeof(sub_entry_s));
         ht->table[index].length = 0;
-        ht->table[index].size = INTER_MOVE_TABLE_PATHS_PER_NODE;
+        ht->table[index].size = INTER_MOVE_TABLE_PATHS_PER_NODE_NONRSS;
     }
 
     sub_entry_s sub_entry = {
@@ -413,10 +421,10 @@ void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABL
 inter_move_table_s* inter_move_table_create() {
     inter_move_table_s *ht = (inter_move_table_s*)malloc(sizeof(inter_move_table_s));
     ht->table = (inter_move_entry_s*)calloc(INTER_MOVE_TABLE_CAPACITY, sizeof(inter_move_entry_s));
-    ht->RSS.paths = (RSS_sub_entry_s*)calloc(INTER_MOVE_TABLE_PATHS_PER_NODE, sizeof(RSS_sub_entry_s));
+    ht->RSS.paths = (RSS_sub_entry_s*)calloc(INTER_MOVE_TABLE_PATHS_PER_NODE_RSS, sizeof(RSS_sub_entry_s));
 
     ht->RSS.length = 0;
-    ht->RSS.size = INTER_MOVE_TABLE_PATHS_PER_NODE;
+    ht->RSS.size = INTER_MOVE_TABLE_PATHS_PER_NODE_RSS;
     ht->RSS.startState = ROBOT_START_STATE;
     ht->size = INTER_MOVE_TABLE_CAPACITY;
 
@@ -813,7 +821,7 @@ void push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current
 
 void Load_alg_chunks(const alg_s* alg, MovePair* alg_sections, uint8_t* numAlgSecs) {
     /////////////////////////////////  LOAD ALG_CHUNKS  //////////////////////////////
-    print_alg(alg);
+    //print_alg(alg);
     for (int i = 0; i < alg->length; i++) {
         if (*numAlgSecs > 0 && move_faces[alg_sections[*numAlgSecs-1].move1] == opposite_faces[move_faces[alg->moves[i]]]) {
             alg_sections[*numAlgSecs-1].move2 = alg->moves[i];
