@@ -1,0 +1,15 @@
+# ignore everything by default
+*
+
+# unignore directories
+!*/
+
+# unignore .gitignore
+!.gitignore
+
+# unignore makefiles
+!Makefile
+
+# unignore .c or .h files
+!*.c
+!*.h
