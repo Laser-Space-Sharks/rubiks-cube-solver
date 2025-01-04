@@ -17,7 +17,7 @@ from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\
 NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
 imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
-from numpy import asarray, zeros, where, copy
+from numpy import asarray, zeros, where, copy, uint32
 # import matplotlib as plt
 from os import chdir
 # from io import BytesIO
