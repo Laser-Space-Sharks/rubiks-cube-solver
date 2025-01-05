@@ -30,6 +30,7 @@ typedef struct RobotSolution {
 
 typedef struct inter_move_table inter_move_table_s;
 
+void print_RobotState(RobotState_s servos);
 void print_State(State_s state);
 bool compare_states(const State_s* state1, const State_s* state2);
 
