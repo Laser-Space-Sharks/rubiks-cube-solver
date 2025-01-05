@@ -53,16 +53,16 @@ LOWER_BOUND_COLORS = [
     asarray([25, 50, 70]), # yellow
     asarray([159, 50, 70]), # red
     asarray([90, 50, 70]), # blue
-    asarray([0, 0, 178]), # white
+    asarray([0, 0, 170]), # white
     asarray([7, 50, 70]), # orange
     asarray([36, 50, 70]), # green
 ]
 
 UPPER_BOUND_COLORS = [
-    asarray([35, 255, 255]), # yellow
+    asarray([52, 255, 255]), # yellow
     asarray([180, 255, 255]), # red
     asarray([128, 255, 255]), # blue
-    asarray([190, 33, 255]), # white
+    asarray([190, 47, 255]), # white
     asarray([24, 255, 255]), # orange
     asarray([89, 255, 255]), # green
 ]
@@ -276,7 +276,7 @@ def convertToShiftCube(cubeArray):
     # the shift cube, written in Colorblind notation
     faceOrder = [0, 1, 2, 3, 4, 5]
     for i in range(6):
-        face = faceSearch(faceOrder[i])
+        face = faceSearch(cubeArray, faceOrder[i])
         faceNum = 0; k = 1; j = 0
         while k!=0 or j!=0:
             peice = face[i][j]
@@ -298,7 +298,7 @@ def convertToShiftCube(cubeArray):
 ####### Testing #######################################
 #######################################################
 
-def testScan(frontCenterColor, upCenterColor):
+def testScan(frontCenterColor, upCenterColor, filename):
     print("------------------------------")
     print("Starting Test!")
     print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
@@ -306,7 +306,7 @@ def testScan(frontCenterColor, upCenterColor):
     print("colors array generated")
     print(f"Colors array: {colorsArray}")
     print("Starting Face Scan!")
-    faceArray = scanFace(colorsArray)
+    faceArray = scanFace(colorsArray, True, filename)
     print("face scanned!")
     print(faceArray)
     print(translateToColors(faceArray, colorsArray))
