@@ -916,14 +916,17 @@ DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode) {
     DijkstraPath.size = solve_path_length;
     int index = solve_path_length-1;
     node = EndNode;
-    DijkstraPath.path[index--] = *node;
-    while(node->parent != NULL) {
-        node = node->parent;
+    do {
         DijkstraPath.path[index--] = *node;
-    }
+        node = node->parent;
+    } while(node);
     return DijkstraPath;
 }
 RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, const inter_move_table_s* INTER_MOVE_TABLE) {
+    for (int i = 0; i < Dijkstra.size; i++) {
+        print_State(Dijkstra.path[i].state); printf(", isBefore=%hhu, weight=%f\n", Dijkstra.path[i].isBefore, Dijkstra.path[i].weight);
+    } printf("----------------------------\n");
+
     RobotState_s* interpaths_paths[Dijkstra.size];
     for (size_t i = 0; i < Dijkstra.size; i++) interpaths_paths[i] = NULL;
     size_t interpaths_lengths[Dijkstra.size];
@@ -943,7 +946,7 @@ RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, cons
         }
     }
     for (size_t i = 1; i < Dijkstra.size-1; i++) {
-        if (Dijkstra.path[i].isBefore == 0) {
+        if (Dijkstra.path[i+1].isBefore == 1) {
             const inter_move_entry_s* entry = inter_move_table_lookup(INTER_MOVE_TABLE, &Dijkstra.path[i].state.servos);
             for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                 State_s endState = Undefault_EndState(Dijkstra.path[i].state, entry->paths[pathInd].endState);
@@ -968,11 +971,13 @@ RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, cons
     RobotState_s* ROBOT_SOLUTION = (RobotState_s*)malloc(ROBOT_SOLUTION_LENGTH * sizeof(RobotState_s));
     size_t index = 0;
     for (size_t i = 0; i < Dijkstra.size; i++) {
+        print_State(Dijkstra.path[i].state); printf("\n");
         ROBOT_SOLUTION[index++] = Dijkstra.path[i].state.servos;
         for (size_t j = 0; j < interpaths_lengths[i]; j++) {
+            print_RobotState(interpaths_paths[i][j]); printf("\n");
             ROBOT_SOLUTION[index++] = interpaths_paths[i][j];
         } free(interpaths_paths[i]);
-    }
+    } printf("----------------------------\n");
     return (RobotSolution) {
         .solution = ROBOT_SOLUTION,
         .size = ROBOT_SOLUTION_LENGTH

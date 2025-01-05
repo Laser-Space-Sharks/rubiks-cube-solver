@@ -313,9 +313,9 @@ int main(int argc, char *argv[]) {
 
         //test_simplifer();
 
-        //test_servoCoderC(scrambles, NUM_TESTS);
+        test_servoCoderC(scrambles, NUM_TESTS);
 
-        test_solve_and_compile(scrambles, NUM_TESTS);
+        //test_solve_and_compile(scrambles, NUM_TESTS);
     }
 
     return 0;
