@@ -12,7 +12,7 @@
 
 #define INTER_MOVE_TABLE_CAPACITY 162
 #define INTER_MOVE_TABLE_PATHS_PER_NODE_NONRSS 735
-#define INTER_MOVE_TABLE_PATHS_PER_NODE_RSS 736
+#define INTER_MOVE_TABLE_PATHS_PER_NODE_RSS 735
 
 /*
 #define halfTurn 500 //in Milliseconds
@@ -74,10 +74,10 @@ typedef struct inter_move_table {
 // (('R', 2), (90, 1), (90, 1), (180, 0), (0, 0))    
 static const State_s ROBOT_START_STATE = {
     .persp = (Orientation_s) {
-        FACE_R, 2
+        FACE_F, 0
     },
     .servos = (RobotState_s) {
-        0,1,0,1,2,1,0,1
+        1,1,1,1,0,0,0,0
     }
 };
 
@@ -431,7 +431,7 @@ inter_move_table_s* inter_move_table_create() {
     init_RobotStateNum_can_do_move();
 
     insert_normal_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable.txt");
-    insert_root_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable_rootpaths.txt");
+    insert_root_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable_other_rootpaths.txt");
 
     size_t numSubEntries = 0;
     size_t numRSSSubEntries = 0;
@@ -924,6 +924,12 @@ DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode) {
     return DijkstraPath;
 }
 RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, const inter_move_table_s* INTER_MOVE_TABLE) {
+    for (int i = 0; i < Dijkstra.size; i++) {
+        print_State(Dijkstra.path[i].state);
+        printf(", isBefore=%hhu, weight=%f", Dijkstra.path[i].isBefore, Dijkstra.path[i].weight);
+        printf("\n");
+    } printf("-----------------------\n");
+
     RobotState_s* interpaths_paths[Dijkstra.size];
     for (size_t i = 0; i < Dijkstra.size; i++) interpaths_paths[i] = NULL;
     size_t interpaths_lengths[Dijkstra.size];
@@ -943,7 +949,7 @@ RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, cons
         }
     }
     for (size_t i = 1; i < Dijkstra.size-1; i++) {
-        if (Dijkstra.path[i].isBefore == 1) {
+        if (Dijkstra.path[i].isBefore == 0) {
             const inter_move_entry_s* entry = inter_move_table_lookup(INTER_MOVE_TABLE, &Dijkstra.path[i].state.servos);
             for (size_t pathInd = 0; pathInd < entry->length; pathInd++) {
                 State_s endState = Undefault_EndState(Dijkstra.path[i].state, entry->paths[pathInd].endState);
@@ -968,11 +974,15 @@ RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, cons
     RobotState_s* ROBOT_SOLUTION = (RobotState_s*)malloc(ROBOT_SOLUTION_LENGTH * sizeof(RobotState_s));
     size_t index = 0;
     for (size_t i = 0; i < Dijkstra.size; i++) {
+        print_State(Dijkstra.path[i].state);
+        printf("\n");
         ROBOT_SOLUTION[index++] = Dijkstra.path[i].state.servos;
         for (size_t j = 0; j < interpaths_lengths[i]; j++) {
+            print_RobotState(interpaths_paths[i][j]);
+            printf("\n");
             ROBOT_SOLUTION[index++] = interpaths_paths[i][j];
         } free(interpaths_paths[i]);
-    }
+    } printf("--------------------------\n");
     return (RobotSolution) {
         .solution = ROBOT_SOLUTION,
         .size = ROBOT_SOLUTION_LENGTH

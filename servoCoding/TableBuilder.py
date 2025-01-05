@@ -383,29 +383,32 @@ def trace_path(state1: State, parents: dict[State, State], state2):
 def Dijkstra_to_all_MOVE_STATES(startStates: State, paths):
     count = 0
     for startState in startStates:
+        graph = None
         for Connected_graph in SEPARATED_TOTAL_STATES:
-            if startState not in Connected_graph: continue
-            _, parents = Dijkstra(startState, Connected_graph)
-            count += 1
-            print(f"\rDijkstra finished! {count}/{len(ROBOT_MOVE_STATES)}", end='', flush=True)
-            for persp, Rstate2 in product(ALLPERSPS, ROBOT_MOVE_STATES):
-                endState = State(persp, Rstate2)
-                if endState == startState: continue
-                if endState not in Connected_graph: continue
-                paths.append(tuple(trace_path(startState, parents, endState)))
-            break
+            if startState in Connected_graph:
+                graph = Connected_graph
+                break
+        _, parents = Dijkstra(startState, graph)
+        count += 1
+        print(f"\rDijkstra finished! {count}/{len(ROBOT_MOVE_STATES)}", end='', flush=True)
+        for persp, Rstate2 in product(ALLPERSPS, ROBOT_MOVE_STATES):
+            endState = State(persp, Rstate2)
+            if endState == startState: continue
+            if endState not in graph: continue
+            paths.append(tuple(trace_path(startState, parents, endState)))
     print()
 
 
 PATHS = []
-states = [State(Orientation('F', 0), Rstate1) for Rstate1 in ROBOT_MOVE_STATES]
-
-Dijkstra_to_all_MOVE_STATES(states, PATHS)
+Dijkstra_to_all_MOVE_STATES([State(Orientation('F', 0), Rstate1) for Rstate1 in ROBOT_MOVE_STATES], PATHS)
 ROOT_PATHS = []
 Dijkstra_to_all_MOVE_STATES([Robot_start_state], ROOT_PATHS)
+OTHER_ROOT_PATHS = []
+Dijkstra_to_all_MOVE_STATES([State(Orientation('F', 0), RobotState(ArmState(1, 0), ArmState(1, 0), ArmState(1, 0), ArmState(1, 0)))], OTHER_ROOT_PATHS)
 
 print(len(PATHS))
 print(len(ROOT_PATHS))
+print(len(OTHER_ROOT_PATHS))
 
 with open("ServoOptimizationTable.txt", "w") as file:
     for path in PATHS:
@@ -413,5 +416,9 @@ with open("ServoOptimizationTable.txt", "w") as file:
         file.write(f"{line}\n")
 with open("ServoOptimizationTable_rootpaths.txt", "w") as file:
     for path in ROOT_PATHS:
+        line = ' '.join([str(i.asNum()) for i in path])
+        file.write(f"{line}\n")
+with open("ServoOptimizationTable_other_rootpaths.txt", "w") as file:
+    for path in OTHER_ROOT_PATHS:
         line = ' '.join([str(i.asNum()) for i in path])
         file.write(f"{line}\n")
