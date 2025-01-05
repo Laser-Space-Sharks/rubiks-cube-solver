@@ -179,17 +179,17 @@ def genColorsArray(frontCenterColor, upCenterColor):
     # Here ifs are used to eliminate out of bounds errors.
     # Exploits fact that the same colors are always opposite of eachother
     #down
-    if upCenterColor + 3 > 5:
+    if upCenterColor + 3 < 5:
         colorsArray[upCenterColor + 3] = 5
     else:
         colorsArray[upCenterColor - 3] = 5
     #back
-    if frontCenterColor + 3 > 5:
+    if frontCenterColor + 3 < 5:
         colorsArray[frontCenterColor + 3] = 4
     else:
         colorsArray[frontCenterColor - 3] = 4
     #left
-    if rightCenterColor + 3 > 5:
+    if rightCenterColor + 3 < 5:
         colorsArray[rightCenterColor + 3] = 3
     else:
         colorsArray[rightCenterColor - 3] = 3
@@ -312,17 +312,24 @@ def testScan(frontCenterColor, upCenterColor, filename):
     print(translateToColors(faceArray, colorsArray))
     return faceArray
 
-def testImgNormal():
+def testFromSaved(frontCenterColor, upCenterColor):
+    print("------------------------------")
     print("Starting Test!")
-    image = captureImg("/home/pi/cubeImgs/", "testCube", delete=False)
-    print("image captured!")
-    normImg = normalizeImg(image)
-    saveImg(normImg, "/home/pi/cubeImgs/", "testCubeNorm.jpg")
-
-def testColorBoundries(imagePath):
-    image = imread(f"{imagePath}.jpg", IMREAD_COLOR)
-    color = colorAnalysis(image)
-    print(COLORS[color])
+    print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
+    colorsArray = genColorsArray(frontCenterColor, upCenterColor)
+    print("colors array generated")
+    print(f"Colors array: {colorsArray}")
+    print("Starting Cube Scan!")
+    cubeArray = []
+    for i in range(6):
+        faceArray = scanFace(colorsArray, True, "wholecube1")
+        print(f"face {i} scanned!")
+        print(faceArray)
+        print(translateToColors(faceArray, colorsArray))
+        cubeArray.append(faceArray)
+    print("Cube Scanned!!")
+    print(cubeArray)
+    print(f"Converted to shift cube: {bin(convertToShiftCube(cubeArray))}")
 
 def test(frontCenterColor, upCenterColor):
     print("------------------------------")
@@ -343,4 +350,4 @@ def test(frontCenterColor, upCenterColor):
     print(cubeArray)
     print(f"Converted to shift cube: {bin(convertToShiftCube(cubeArray))}")
 
-test(2, 0) # blue, yellow
+testFromSaved(2, 0) # blue, yellow  
