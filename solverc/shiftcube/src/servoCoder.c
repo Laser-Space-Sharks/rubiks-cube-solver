@@ -924,12 +924,6 @@ DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode) {
     return DijkstraPath;
 }
 RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, const inter_move_table_s* INTER_MOVE_TABLE) {
-    for (int i = 0; i < Dijkstra.size; i++) {
-        print_State(Dijkstra.path[i].state);
-        printf(", isBefore=%hhu, weight=%f", Dijkstra.path[i].isBefore, Dijkstra.path[i].weight);
-        printf("\n");
-    } printf("-----------------------\n");
-
     RobotState_s* interpaths_paths[Dijkstra.size];
     for (size_t i = 0; i < Dijkstra.size; i++) interpaths_paths[i] = NULL;
     size_t interpaths_lengths[Dijkstra.size];
@@ -974,15 +968,11 @@ RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, cons
     RobotState_s* ROBOT_SOLUTION = (RobotState_s*)malloc(ROBOT_SOLUTION_LENGTH * sizeof(RobotState_s));
     size_t index = 0;
     for (size_t i = 0; i < Dijkstra.size; i++) {
-        print_State(Dijkstra.path[i].state);
-        printf("\n");
         ROBOT_SOLUTION[index++] = Dijkstra.path[i].state.servos;
         for (size_t j = 0; j < interpaths_lengths[i]; j++) {
-            print_RobotState(interpaths_paths[i][j]);
-            printf("\n");
             ROBOT_SOLUTION[index++] = interpaths_paths[i][j];
         } free(interpaths_paths[i]);
-    } printf("--------------------------\n");
+    }
     return (RobotSolution) {
         .solution = ROBOT_SOLUTION,
         .size = ROBOT_SOLUTION_LENGTH
