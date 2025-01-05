@@ -69,7 +69,7 @@ static void stress_test_cube18B_xcross(size_t apply_alg_times, const alg_s* alg)
 }
 static void stress_test(size_t apply_alg_times, const char* algstr) {
     alg_s* alg = alg_from_alg_str(algstr);
-    printf("alg to stress test %d times: \n", apply_alg_times);
+    printf("alg to stress test %zu times: \n", apply_alg_times);
     print_alg(alg);
     stress_test_shiftcube(apply_alg_times, alg);
     stress_test_cube18B(apply_alg_times, alg);
@@ -191,9 +191,9 @@ static void test_simplifier_1case(char* algstr, char* simplifiedalgstr) {
     alg_s* simplified = alg_from_alg_str(simplifiedalgstr);
     if (alg->length != simplified->length) {
         printf("ALGS DON'T MATCH:\n");
-        printf("Length of alg: %d\n", alg->length);
+        printf("Length of alg: %zu\n", alg->length);
         print_alg(alg);
-        printf("Length of simplified: %d\n", simplified->length);
+        printf("Length of simplified: %zu\n", simplified->length);
         print_alg(simplified);
     } else {
         shift_cube_s cube1 = SOLVED_SHIFTCUBE, cube2 = SOLVED_SHIFTCUBE;
@@ -220,7 +220,7 @@ static void test_simplifer() {
     test_simplifier_1case("R3 L2 U L2 D U3", "R3 L2 U L2 D U3");
 }
 static void test_servoCoderC(const char** scrambles, size_t NUM_TESTS) {
-    const inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
+    inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
     alg_s* alg = NULL;
     for (size_t i = 0; i < NUM_TESTS; i++) {
         alg = alg_from_alg_str(scrambles[i]);
@@ -237,7 +237,7 @@ static void test_servoCoderC(const char** scrambles, size_t NUM_TESTS) {
 }
 static void test_solve_and_compile(const char** scrambles, size_t NUM_TESTS) {
     init_solver();
-    const inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
+    inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
 
     cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
     cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");

@@ -297,8 +297,8 @@ static void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie() {
         facelet_pos_s
     
     //printf("cubie_to_orderedPositions[UR][1].index = %hhu\n", cubie_to_orderedPositions[CUBIE_UR][1].index);
-    for (int row = 0; row < NUM_EDGES; row++) { //*********
-        for (cubie_e colors = 0; colors < 24; colors++) { //*********
+    for (int row = 0; row < NUM_EDGES; row++) {
+        for (cubie_e colors = 0; colors < 24; colors++) {
             face_e colorsArr[3] = {
                 cubieDefinitions[colors][0],
                 cubieDefinitions[colors][1],
@@ -313,7 +313,7 @@ static void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie() {
             if (colorsArr[2] >= 7) {
                 printf("Whoops! init_colorsAtEdgePosInd_to_cubieAndSolvedCubie goofed up: colorsArr[2] = %hhu\n", colorsArr[2]);
             }
-            uint8_t solved_cubieInd = colorSequence_to_solvedCubieInd[colorsArr[0]][colorsArr[1]][colorsArr[2]]; //*********
+            uint8_t solved_cubieInd = colorSequence_to_solvedCubieInd[colorsArr[0]][colorsArr[1]][colorsArr[2]];
             if (solved_cubieInd >= 20) {
                 printf("Whoops! init_colorsAtEdgePosInd_to_cubieAndSolvedCubie goofed up: solved_cubieInd = %hhu\n", solved_cubieInd);
             }
@@ -355,7 +355,7 @@ static void init_colorsAtEdgePosInd_to_cubieAndSolvedCubie() {
                 printf("Whoops! init_colorsAtEdgePosInd_to_cubieAndSolvedCubie goofed up: cubieDef[2] = %hhu\n", cubieDef[2]);
             }
 
-            cubie_e cubie = cubieDefinition_to_cubie[cubieDef[0]][cubieDef[1]][cubieDef[2]]; //*********
+            cubie_e cubie = cubieDefinition_to_cubie[cubieDef[0]][cubieDef[1]][cubieDef[2]];
 
             colorsAtEdgePosInd_to_cubieAndSolvedCubie[0][colors][row] = cubie;
             colorsAtEdgePosInd_to_cubieAndSolvedCubie[1][colors][row] = solved_cubieInd;
@@ -456,7 +456,7 @@ static void init_colorsAtCornerPosInd_to_cubieAndSolvedCubie() {
         if (colorsArr[2] >= 7) {
             printf("Whoops! init_colorsAtCornerPosInd_to_cubieAndSolvedCubie goofed up: colorsArr[2] = %hhu\n", colorsArr[2]);
         }
-        uint8_t solved_cubieInd = colorSequence_to_solvedCubieInd[colorsArr[0]][colorsArr[1]][colorsArr[2]]; //*********
+        uint8_t solved_cubieInd = colorSequence_to_solvedCubieInd[colorsArr[0]][colorsArr[1]][colorsArr[2]];
         cubie_e solvedCubie = SOLVED_CUBIES[solved_cubieInd];
         face_e solvedCubieDef[3] = {
             cubieDefinitions[solvedCubie][0],

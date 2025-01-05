@@ -1,6 +1,7 @@
 #include "shift_cube.h"
 #include "solver_print.h"
 #include "cube_table.h"
+#include "lookup_tables.h"
 
 typedef struct {
     shift_cube_s key;
@@ -171,4 +172,29 @@ size_t cube_table_entries(const cube_table_s *ct) {
 
 size_t cube_table_size(const cube_table_s *ct) {
     return ct->size;
+}
+
+void cube_table_print_algs_bigger_than_n(const cube_table_s* ct, size_t n) {
+    printf("   index  |               cube string representation            | algorithm\n");
+    printf("------------------------------------------------------------------------------\n");
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].algs.list[0].length <= n) continue;
+        if (ct->table[idx].algs.list != NULL) {
+            printf("%10zu ", idx);
+            print_cube_line_colors(ct->table[idx].key);
+            print_alg(&ct->table[idx].algs.list[0]);
+        }
+    }
+}
+
+void cube_table_check_if_1LLL_is_valid(const cube_table_s* ct) {
+    if (cube_table_entries(ct) != 62208) printf("1LLL NOT VALID!\n");
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].algs.list != NULL) {
+            if (ct->table[idx].algs.num_algs != 1) printf("1LLL NOT VALID!\n");
+            shift_cube_s cube_mask = masked_cube(&ct->table[idx].key, &f2l_4mask);
+            shift_cube_s solved_mask = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
+            if (!compare_cubes(&cube_mask, &solved_mask)) printf("1LLL NOT VALID!\n");
+        }
+    }
 }
