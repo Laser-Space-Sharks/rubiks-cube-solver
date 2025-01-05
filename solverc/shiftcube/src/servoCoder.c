@@ -193,10 +193,10 @@ bool state_can_do_opposite_move_pair(move_e move1, move_e move2, State_s state);
 void state_after_opposite_moves_pair(move_e move1, move_e move2, State_s state, uint8_t *len, State_s* ret);
 void state_after_MovePair(MovePair pair, State_s state, uint8_t* len, State_s* ret);
 
-void push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr);
+void push_move_edges(MinHeap* minheap, MovePair pair, MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr);
 void Load_alg_chunks(const alg_s* alg, MovePair* alg_sections, uint8_t* numAlgSecs);
 void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8_t numAlgSecs, const inter_move_table_s* INTER_MOVE_TABLE, MinHeapNode** EndNode);
-DijkstraPath_s Form_DijkstraPath_from_EndNode(const MinHeapNode* EndNode);
+DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode);
 RobotSolution Form_RobotSolution_from_DijkstraPath(DijkstraPath_s Dijkstra, const inter_move_table_s* INTER_MOVE_TABLE);
 
 /////////////////////////////////////////////// FUNCTIONS /////////////////////////////////////////
@@ -582,7 +582,7 @@ State_s stateNum_to_state(uint16_t stateNum) {
     };    
 }
 void print_RobotState(RobotState_s servos) {
-    printf("%c.%c.%c.%c.U%hhu.R%hhu.D%hhu.L%hhu",
+    printf("%c.%c.%c.%c.U%hu.R%hu.D%hu.L%hu",
         ((servos.n) ? 'N' : 'n'),
         ((servos.e) ? 'E' : 'e'),
         ((servos.s) ? 'S' : 's'),
@@ -812,7 +812,7 @@ void state_after_MovePair(MovePair pair, State_s state, uint8_t* len, State_s* r
         state_after_opposite_moves_pair(pair.move1, pair.move2, state, len, ret);
     }
 }
-void push_move_edges(MinHeap* minheap, MovePair pair, const MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr) {
+void push_move_edges(MinHeap* minheap, MovePair pair, MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr) {
     state_after_MovePair(pair, current_node->state, stateAfterMove_len, stateAfterMove_arr);
     for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < *stateAfterMove_len; stateAfterMoveInd++) {
         MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], childN, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
@@ -904,7 +904,7 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
     printf("DIJKSTRA FINISHED!: Min Distance: %lf\n", current_node->weight);
     *EndNode = current_node; //printf("\tline 860\n");
 }
-DijkstraPath_s Form_DijkstraPath_from_EndNode(const MinHeapNode* EndNode) {
+DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode) {
     size_t solve_path_length = 1;
     MinHeapNode* node = EndNode;
     while(node->parent != NULL) {
