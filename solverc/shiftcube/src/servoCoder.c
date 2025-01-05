@@ -158,15 +158,15 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line);
 bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line);
 void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename);
 void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename);
-inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key);
+static inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key);
 const RSS_entry_s* inter_move_table_get_RSS(const inter_move_table_s *ht);
 const inter_move_entry_s* inter_move_table_lookup(const inter_move_table_s *ht, const RobotState_s *key);
 
 Orientation_arr6_s Arr6_from_Orientation(Orientation_s O);
 Orientation_s Orientation_from_Arr6(Orientation_arr6_s arr6);
 Orientation_arr6_s multiply_arr6s(Orientation_arr6_s arr1, Orientation_arr6_s arr2);
-inline uint8_t orientationNum(Orientation_s O);
-inline Orientation_s orientation_from_num(uint8_t num);
+static inline uint8_t orientationNum(Orientation_s O);
+static inline Orientation_s orientation_from_num(uint8_t num);
 State_s Undefault_EndState(State_s origin, State_s OGendState);
 State_s stateNum_to_state(uint16_t stateNum);
 void print_RobotState(RobotState_s servos);
@@ -180,8 +180,8 @@ bool is_valid_state(const State_s* state);
 float calc_weight_of_armstep(bool e1, uint8_t rot1, bool e2, uint8_t rot2);
 float calc_weight_of_step(const State_s* state1, const State_s* state2);
 
-inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5);
-inline bool allequal4(bool a1, bool a2, bool a3, bool a4);
+static inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5);
+static inline bool allequal4(bool a1, bool a2, bool a3, bool a4);
 
 bool can_defaultState_do_move(move_e move, RobotState_s servos);
 void init_RobotStateNum_can_do_move();
@@ -457,7 +457,7 @@ inter_move_table_s* inter_move_table_create() {
 
     return ht;
 }
-inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key) {
+static inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key) {
     if (ht == NULL || key == NULL) {
         return ht->size;
     }
@@ -536,10 +536,10 @@ Orientation_arr6_s multiply_arr6s(Orientation_arr6_s arr1, Orientation_arr6_s ar
         }
     };
 }
-inline uint8_t orientationNum(Orientation_s O) {
+static inline uint8_t orientationNum(Orientation_s O) {
     return O.face*4 + O.rot;
 }
-inline Orientation_s orientation_from_num(uint8_t num) {
+static inline Orientation_s orientation_from_num(uint8_t num) {
     return (Orientation_s) {
         .face = num>>2,
         .rot = num&3
@@ -688,12 +688,12 @@ float calc_weight_of_step(const State_s* state1, const State_s* state2) {
     return maxWeight;
 }
 
-inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5) {
+static inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5) {
     return (
         a1 == a2 && a2 == a3 && a3 == a4 && a4 == a5
     );
 }
-inline bool allequal4(bool a1, bool a2, bool a3, bool a4) {
+static inline bool allequal4(bool a1, bool a2, bool a3, bool a4) {
     return (
         a1 == a2 && a2 == a3 && a3 == a4
     );
