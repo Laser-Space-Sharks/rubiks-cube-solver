@@ -3,7 +3,7 @@ CXX := clang
 pi?=
 sysroot?=
 
-CXXFLAGS  := -O2 -Wall -Wno-missing-braces -Wno-unused-function -std=c23 --debug
+CXXFLAGS  := -O2 -Wall -Wno-missing-braces -Wno-unused-function -Wno-unused-variable -std=c23 --debug
 
 ifeq ($(pi), true)
 ifeq ($(sysroot),)
