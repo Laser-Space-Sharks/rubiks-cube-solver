@@ -153,8 +153,8 @@ def colorAnalysis(peice):
         # waitKey(0)
         # find the percentage of the piece that is in that color range
         percent = (countNonZero(mask)/(PIECE_SIZE**2)) * 100
-        # if more than 70% of the cube is that color, return the color
-        if percent >= 60 or (i == 1 and redColorCheck(peiceCopy, mask) >= 60):
+        # if more than 55% of the peice is that color, return the color
+        if percent >= 55 or (i == 1 and redColorCheck(peiceCopy, mask) >= 55):
             return i
     # if nothing hits its probably white
     return 3
