@@ -148,14 +148,7 @@ void print_MinHeapNode(const MinHeapNode* node) {
 }
 
 MinHeap* MinHeap_create(MovePair* alg_sections, size_t numAlgSecs) {
-    size_t numSingleMoves = 0;
-    size_t numOppPairs = 0;
-    for (size_t i = 0; i < numAlgSecs; i++) {
-        if (MovePair_is_singleMove(alg_sections[i])) {
-            numSingleMoves++;
-        } else numOppPairs++;
-    }
-    size_t size = (480*2*numSingleMoves) + (256*2*numOppPairs) + 1;
+    size_t size = total_nodes_from_alg_secs(alg_sections, numAlgSecs);
     MinHeap* minheap = (MinHeap*)malloc(sizeof(MinHeap));
     minheap->heap = (MinHeapNode**)calloc(size, sizeof(MinHeapNode*));
     minheap->nodes_to_indexes = MinHeapMap_create(alg_sections, numAlgSecs);

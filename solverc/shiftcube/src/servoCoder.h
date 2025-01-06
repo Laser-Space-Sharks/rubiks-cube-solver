@@ -38,6 +38,7 @@ inter_move_table_s* inter_move_table_create();
 void inter_move_table_free(inter_move_table_s *ht);
 size_t inter_move_table_hash(const RobotState_s *key);
 
+size_t total_nodes_from_alg_secs(MovePair* alg_sections, uint8_t numAlgSecs);
 RobotSolution servoCode_compiler_Ofastest(const alg_s* alg, const inter_move_table_s* INTER_MOVE_TABLE);
 
 #endif // SERVOCODER_H
