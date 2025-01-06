@@ -430,8 +430,8 @@ inter_move_table_s* inter_move_table_create() {
 
     init_RobotStateNum_can_do_move();
 
-    insert_normal_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable.txt");
-    insert_root_lines_into_inter_move_table(ht, "../../servoCoding/ServoOptimizationTable_other_rootpaths.txt");
+    insert_normal_lines_into_inter_move_table(ht, INTER_MOVE_TABLE_PATH);
+    insert_root_lines_into_inter_move_table(ht, INTER_MOVE_TABLE_RSS_PATH);
 
     size_t numSubEntries = 0;
     size_t numRSSSubEntries = 0;

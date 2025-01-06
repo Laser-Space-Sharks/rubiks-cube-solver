@@ -9,6 +9,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+static const char* LL_PATH = "../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt";
+static const char* F2L_PATH = "../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt";
+static const char* INTER_MOVE_TABLE_PATH = "../../servoCoding/ServoOptimizationTable.txt";
+static const char* INTER_MOVE_TABLE_RSS_PATH = "../../servoCoding/ServoOptimizationTable_other_rootpaths.txt";
+
 typedef enum : uint8_t {
     FACE_U = 0,
     FACE_R = 1,

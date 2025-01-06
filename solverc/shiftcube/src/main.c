@@ -151,8 +151,8 @@ static void test_cube18B_moves() {
 static void test_cube_solve(const char** scrambles, int NUM_TESTS) {
     init_solver();
 
-    cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
-    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+    cube_table_s *f2l_table = generate_f2l_table(F2L_PATH);
+    cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
 
     alg_s *alg = NULL;
     shift_cube_s cube = SOLVED_SHIFTCUBE;
@@ -247,8 +247,8 @@ static void test_solve_and_compile(const char** scrambles, size_t NUM_TESTS) {
     init_solver();
     inter_move_table_s* INTER_MOVE_TABLE = inter_move_table_create();
 
-    cube_table_s *f2l_table = generate_f2l_table("../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt");
-    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+    cube_table_s *f2l_table = generate_f2l_table(F2L_PATH);
+    cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
 
     alg_s *alg = NULL;
     shift_cube_s cube = SOLVED_SHIFTCUBE;
@@ -285,7 +285,7 @@ static void test_solve_and_compile(const char** scrambles, size_t NUM_TESTS) {
 }
 
 static void test_1LLL() {
-    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+    cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
     LL_table_diagnostics(last_layer_table);
 }
 
