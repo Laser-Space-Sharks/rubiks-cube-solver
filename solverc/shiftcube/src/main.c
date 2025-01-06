@@ -284,6 +284,11 @@ static void test_solve_and_compile(const char** scrambles, size_t NUM_TESTS) {
     inter_move_table_free(INTER_MOVE_TABLE);
 }
 
+static void test_1LLL() {
+    cube_table_s *last_layer_table = generate_last_layer_table("../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt");
+    LL_table_diagnostics(last_layer_table);
+}
+
 int main(int argc, char *argv[]) {
     shift_cube_s cube = SOLVED_SHIFTCUBE;
 
@@ -315,7 +320,9 @@ int main(int argc, char *argv[]) {
 
         //test_servoCoderC(scrambles, NUM_TESTS);
 
-        test_solve_and_compile(scrambles, NUM_TESTS);
+        //test_solve_and_compile(scrambles, NUM_TESTS);
+
+        test_1LLL();
     }
 
     return 0;

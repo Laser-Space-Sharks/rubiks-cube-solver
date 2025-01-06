@@ -17,7 +17,8 @@ void cube_table_free(cube_table_s *ct);
 void cube_table_clear(cube_table_s *ct);
 void cube_table_print(cube_table_s *ct);
 void cube_table_print_algs_bigger_than_n(const cube_table_s* ct, size_t n);
-void cube_table_check_if_1LLL_is_valid(const cube_table_s* ct);
+bool cube_table_check_if_1LLL_is_valid(const cube_table_s* ct);
+void LL_table_diagnostics(const cube_table_s* ct);
 
 size_t cube_table_entries(const cube_table_s *ct);
 size_t cube_table_size(const cube_table_s *ct);

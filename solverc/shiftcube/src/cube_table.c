@@ -187,14 +187,50 @@ void cube_table_print_algs_bigger_than_n(const cube_table_s* ct, size_t n) {
     }
 }
 
-void cube_table_check_if_1LLL_is_valid(const cube_table_s* ct) {
-    if (cube_table_entries(ct) != 62208) printf("1LLL NOT VALID!\n");
+bool cube_table_check_if_1LLL_is_valid(const cube_table_s* ct) {
+    bool is_valid = true;
+    if (cube_table_entries(ct) != 62208) is_valid = false;
     for (size_t idx = 0; idx < ct->size; idx++) {
         if (ct->table[idx].algs.list != NULL) {
-            if (ct->table[idx].algs.num_algs != 1) printf("1LLL NOT VALID!\n");
+            if (ct->table[idx].algs.num_algs != 1) is_valid = false;
             shift_cube_s cube_mask = masked_cube(&ct->table[idx].key, &f2l_4mask);
             shift_cube_s solved_mask = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
-            if (!compare_cubes(&cube_mask, &solved_mask)) printf("1LLL NOT VALID!\n");
+            if (!compare_cubes(&cube_mask, &solved_mask)) is_valid = false;
+        }
+    } if (!is_valid) printf("1LLL NOT VALID!\n");
+    return is_valid;
+}
+
+uint8_t LL_table_get_maxmimum_alg_length(const cube_table_s* ct) {
+    uint8_t max = 0;
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].algs.list != NULL) {
+            uint8_t candidate = ct->table[idx].algs.list[0].length;
+            if (candidate > max) max = candidate;
+        }
+    } return max;
+}
+
+void LL_table_diagnostics(const cube_table_s* ct) {
+    if (cube_table_check_if_1LLL_is_valid(ct)) {
+        printf("1LLL is valid!\n");
+    }
+    uint8_t maxlength = LL_table_get_maxmimum_alg_length(ct);
+    size_t counts[maxlength+1];
+    for (int i = 0; i < maxlength+1; i++) counts[i] = 0;
+
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].algs.list != NULL) {
+            counts[ct->table[idx].algs.list[0].length]++;
         }
     }
+    printf("maximum length is %hhu", maxlength);
+    printf("\nlengths:    ");
+    for (uint8_t i = 0; i < maxlength+1; i++) {
+        printf("%6hhu", i);
+    }
+    printf("\nfrequency: [");
+    for (uint8_t i = 0; i < maxlength+1; i++) {
+        printf("%6zu", counts[i]);
+    } printf("]\n");
 }
