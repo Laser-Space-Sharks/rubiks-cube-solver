@@ -255,7 +255,7 @@ static void test_solve_and_compile(const char** scrambles, size_t NUM_TESTS) {
 
     printf("Performing tests\n");
     double sum_algLengths = 0;
-    for (uint8_t test = 0; test < NUM_TESTS; test++) {
+    for (uint8_t test = 0; test < 1; test++) {
         cube = SOLVED_SHIFTCUBE;
         alg = alg_from_alg_str(scrambles[test]);
         printf("Testing scramble: %s\n", scrambles[test]);
@@ -269,6 +269,10 @@ static void test_solve_and_compile(const char** scrambles, size_t NUM_TESTS) {
         printf("Solution (%zu moves): ", solve->length);
         print_alg(solve);
         RobotSolution robosolution = servoCode_compiler_Ofastest(solve, INTER_MOVE_TABLE);
+        for (size_t i = 0; i < robosolution.size; i++) {
+            print_RobotState(robosolution.solution[i]);
+            printf("\n");
+        }
         sum_algLengths += solve->length;
         alg_free(solve);
         alg_free(alg);
@@ -291,7 +295,7 @@ static void test_1LLL() {
 
 static void test_LL_improvements() {
     cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
-    LL_find_improvements_to_depth_n(last_layer_table, 10);
+    LL_find_improvements_to_depth_n(last_layer_table, 11);
 }
 
 int main(int argc, char *argv[]) {
@@ -326,10 +330,10 @@ int main(int argc, char *argv[]) {
 
         //test_servoCoderC(scrambles, NUM_TESTS);
 
-        //test_solve_and_compile(scrambles, NUM_TESTS);
+        test_solve_and_compile(scrambles, NUM_TESTS);
 
         //test_1LLL();
-        test_LL_improvements();
+        //test_LL_improvements();
     }
 
     return 0;

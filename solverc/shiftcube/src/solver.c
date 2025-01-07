@@ -162,13 +162,15 @@ alg_s* bidirectional_search(const shift_cube_s *start, const shift_cube_s *goal,
 
     bool found = false;
 
-    for (uint8_t depth = 0; depth < start_depth; depth++) {
+    for (uint8_t depth = 0; depth <= start_depth; depth++) {
         if (bidirectional_recursion(&start_cube, start_ct, end_ct, start_alg, depth)) {
             alg_free(end_alg);
             end_alg = alg_copy(&cube_table_lookup(end_ct, &start_cube)->list[0]);
             found = true;
             break;
         }
+
+        if (max_depth % 2 == 1) break;
 
         if (bidirectional_recursion(&end_cube, end_ct, start_ct, end_alg, depth)) {
             alg_free(start_alg);
@@ -341,6 +343,8 @@ alg_s* solve_cube(shift_cube_s cube, const cube_table_s *f2l_table, const cube_t
     xcross_stage(cube, &best_solve, f2l_table, ll_table);
     cube_table_clear(xcross_start_ct);
     cube_table_clear(xcross_end_ct);
+
+    if (best_solve == NULL) printf("best_solve is NULL!\n");
 
     return best_solve;
 }
