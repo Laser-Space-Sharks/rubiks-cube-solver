@@ -23,4 +23,6 @@ void LL_table_diagnostics(const cube_table_s* ct);
 size_t cube_table_entries(const cube_table_s *ct);
 size_t cube_table_size(const cube_table_s *ct);
 
+void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n);
+
 #endif // CUBE_TABLE_H

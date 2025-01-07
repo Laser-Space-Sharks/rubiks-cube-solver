@@ -2,6 +2,7 @@
 #include "solver_print.h"
 #include "cube_table.h"
 #include "lookup_tables.h"
+#include "solver.h"
 
 typedef struct {
     shift_cube_s key;
@@ -233,4 +234,34 @@ void LL_table_diagnostics(const cube_table_s* ct) {
     for (uint8_t i = 0; i < maxlength+1; i++) {
         printf("%6zu", counts[i]);
     } printf("]\n");
+}
+
+void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n) {
+    size_t total_found, total_improved;
+    total_found = total_improved = 0;
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        printf("trying idx %zu: ", idx);
+        if (ct->table[idx].algs.list != NULL) {
+            uint8_t current_length = ct->table[idx].algs.list[0].length;
+
+            alg_s* alg = bidirectional_search(&ct->table[idx].key, &SOLVED_SHIFTCUBE, n);
+            if (alg == NULL) {
+                printf("\n");
+                continue;
+            }
+
+            total_found++;
+            if (alg->length < current_length) {
+                total_improved++;
+                printf("alg found and improved!\n");
+            } else {
+                printf("alg found!\n");
+            }
+            alg_free(alg);
+        } else {
+            printf("\n");
+        }
+    }
+    printf("# found: %zu\n", total_found);
+    printf("# improved: %zu\n", total_improved);
 }

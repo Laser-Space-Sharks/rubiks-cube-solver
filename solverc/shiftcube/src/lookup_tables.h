@@ -67,6 +67,15 @@ static const shift_cube_s pll_mask = {
     .state[FACE_D] = 0x00000000
 };
 
+static const shift_cube_s full_cube_mask = {
+    .state[FACE_U] = 0xFFFFFFFF,
+    .state[FACE_R] = 0xFFFFFFFF,
+    .state[FACE_F] = 0xFFFFFFFF,
+    .state[FACE_L] = 0xFFFFFFFF,
+    .state[FACE_B] = 0xFFFFFFFF,
+    .state[FACE_D] = 0xFFFFFFFF
+};
+
 // Cube piece lookups
 static const shift_cube_s corner_piece_mask = {
     .state[FACE_U] = 0xF0F0F0F0,

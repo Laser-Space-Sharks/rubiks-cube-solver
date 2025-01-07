@@ -289,7 +289,13 @@ static void test_1LLL() {
     LL_table_diagnostics(last_layer_table);
 }
 
+static void test_LL_improvements() {
+    cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
+    LL_find_improvements_to_depth_n(last_layer_table, 10);
+}
+
 int main(int argc, char *argv[]) {
+    printf("sad isn't happening!\n");
     shift_cube_s cube = SOLVED_SHIFTCUBE;
 
     #define NUM_TESTS 9
@@ -322,7 +328,8 @@ int main(int argc, char *argv[]) {
 
         //test_solve_and_compile(scrambles, NUM_TESTS);
 
-        test_1LLL();
+        //test_1LLL();
+        test_LL_improvements();
     }
 
     return 0;

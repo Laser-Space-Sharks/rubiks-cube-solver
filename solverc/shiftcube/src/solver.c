@@ -160,28 +160,35 @@ alg_s* bidirectional_search(const shift_cube_s *start, const shift_cube_s *goal,
     shift_cube_s start_cube = *start;
     shift_cube_s end_cube   = *goal;
 
+    bool found = false;
+
     for (uint8_t depth = 0; depth < start_depth; depth++) {
         if (bidirectional_recursion(&start_cube, start_ct, end_ct, start_alg, depth)) {
             alg_free(end_alg);
             end_alg = alg_copy(&cube_table_lookup(end_ct, &start_cube)->list[0]);
+            found = true;
             break;
         }
 
         if (bidirectional_recursion(&end_cube, end_ct, start_ct, end_alg, depth)) {
             alg_free(start_alg);
             start_alg = alg_copy(&cube_table_lookup(start_ct, &end_cube)->list[0]);
+            found = true;
             break;
         }
-    }
-
-    alg_invert(end_alg);
-    alg_concat(start_alg, end_alg);
-
-    alg_free(end_alg);
+    } 
     cube_table_free(start_ct);
     cube_table_free(end_ct);
-
-    return start_alg;
+    if (!found) {
+        alg_free(start_alg);
+        alg_free(end_alg);
+        return NULL;
+    } else {
+        alg_invert(end_alg);
+        alg_concat(start_alg, end_alg);
+        alg_free(end_alg);
+        return start_alg;
+    }
 }
 
 static alg_s* xcross_search(const shift_cube_s *start, const shift_cube_s *goal) {
