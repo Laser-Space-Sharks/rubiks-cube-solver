@@ -319,7 +319,7 @@ static alg_s* bidirectional_1LLL_search(const shift_cube_s *start, const cube_ta
 }
 
 
-void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n) {
+void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n, size_t start_ind) {
     size_t total_found, total_improved;
     total_found = total_improved = 0;
 
@@ -333,7 +333,7 @@ void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n) {
     }
 
 
-    for (size_t idx = 0; idx < ct->size; idx++) {
+    for (size_t idx = start_ind; idx < ct->size; idx++) {
         if (ct->table[idx].algs.list != NULL) {
             //printf("trying idx %zu: ", idx);
             uint8_t current_length = ct->table[idx].algs.list[0].length;

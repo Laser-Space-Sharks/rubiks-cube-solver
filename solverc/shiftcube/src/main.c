@@ -295,7 +295,7 @@ static void test_1LLL() {
 
 static void test_LL_improvements() {
     cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
-    LL_find_improvements_to_depth_n(last_layer_table, 11);
+    LL_find_improvements_to_depth_n(last_layer_table, 11, 11616);
 }
 
 int main(int argc, char *argv[]) {
@@ -330,10 +330,10 @@ int main(int argc, char *argv[]) {
 
         //test_servoCoderC(scrambles, NUM_TESTS);
 
-        test_solve_and_compile(scrambles, NUM_TESTS);
+        //test_solve_and_compile(scrambles, NUM_TESTS);
 
         //test_1LLL();
-        //test_LL_improvements();
+        test_LL_improvements();
     }
 
     return 0;
