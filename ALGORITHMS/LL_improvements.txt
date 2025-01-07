@@ -230,3 +230,476 @@ At idx 11543: alg improved to length 11 with gain  2: R' U' F U F' R L' B' U' B 
 At idx 11567: alg improved to length 11 with gain  8: F' U' L2 D' L' D L' U F2 U2 F' 
 At idx 11571: alg improved to length 10 with gain  5: R' U L' U' L2 D F2 D' R L' 
 At idx 11615: alg improved to length 10 with gain  1: B F' L' B' L F U L U' L' 
+At idx 11954: alg improved to length 11 with gain  4: U L' U2 L2 U F U' F' L2 U L 
+At idx 11958: alg improved to length 11 with gain  5: U L' U R' U' R2 D B2 D' R' L 
+At idx 12017: alg improved to length 11 with gain  6: F2 D B R2 B D2 F D' B2 D2 F 
+At idx 12051: alg improved to length 11 with gain  4: L F' D' L D' R' B' R D2 L2 F 
+At idx 12071: alg improved to length 11 with gain  5: U R' U L' U' L2 D F2 D' R L' 
+At idx 12075: alg improved to length 11 with gain  3: B U2 R D B2 D' R2 U R U B' 
+At idx 12169: alg improved to length 10 with gain  8: R U B U2 B' R' U' F' U2 F 
+At idx 12264: alg improved to length 10 with gain  4: F U2 F' R' U F U F' U' R 
+At idx 12288: alg improved to length 10 with gain  2: U' R' F' R2 D2 L2 B' L2 D2 R' 
+At idx 12315: alg improved to length 11 with gain  4: U2 F' U' F2 R U R' U' F2 U2 F 
+At idx 12330: alg improved to length 11 with gain  6: U R' U' F' U2 F R U B U2 B' 
+At idx 12391: alg improved to length 11 with gain  3: L U' B' U' B2 D L2 D' B' U2 L' 
+At idx 12425: alg improved to length 11 with gain  3: L2 F2 R' F' R F' L2 U B' U B 
+At idx 12531: alg improved to length 11 with gain  4: F' L' F U2 F2 L2 B L B' L2 F2 
+At idx 12564: alg improved to length 10 with gain  2: F' L' U B' U' B U' L U F 
+At idx 12567: alg improved to length  9 with gain  1: U2 B' U' B2 L' B' L2 U' L' 
+At idx 12588: alg improved to length 11 with gain  4: U F2 U F2 D' L2 B2 U' B2 D L2 
+At idx 12693: alg improved to length 11 with gain  2: R U' B' R B L' D B D' R2 L 
+At idx 12702: alg improved to length 11 with gain  3: U2 B' R' B L B' U' R U B L' 
+At idx 12706: alg improved to length 11 with gain  4: F2 R2 B2 L' D2 L B2 R F' R F' 
+At idx 12774: alg improved to length 11 with gain  1: U2 L' B L B' U' B' R' U R B 
+At idx 12822: alg improved to length 10 with gain  2: U2 F R F2 D2 B2 L B2 D2 F 
+At idx 12824: alg improved to length 10 with gain  1: F' L F' L' F2 U2 R' F R F' 
+At idx 12842: alg improved to length 11 with gain  5: U2 F D B' R B D' F' R U' R' 
+At idx 12908: alg improved to length 11 with gain  1: U' F U' B' R2 U' R2 U R2 F' B 
+At idx 12946: alg improved to length 10 with gain  1: R' U B L U' L' B' R' U R2 
+At idx 13044: alg improved to length 11 with gain  3: U' B' R' B L B' U' R U B L' 
+At idx 13068: alg improved to length 10 with gain  2: F' U' L' U B' U B U' L F 
+At idx 13195: alg improved to length 10 with gain  3: L F U F2 U' L' U L F L' 
+At idx 13214: alg improved to length  9 with gain  1: U2 L U L2 B L B2 U B 
+At idx 13343: alg improved to length 11 with gain  2: U2 B U L U' F U' F' U L' B' 
+At idx 13520: alg improved to length 11 with gain  4: R' F R' F' R2 B U' L U' L' B' 
+At idx 13603: alg improved to length 11 with gain  2: L' U R D' B U B' U' D R' L 
+At idx 13632: alg improved to length 11 with gain  1: U F' L U L2 U L2 U2 L' U F 
+At idx 13746: alg improved to length 11 with gain  4: R F' U' L' U F R2 F' L F R 
+At idx 13785: alg improved to length 10 with gain  1: F' U' L U L' F U L U2 L' 
+At idx 13804: alg improved to length 11 with gain  3: U R2 U' R2 D B2 L2 U L2 D' B2 
+At idx 13854: alg improved to length 10 with gain  2: U R' F' R2 D2 L2 B' L2 D2 R' 
+At idx 13883: alg improved to length 10 with gain  1: F U' L' B' U B L F U' F2 
+At idx 13977: alg improved to length 11 with gain  3: R' B U L U' B' R2 B L' B' R' 
+At idx 14032: alg improved to length 11 with gain  5: R U2 R' U' F' L' B' U' B L F 
+At idx 14082: alg improved to length 11 with gain  2: U F' U' L2 D' L U L' D L2 F 
+At idx 14087: alg improved to length 10 with gain  1: F2 U F' L' B' U' B L U F' 
+At idx 14116: alg improved to length 11 with gain  1: R2 F2 L D2 L D L' D L' F2 R2 
+At idx 14177: alg improved to length 11 with gain  2: L R' D' U F U' F' D L' U' R 
+At idx 14182: alg improved to length 11 with gain  5: U2 F2 R2 B' R D R' D' B R2 F2 
+At idx 14260: alg improved to length 11 with gain  1: U B' F2 D R D' R' F' R F' B 
+At idx 14294: alg improved to length 10 with gain  3: B L B' R B L' U B' U' R' 
+At idx 14316: alg improved to length 11 with gain  4: F2 L' U L U' L' U' L2 F L' F 
+At idx 14372: alg improved to length 11 with gain  3: U' R2 D B' D L2 B D2 R2 U' F 
+At idx 14375: alg improved to length 11 with gain  7: F' L2 D' R' B2 R D2 L' D' L' F 
+At idx 14524: alg improved to length 11 with gain  2: L U F U' F' L2 B' U' B U L 
+At idx 14550: alg improved to length 11 with gain  1: U' R' F R' F' R2 U2 B' R B R' 
+At idx 14580: alg improved to length 11 with gain  1: R' U R2 D' L F2 L' D R U2 R2 
+At idx 14704: alg improved to length 11 with gain  3: U' B U2 B' L' U B U B' U' L 
+At idx 14827: alg improved to length 11 with gain  2: U L' U' B' U R' U R U' B L 
+At idx 14901: alg improved to length 11 with gain  2: R F R' B' R B U R U' F' R' 
+At idx 14908: alg improved to length 11 with gain  4: L' B L' B2 U B U B' U' B L2 
+At idx 14913: alg improved to length 10 with gain  1: F U' R' U2 R U F' R' U R 
+At idx 14979: alg improved to length 11 with gain  3: R B2 L R2 F' L F R2 L2 B2 R' 
+At idx 14993: alg improved to length 11 with gain  5: L' R U R' U' R' L2 F R F' L' 
+At idx 15062: alg improved to length 11 with gain  3: F R' F' L F2 R F' U F' U' L' 
+At idx 15164: alg improved to length 11 with gain  2: L' U B L' B' R D' B' D R' L2 
+At idx 15169: alg improved to length 11 with gain  3: B F U2 F' L2 B2 R B' L2 B2 R' 
+At idx 15190: alg improved to length  9 with gain  1: U F U F2 L F L2 U L 
+At idx 15306: alg improved to length 11 with gain  5: U B2 R2 F D' R' D R F' R2 B2 
+At idx 15391: alg improved to length 10 with gain  1: L' R U' L U R' U2 L' U2 L 
+At idx 15438: alg improved to length 11 with gain  5: U2 F' L' F R' F' L U' F U R 
+At idx 15453: alg improved to length 11 with gain  1: F' U F2 D' B L2 B' D F U2 F2 
+At idx 15478: alg improved to length 11 with gain  3: F' D' B L' B' D F U' L' U2 L 
+At idx 15501: alg improved to length 11 with gain  1: U F U B R B' U' B R' F' B' 
+At idx 15532: alg improved to length 11 with gain  2: B2 R2 F R F' R B2 U' L U' L' 
+At idx 15680: alg improved to length 11 with gain  2: U F R U R2 U' F' U F R F' 
+At idx 15866: alg improved to length 11 with gain  2: U R' U' F2 D' F U F' D F2 R 
+At idx 15989: alg improved to length 11 with gain  3: F' L2 F2 U2 F' L' F U2 F2 L2 F 
+At idx 16001: alg improved to length 11 with gain  4: L' B' R' B L2 B' U' R U B L' 
+At idx 16011: alg improved to length 11 with gain  2: B F' L2 U L2 U' L2 U' F U B' 
+At idx 16024: alg improved to length  9 with gain  1: U L' U' L2 F' L' F2 U' F' 
+At idx 16050: alg improved to length 11 with gain  3: U2 L' B' L F L' U' B U L F' 
+At idx 16067: alg improved to length 11 with gain  2: F R B U' B' R' U' R U R' F' 
+At idx 16094: alg improved to length 11 with gain  1: B F' D' L' D F B' U' L' U2 L 
+At idx 16109: alg improved to length 11 with gain  2: R U R' U F2 L' B L' B' L2 F2 
+At idx 16140: alg improved to length 11 with gain  1: B2 R2 F D' F D' F' D2 F' R2 B2 
+At idx 16321: alg improved to length 11 with gain  1: F U2 B F2 L' F L' F' L F B' 
+At idx 16358: alg improved to length 11 with gain  1: U2 B U F L F' U' F L' F' B' 
+At idx 16375: alg improved to length 11 with gain  5: F U R' F R F2 L' B' U' B L 
+At idx 16400: alg improved to length 11 with gain  3: R2 F2 L F2 R F R' F L' F2 R2 
+At idx 16405: alg improved to length 11 with gain  4: L F' L F' R2 B' D2 B R2 F2 L2 
+At idx 16451: alg improved to length 11 with gain  4: U' B' L U F U' L' B L F' L' 
+At idx 16517: alg improved to length 10 with gain  5: B' U' B L' D' R B R' D L 
+At idx 16518: alg improved to length 11 with gain  1: U B' F R2 U' R2 U R2 B U F' 
+At idx 16564: alg improved to length 11 with gain  2: U2 L U F U' R U' R' U F' L' 
+At idx 16572: alg improved to length 11 with gain  1: R U' R' U2 R' D' L F2 L' D R 
+At idx 16674: alg improved to length 11 with gain  6: U' F' U2 F R2 B L' B L B2 R2 
+At idx 16693: alg improved to length 11 with gain  4: U2 B' U' B2 L U L' U' B2 U2 B 
+At idx 16717: alg improved to length 11 with gain  1: U' L' B L' B' L2 U2 F' L F L' 
+At idx 16723: alg improved to length 10 with gain  3: B L' B' U' B U L2 U' L' B' 
+At idx 16779: alg improved to length  9 with gain  1: U2 B U B2 R B R2 U R 
+At idx 16839: alg improved to length 11 with gain  4: U2 B' U' B L' D' R B R' D L 
+At idx 16860: alg improved to length 11 with gain  2: U' R' U' F' U L' U L U' F R 
+At idx 16906: alg improved to length 11 with gain  4: U' R' U' R2 B U B' U' R2 U2 R 
+At idx 16908: alg improved to length 11 with gain  1: U B F' L2 U' L2 U L2 F U B' 
+At idx 16926: alg improved to length 11 with gain  3: U2 L F L' B L F' U L' U' B' 
+At idx 16947: alg improved to length 10 with gain  1: U R' F2 L D' L D L2 F2 R 
+At idx 16997: alg improved to length 11 with gain  4: U' B F' L2 U L2 U' L2 B' U' F 
+At idx 16998: alg improved to length 11 with gain  1: U F R' F' U' F U R2 U' R' F' 
+At idx 17022: alg improved to length 10 with gain  1: B U2 B' U' L' B U' B' U L 
+At idx 17048: alg improved to length 11 with gain  2: U F R U' B U B' U R' U' F' 
+At idx 17085: alg improved to length 11 with gain  7: R' F L F2 R' L B D2 B' R2 L2 
+At idx 17098: alg improved to length 10 with gain  8: R' U' F' U2 F R U B U2 B' 
+At idx 17114: alg improved to length 10 with gain  5: R2 U' R2 D B2 L2 U L2 D' B2 
+At idx 17153: alg improved to length 11 with gain  2: B F' D' U L U' L' D B' U' F 
+At idx 17191: alg improved to length 11 with gain  4: R' F R B' R2 F' R U' R U B 
+At idx 17300: alg improved to length 11 with gain  3: L U2 B D L2 D' B2 U B U L' 
+At idx 17451: alg improved to length 11 with gain  1: U2 B' F R' F' R B U R U' R' 
+At idx 17453: alg improved to length 11 with gain  3: U R2 D' F D' L2 F' D2 R2 U B' 
+At idx 17472: alg improved to length 11 with gain  3: U2 F' U2 F U2 L F R' F' R L' 
+At idx 17584: alg improved to length 11 with gain  2: L2 F' L' F L' B' U' B L U L' 
+At idx 17592: alg improved to length 10 with gain  7: L' B' L F' L' B U' L U F 
+At idx 17603: alg improved to length 11 with gain  1: R B2 R' B U B2 U' B' L U2 L' 
+At idx 17736: alg improved to length  9 with gain  2: B R D2 F2 U2 L F2 D2 B 
+At idx 17756: alg improved to length 11 with gain  4: U2 R U2 R' F2 L' B L' B' L2 F2 
+At idx 17780: alg improved to length  9 with gain  1: U B U L' B L B' U' B' 
+At idx 17855: alg improved to length 11 with gain  1: U2 F' L F L' U' L' B' U B L 
+At idx 17941: alg improved to length 11 with gain  7: R' F D F D2 B' L2 B D F2 R 
+At idx 17970: alg improved to length  8 with gain  2: L' U' L U L F' L' F 
+At idx 18071: alg improved to length 11 with gain  3: R2 F2 L F2 R F' L2 U2 L F R 
+At idx 18267: alg improved to length 11 with gain  4: L B' D2 B L' U' L B' D2 B L' 
+At idx 18284: alg improved to length 11 with gain  2: F U R U' R' F2 L' U' L U F 
+At idx 18288: alg improved to length 11 with gain  1: U2 B2 F D' R D F' B2 L U' L' 
+At idx 18369: alg improved to length 11 with gain  4: F U F2 L F L' F R U R' F' 
+At idx 18370: alg improved to length 10 with gain  1: F2 U' F2 D F2 D' L2 U L2 F2 
+At idx 18612: alg improved to length 11 with gain  5: L F2 L2 U F' U F U2 L2 F2 L' 
+At idx 18630: alg improved to length 11 with gain  4: F R' F2 D2 B' L' B D2 F' R F2 
+At idx 18649: alg improved to length 11 with gain  6: L' D' R B' R' D L2 F U F' L' 
+At idx 18656: alg improved to length 11 with gain  5: B L' F' L2 F' B R' D2 R F2 B2 
+At idx 18675: alg improved to length 11 with gain  3: U R2 D B' D L2 B D2 R2 U' F 
+At idx 18690: alg improved to length 11 with gain  4: B R' U' F' U R B2 R' F R B 
+At idx 18704: alg improved to length 11 with gain  3: F R2 B2 F2 L' B' L F2 B' R2 F' 
+At idx 18731: alg improved to length 11 with gain  6: L2 F2 D' R B2 R' D F2 L U2 L 
+At idx 18748: alg improved to length 11 with gain  4: R' U' F' U F' L F2 R F' L' F 
+At idx 18749: alg improved to length 11 with gain  4: R D' R2 U2 F' U F U R2 D R' 
+At idx 18809: alg improved to length 11 with gain  2: R' B L2 F D F D' F2 L2 B' R 
+At idx 18869: alg improved to length 11 with gain  5: L F2 R2 D B' D B D2 R2 F2 L' 
+At idx 18898: alg improved to length 10 with gain  6: L2 B2 R D' B' D B R' B2 L2 
+At idx 18913: alg improved to length 11 with gain  2: F R2 U B' U' R' U B R' U' F' 
+At idx 18918: alg improved to length 10 with gain  7: B U B' R D L' B' L D' R' 
+At idx 18929: alg improved to length  9 with gain  1: F' L2 B2 D' B' D B' L2 F 
+At idx 19054: alg improved to length 10 with gain  2: R' F R F' U' F' L' U L F 
+At idx 19182: alg improved to length 10 with gain  1: R' U' R F' B2 D L D' F B2 
+At idx 19205: alg improved to length  8 with gain  1: B U L' B L B' U' B' 
+At idx 19214: alg improved to length 11 with gain  7: L2 R2 B D2 B' R L' F2 L' F' R 
+At idx 19227: alg improved to length 11 with gain  4: U' R U2 R' F2 L' B L' B' L2 F2 
+At idx 19285: alg improved to length 11 with gain  2: F' R' F L F' L' U' F' U R F 
+At idx 19291: alg improved to length 11 with gain  3: R' D' L F' L' D R U' F' U2 F 
+At idx 19339: alg improved to length 11 with gain  4: F U2 L' B2 D' R2 D B2 L U F' 
+At idx 19377: alg improved to length  9 with gain  1: U2 B U B L' B' L U' B' 
+At idx 19379: alg improved to length 11 with gain  4: L F' L2 D2 R' B' R D2 L' F L2 
+At idx 19390: alg improved to length  9 with gain  4: R B2 L2 D L D' L B2 R' 
+At idx 19411: alg improved to length  9 with gain  1: U2 R' U' R2 B' R' B2 U' B' 
+At idx 19559: alg improved to length 11 with gain  1: U' B' F R' F' R B U R U' R' 
+At idx 19584: alg improved to length 11 with gain  7: F' L2 B2 D2 B' D2 L' F L2 B' L 
+At idx 19618: alg improved to length 10 with gain  2: U2 L' F' D2 R2 U2 B' R2 D2 L' 
+At idx 19650: alg improved to length 10 with gain  4: B L B' R' B U L' U' B' R 
+At idx 19742: alg improved to length 10 with gain  5: F' U B' U' B2 D L2 D' F B' 
+At idx 19924: alg improved to length 11 with gain  6: B2 D' F' R2 F' D2 B' D F2 D2 B' 
+At idx 19984: alg improved to length 11 with gain  4: B L2 D R F2 R' D2 L D L B' 
+At idx 19990: alg improved to length 11 with gain  1: L D R' F2 R D' L' U2 L' U' L 
+At idx 19997: alg improved to length 11 with gain  4: U L U2 L' B2 R' F R' F' R2 B2 
+At idx 20053: alg improved to length 10 with gain  2: L' R B2 U' B2 U B2 L U R' 
+At idx 20070: alg improved to length 11 with gain  5: U B' F D' R2 D B2 U' B' U F' 
+At idx 20075: alg improved to length 11 with gain  6: R B U' B' R2 D' L F L' D R 
+At idx 20083: alg improved to length 11 with gain  3: B' U B U R' L2 D F' D' R L2 
+At idx 20101: alg improved to length 11 with gain  5: B' U' R B' R' B2 L F U F' L' 
+At idx 20161: alg improved to length 11 with gain  3: F U R U' R B' R2 F' R B R' 
+At idx 20207: alg improved to length 11 with gain  6: U' B D F' L F D' B' L U' L' 
+At idx 20353: alg improved to length 11 with gain  5: R' U' F' U R2 D2 L2 B' L2 D2 R' 
+At idx 20357: alg improved to length 11 with gain  2: L' U' B' U B L2 F U F' U' L' 
+At idx 20366: alg improved to length 11 with gain  6: U' F2 R2 B' R' B R' F2 L' U2 L 
+At idx 20414: alg improved to length 11 with gain  4: B U2 B R2 D F' L2 F D' R2 B2 
+At idx 20501: alg improved to length 10 with gain  5: L' U2 L U2 B L F' L' F B' 
+At idx 20510: alg improved to length 11 with gain  2: B2 L' B' L2 U2 L' U B' R' U' R 
+At idx 20640: alg improved to length 11 with gain  1: F U L' R2 B' R' B L U' R' F' 
+At idx 20664: alg improved to length 11 with gain  3: U2 R B R' F R B' U R' U' F' 
+At idx 20742: alg improved to length 11 with gain  2: R' B L2 F' L' F' L F2 L2 B' R 
+At idx 20753: alg improved to length 11 with gain  5: R' U L U' F2 U' F2 U F2 R L' 
+At idx 20827: alg improved to length 10 with gain  2: R' U' F' U L' U L U' F R 
+At idx 20953: alg improved to length 11 with gain  3: F' L' U' L U' F U2 F R' F' R 
+At idx 21114: alg improved to length 10 with gain  6: L2 B2 R B' D' B D R' B2 L2 
+At idx 21130: alg improved to length 11 with gain  4: U L' U2 L U2 B L F' L' F B' 
+At idx 21142: alg improved to length 11 with gain  2: L F R' F' L' F2 R F2 L' U2 L 
+At idx 21234: alg improved to length 11 with gain  2: U B' R' B L B' U' R U B L' 
+At idx 21239: alg improved to length 10 with gain  1: F' U R B U' B' R' F' U F2 
+At idx 21286: alg improved to length 10 with gain  7: L2 B2 L' F U F' U' L B2 L2 
+At idx 21316: alg improved to length 11 with gain  4: U2 F U2 F' L2 B' R B' R' B2 L2 
+At idx 21419: alg improved to length 11 with gain  2: R F U R' U' B' R' B R F' R' 
+At idx 21494: alg improved to length 11 with gain  4: U B F' L F L' B' U2 L' U2 L 
+At idx 21515: alg improved to length 11 with gain  4: U' F' U2 F U2 L F R' F' R L' 
+At idx 21517: alg improved to length 11 with gain  5: U F2 R2 B' R D R' D' B R2 F2 
+At idx 21530: alg improved to length 11 with gain  3: U2 R' F' R B R' U' F U R B' 
+At idx 21552: alg improved to length 11 with gain  3: U B' U R U' R' U' B R U2 R' 
+At idx 21565: alg improved to length 11 with gain  4: U' L' F U R U' F' L F R' F' 
+At idx 21577: alg improved to length 11 with gain  2: L R' D F D' L' F U' F' U R 
+At idx 21607: alg improved to length  8 with gain  2: R' F R F' U' F' U F 
+At idx 21624: alg improved to length 10 with gain  1: R' U' F U2 F2 U' F2 U' F' R 
+At idx 21653: alg improved to length 11 with gain  6: U' L U L' B D F' L' F D' B' 
+At idx 21658: alg improved to length 11 with gain  1: F2 R2 B' D B' D B D2 B R2 F2 
+At idx 21676: alg improved to length 10 with gain  5: L2 F2 R' F D F' D' R F2 L2 
+At idx 21685: alg improved to length 11 with gain  6: U2 R' U2 R B2 L F' L F L2 B2 
+At idx 21717: alg improved to length 11 with gain  4: U F2 L2 B L' D' L D B' L2 F2 
+At idx 21766: alg improved to length 11 with gain  3: R2 B2 L' B' L B' R2 U F' U F 
+At idx 21791: alg improved to length 11 with gain  3: R B2 L2 F' L B' L' F L2 B' R' 
+At idx 21808: alg improved to length 11 with gain  1: U2 R U L B L' U' L B' R' L' 
+At idx 21810: alg improved to length 11 with gain  4: F' L F' L2 U L U L' U' L F2 
+At idx 21818: alg improved to length 11 with gain  5: R' U2 R B L2 F' L' F U2 L' B' 
+At idx 21831: alg improved to length 11 with gain  5: U' B F' D L2 D' B2 U B U' F 
+At idx 21855: alg improved to length 10 with gain  5: L2 F2 L B' U' B U L' F2 L2 
+At idx 21913: alg improved to length 11 with gain  4: F D' F2 U' L' U' L U2 F2 D F' 
+At idx 21958: alg improved to length 10 with gain  1: R2 U R' F' L' U' L F U R' 
+At idx 22019: alg improved to length 11 with gain  4: U' B2 R2 F R F' R B2 L U2 L' 
+At idx 22036: alg improved to length 11 with gain  2: R U R' F' U L' B' U' B L F 
+At idx 22097: alg improved to length 11 with gain  1: R2 F2 L D' L D' L' D2 L' F2 R2 
+At idx 22126: alg improved to length 11 with gain  2: L2 R D' B D R' B L B' U' L 
+At idx 22162: alg improved to length  9 with gain  1: U2 F U F R' F' R U' F' 
+At idx 22181: alg improved to length 11 with gain  4: F' L2 U L2 U' L2 U' F B' U2 B 
+At idx 22279: alg improved to length 11 with gain  5: U F2 L2 F' R U R' U' F L2 F2 
+At idx 22428: alg improved to length 10 with gain  6: R2 B2 L' B' L B' R2 F' U2 F 
+At idx 22492: alg improved to length 11 with gain  2: F U R U' F2 D2 B2 L B2 D2 F 
+At idx 22514: alg improved to length 11 with gain  5: L' R' U2 L F2 R2 B' R F2 R2 B 
+At idx 22635: alg improved to length 11 with gain  3: L2 R' D F D' R L2 U' B' U' B 
+At idx 22671: alg improved to length 11 with gain  4: R' U F U2 L F' L' U2 F' U R 
+At idx 22684: alg improved to length 11 with gain  2: R' U2 R B2 L' B2 R B L B' R' 
+At idx 22761: alg improved to length 11 with gain  3: F' L D U2 R F R' U2 D' F L' 
+At idx 22770: alg improved to length 10 with gain  3: R B R' F R B' U R' U' F' 
+At idx 22814: alg improved to length 11 with gain  6: F U2 F' U' L D R' F' R D' L' 
+At idx 22924: alg improved to length 11 with gain  2: U2 L F' L' U' L U F2 U' F' L' 
+At idx 23078: alg improved to length 11 with gain  1: U' R B' R' B U2 R2 F R F' R 
+At idx 23107: alg improved to length 11 with gain  5: U F2 R2 F L' U' L U F' R2 F2 
+At idx 23123: alg improved to length 11 with gain  2: U F' L' B' L F L' U' B U L 
+At idx 23175: alg improved to length 10 with gain  5: L R' F2 U F2 U' F2 L' U' R 
+At idx 23233: alg improved to length 11 with gain  3: B F' L' D F L' F' D' B' L F 
+At idx 23544: alg improved to length 11 with gain  3: F' L' U' L2 U2 L2 U' L2 U' L' F 
+At idx 23943: alg improved to length 11 with gain  5: R F' D2 F R' U2 R F' D2 F R' 
+At idx 24099: alg improved to length 11 with gain  4: F' L2 B2 D2 R D R' D B2 L2 F 
+At idx 24240: alg improved to length 11 with gain  1: R' U' B F2 L F L' B' U F R 
+At idx 24281: alg improved to length 11 with gain  4: U' L' R B2 U B2 U' B2 R' U' L 
+At idx 24394: alg improved to length 11 with gain  1: U F R' F' R U2 F2 L F L' F 
+At idx 24484: alg improved to length 11 with gain  3: U F' U R2 D2 B' L2 D' B D' R2 
+At idx 24529: alg improved to length 11 with gain  4: L' U2 F' D' L2 D F2 U' F' U' L 
+At idx 24645: alg improved to length 11 with gain  5: U2 B' F D' R2 D B2 U' B' U F' 
+At idx 24792: alg improved to length  8 with gain  2: R' F' U F R B U' B' 
+At idx 24867: alg improved to length 11 with gain  2: L U' R' U F2 U F2 U' F2 R L' 
+At idx 24944: alg improved to length 11 with gain  2: F' U F R U' B U2 B2 R B R2 
+At idx 25050: alg improved to length 10 with gain  2: U2 B2 U' R L' B2 R' L U' B2 
+At idx 25206: alg improved to length 11 with gain  3: U2 L' R B L B' R' U2 B' U2 B 
+At idx 25325: alg improved to length 11 with gain  2: L' R B2 U B2 U' B2 U' L U R' 
+At idx 25340: alg improved to length 10 with gain  1: F' L' U' L U2 B U' F U B' 
+At idx 25527: alg improved to length 11 with gain  1: F' U L F' L' D' B L' B' D F2 
+At idx 25599: alg improved to length 11 with gain  5: L F R U' R' F' L' U' B' U2 B 
+At idx 25677: alg improved to length 10 with gain  5: L' U R' U' R2 D B2 D' R' L 
+At idx 25701: alg improved to length 11 with gain  5: U2 F U' B U B2 D' R2 D F' B 
+At idx 25814: alg improved to length 11 with gain  3: R' F2 R2 U2 R' F' R U2 R2 F2 R 
+At idx 25900: alg improved to length 11 with gain  2: B' U' R' U R B2 L U L' U' B' 
+At idx 25974: alg improved to length 11 with gain  6: R U2 R' U' F D B' R' B D' F' 
+At idx 26035: alg improved to length 10 with gain  5: B' F D' R2 D B2 U' B' U F' 
+At idx 26128: alg improved to length 11 with gain  4: U2 F R2 B' R' B2 R' F' R B' R' 
+At idx 26213: alg improved to length 11 with gain  1: B U' B' U2 B' D' F R2 F' D B 
+At idx 26257: alg improved to length 11 with gain  3: R U2 R' F' L' U2 L F R U2 R' 
+At idx 26459: alg improved to length 10 with gain  5: L' R D B2 D' R2 U R U' L 
+At idx 26560: alg improved to length  9 with gain  1: U F' U' F2 R' F' R2 U' R' 
+At idx 26565: alg improved to length 11 with gain  5: L U2 L' U' F B2 D' R' D F' B2 
+At idx 26663: alg improved to length 11 with gain  2: L U2 L2 U' L2 F U' F' L2 U L 
+At idx 26749: alg improved to length 11 with gain  1: U B' F R' F' R B U R U' R' 
+At idx 26751: alg improved to length 11 with gain  7: B' R B2 L' B D2 L' D2 L2 B2 R' 
+At idx 26853: alg improved to length 11 with gain  4: F' U2 R' D' F2 D R2 U' R' U' F 
+At idx 27014: alg improved to length 11 with gain  6: U L U L' B D F' L' F D' B' 
+At idx 27067: alg improved to length 11 with gain  6: U' B2 L2 F' L' F L' B2 R' U2 R 
+At idx 27090: alg improved to length 10 with gain  4: R' F' L' F R F' U' L U F 
+At idx 27155: alg improved to length 11 with gain  4: U' L R' F R F' L' U2 F' U2 F 
+At idx 27216: alg improved to length 10 with gain  5: L2 F2 R' D F D' F' R F2 L2 
+At idx 27317: alg improved to length 11 with gain  6: L U' F' U2 R' F R U2 F U' L' 
+At idx 27786: alg improved to length 11 with gain  4: L F U' F' L' B L' B' L2 U' L' 
+At idx 27857: alg improved to length 11 with gain  2: L2 R' D F' D' R F' L' F U L' 
+At idx 27985: alg improved to length 10 with gain  5: F U' B U B2 D' R2 D F' B 
+At idx 27999: alg improved to length 11 with gain  4: R B' D' B' D2 F L2 F' D' B2 R' 
+At idx 28000: alg improved to length 10 with gain  2: U F R F2 D2 B2 L B2 D2 F 
+At idx 28105: alg improved to length 11 with gain  4: U' L' U' L2 F U F' U' L2 U2 L 
+At idx 28169: alg improved to length 11 with gain  5: B L2 D F L D2 B R2 D B2 L 
+At idx 28223: alg improved to length 11 with gain  3: L F R2 B' R F R' B R2 F2 L' 
+At idx 28249: alg improved to length 11 with gain  2: B F' D' L' D F L' U L U' B' 
+At idx 28255: alg improved to length 11 with gain  2: B2 F' D L' D' F L' B' L U B' 
+At idx 28313: alg improved to length 11 with gain  4: B D2 F L F' D2 B R' B R B 
+At idx 28336: alg improved to length 11 with gain  2: U' L F' L' U' L U F2 U' F' L' 
+At idx 28360: alg improved to length 10 with gain  2: B U L U' F U' F' U L' B' 
+At idx 28374: alg improved to length 10 with gain  3: B L U L2 U' B' U B L B' 
+At idx 28425: alg improved to length 11 with gain  1: B U2 B' U' R L' D B' D' R' L 
+At idx 28559: alg improved to length 11 with gain  1: L R' D' F' D R L' U' F' U2 F 
+At idx 28601: alg improved to length 11 with gain  6: U B U B' R D L' B' L D' R' 
+At idx 28626: alg improved to length 11 with gain  3: R' U2 R U B U2 L U2 L' U' B' 
+At idx 28731: alg improved to length 11 with gain  2: U R' F' U L' U' L U' F U R 
+At idx 28954: alg improved to length 10 with gain  2: U R2 B2 F2 L2 D L2 F2 B2 R2 
+At idx 28998: alg improved to length 10 with gain  4: U B L2 F2 D F D' F L2 B' 
+At idx 29054: alg improved to length 11 with gain  1: U B L2 B2 R B' R' B2 L' U2 L' 
+At idx 29110: alg improved to length 11 with gain  4: R' F2 D2 B' L B D F' D R F' 
+At idx 29190: alg improved to length 11 with gain  5: U2 R' U L' U' L2 D F2 D' R L' 
+At idx 29205: alg improved to length 11 with gain  2: U' R' U' F' U R B' R' F R B 
+At idx 29211: alg improved to length  9 with gain  1: U' R' U' R U R B' R' B 
+At idx 29317: alg improved to length 11 with gain  2: R' F R' F L2 B D2 B' L2 F2 R2 
+At idx 29415: alg improved to length 11 with gain  3: B' R D B' D F L F' D2 B2 R' 
+At idx 29515: alg improved to length  9 with gain  1: U' R U R B' R' B U' R' 
+At idx 29599: alg improved to length 11 with gain  3: U B R' U' F' U R B' R' F R 
+At idx 29621: alg improved to length 11 with gain  1: R U2 L R2 F' R F' R' F R L' 
+At idx 29627: alg improved to length 11 with gain  2: L U F' U' F R' D' F D R L' 
+At idx 29633: alg improved to length 11 with gain  3: R' F2 L2 R2 B L B' R2 L F2 R 
+At idx 29637: alg improved to length 11 with gain  4: U2 B L2 F' L' F2 L' B' L F' L' 
+At idx 29744: alg improved to length 11 with gain  3: U2 R F' U' L' U F R' F' L F 
+At idx 29823: alg improved to length 11 with gain  5: L U B' R2 D' F' D R2 B U L' 
+At idx 29836: alg improved to length 11 with gain  5: U2 L D R' F R D' L' F U' F' 
+At idx 29938: alg improved to length 11 with gain  3: B2 L2 F' L' F L' B2 U R' U R 
+At idx 30089: alg improved to length 11 with gain  1: U L' R B' R' B L U B U' B' 
+At idx 30167: alg improved to length 11 with gain  4: B U B' U2 R D L' B L D' R' 
+At idx 30187: alg improved to length 11 with gain  4: U' F U2 F' L2 B' R B' R' B2 L2 
+At idx 30237: alg improved to length 11 with gain  4: R B' R2 D2 L' F' L D2 R' B R2 
+At idx 30282: alg improved to length 11 with gain  1: U F' L F' L' F2 U2 R' F R F' 
+At idx 30301: alg improved to length 11 with gain  2: U' B' U' R' U F' U F U' R B 
+At idx 30320: alg improved to length 10 with gain  1: L U L' F' U L U2 L' U' F 
+At idx 30416: alg improved to length 11 with gain  6: U2 L' U2 L F2 R B' R B R2 F2 
+At idx 30516: alg improved to length 10 with gain  7: F' U' L' U B' L F L' B L 
+At idx 30591: alg improved to length 11 with gain  1: U L F2 L2 B L' B' L2 F' U2 F' 
+At idx 30636: alg improved to length 11 with gain  4: U2 L F L' B' L U F' U' L' B 
+At idx 30700: alg improved to length 11 with gain  1: U2 L U R F R' U' R F' R' L' 
+At idx 30966: alg improved to length 11 with gain  4: U2 B2 R2 F R' D' R D F' R2 B2 
+At idx 30993: alg improved to length 11 with gain  2: F U' R' F R B' D R D' F2 B 
+At idx 31126: alg improved to length 11 with gain  2: B R' F2 L' D' L' D L2 F2 R B' 
+At idx 31149: alg improved to length 11 with gain  4: F' U' R B2 D L D' B2 R' U' F 
+At idx 31188: alg improved to length 11 with gain  2: F' U' L' U L F2 R U R' U' F' 
+At idx 31189: alg improved to length  8 with gain  1: B U B2 R B R2 U R 
+At idx 31214: alg improved to length 11 with gain  4: R' F2 L2 D2 L' D2 F L' F2 R F' 
+At idx 31250: alg improved to length 11 with gain  3: U' F U2 F' R' U F U F' U' R 
+At idx 31282: alg improved to length 11 with gain  3: L U F U2 F' U2 L' U' B' U2 B 
+At idx 31451: alg improved to length 11 with gain  4: U' B' D' F R' F' D B R' U R 
+At idx 31591: alg improved to length 11 with gain  3: F2 R2 F L2 B L B' L F' R2 F2 
+At idx 31693: alg improved to length 11 with gain  1: L2 U2 L' D' R B2 R' D L2 U' L 
+At idx 31733: alg improved to length 11 with gain  5: B L U' L' B' R2 F R F' U R 
+At idx 31802: alg improved to length 10 with gain  1: F' U' L' U2 L U F R U' R' 
+At idx 31811: alg improved to length 11 with gain  6: U2 R2 B2 L' B' L B' R2 F' U2 F 
+At idx 31814: alg improved to length 11 with gain  4: L2 B2 R B' R' B2 L2 U2 L' B L 
+At idx 31959: alg improved to length  8 with gain  1: L U F' L F L' U' L' 
+At idx 32036: alg improved to length 11 with gain  5: U L F2 R' F' R2 F' L' F R' F' 
+At idx 32046: alg improved to length 11 with gain  4: U' L' D' R B' R' D L B' U B 
+At idx 32172: alg improved to length 11 with gain  3: U' R' U' R B' D' F R F' D B 
+At idx 32259: alg improved to length 10 with gain  4: R U B U' L B' R' B L' B' 
+At idx 32365: alg improved to length 11 with gain  3: L F' L' B L2 F L' U L' U' B' 
+At idx 32398: alg improved to length 11 with gain  1: F2 R2 B' R F' R2 B2 U2 B' R' F' 
+At idx 32675: alg improved to length 11 with gain  3: L2 B2 L' F R' F R F2 L B2 L2 
+At idx 32813: alg improved to length 11 with gain  1: R B R B' R D2 L' F L D2 R 
+At idx 32817: alg improved to length 10 with gain  4: R2 D' R' D R' B2 L U' L' B2 
+At idx 32854: alg improved to length 11 with gain  5: U2 L2 F2 R' D F D' F' R F2 L2 
+At idx 32905: alg improved to length 11 with gain  4: R' U2 R B L F U F' U L' B' 
+At idx 33173: alg improved to length 10 with gain  1: B' U2 B' L2 F' L' F L2 B2 L 
+At idx 33240: alg improved to length 11 with gain  1: L2 B2 R D2 R D R' D R' B2 L2 
+At idx 33257: alg improved to length 11 with gain  1: F' U2 F U F2 L F L2 U L F 
+At idx 33328: alg improved to length 11 with gain  3: U2 B' F R2 U R2 U' R2 F' U' B 
+At idx 33365: alg improved to length 11 with gain  2: B2 F' D L' D' F B2 U' R' U2 R 
+At idx 33433: alg improved to length 10 with gain  2: B' R B R' U' R' F' U F R 
+At idx 33500: alg improved to length 11 with gain  4: U' L2 B2 R D' B' D B R' B2 L2 
+At idx 33559: alg improved to length  9 with gain  2: F R F2 D2 B2 L B2 D2 F 
+At idx 33705: alg improved to length 11 with gain  2: B' U' R U R' F' B L' U' L F 
+At idx 33708: alg improved to length 10 with gain  3: R2 D' F D' L2 F' D2 R2 U B' 
+At idx 33818: alg improved to length 10 with gain  2: U2 F2 U R' L F2 R L' U F2 
+At idx 33929: alg improved to length 11 with gain  5: U B2 L2 B U' R' U R B' L2 B2 
+At idx 33986: alg improved to length 11 with gain  4: F L' U2 R B' U2 B R' U2 L F' 
+At idx 34038: alg improved to length 10 with gain  2: L' U' B' U R' U R U' B L 
+At idx 34120: alg improved to length 11 with gain  2: B U B' U R2 F' L F' L' F2 R2 
+At idx 34127: alg improved to length 11 with gain  2: U B' U' R' U B L' B' R B L 
+At idx 34221: alg improved to length 10 with gain  2: L R' F2 U' F2 U F2 R U L' 
+At idx 34235: alg improved to length 11 with gain  3: U L B' U' R' U B L' B' R B 
+At idx 34248: alg improved to length 10 with gain  1: L F' L' F U2 L2 B L B' L 
+At idx 34430: alg improved to length 11 with gain  4: F U F2 L2 D' B2 D' B2 D2 L2 F 
+At idx 34432: alg improved to length 11 with gain  2: R U' R' F' U F R B' R B R2 
+At idx 34440: alg improved to length 11 with gain  1: U' B F' L2 U' L2 U L2 F U B' 
+At idx 34522: alg improved to length 11 with gain  4: F2 L2 B L' F L2 B2 U2 B L F 
+At idx 34675: alg improved to length 11 with gain  4: L U2 L B2 D R' F2 R D' B2 L2 
+At idx 34715: alg improved to length 11 with gain  1: B U' B' R' U F' U2 F2 R' F' R2 
+At idx 35141: alg improved to length 10 with gain  1: R' U' R F U' R' U2 R U F' 
+At idx 35204: alg improved to length 11 with gain  2: L' U2 L U' F' D' B L' B' D F 
+At idx 35241: alg improved to length 11 with gain  4: U2 F R F' L' F U R' U' F' L 
+At idx 35316: alg improved to length 11 with gain  3: L2 F2 L B2 R B R' B L' F2 L2 
+At idx 35484: alg improved to length 11 with gain  5: L F' L' U2 F U2 F U2 R' F' R 
+At idx 35557: alg improved to length 10 with gain  1: B' R B' R' B2 U2 L' B L B' 
+At idx 35599: alg improved to length 10 with gain  5: L R' D F2 D' L2 U L U' R 
+At idx 35697: alg improved to length 11 with gain  4: F' L' U L F R' F R F2 U F 
+At idx 35837: alg improved to length 10 with gain  6: B L2 F' L' F2 L' B' L F' L' 
+At idx 35863: alg improved to length  9 with gain  2: L F L2 D2 R2 B R2 D2 L 
+At idx 35991: alg improved to length  9 with gain  1: U' R U R2 F R F2 U F 
+At idx 35996: alg improved to length 11 with gain  2: L F L' R2 B' R' B R' L F' L' 
+At idx 36048: alg improved to length 10 with gain  2: B' R' U F' U' F U' R U B 
+At idx 36100: alg improved to length 11 with gain  2: F' D2 B2 L' B2 D2 F2 U R' U' F' 
+At idx 36150: alg improved to length 10 with gain  4: L U2 L' F' U L U L' U' F 
+At idx 36212: alg improved to length 11 with gain  4: B U2 B' R' F' L' U' L U' F R 
+At idx 36319: alg improved to length 11 with gain  4: U' L2 B2 R B R' B L2 F U2 F' 
+At idx 36381: alg improved to length 11 with gain  5: L B' D2 B L' U2 L B' D2 B L' 
+At idx 36409: alg improved to length 11 with gain  1: U2 L' R2 D B D' B' R' B R' L 
+At idx 36414: alg improved to length 11 with gain  4: U' R2 F2 L D' F' D F L' F2 R2 
+At idx 36642: alg improved to length 11 with gain  5: R B' L' B2 R L' F' D2 F R2 L2 
+At idx 36648: alg improved to length 10 with gain  3: F2 D R' D B2 R D2 F2 U' L 
+At idx 36659: alg improved to length 10 with gain  4: U R B2 L2 D L D' L B2 R' 
+At idx 36825: alg improved to length 11 with gain  3: B U2 R U R2 F R F2 U F B' 
+At idx 36937: alg improved to length 11 with gain  2: L' F' U' L U B L B' L' F L 
+At idx 36974: alg improved to length 10 with gain  5: R' U2 R U2 F R B' R' F' B 
+At idx 37038: alg improved to length 11 with gain  3: F' U' L' U2 L U' F U R U2 R' 
+At idx 37054: alg improved to length 11 with gain  1: U R U L B L' U' L B' R' L' 
+At idx 37070: alg improved to length 11 with gain  4: U L' U R B2 U B2 U' B2 R' L 
+At idx 37076: alg improved to length  9 with gain  1: U2 B' U' B U B L' B' L 
+At idx 37181: alg improved to length 11 with gain  4: U2 B L B' R B L2 B L B2 R' 
+At idx 37206: alg improved to length 11 with gain  7: U2 R U B U2 B' R' U' F' U2 F 
+At idx 37509: alg improved to length 11 with gain  4: U2 R' U' R2 B U B' U' R2 U2 R 
+At idx 37618: alg improved to length 11 with gain  2: U F' L' F R F' U' L U F R' 
+At idx 37635: alg improved to length 10 with gain  4: B2 R2 F R F' R B2 L U2 L' 
+At idx 37651: alg improved to length 10 with gain  1: L' B L' B' L2 U2 F' L F L' 
+At idx 37659: alg improved to length 11 with gain  2: R2 F2 L F L' F R2 U' B U' B' 
+At idx 37694: alg improved to length 11 with gain  2: U' F' U L U' L' U' F L U2 L' 
+At idx 37724: alg improved to length 11 with gain  7: B' R2 D' L' F2 L D2 R' D' R' B 
+At idx 37745: alg improved to length  9 with gain  4: F R2 B' D B' D' B2 R2 F' 
+At idx 37750: alg improved to length 11 with gain  4: U L2 B2 R B R' B L2 F U2 F' 
+At idx 37814: alg improved to length 10 with gain  4: U B L2 F' D F' D' F2 L2 B' 
+At idx 37858: alg improved to length 10 with gain  4: B' U2 B2 U L U' L' B2 U B 
+At idx 37922: alg improved to length 11 with gain  2: U' R B' R' U' R U B2 U' B' R' 
+At idx 38000: alg improved to length 10 with gain  1: B2 R2 U' R2 D B2 D' B2 U B2 
+At idx 38064: alg improved to length 11 with gain  3: U2 L' U' B' U L F' L' B L F 
+At idx 38100: alg improved to length 11 with gain  3: U R F' U' L' U F R' F' L F 
+At idx 38141: alg improved to length  8 with gain  1: F U F R' F' R U' F' 
+At idx 38171: alg improved to length  8 with gain  2: R' U' R U R B' R' B 
+At idx 38246: alg improved to length 11 with gain  4: F R' F R' B2 L' D2 L B2 R2 F2 
+At idx 38322: alg improved to length 11 with gain  5: R U' F' L2 D' B D L2 F U' R' 
+At idx 38331: alg improved to length  9 with gain  1: B' U2 B2 L' B' L B' U2 B 
+At idx 38465: alg improved to length 10 with gain  1: L' U2 L U2 R U' L' U R' L 
+At idx 38471: alg improved to length  9 with gain  2: R F D2 L2 U2 B L2 D2 R 
+At idx 38568: alg improved to length 10 with gain  7: F2 L2 F' R U R' U' F L2 F2 
+At idx 38738: alg improved to length 10 with gain  2: U2 F' R' D2 B2 U2 L' B2 D2 F' 
+At idx 38739: alg improved to length 11 with gain  4: B' U2 B2 L2 D2 F2 D' F2 D' L2 B' 
+At idx 38854: alg improved to length 11 with gain  2: U2 R B' R' U' R U B2 U' B' R' 
+At idx 38856: alg improved to length 11 with gain  8: F U2 L' B2 D' R' D B2 L U' F' 
+At idx 38902: alg improved to length 10 with gain  7: R' U' F' U L' F R F' L F 
+At idx 38957: alg improved to length 11 with gain  4: B L' B2 D2 F' R' F D2 B' L B2 
+At idx 38958: alg improved to length 10 with gain  7: R2 F2 R' U B U' B' R F2 R2 
+At idx 39069: alg improved to length 11 with gain  2: U' F R F' L F R' U F' U' L' 
+At idx 39077: alg improved to length 11 with gain  5: F U2 F' U' R L2 D' B' D R' L2 
+At idx 39098: alg improved to length 11 with gain  1: R2 F R F2 U2 F U' R B U B' 
+At idx 39141: alg improved to length 11 with gain  3: F' U' L' U2 R U' L U R' U' F 
+At idx 39470: alg improved to length 11 with gain  3: R B2 R2 U2 R B R' U2 R2 B2 R' 
+At idx 39562: alg improved to length 10 with gain  4: L' U' B2 D' B U B' D B2 L 
+At idx 39565: alg improved to length 11 with gain  2: B F2 D' L D B' L F L' U' F 
+At idx 39567: alg improved to length 11 with gain  3: U2 F U' L2 D2 B R2 D B' D L2 
+At idx 39603: alg improved to length 11 with gain  1: U' B' U' R U2 R2 U' R2 U' R' B 
+At idx 39612: alg improved to length 11 with gain  4: U' B2 R2 F D' R' D R F' R2 B2 
+At idx 39617: alg improved to length 11 with gain  3: R B L U2 L2 B' R B2 L B2 R2 
+At idx 39642: alg improved to length 11 with gain  4: R' B U2 F' L U2 L' F U2 B' R 
+At idx 39651: alg improved to length 10 with gain  2: B' U' R' U F' U F U' R B 
+At idx 39818: alg improved to length 11 with gain  2: L R2 D' F' D R2 L' U B U B' 
+At idx 39850: alg improved to length 11 with gain  4: L F' L2 B L' D2 B D2 B2 L2 F 
+At idx 39981: alg improved to length 11 with gain  3: R' F D U2 B R B' U2 D' R F' 
+At idx 40030: alg improved to length 11 with gain  6: U B' R' B L' B' R U' B U L 
+At idx 40170: alg improved to length 11 with gain  5: U F R F' L F R2 F R F2 L' 
+At idx 40298: alg improved to length 11 with gain  1: F' D' B L2 B' D F U2 F U F' 
+At idx 40530: alg improved to length 10 with gain  2: U2 R' F' R2 D2 L2 B' L2 D2 R' 
+At idx 40544: alg improved to length 11 with gain  6: L F U' F' L2 D' R B R' D L 
+At idx 40556: alg improved to length 11 with gain  2: U' L' U' B' U L F' L' B L F 
+At idx 40585: alg improved to length 11 with gain  3: L' U L U F2 B' D R' D' F2 B 
+At idx 40590: alg improved to length 11 with gain  3: R' U' F' U F2 R' F' R2 B U2 B' 
+At idx 40616: alg improved to length  8 with gain  2: R U R' F' L' U' L F 
+At idx 40746: alg improved to length 11 with gain  4: R U2 R' F' L' B' U' B U' L F 
+At idx 40958: alg improved to length 11 with gain  2: F L' B2 R' D' R' D R2 B2 L F'
