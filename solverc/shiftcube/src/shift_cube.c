@@ -91,6 +91,13 @@ bool compare_cubes(const shift_cube_s *a, const shift_cube_s *b) {
     return false;
 }
 
+bool shiftcube_a_less_than_b(const shift_cube_s* a, const shift_cube_s *b) {
+    for (uint8_t i = 0; i < 6; i++) {
+        if (a->state[i] == b->state[i]) continue;
+        return (a->state[i] < b->state[i]);
+    } return false;
+}
+
 // builds a masked cube with edges that match color1 and color2,
 // if color1 or color2 are FACE_NULL, it matches to any face which matches
 // the criterion set by another color

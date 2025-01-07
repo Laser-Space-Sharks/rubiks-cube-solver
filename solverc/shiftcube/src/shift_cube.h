@@ -82,6 +82,7 @@ shift_cube_s* cube_copy(const shift_cube_s *cube);
 shift_cube_s ored_cube(const shift_cube_s *a, const shift_cube_s *b);
 shift_cube_s masked_cube(const shift_cube_s *cube, const shift_cube_s *mask);
 bool compare_cubes(const shift_cube_s *a, const shift_cube_s *b);
+bool shiftcube_a_less_than_b(const shift_cube_s* a, const shift_cube_s *b);
 
 shift_cube_s get_edges(const shift_cube_s *cube, face_e color1, face_e color2);
 shift_cube_s get_corners(const shift_cube_s *cube, face_e color1, face_e color2, face_e color3);

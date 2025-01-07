@@ -23,6 +23,9 @@ void LL_table_diagnostics(const cube_table_s* ct);
 size_t cube_table_entries(const cube_table_s *ct);
 size_t cube_table_size(const cube_table_s *ct);
 
-void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n, size_t start_ind);
+void print_alg_length_frequencies(const cube_table_s* ct);
+void LL_find_improvements_to_depth_n(cube_table_s* ct, uint8_t n, size_t start_ind);
+const cube_table_s* get_very_unique_1LLL_cases(const cube_table_s* ct);
+const cube_table_s* get_1LLL_from_very_uniq_cases(const cube_table_s* ct);
 
 #endif // CUBE_TABLE_H

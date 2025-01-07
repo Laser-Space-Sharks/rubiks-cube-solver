@@ -258,3 +258,49 @@ move_e* alg_concat(alg_s *dest, const alg_s *src) {
     dest->length = new_len;
     return dest->moves;
 }
+
+
+bool simplified_alg_compare_forms(const alg_s* a, const alg_s* b) {
+    if (a->length != b->length) return false;
+    for (uint8_t i = 0; i < a->length; i++) {
+        if (a->moves[i] != b->moves[i]) {
+            if (i != a->length-1 && move_faces[a->moves[i]] == opposite_faces[move_faces[a->moves[i+1]]] && a->moves[i+1] == b->moves[i] && a->moves[i] == b->moves[i+1]) {
+                i++;
+            } else {
+                return false;
+            }
+        }
+    } return true;
+}
+
+bool alg_compare(const alg_s* a, const alg_s* b) {
+    shift_cube_s cubeA, cubeB;
+    cubeA = cubeB = SOLVED_SHIFTCUBE;
+    apply_alg(&cubeA, a);
+    apply_alg(&cubeB, b);
+    return compare_cubes(&cubeA, &cubeB);
+}
+
+alg_list_s* get_alg_family(const alg_s* alg) {
+    alg_list_s* alg_list = (alg_list_s*)malloc(sizeof(alg_list_s));
+    alg_list->num_algs = 0;
+    alg_list->size = 16;
+    alg_list->list = (alg_s*)malloc((alg_list->size)*sizeof(alg_s));
+
+    alg_s conj = alg_static_copy(alg);
+    alg_invert(&conj);
+    alg_list->list[alg_list->num_algs++] = alg_static_copy(alg);
+    alg_list->list[alg_list->num_algs++] = alg_static_copy(&conj);
+    for (int i = 1; i < 8; i++) {
+        alg_s new_alg  = alg_static_copy(alg);
+        alg_s new_conj = alg_static_copy(&conj);
+        for (int j = 0; j < alg->length; j++) new_alg.moves[j] = move_transformations[i][alg->moves[j]];
+        for (int j = 0; j < conj.length; j++) new_conj.moves[j] = move_transformations[i][conj.moves[j]];
+        alg_list->list[alg_list->num_algs++] = alg_static_copy(&new_alg);
+        alg_list->list[alg_list->num_algs++] = alg_static_copy(&new_conj);
+        free(new_alg.moves);
+        free(new_conj.moves);
+    }
+    free(conj.moves);
+    return alg_list;
+}

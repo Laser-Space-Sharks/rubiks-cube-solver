@@ -295,7 +295,18 @@ static void test_1LLL() {
 
 static void test_LL_improvements() {
     cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
-    LL_find_improvements_to_depth_n(last_layer_table, 11, 11616);
+    LL_table_diagnostics(last_layer_table);
+    //LL_find_improvements_to_depth_n(last_layer_table, 11, 11616);
+    cube_table_s* uniq_1LLLs = get_very_unique_1LLL_cases(last_layer_table);
+    LL_find_improvements_to_depth_n(uniq_1LLLs, 11, 0);
+    print_alg_length_frequencies(uniq_1LLLs);
+    LL_find_improvements_to_depth_n(uniq_1LLLs, 12, 0);
+    print_alg_length_frequencies(uniq_1LLLs);
+    //cube_table_print(uniq_1LLLs);
+    cube_table_free(last_layer_table);
+    last_layer_table = get_1LLL_from_very_uniq_cases(uniq_1LLLs);
+    cube_table_free(uniq_1LLLs);
+    cube_table_free(last_layer_table);
 }
 
 int main(int argc, char *argv[]) {

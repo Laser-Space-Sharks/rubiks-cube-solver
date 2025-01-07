@@ -76,6 +76,17 @@ static const move_e move_inverted[NUM_MOVES+1] = {
     MOVE_NULL
 };
 
+static const move_e move_transformations[8][NUM_MOVES] = {
+    {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17}, // NoOp
+    {0, 1, 2, 12, 13, 14, 3, 4, 5, 6, 7, 8, 9, 10, 11, 15, 16, 17},
+    {2, 1, 0, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 17, 16, 15},
+    {0, 1, 2, 9, 10, 11, 12, 13, 14, 3, 4, 5, 6, 7, 8, 15, 16, 17},
+    {2, 1, 0, 8, 7, 6, 5, 4, 3, 14, 13, 12, 11, 10, 9, 17, 16, 15},
+    {0, 1, 2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 3, 4, 5, 15, 16, 17},
+    {2, 1, 0, 5, 4, 3, 14, 13, 12, 11, 10, 9, 8, 7, 6, 17, 16, 15},
+    {2, 1, 0, 11, 10, 9, 8, 7, 6, 5, 4, 3, 14, 13, 12, 17, 16, 15}
+};
+
 static const move_e move_rotated_on_y[4][NUM_MOVES] = {
     {MOVE_U, MOVE_U2, MOVE_U3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_D, MOVE_D2, MOVE_D3},
     {MOVE_U, MOVE_U2, MOVE_U3, MOVE_B, MOVE_B2, MOVE_B3, MOVE_R, MOVE_R2, MOVE_R3, MOVE_F, MOVE_F2, MOVE_F3, MOVE_L, MOVE_L2, MOVE_L3, MOVE_D, MOVE_D2, MOVE_D3},

@@ -34,4 +34,8 @@ void alg_simplify(alg_s *alg);
 void alg_rotate_on_y(alg_s *alg, uint8_t y_turns);
 
 move_e* alg_concat(alg_s *dest, const alg_s *src);
+
+bool simplified_alg_compare_forms(const alg_s* a, const alg_s* b);
+bool alg_compare(const alg_s* a, const alg_s* b);
+alg_list_s* get_alg_family(const alg_s* alg);
 #endif // ALG_H

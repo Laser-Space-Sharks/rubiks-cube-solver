@@ -212,10 +212,8 @@ uint8_t LL_table_get_maxmimum_alg_length(const cube_table_s* ct) {
     } return max;
 }
 
-void LL_table_diagnostics(const cube_table_s* ct) {
-    if (cube_table_check_if_1LLL_is_valid(ct)) {
-        printf("1LLL is valid!\n");
-    }
+void print_alg_length_frequencies(const cube_table_s* ct) {
+    printf("num entries: %zu\n", cube_table_entries(ct));
     uint8_t maxlength = LL_table_get_maxmimum_alg_length(ct);
     size_t counts[maxlength+1];
     for (int i = 0; i < maxlength+1; i++) counts[i] = 0;
@@ -234,6 +232,12 @@ void LL_table_diagnostics(const cube_table_s* ct) {
     for (uint8_t i = 0; i < maxlength+1; i++) {
         printf("%6zu", counts[i]);
     } printf("]\n");
+}
+
+void LL_table_diagnostics(const cube_table_s* ct) {
+    if (cube_table_check_if_1LLL_is_valid(ct)) {
+        printf("1LLL is valid!\n");
+    } print_alg_length_frequencies(ct);
 }
 
 void bidirectional_recursion_1LLL_build_end_ct(shift_cube_s *cube, cube_table_s *our_ct, alg_s *alg, uint8_t depth) {
@@ -319,7 +323,7 @@ static alg_s* bidirectional_1LLL_search(const shift_cube_s *start, const cube_ta
 }
 
 
-void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n, size_t start_ind) {
+void LL_find_improvements_to_depth_n(cube_table_s* ct, uint8_t n, size_t start_ind) {
     size_t total_found, total_improved;
     total_found = total_improved = 0;
 
@@ -347,11 +351,13 @@ void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n, size_t s
             total_found++;
             if (alg->length < current_length) {
                 total_improved++;
+                free(ct->table[idx].algs.list[0].moves);
+                ct->table[idx].algs.list[0] = alg_static_copy(alg);
                 printf("At idx %5zu: alg improved to length %2zu with gain %2zu: ", idx, alg->length, current_length - alg->length);
                 print_alg(alg);
-            } else {
+            } //else {
                 //printf("alg found!\n");
-            }
+            //}
             alg_free(alg);
         }
     }
@@ -359,4 +365,58 @@ void LL_find_improvements_to_depth_n(const cube_table_s* ct, uint8_t n, size_t s
     printf("# improved: %zu\n", total_improved);
     cube_table_free(end_ct);
     alg_free(end_alg);
+}
+
+const cube_table_s* get_very_unique_1LLL_cases(const cube_table_s* ct) {
+    cube_table_s* very_uniq_cases = cube_table_create(9257);
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].algs.list != NULL) { //printf("\tline 367\n");
+            alg_list_s* alg_family = get_alg_family(&ct->table[idx].algs.list[0]); //printf("\tline 368\n");
+            shift_cube_s least_cube = NULL_CUBE;
+            alg_s least_alg;
+            least_alg.moves = NULL;
+            bool already_in = false;
+            for (int i = 0; i < 16; i++) {
+                shift_cube_s cube = SOLVED_SHIFTCUBE;
+                apply_alg(&cube, &alg_family->list[i]); //printf("\tline 374\n");
+
+                if (cube_table_lookup(very_uniq_cases, &cube)) already_in = true; //printf("\tline 376\n");
+                if (compare_cubes(&least_cube, &NULL_CUBE) || shiftcube_a_less_than_b(&cube, &least_cube)) { //printf("\tline 377\n");
+                    least_cube = cube;
+                    free(least_alg.moves);
+                    least_alg = alg_static_copy(&alg_family->list[i]); //printf("\tline 379\n");
+                } //printf("\tline 380\n");
+                free(alg_family->list[i].moves); //printf("\tline 381\n");
+            }
+            free(alg_family->list); //printf("\tline 383\n");
+            free(alg_family); //printf("\tline 384\n");
+            if (!already_in) { //printf("\tline 385\n");
+                alg_invert(&least_alg);
+                cube_table_insert(very_uniq_cases, &least_cube, &least_alg); //printf("\tline 386\n");
+            } //printf("\tline 387\n");
+            free(least_alg.moves); //printf("\tline 388\n");
+        }
+    } print_alg_length_frequencies(very_uniq_cases);
+    return very_uniq_cases;
+} 
+
+const cube_table_s* get_1LLL_from_very_uniq_cases(const cube_table_s* ct) {
+    cube_table_s* LL_table = cube_table_create(131009);
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].algs.list != NULL) {
+            alg_list_s* alg_family = get_alg_family(&ct->table[idx].algs.list[0]);
+            for (int i = 0; i < 16; i++) {
+                shift_cube_s cube = SOLVED_SHIFTCUBE;
+                apply_alg(&cube, &alg_family->list[i]);
+                alg_invert(&alg_family->list[i]);
+                if (!cube_table_lookup(LL_table, &cube)) {
+                    cube_table_insert(LL_table, &cube, &alg_family->list[i]);
+                }
+                free(alg_family->list[i].moves);
+            }
+            free(alg_family->list);
+            free(alg_family);
+        }
+    } print_alg_length_frequencies(LL_table);
+    return LL_table;
 }
