@@ -29,8 +29,9 @@ from subprocess import run
 #######################################################
 
 Abbie_img_folder = "/home/aagowl/Downloads/"
-IMG_SIZE = 60 # for resolution
-PIECE_SIZE = IMG_SIZE//3
+IMG_WIDTH = 56 # for resolution
+IMG_HEIGHT = 64
+PIECE_SIZE = (IMG_WIDTH//3) * (IMG_HEIGHT//3)
 CUBE_IMG_FOLDER = "/home/pi/cubeImgs/"
 # colors array good for translating numerical colors into english
 # does not work when cube translated into colorblind notation (obvi)
@@ -59,7 +60,7 @@ LOWER_BOUND_COLORS = [
 
 UPPER_BOUND_COLORS = [
     asarray([52, 255, 255]), # yellow
-    asarray([205, 255, 255]), # red
+    asarray([180, 255, 255]), # red
     asarray([128, 255, 255]), # blue
     asarray([190, 47, 255]), # white
     asarray([24, 255, 255]), # orange
@@ -104,9 +105,9 @@ def captureImg(directory, filename, delete=True):
         "-o", 
         f"{filename}.jpg", 
         "--width", 
-        f"{IMG_SIZE}",
+        f"{IMG_WIDTH}",
         "--height",
-        f"{IMG_SIZE}"])
+        f"{IMG_HEIGHT}"])
     
     # read image into cv2, which uses bgr by default
     image = imread(f"{directory}{filename}.jpg", IMREAD_COLOR)
@@ -114,26 +115,6 @@ def captureImg(directory, filename, delete=True):
     if delete:
         delImg(directory, filename)
     return image
-
-####### NORMALIZE #######
-def normalizeImg(image):
-    # split into color channels
-    b, g, r = split(image)
-
-    # normalize channels
-    bNorm = normalize(b, None, alpha=0, beta=255, norm_type=NORM_MINMAX)
-    gNorm = normalize(g, None, alpha=0, beta=255, norm_type=NORM_MINMAX)
-    rNorm = normalize(r, None, alpha=0, beta=255, norm_type=NORM_MINMAX)
-    
-    # merge
-    mergedImage = merge([bNorm, gNorm, rNorm])
-
-    # changing colorspaces
-    normalizedImage = cvtColor(mergedImage, COLOR_BGR2HSV)
-    # Here we are using hue saturation value (HSV) in order to easily define 
-    # a range of values that we can the colors of a given cube to fall between
-
-    return normalizedImage
 
 #######################################################
 ####### Color Analysis ################################
@@ -147,11 +128,11 @@ def colorAnalysis(peice):
         # turns into an array where everything that is set to 255 is in that range, everything else is 0
         peiceCopy = peice
         mask = inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
-        print(f"checking for {COLORS[i]}")
-        imshow('Mask', mask) # CHANGE
-        waitKey(0) # CHANGE
+        # print(f"checking for {COLORS[i]}")
+        # imshow('Mask', mask) # CHANGE
+        # waitKey(0) # CHANGE
         # find the percentage of the piece that is in that color range
-        percent = (countNonZero(mask)/(PIECE_SIZE**2)) * 100
+        percent = (countNonZero(mask)/(PIECE_SIZE)) * 100
         # if more than 55% of the peice is that color, return the color
         if percent >= 55 or (i == 1 and redColorCheck(peiceCopy, mask) >= 55):
             return i
@@ -163,7 +144,7 @@ def redColorCheck(peiceCopy, mask1):
     red2Lower = asarray([0, 50, 70])
     mask2 = inRange(peiceCopy, red2Lower, red2Upper)
     result = bitwise_or(mask1, mask2)
-    return (countNonZero(result)/(PIECE_SIZE**2)) * 100
+    return (countNonZero(result)/(PIECE_SIZE)) * 100
 
 def genColorsArray(frontCenterColor, upCenterColor):
     # returns an array with elements representing cube faces
@@ -212,21 +193,21 @@ def analyzeFace(image, colorsArray):
     imagePixels = [
         # First row of peices shiftcube->(1, 2, 3)
         [
-            image[0:IMG_SIZE//3, 0:IMG_SIZE//3], 
-            image[0:IMG_SIZE//3, IMG_SIZE//3:2*(IMG_SIZE)//3], 
-            image[0:IMG_SIZE//3, 2*(IMG_SIZE)//3:IMG_SIZE]
+            image[0:IMG_HEIGHT//3, 0:IMG_WIDTH//3], 
+            image[0:IMG_HEIGHT//3, IMG_WIDTH//3:2*(IMG_WIDTH)//3], 
+            image[0:IMG_HEIGHT//3, 2*(IMG_WIDTH)//3:IMG_WIDTH]
         ],
         # second row of peices shiftcube->(8, center, 4)
         [
-            image[IMG_SIZE//3:2*(IMG_SIZE)//3, 0:IMG_SIZE//3], 
-            image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3], 
-            image[IMG_SIZE//3:2*(IMG_SIZE)//3, 2*(IMG_SIZE)//3:IMG_SIZE]
+            image[IMG_HEIGHT//3:2*(IMG_HEIGHT)//3, 0:IMG_WIDTH//3], 
+            image[IMG_HEIGHT//3:2*(IMG_HEIGHT)//3, IMG_WIDTH//3:2*(IMG_WIDTH)//3], 
+            image[IMG_HEIGHT//3:2*(IMG_HEIGHT)//3, 2*(IMG_WIDTH)//3:IMG_WIDTH]
         ],
         # third row of peices shiftcube->(7, 6, 5)
         [
-            image[2*(IMG_SIZE)//3:IMG_SIZE, 0:IMG_SIZE//3], 
-            image[2*(IMG_SIZE)//3:IMG_SIZE, IMG_SIZE//3:2*(IMG_SIZE)//3], 
-            image[2*(IMG_SIZE)//3:IMG_SIZE, 2*(IMG_SIZE)//3:IMG_SIZE]
+            image[2*(IMG_HEIGHT)//3:IMG_HEIGHT, 0:IMG_WIDTH//3], 
+            image[2*(IMG_HEIGHT)//3:IMG_HEIGHT, IMG_WIDTH//3:2*(IMG_WIDTH)//3], 
+            image[2*(IMG_HEIGHT)//3:IMG_HEIGHT, 2*(IMG_WIDTH)//3:IMG_WIDTH]
         ]
     ]
     peiceNamesRow = ["upper", "center", "lower"]
@@ -237,22 +218,20 @@ def analyzeFace(image, colorsArray):
         for j in range(3):
             peice = imagePixels[i][j].copy()
             peiceCopy = peice.copy()
-            print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
-            imshow("Display window", cvtColor(peiceCopy, COLOR_HSV2BGR)) #CHANGE
-            waitKey(0) #CHANGE
+            # print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
+            # imshow("Display window", cvtColor(peiceCopy, COLOR_HSV2BGR)) # CHANGE
+            # waitKey(0) # CHANGE
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
-            print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
+            # print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
 
     return face
 
 def scanFace(colorsArray, readSavedImg=False, filename=""):
     if readSavedImg:
-        image = imread(f"{Abbie_img_folder}{filename}.jpg", IMREAD_COLOR) # CHANGE
+        image = imread(f"{CUBE_IMG_FOLDER}{filename}.jpg", IMREAD_COLOR) # CHANGE
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
-    
-    #normalizedImg = normalizeImg(image)
     normalizedImage = cvtColor(image, COLOR_BGR2HSV)
     return analyzeFace(normalizedImage, colorsArray)
 
@@ -284,7 +263,7 @@ def convertToShiftCube(cubeArray):
         faceNum = uint32(0); k = 1; j = 0; c = 0
         while c < 8:
             peice = uint32(face[k][j])
-            print(f"face {i} peice[{k}][{j}] faceNum so far: {faceNum} \n peice: {peice}")
+            # print(f"face {i} peice[{k}][{j}] faceNum so far: {faceNum} \n peice: {peice}")
             faceNum = faceNum << (4) # move over a nibble
             faceNum += peice
             # traverse in loop around center
