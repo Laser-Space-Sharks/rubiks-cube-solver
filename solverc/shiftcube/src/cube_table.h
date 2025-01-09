@@ -27,5 +27,6 @@ void print_alg_length_frequencies(const cube_table_s* ct);
 void LL_find_improvements_to_depth_n(cube_table_s* ct, uint8_t n, size_t start_ind);
 const cube_table_s* get_very_unique_1LLL_cases(const cube_table_s* ct);
 const cube_table_s* get_1LLL_from_very_uniq_cases(const cube_table_s* ct);
+void cube_table_print_algs(const cube_table_s *ct);
 
 #endif // CUBE_TABLE_H

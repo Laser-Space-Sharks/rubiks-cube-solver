@@ -197,6 +197,9 @@ bool cube_table_check_if_1LLL_is_valid(const cube_table_s* ct) {
             shift_cube_s cube_mask = masked_cube(&ct->table[idx].key, &f2l_4mask);
             shift_cube_s solved_mask = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
             if (!compare_cubes(&cube_mask, &solved_mask)) is_valid = false;
+            shift_cube_s test_cube = ct->table[idx].key;
+            apply_alg(&test_cube, &ct->table[idx].algs.list[0]);
+            if (!compare_cubes(&test_cube, &SOLVED_SHIFTCUBE)) is_valid = false;
         }
     } if (!is_valid) printf("1LLL NOT VALID!\n");
     return is_valid;
@@ -263,11 +266,7 @@ void bidirectional_recursion_1LLL_build_end_ct(shift_cube_s *cube, cube_table_s 
         }
 
         if (move_faces[move] == opposite_faces[move_faces[prev_move]] &&
-            (move_faces[move] == move_faces[prev_prev_move] || move_faces[move] > move_faces[prev_move])) {
-            continue;
-        }
-
-        alg_insert(alg, move, alg->length);
+            (move_faces[move] == move_faces[prev_prev_move] || move_faces[move] > move_faces[prev_move])) { continue; } alg_insert(alg, move, alg->length);
         apply_move(cube, move);
         bidirectional_recursion_1LLL_build_end_ct(cube, our_ct, alg, depth - 1);
 
@@ -419,4 +418,10 @@ const cube_table_s* get_1LLL_from_very_uniq_cases(const cube_table_s* ct) {
         }
     } print_alg_length_frequencies(LL_table);
     return LL_table;
+}
+
+void cube_table_print_algs(const cube_table_s *ct) {
+    for (size_t idx = 0; idx < ct->size; idx++) {
+        print_alg(&ct->table[idx].algs.list[0]);
+    }
 }

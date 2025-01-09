@@ -6,9 +6,9 @@
 
 
 typedef struct {
-    move_t *moves;
-    size_t length;
     size_t size;
+    size_t length;
+    move_t *moves;
 } alg_s;
 
 typedef struct {
@@ -46,5 +46,11 @@ void alg_list_append(alg_list_s *alg_list, const alg_s *alg);
 void alg_list_free(alg_list_s *alg_list);
 
 alg_list_s* alg_list_from_file(const char *filepath);
+
+static const alg_s NULL_ALG = {
+    (size_t)0,
+    (size_t)0,
+    (move_t*)NULL
+};
 
 #endif // ALG_H

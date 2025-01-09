@@ -335,6 +335,7 @@ alg_list_s *get_alg_family(const alg_s* alg) {
         free(new_alg.moves);
         free(new_conj.moves);
     }
+
     free(conj.moves);
     return alg_list;
 }
@@ -345,6 +346,7 @@ alg_list_s* alg_list_create(size_t num_algs) {
 
     alg_list->num_algs = 0;
     alg_list->size = num_algs;
+    return alg_list;
 }
 
 void alg_list_append(alg_list_s *alg_list, const alg_s *alg) {
@@ -366,7 +368,7 @@ void alg_list_free(alg_list_s *alg_list) {
 }
 
 alg_list_s* alg_list_from_file(const char *filepath) {
-    FILE *fp = fopen(filepath, "r");
+    FILE *fp = fopen(filepath, "rb");
     assert(fp);
 
     alg_list_s *alg_list = alg_list_create(MIN_LIST_RESIZE);
