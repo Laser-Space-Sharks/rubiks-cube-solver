@@ -149,8 +149,8 @@ def colorAnalysis(peice):
         peiceCopy = peice
         mask = inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
         print(f"checking for {COLORS[i]}")
-        # imshow('Mask', mask)
-        # waitKey(0)
+        imshow('Mask', mask)
+        waitKey(0)
         # find the percentage of the piece that is in that color range
         percent = (countNonZero(mask)/(PIECE_SIZE**2)) * 100
         # if more than 55% of the peice is that color, return the color
@@ -239,8 +239,8 @@ def analyzeFace(image, colorsArray):
             peice = imagePixels[i][j].copy()
             peiceCopy = peice.copy()
             print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
-            # imshow("Display window", cvtColor(peiceCopy, COLOR_HSV2BGR))
-            # waitKey(0)
+            imshow("Display window", cvtColor(peiceCopy, COLOR_HSV2BGR))
+            waitKey(0)
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
             print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
@@ -249,7 +249,7 @@ def analyzeFace(image, colorsArray):
 
 def scanFace(colorsArray, readSavedImg=False, filename=""):
     if readSavedImg:
-        image = imread(f"{CUBE_IMG_FOLDER}{filename}.jpg", IMREAD_COLOR)
+        image = imread(f"{Abbie_img_folder}{filename}.jpg", IMREAD_COLOR)
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     
@@ -277,21 +277,23 @@ def convertToShiftCube(cubeArray):
     faceOrder = [0, 1, 2, 3, 4, 5]
     for i in range(6):
         face = faceSearch(cubeArray, faceOrder[i])
-        faceNum = 0; k = 1; j = 0
-        while k!=0 or j!=0:
-            peice = face[i][j]
-            faceNum << (4) # move over a nibble
+        faceNum = uint32(0); k = 1; j = 0; c = 0
+        while c < 8:
+            peice = uint32(face[k][j])
+            print(f"face {i} peice[{k}][{j}] faceNum so far: {faceNum} \n peice: {peice}")
+            faceNum = faceNum << (4) # move over a nibble
             faceNum += peice
             # traverse in loop around center
             if j == 0 and k != 2:
                 k+=1
-            if k == 2 and j != 2:
+            elif k == 2 and j != 2:
                 j+=1
-            if j == 2 and k !=0:
+            elif j == 2 and k !=0:
                 k-=1
-            if k == 0:
+            elif k == 0:
                 j-=1
-        shiftCube[i] = faceNum 
+            c+=1
+        shiftCube[i] = faceNum
     return shiftCube
 
 #######################################################
@@ -321,15 +323,16 @@ def testFromSaved(frontCenterColor, upCenterColor):
     print(f"Colors array: {colorsArray}")
     print("Starting Cube Scan!")
     cubeArray = []
+    imageNames = ["wholecube1", "wholecube2","wholecube3","wholecube4","wholecube5","wholecube6"]
     for i in range(6):
-        faceArray = scanFace(colorsArray, True, "wholecube1")
+        faceArray = scanFace(colorsArray, True, imageNames[i])
         print(f"face {i} scanned!")
         print(faceArray)
         print(translateToColors(faceArray, colorsArray))
         cubeArray.append(faceArray)
     print("Cube Scanned!!")
     print(cubeArray)
-    print(f"Converted to shift cube: {bin(convertToShiftCube(cubeArray))}")
+    print(f"Converted to shift cube: {convertToShiftCube(cubeArray)}")
 
 def test(frontCenterColor, upCenterColor):
     print("------------------------------")
@@ -348,6 +351,6 @@ def test(frontCenterColor, upCenterColor):
         cubeArray.append(faceArray)
     print("Cube Scanned!!")
     print(cubeArray)
-    print(f"Converted to shift cube: {bin(convertToShiftCube(cubeArray))}")
+    print(f"Converted to shift cube: {convertToShiftCube(cubeArray)}")
 
-testFromSaved(2, 0) # blue, yellow  
+testFromSaved(2, 0) # blue, yellow
