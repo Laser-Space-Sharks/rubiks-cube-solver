@@ -1,11 +1,13 @@
 #include "main.h"
 #include "alg.h"
+#include "cube_table.h"
 #include "shift_cube.h"
 #include "cube18B.h"
 #include "translators.h"
 #include "solver.h"
 #include "servoCoder.h"
 
+#include <assert.h>
 #include <time.h>
 
 static void test_translation(const shift_cube_s* shiftcube, const cube18B_s* cube18B)  {
@@ -67,6 +69,7 @@ static void stress_test_cube18B_xcross(size_t apply_alg_times, const alg_s* alg)
 
     printf("Cube18B_xcross time: %fs\n", (double)(end_cube18b - start_cube18b)/CLOCKS_PER_SEC);
 }
+
 static void stress_test(size_t apply_alg_times, const char* algstr) {
     alg_s* alg = alg_from_alg_str(algstr);
     printf("alg to stress test %zu times: \n", apply_alg_times);
@@ -78,6 +81,7 @@ static void stress_test(size_t apply_alg_times, const char* algstr) {
     printf("\n");
     alg_free(alg);
 }
+
 static void test_shiftcube_moves() {
     shift_cube_s cube = SOLVED_SHIFTCUBE;
     print_cube_map_colors(cube); 
@@ -151,8 +155,8 @@ static void test_cube18B_moves() {
 static void test_cube_solve(const char** scrambles, int NUM_TESTS) {
     init_solver();
 
-    cube_table_s *f2l_table = generate_f2l_table(F2L_PATH);
-    cube_table_s *last_layer_table = generate_last_layer_table(LL_PATH);
+    cube_table_s *f2l_table = gen_f2l_table();
+    cube_table_s *last_layer_table = gen_last_layer_table();
 
     alg_s *alg = NULL;
     shift_cube_s cube = SOLVED_SHIFTCUBE;
@@ -310,7 +314,6 @@ static void test_LL_improvements() {
 }
 
 int main(int argc, char *argv[]) {
-    printf("sad isn't happening!\n");
     shift_cube_s cube = SOLVED_SHIFTCUBE;
 
     #define NUM_TESTS 9
@@ -330,7 +333,7 @@ int main(int argc, char *argv[]) {
         alg_s* alg = alg_from_alg_str(argv[1]);
         alg_free(alg);
     } else {
-        //test_cube_solve(scrambles, NUM_TESTS);
+        test_cube_solve(scrambles, NUM_TESTS);
 
         //test_shiftcube_moves();
         //test_cube18B_moves();
@@ -344,7 +347,7 @@ int main(int argc, char *argv[]) {
         //test_solve_and_compile(scrambles, NUM_TESTS);
 
         //test_1LLL();
-        test_LL_improvements();
+        //test_LL_improvements();
     }
 
     return 0;

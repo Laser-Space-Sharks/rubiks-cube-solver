@@ -1,4 +1,5 @@
 #define _GNU_SOURCE
+#include "main.h"
 
 #include "solver.h"
 
@@ -7,6 +8,7 @@
 
 #include <stdio.h>
 #include <sys/types.h>
+
 
 static cube_table_s *xcross_start_ct = NULL;
 static cube_table_s *xcross_end_ct   = NULL;
@@ -242,11 +244,10 @@ static alg_s* xcross_search(const shift_cube_s *start, const shift_cube_s *goal)
 }
 
 alg_s* solve_cross(shift_cube_s cube) {
-    // match to cross pieces
-    shift_cube_s start_cube = get_edges(&cube, FACE_D, FACE_NULL);
+    // match to cross pieces shift_cube_s start_cube = get_edges(&cube, FACE_D, FACE_NULL);
     shift_cube_s goal_cube = get_edges(&SOLVED_SHIFTCUBE, FACE_D, FACE_NULL);
 
-    return bidirectional_search(&start_cube, &goal_cube, 8);
+    return bidirectional_search(&cube, &goal_cube, 8);
 }
 
 static void last_layer_stage(const shift_cube_s *cube, alg_s **best, const alg_s *xsolve,
@@ -349,122 +350,140 @@ alg_s* solve_cube(shift_cube_s cube, const cube_table_s *f2l_table, const cube_t
     return best_solve;
 }
 
-uint8_t f2l_pair_orders[24][4] = {
-    {0, 1, 2, 3},
-    {0, 1, 3, 2},
-    {0, 2, 1, 3},
-    {0, 2, 3, 1},
-    {0, 3, 1, 2},
-    {0, 3, 2, 1},
-    {1, 0, 2, 3},
-    {1, 0, 3, 2},
-    {1, 2, 0, 3},
-    {1, 2, 3, 0},
-    {1, 3, 0, 2},
-    {1, 3, 2, 0},
-    {2, 0, 1, 3},
-    {2, 0, 3, 1},
-    {2, 1, 0, 3},
-    {2, 1, 3, 0},
-    {2, 3, 0, 1},
-    {2, 3, 1, 0},
-    {3, 0, 1, 2},
-    {3, 0, 2, 1},
-    {3, 1, 0, 2},
-    {3, 1, 2, 0},
-    {3, 2, 0, 1},
-    {3, 2, 1, 0}
-};
+cube_table_s* gen_last_layer_table() {
+    cube_table_s *ll_table = cube_table_create(131009);
+    alg_list_s *ll_algs = alg_list_from_file(LL_PATH);
 
-cube_table_s* generate_last_layer_table(const char *filename) {
-    FILE *file = fopen(filename, "rb");
-    if (file == NULL) {
-        return NULL;
+    for (size_t i = 0; i < ll_algs->num_algs; i++) {
+        shift_cube_s cube = SOLVED_SHIFTCUBE;
+        alg_invert(&ll_algs->list[i]);
+        apply_alg(&cube, &ll_algs->list[i]);
+        alg_invert(&ll_algs->list[i]);
+        cube_table_insert(ll_table, &cube, &ll_algs->list[i]);
     }
 
-    char *line = NULL;
-    size_t len;
-    ssize_t read;
+    cube_table_insert(ll_table, &SOLVED_SHIFTCUBE, &NULL_ALG);
 
-    // generate a cube table twice the size of the number of 1lll states,
-    // the number below was chosen arbitrarily 
-    cube_table_s *last_layer_table = cube_table_create(131009);
-
-    shift_cube_s cube;
-    alg_s *algorithm = NULL;
-    while ((read = getline(&line, &len, file)) != -1) {
-        cube = SOLVED_SHIFTCUBE;
-        alg_s *algorithm = alg_from_alg_str(line);
-
-        // If a line doesn't have a valid algorithm to parse, fail
-        if (algorithm == NULL) {
-            cube_table_free(last_layer_table);
-            last_layer_table = NULL;
-            break;
-        }
-
-        alg_invert(algorithm);
-        apply_alg(&cube, algorithm);
-        alg_invert(algorithm);
-        cube_table_insert(last_layer_table, &cube, algorithm);
-
-        alg_free(algorithm);
-    }
-
-
-    free(line);
-    fclose(file);
-    alg_free(algorithm);
-    return last_layer_table;
+    alg_list_free(ll_algs);
+    return ll_table;
 }
 
-cube_table_s* generate_f2l_table(const char *filename) {
-    FILE *file = fopen(filename, "rb");
-    if (file == NULL) {
-        return NULL;
-    }
-
-    char *line = NULL;
-    size_t len;
-    ssize_t read;
-
-    // generate a cube table twice the size of the number of 1lll states,
-    // the number below was chosen arbitrarily 
+cube_table_s* gen_f2l_table() {
     cube_table_s *f2l_table = cube_table_create(2909);
+    alg_list_s *f2l_algs = alg_list_from_file(F2L_PATH);
 
-    shift_cube_s cube;
-    alg_s *algorithm = NULL;
-
-    while ((read = getline(&line, &len, file)) != -1) {
-        shift_cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
-        alg_s *algorithm = alg_from_alg_str(line);
-
-        // If a line doesn't have a valid algorithm to parse, fail
-        if (algorithm == NULL) {
-            cube_table_free(f2l_table);
-            f2l_table = NULL;
-            break;
-        }
-
+    const shift_cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
+    for (size_t i = 0; i < f2l_algs->num_algs; i++) {
         for (uint8_t y_turns = 0; y_turns < 4; y_turns++) {
-            cube = solved_f2l_bits;
-            alg_rotate_on_y(algorithm, y_turns);
-            alg_invert(algorithm);
-            apply_alg(&cube, algorithm);
+            shift_cube_s cube = solved_f2l_bits;
+            alg_invert(&f2l_algs->list[i]);
+            apply_alg(&cube, &f2l_algs->list[i]);
+
             // a y_turn, as a rotation about U, goes in the opposite direction
             // of the f2l pairs, so to get the f2l_pair an algorithm is associated
             // with, take the negative of y_turns to get that slot
             cube = get_f2l_pair(&cube, mod4(-y_turns));
-            alg_invert(algorithm);
-            cube_table_insert(f2l_table, &cube, algorithm);
-            alg_rotate_on_y(algorithm, -y_turns);
-        }
+            alg_invert(&f2l_algs->list[i]);
+            cube_table_insert(f2l_table, &cube, &f2l_algs->list[i]);
 
-        alg_free(algorithm);
+            // rotate the algorithm forward for the next iteration
+            alg_rotate_on_y(&f2l_algs->list[i], 1);
+        }
     }
 
-    free(line);
-    fclose(file);
-    alg_free(algorithm);
+    alg_list_free(f2l_algs);
     return f2l_table;
+}
+
+cube_table_s* generate_last_layer_table(const char *filename) {
+//    FILE *file = fopen(filename, "rb");
+//    if (file == NULL) {
+//        return NULL;
+//    }
+//
+//    char *line = NULL;
+//    size_t len;
+//    ssize_t read;
+//
+//    // generate a cube table twice the size of the number of 1lll states,
+//    // the number below was chosen arbitrarily 
+//    cube_table_s *last_layer_table = cube_table_create(131009);
+//
+//    shift_cube_s cube;
+//    alg_s *algorithm = NULL;
+//    while ((read = getline(&line, &len, file)) != -1) {
+//        cube = SOLVED_SHIFTCUBE;
+//        alg_s *algorithm = alg_from_alg_str(line);
+//
+//        // If a line doesn't have a valid algorithm to parse, fail
+//        if (algorithm == NULL) {
+//            cube_table_free(last_layer_table);
+//            last_layer_table = NULL;
+//            break;
+//        }
+//
+//        alg_invert(algorithm);
+//        apply_alg(&cube, algorithm);
+//        alg_invert(algorithm);
+//        cube_table_insert(last_layer_table, &cube, algorithm);
+//
+//        alg_free(algorithm);
+//    }
+//
+//
+//    free(line);
+//    fclose(file);
+//    alg_free(algorithm);
+//    return last_layer_table;
+}
+
+cube_table_s* generate_f2l_table(const char *filename) {
+//    FILE *file = fopen(filename, "rb");
+//    if (file == NULL) {
+//        return NULL;
+//    }
+//
+//    char *line = NULL;
+//    size_t len;
+//    ssize_t read;
+//
+//    // generate a cube table twice the size of the number of 1lll states,
+//    // the number below was chosen arbitrarily 
+//    cube_table_s *f2l_table = cube_table_create(2909);
+//
+//    shift_cube_s cube;
+//    alg_s *algorithm = NULL;
+//
+//    while ((read = getline(&line, &len, file)) != -1) {
+//        shift_cube_s solved_f2l_bits = masked_cube(&SOLVED_SHIFTCUBE, &f2l_4mask);
+//        alg_s *algorithm = alg_from_alg_str(line);
+//
+//        // If a line doesn't have a valid algorithm to parse, fail
+//        if (algorithm == NULL) {
+//            cube_table_free(f2l_table);
+//            f2l_table = NULL;
+//            break;
+//        }
+//
+//        for (uint8_t y_turns = 0; y_turns < 4; y_turns++) {
+//            cube = solved_f2l_bits;
+//            alg_rotate_on_y(algorithm, y_turns);
+//            alg_invert(algorithm);
+//            apply_alg(&cube, algorithm);
+//            // a y_turn, as a rotation about U, goes in the opposite direction
+//            // of the f2l pairs, so to get the f2l_pair an algorithm is associated
+//            // with, take the negative of y_turns to get that slot
+//            cube = get_f2l_pair(&cube, mod4(-y_turns));
+//            alg_invert(algorithm);
+//            cube_table_insert(f2l_table, &cube, algorithm);
+//            alg_rotate_on_y(algorithm, -y_turns);
+//        }
+//
+//        alg_free(algorithm);
+//    }
+//
+//    free(line);
+//    fclose(file);
+//    alg_free(algorithm);
+//    return f2l_table;
 }
