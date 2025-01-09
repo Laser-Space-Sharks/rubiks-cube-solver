@@ -180,7 +180,7 @@ def translateToColors(faceArray, colorsArray):
     faceColors = [["", "", ""],["", "", ""],["", "", ""]]
     for i in range(3):
         for j in range(3):
-            faceColors[i][j] = COLORS[int(where(colorsArray == int(faceArray[i][j]))[0])]
+            faceColors[i][j] = COLORS[int(where(colorsArray == faceArray[i][j].item())[0].item())]
     
     return faceColors
 
@@ -229,7 +229,7 @@ def analyzeFace(image, colorsArray):
 
 def scanFace(colorsArray, readSavedImg=False, filename=""):
     if readSavedImg:
-        image = imread(f"{CUBE_IMG_FOLDER}{filename}.jpg", IMREAD_COLOR) # CHANGE
+        image = imread(f"{Abbie_img_folder}{filename}.jpg", IMREAD_COLOR) # CHANGE
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     normalizedImage = cvtColor(image, COLOR_BGR2HSV)
