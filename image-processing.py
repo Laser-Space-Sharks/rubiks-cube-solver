@@ -60,7 +60,7 @@ LOWER_BOUND_COLORS = [
 
 UPPER_BOUND_COLORS = [
     asarray([52, 255, 255]), # yellow
-    asarray([180, 255, 255]), # red
+    asarray([205, 255, 255]), # red
     asarray([128, 255, 255]), # blue
     asarray([190, 47, 255]), # white
     asarray([24, 255, 255]), # orange
@@ -149,8 +149,8 @@ def colorAnalysis(peice):
         peiceCopy = peice
         mask = inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
         print(f"checking for {COLORS[i]}")
-        imshow('Mask', mask)
-        waitKey(0)
+        imshow('Mask', mask) # CHANGE
+        waitKey(0) # CHANGE
         # find the percentage of the piece that is in that color range
         percent = (countNonZero(mask)/(PIECE_SIZE**2)) * 100
         # if more than 55% of the peice is that color, return the color
@@ -239,8 +239,8 @@ def analyzeFace(image, colorsArray):
             peice = imagePixels[i][j].copy()
             peiceCopy = peice.copy()
             print(f"####### We are on the {peiceNamesRow[i]} {peiceNamesCol[j]} peice ######")
-            imshow("Display window", cvtColor(peiceCopy, COLOR_HSV2BGR))
-            waitKey(0)
+            imshow("Display window", cvtColor(peiceCopy, COLOR_HSV2BGR)) #CHANGE
+            waitKey(0) #CHANGE
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
             print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
@@ -249,7 +249,7 @@ def analyzeFace(image, colorsArray):
 
 def scanFace(colorsArray, readSavedImg=False, filename=""):
     if readSavedImg:
-        image = imread(f"{Abbie_img_folder}{filename}.jpg", IMREAD_COLOR)
+        image = imread(f"{Abbie_img_folder}{filename}.jpg", IMREAD_COLOR) # CHANGE
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     
@@ -260,6 +260,11 @@ def scanFace(colorsArray, readSavedImg=False, filename=""):
 def getCenterColor(image):
     centerPiece = image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3]
     return colorAnalysis(centerPiece)
+
+# test to see if cube is impossible
+def errorCorrection(cubeArray):
+    
+    return -1
     
 #######################################################
 ####### Format to ShiftCube ###########################
