@@ -60,7 +60,7 @@ LOWER_BOUND_COLORS = [
 
 UPPER_BOUND_COLORS = [
     asarray([52, 255, 255]), # yellow
-    asarray([180, 255, 255]), # red
+    asarray([205, 255, 255]), # red
     asarray([128, 255, 255]), # blue
     asarray([190, 47, 255]), # white
     asarray([24, 255, 255]), # orange
