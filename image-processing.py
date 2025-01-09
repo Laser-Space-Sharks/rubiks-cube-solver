@@ -22,7 +22,6 @@ from numpy import asarray, zeros, where, copy, uint32
 from os import chdir
 # from io import BytesIO
 from subprocess import run
-from math import trunc, log2
 
 #######################################################
 ####### Constant Variables            #################
