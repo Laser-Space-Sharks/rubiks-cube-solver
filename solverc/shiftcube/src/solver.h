@@ -20,7 +20,7 @@ alg_s* solve_cross(shift_cube_s cube);
 alg_s* solve_cube(shift_cube_s cube, const cube_table_s *f2l_table, const cube_table_s *ll_table);
 alg_s* solve_f2l(shift_cube_s cube);
 
-cube_table_s* generate_last_layer_table(char *filename);
-cube_table_s* generate_f2l_table(char *filename);
+cube_table_s* generate_last_layer_table(const char *filename);
+cube_table_s* generate_f2l_table(const char *filename);
 
 #endif // SOLVER_H
