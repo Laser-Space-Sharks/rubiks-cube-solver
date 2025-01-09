@@ -2,10 +2,12 @@
 #include "shift_cube.h"
 #include "move.h"
 
+#include <assert.h>
+
 alg_s *alg_create(size_t size) {
     alg_s *alg = (alg_s*)malloc(sizeof(alg_s));
 
-    alg->moves = (move_e*)malloc(size * sizeof(move_e));
+    alg->moves = (move_e*)malloc(size);
     alg->length = 0;
     alg->size = size;
 
@@ -17,7 +19,7 @@ alg_s* alg_copy(const alg_s *src) {
 
     alg_s *copy = alg_create(src->length);
 
-    (void)memcpy(copy->moves, src->moves, src->length * sizeof(move_e));
+    (void)memcpy(copy->moves, src->moves, src->length);
     copy->length = src->length;
 
     return copy;
@@ -33,6 +35,11 @@ alg_s alg_static_copy(const alg_s *src) {
     return copy;
 }
 
+void alg_shrink(alg_s *alg) {
+    alg->moves = realloc(alg->moves, alg->length);
+    alg->size  = alg->length;
+}
+
 void alg_free(alg_s *alg) {
     if (alg == NULL) {
         return;
@@ -43,12 +50,7 @@ void alg_free(alg_s *alg) {
 }
 
 bool alg_insert(alg_s *alg, move_e move, size_t index) {
-    // don't try to insert if index is out of bounds
-    if (index > alg->length) {
-        return false;
-    }
-
-	// reallocate the move moves if needed
+    // reallocate the move moves if needed
     if (alg->length == alg->size) {
         alg->size *= 2;
         alg->moves = (move_e*)realloc(
@@ -82,13 +84,6 @@ bool alg_delete(alg_s *alg, size_t index) {
                       sizeof(move_e) * (alg->length - (index + 1)));
     }
     alg->length--;
-
-    // for memory leak protection: decrease the size of the move moves if length <= 1/4 size
-    // and the length is still greater than INIT_alg_SIZE
-    if (alg->length >= MIN_LIST_RESIZE && alg->length <= alg->size/4) {
-        alg->size /= 2;
-        alg->moves = (move_e*)realloc(alg->moves, sizeof(move_e) * alg->size);
-    }
 
     // deletion was successful
     return true;
@@ -226,6 +221,45 @@ alg_s* alg_from_alg_str(const char *alg_str) {
     return alg;
 }
 
+alg_s* alg_from_str(const char *str) {
+    if (!str) {
+        return NULL;
+    }
+
+    alg_s *alg = alg_create(MIN_LIST_RESIZE);
+    for (size_t i = 0; str[i]; i++) {
+        if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n') 
+            continue;
+
+        face_e face = face_from_char(str[i]);
+
+        if (face == FACE_NULL) {
+            alg_free(alg);
+            return NULL;
+        }
+
+        alg_insert(alg, 3*face, alg->length);
+        switch (str[i+1]) {
+            case '1':
+                break;
+            case '2':
+                alg->moves[alg->length-1]++;
+                break;
+            case '3':
+            case '\'':
+                alg->moves[alg->length-1] += 2;
+                break;
+            default:
+                continue;
+        }
+
+        i++;
+    }
+
+    alg_shrink(alg);
+    return alg;
+}
+
 void alg_rotate_on_y(alg_s *alg, uint8_t y_turns) {
     if (alg == NULL || alg->moves == NULL) {
         return;
@@ -273,7 +307,7 @@ bool simplified_alg_compare_forms(const alg_s* a, const alg_s* b) {
     } return true;
 }
 
-bool alg_compare(const alg_s* a, const alg_s* b) {
+bool alg_compare(const alg_s *a, const alg_s *b) {
     shift_cube_s cubeA, cubeB;
     cubeA = cubeB = SOLVED_SHIFTCUBE;
     apply_alg(&cubeA, a);
@@ -281,7 +315,7 @@ bool alg_compare(const alg_s* a, const alg_s* b) {
     return compare_cubes(&cubeA, &cubeB);
 }
 
-alg_list_s* get_alg_family(const alg_s* alg) {
+alg_list_s *get_alg_family(const alg_s* alg) {
     alg_list_s* alg_list = (alg_list_s*)malloc(sizeof(alg_list_s));
     alg_list->num_algs = 0;
     alg_list->size = 16;
@@ -302,5 +336,56 @@ alg_list_s* get_alg_family(const alg_s* alg) {
         free(new_conj.moves);
     }
     free(conj.moves);
+    return alg_list;
+}
+
+alg_list_s* alg_list_create(size_t num_algs) {
+    alg_list_s *alg_list = malloc(sizeof(alg_list_s));
+    alg_list->list = malloc(sizeof(alg_s) * num_algs);
+
+    alg_list->num_algs = 0;
+    alg_list->size = num_algs;
+}
+
+void alg_list_append(alg_list_s *alg_list, const alg_s *alg) {
+    if (alg_list->num_algs == alg_list->size) {
+        alg_list->size *= 2;
+        alg_list->list = realloc(alg_list->list, sizeof(alg_s) * alg_list->size);
+    }
+
+    alg_list->list[alg_list->num_algs++] = alg_static_copy(alg);
+}
+
+void alg_list_free(alg_list_s *alg_list) {
+    for (size_t i = 0; i < alg_list->num_algs; i++) {
+        free(alg_list->list[i].moves);
+    }
+
+    free(alg_list->list);
+    free(alg_list);
+}
+
+alg_list_s* alg_list_from_file(const char *filepath) {
+    FILE *fp = fopen(filepath, "r");
+    assert(fp);
+
+    alg_list_s *alg_list = alg_list_create(MIN_LIST_RESIZE);
+
+    char line_buff[256];
+    while (fgets(line_buff, 256, fp)) {
+        if (line_buff[0] == '\n') continue;
+
+        alg_s *alg = alg_from_str(line_buff);
+        if (!alg) {
+            alg_list_free(alg_list);
+            fclose(fp);
+            return NULL;
+        }
+
+        alg_list_append(alg_list, alg);
+        alg_free(alg);
+    }
+
+    fclose(fp);
     return alg_list;
 }
