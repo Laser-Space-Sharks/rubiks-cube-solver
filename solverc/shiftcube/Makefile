@@ -21,6 +21,7 @@ endif
 CXXFLAGS  += --target=armv6-linux-gnueabihf --sysroot=$(SYSROOT)
 CXXFLAGS  += -march=armv6
 CXXFLAGS  += -fuse-ld=lld
+CXXFLAGS  += --static
 endif
 
 COBJFLAGS := $(CXXFLAGS) -c
