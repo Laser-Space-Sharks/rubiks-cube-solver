@@ -376,7 +376,7 @@ uint8_t f2l_pair_orders[24][4] = {
     {3, 2, 1, 0}
 };
 
-cube_table_s* generate_last_layer_table(char *filename) {
+cube_table_s* generate_last_layer_table(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
         return NULL;
@@ -418,7 +418,7 @@ cube_table_s* generate_last_layer_table(char *filename) {
     return last_layer_table;
 }
 
-cube_table_s* generate_f2l_table(char *filename) {
+cube_table_s* generate_f2l_table(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
         return NULL;

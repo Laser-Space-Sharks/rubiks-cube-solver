@@ -25,6 +25,25 @@ typedef enum : uint8_t {
     FACE_NULL=6
 } face_e;
 
+static inline face_e face_from_char(char c) {
+    switch (c) {
+        case 'U':
+            return FACE_U;
+        case 'R':
+            return FACE_R;
+        case 'F':
+            return FACE_F;
+        case 'L':
+            return FACE_L;
+        case 'B':
+            return FACE_B;
+        case 'D':
+            return FACE_D;
+        default:
+            return FACE_NULL;
+    }
+}
+
 static const char facePrints[7] = {'U', 'R', 'F', 'L', 'B', 'D', 'N'};
 
 typedef enum : char {
