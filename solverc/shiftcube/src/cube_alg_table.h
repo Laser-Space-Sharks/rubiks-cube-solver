@@ -22,6 +22,7 @@ typedef struct cube_alg_table {
 
 cube_alg_table_s* cube_alg_table_create(size_t size);
 bool cube_alg_table_overwrite(cube_alg_table_s *ct, const shift_cube_s *key, const alg_s *moves);
+bool cube_alg_table_overwrite_if_better(cube_alg_table_s *ct, const shift_cube_s *key, const alg_s *moves);
 bool cube_alg_table_insert_if_new(cube_alg_table_s *ct, const shift_cube_s *key, const alg_s *moves);
 const alg_s* cube_alg_table_lookup(const cube_alg_table_s *ct, const shift_cube_s *cube);
 void cube_alg_table_clear(cube_alg_table_s *ct);

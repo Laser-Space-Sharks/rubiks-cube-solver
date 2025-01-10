@@ -64,6 +64,27 @@ bool cube_alg_table_overwrite(cube_alg_table_s *ct, const shift_cube_s *key, con
     }
 }
 
+bool cube_alg_table_overwrite_if_better(cube_alg_table_s *ct, const shift_cube_s *key, const alg_s *moves) {
+    if (ct == NULL || key == NULL || moves == NULL) {
+        return false;
+    }
+
+    cube_alg_entry_s* entry = cube_alg_table_get_insertion_index(ct, key);
+    if (entry == NULL) return false;
+
+    if (entry->alg.moves != NULL) {
+        if (entry->alg.length <= moves->length) return false;
+        free(entry->alg.moves);
+        entry->alg = alg_static_copy(moves);
+        return true;
+    } else {
+        entry->key = *key;
+        entry->alg = alg_static_copy(moves);
+        ct->entries++;
+        return true;
+    }
+}
+
 bool cube_alg_table_insert_if_new(cube_alg_table_s *ct, const shift_cube_s *key, const alg_s *moves) {
     if (ct == NULL || key == NULL || moves == NULL) {
         return false;
@@ -162,6 +183,7 @@ size_t cube_alg_table_size(const cube_alg_table_s *ct) {
 
 void cube_alg_table_print_algs(const cube_alg_table_s *ct) {
     for (size_t idx = 0; idx < ct->size; idx++) {
+        if (ct->table[idx].alg.moves == NULL) continue;
         print_alg(&ct->table[idx].alg);
     }
 }

@@ -158,6 +158,7 @@ static void test_cube_solve(const char** scrambles, int NUM_TESTS) {
 
     cube_table_s *f2l_table = gen_f2l_table();
     cube_alg_table_s *last_layer_table = gen_last_layer_table();
+    print_alg_length_frequencies(last_layer_table);
 
     alg_s *alg = NULL;
     shift_cube_s cube = SOLVED_SHIFTCUBE;
@@ -309,7 +310,7 @@ static void test_LL_improvements() {
     //LL_find_improvements_to_depth_n(uniq_1LLLs, 12, 0);
     //print_alg_length_frequencies(uniq_1LLLs);
     //cube_table_print(uniq_1LLLs);
-    LL_find_improvements_to_depth_n(uniq_1LLLs, 13, 0);
+    LL_find_improvements_to_depth_n(uniq_1LLLs, 14, 0);
     cube_alg_table_free(last_layer_table);
     last_layer_table = get_1LLL_from_very_uniq_cases(uniq_1LLLs);
     cube_alg_table_free(uniq_1LLLs);
@@ -351,6 +352,7 @@ int main(int argc, char *argv[]) {
 
         //test_1LLL();
         test_LL_improvements();
+        //print_improved_1LLL_algs();
     }
 
     return 0;

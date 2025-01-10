@@ -336,27 +336,21 @@ bool alg_compare(const alg_s *a, const alg_s *b) {
 }
 
 alg_list_s *get_alg_family(const alg_s* alg) {
-    alg_list_s* alg_list = (alg_list_s*)malloc(sizeof(alg_list_s));
-    alg_list->num_algs = 0;
-    alg_list->size = 16;
-    alg_list->list = (alg_s*)malloc((alg_list->size)*sizeof(alg_s));
+    alg_list_s* alg_list = alg_list_create(16);
+    
+    alg_list_append(alg_list, alg);
+    alg_list_append(alg_list, alg);
+    alg_invert(&alg_list->list[1]);
 
-    alg_s conj = alg_static_copy(alg);
-    alg_invert(&conj);
-    alg_list->list[alg_list->num_algs++] = alg_static_copy(alg);
-    alg_list->list[alg_list->num_algs++] = alg_static_copy(&conj);
     for (int i = 1; i < 8; i++) {
-        alg_s new_alg  = alg_static_copy(alg);
-        alg_s new_conj = alg_static_copy(&conj);
-        for (int j = 0; j < alg->length; j++) new_alg.moves[j] = move_transformations[i][alg->moves[j]];
-        for (int j = 0; j < conj.length; j++) new_conj.moves[j] = move_transformations[i][conj.moves[j]];
-        alg_list->list[alg_list->num_algs++] = alg_static_copy(&new_alg);
-        alg_list->list[alg_list->num_algs++] = alg_static_copy(&new_conj);
-        free(new_alg.moves);
-        free(new_conj.moves);
+        alg_list_append(alg_list, alg);
+        alg_list_append(alg_list, &alg_list->list[1]);
+        for (int j = 0; j < alg->length; j++) {
+            alg_list->list[i*2].moves[j] = move_transformations[i][alg_list->list[i*2].moves[j]];
+            alg_list->list[i*2+1].moves[j] = move_transformations[i][alg_list->list[i*2+1].moves[j]];
+        }
     }
 
-    free(conj.moves);
     return alg_list;
 }
 
