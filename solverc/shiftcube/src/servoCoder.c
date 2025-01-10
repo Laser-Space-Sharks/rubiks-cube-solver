@@ -156,8 +156,8 @@ static bool RobotStateNum_can_do_move[18][1296];
 /////////////////////////////////////////////// PRIVATE FUNCTION PROTOTYPES /////////////////////////////////////////
 bool inter_move_table_insert(inter_move_table_s *ht, const char* line);
 bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line);
-void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename);
-void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename);
+void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, const char *filename);
+void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, const char *filename);
 static inline size_t inter_move_table_get_index(const inter_move_table_s *ht, const RobotState_s *key);
 const RSS_entry_s* inter_move_table_get_RSS(const inter_move_table_s *ht);
 const inter_move_entry_s* inter_move_table_lookup(const inter_move_table_s *ht, const RobotState_s *key);
@@ -380,7 +380,7 @@ bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
 
     return true;
 }
-void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename) {
+void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, const char *filename) {
     //printf("starting 'insert_normal_lines_into_inter_move_table'\n");
     FILE *file = fopen(filename, "rb");
     //printf("opened the file...\n");
@@ -401,7 +401,7 @@ void insert_normal_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TA
     fclose(file);
     //printf("finished 'insert_normal_lines_into_inter_move_table'\n");
 }
-void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, char *filename) {
+void insert_root_lines_into_inter_move_table(inter_move_table_s* INTER_MOVE_TABLE, const char *filename) {
     //printf("starting 'insert_root_lines_into_inter_move_table'\n");
     FILE *file = fopen(filename, "rb");
     if (file == NULL) return;

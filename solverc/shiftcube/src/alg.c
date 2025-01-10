@@ -70,6 +70,20 @@ bool alg_insert(alg_s *alg, move_e move, size_t index) {
     // insertion was successful
     return true;
 }
+bool alg_append(alg_s *alg, move_e move) {
+    // reallocate the move moves if needed
+    if (alg->length == alg->size) {
+        alg->size *= 2;
+        alg->moves = (move_e*)realloc(
+            alg->moves, alg->size * sizeof(move_e)
+        );
+    }
+
+    alg->moves[alg->length++] = move;
+
+    // insertion was successful
+    return true;
+}
 
 bool alg_delete(alg_s *alg, size_t index) {
     // don't try to delete if index is out of bounds
@@ -83,6 +97,12 @@ bool alg_delete(alg_s *alg, size_t index) {
         (void)memmove(alg->moves + index, alg->moves + index + 1,
                       sizeof(move_e) * (alg->length - (index + 1)));
     }
+    alg->length--;
+
+    // deletion was successful
+    return true;
+}
+bool alg_pop(alg_s *alg) {
     alg->length--;
 
     // deletion was successful

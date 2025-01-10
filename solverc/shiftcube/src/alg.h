@@ -26,7 +26,9 @@ alg_s  alg_static_copy(const alg_s *src);
 void   alg_free(alg_s *alg);
 
 bool alg_insert(alg_s *moves, move_e move, size_t index);
+bool alg_append(alg_s *alg, move_e move);
 bool alg_delete(alg_s *moves, size_t index);
+bool alg_pop(alg_s *moves);
 size_t alg_lookup(const alg_s *alg, move_e move);
 alg_s* alg_from_alg_str(const char *alg_str);
 alg_s* alg_from_str(const char *str);

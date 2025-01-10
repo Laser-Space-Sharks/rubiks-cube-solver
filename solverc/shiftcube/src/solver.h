@@ -5,6 +5,7 @@
 #include "alg.h"
 #include "shift_cube.h"
 #include "cube_table.h"
+#include "cube_alg_table.h"
 
 bool init_solver();
 void cleanup_solver();
@@ -17,14 +18,14 @@ alg_s* bidirectional_search(const shift_cube_s *start, const shift_cube_s *goal,
 
 alg_s* solve_cross(shift_cube_s cube);
 
-alg_s* solve_cube(shift_cube_s cube, const cube_table_s *f2l_table, const cube_table_s *ll_table);
+alg_s* solve_cube(shift_cube_s cube, const cube_table_s *f2l_table, const cube_alg_table_s *ll_table);
 alg_s* solve_f2l(shift_cube_s cube);
 
 cube_table_s* gen_f2l_table();
-cube_table_s* gen_last_layer_table();
+cube_alg_table_s* gen_last_layer_table();
 
-cube_table_s* generate_last_layer_table(const char *filename);
-cube_table_s* generate_f2l_table(const char *filename);
+//cube_table_s* generate_last_layer_table(const char *filename);
+//cube_table_s* generate_f2l_table(const char *filename);
 
 
 #endif // SOLVER_H
