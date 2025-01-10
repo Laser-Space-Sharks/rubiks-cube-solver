@@ -677,1226 +677,1226 @@ U B' U B L U' F U2 F2 L F L2
 B' R2 F R' D R D' R2 B R' F' R 
 B L F' L' F L' F' B L' F L B2 
 U R2 B U' B' U B U B2 R' B R' 
-At idx     0: alg improved to length 13 with gain  3: R D' U' F2 U' L' U2 L F2 D R' U2 R' 
-At idx    14: alg improved to length 13 with gain  3: R' U2 R B' D' B U' F B' R' F' D B 
-At idx    15: alg improved to length 13 with gain  5: U' L' U' L F2 R U R' U' F2 L' U L 
-At idx    16: alg improved to length 13 with gain  4: R2 B' L2 R D2 L' F L D2 R2 L2 B R' 
-At idx    18: alg improved to length 13 with gain  4: F R' F R F' R B' R' F R2 B R2 F2 
-At idx    24: alg improved to length 13 with gain  4: U' R U' L U L2 B L B' R' B' U B 
-At idx    27: alg improved to length 13 with gain  2: U B' F U' B U F' R B L' B' R' L 
-At idx    28: alg improved to length 13 with gain  4: R U B U' B2 R D2 L' F L D2 R2 B 
-At idx    35: alg improved to length 13 with gain  4: F' D2 R D2 L' F2 U2 L' D2 B R2 D2 L2 
-At idx    39: alg improved to length 13 with gain  1: U R B U' B2 R' F R B R' F2 U F 
-At idx    42: alg improved to length 13 with gain  3: U2 F' U' L' U L2 B2 L' F' L B2 L' F2 
-At idx    48: alg improved to length 13 with gain  2: U L' U2 R B' R' B L B L2 B L2 B2 
-At idx    55: alg improved to length 13 with gain  2: R U2 F2 R2 B' R F' R B2 U2 F' B' R' 
-At idx    67: alg improved to length 13 with gain  3: U2 L' B' U' B U L B U L U' L' B' 
-At idx    72: alg improved to length 13 with gain  1: R U B U B' U' R2 L D' F2 D R L' 
-At idx    88: alg improved to length 13 with gain  3: U F2 R' B' R F' B R F' U B U' B' 
-At idx   103: alg improved to length 13 with gain  3: U' L2 U2 B' U B U' B L B' L' U2 L2 
-At idx   114: alg improved to length 13 with gain  3: F R2 B' D B' D F L' F' D2 B2 R2 F' 
-At idx   130: alg improved to length 13 with gain  1: U2 B' U' B R D' B2 U B' U' B2 D R' 
-At idx   141: alg improved to length 13 with gain  4: U B U B' R2 U' F' U F R2 B U' B' 
-At idx   165: alg improved to length 13 with gain  3: F L2 R2 D' L B L2 D R2 F L' U' F2 
-At idx   167: alg improved to length 13 with gain  3: U2 L B' R2 D' F' D R' B L' B' R' B 
-At idx   177: alg improved to length 13 with gain  2: U2 L' F' L2 D' R U B2 U' R' D F L 
-At idx   178: alg improved to length 13 with gain  1: B L U2 L' B R2 F' D L2 D' F R2 B2 
-At idx   184: alg improved to length 13 with gain  2: U' R2 U B L F' U2 F L' B' R2 U' R2 
-At idx   192: alg improved to length 13 with gain  4: F R2 B2 D2 R U2 L' F2 D2 L U2 R F' 
-At idx   198: alg improved to length 13 with gain  2: F U' R U' R' U L' U R U' R' L F' 
-At idx   199: alg improved to length 13 with gain  5: R' F2 U' F U' R2 B' D2 B' L2 D2 B2 R' 
-At idx   208: alg improved to length 13 with gain  1: R U B U B2 R2 D' R' D R' B U2 R' 
-At idx   219: alg improved to length 13 with gain  5: R' U2 R U2 F R B2 R' D' R D F' B2 
-At idx   231: alg improved to length 13 with gain  1: B' R D R' U2 L' B2 L U2 R2 D' R2 B 
-At idx   233: alg improved to length 13 with gain  2: U R' F2 D' U' L' F' L F U D F2 R 
-At idx   235: alg improved to length 13 with gain  3: U R U2 L' U R' U' B' R2 B' R2 B2 L 
-At idx   239: alg improved to length 13 with gain  3: U' F U2 B' U B U2 F' B' R' U R B 
-At idx   243: alg improved to length 13 with gain  3: R U L' B' L2 F U F' U R L' B2 R2 
-At idx   248: alg improved to length 13 with gain  3: U R B U B' R2 F R F2 L' U L F 
-At idx   252: alg improved to length 13 with gain  2: U L F R U2 R' U F' L' U B' U B 
-At idx   258: alg improved to length 13 with gain  1: U B F U2 B' U' B U2 F2 U B' U' F 
-At idx   276: alg improved to length 13 with gain  3: R U' L D2 B L' U L B' D2 L' U R' 
-At idx   280: alg improved to length 13 with gain  2: U' B' U2 B U B' U B2 U L U' L' B' 
-At idx   286: alg improved to length 13 with gain  2: U' L' B2 U' B2 L B' L' B' U B' L B' 
-At idx   288: alg improved to length 13 with gain  1: L U F U' R U2 R2 F' L F2 R F2 L2 
-At idx   289: alg improved to length 13 with gain  2: F R2 B2 D2 B D R' D B R2 F' U' R 
-At idx   298: alg improved to length 13 with gain  3: B U2 B' R B2 R2 B' U2 B R2 B R' B 
-At idx   300: alg improved to length 13 with gain  1: U' B U2 B' R' F' L' U2 L U' F U R 
-At idx   314: alg improved to length 13 with gain  3: U L U' F U' F' U' F' L F L' U2 L' 
-At idx   321: alg improved to length 13 with gain  3: R B' R2 D2 R B U2 B U2 L' F2 L B' 
-At idx   325: alg improved to length 13 with gain  1: U' R U2 L' U' L F2 D R D' F2 U2 R' 
-At idx   326: alg improved to length 13 with gain  2: U F U R2 U F2 U' F2 U' R2 F2 U2 F 
-At idx   352: alg improved to length 13 with gain  3: U' F' U' L' U2 L F' D' B L' B' D F2 
-At idx   354: alg improved to length 13 with gain  4: U2 L D R' F R F2 R' F R F D' L' 
-At idx   358: alg improved to length 13 with gain  3: U L2 D' L' D2 R' F' R D' F L' U' F' 
-At idx   363: alg improved to length 13 with gain  2: U' L B' R2 F2 D R' D' R F2 R2 B L' 
-At idx   367: alg improved to length 13 with gain  3: B' R B U2 L F2 L B2 R2 D2 B2 L2 F2 
-At idx   377: alg improved to length 13 with gain  1: F' L U L U2 L' U2 L2 U F L U2 L' 
-At idx   380: alg improved to length 13 with gain  3: R' U2 L2 R U L2 D' B2 D B2 L' B2 L 
-At idx   381: alg improved to length 13 with gain  4: U' B D F' L F L2 F' L F L D' B' 
-At idx   391: alg improved to length 13 with gain  3: U2 B' R' U R' D' R U2 R' D R2 U B 
-At idx   397: alg improved to length 13 with gain  4: L' U2 L U' R U2 B L' U L B' U2 R' 
-At idx   399: alg improved to length 13 with gain  4: U L U L' U2 B2 U' R' U R2 B R' B 
-At idx   404: alg improved to length 13 with gain  2: L F R F' L F L' U R' U' L F' L2 
-At idx   411: alg improved to length 13 with gain  3: R U2 R2 F R F R2 L F L' F' R2 F2 
-At idx   422: alg improved to length 13 with gain  3: F L' U2 R2 D B2 D' R' U' R' L U F' 
-At idx   440: alg improved to length 13 with gain  3: R' U2 R U2 R B' R2 U F' U' F R B 
-At idx   460: alg improved to length 13 with gain  2: U2 R U2 L' B' R B R2 L U' R U' R' 
-At idx   474: alg improved to length 13 with gain  3: F L' D2 L U2 L' D2 L F' U' F U' F' 
-At idx   475: alg improved to length 13 with gain  4: U F2 D B' R B D' B' R' F' R F' B 
-At idx   476: alg improved to length 13 with gain  2: U2 R' F' R U' L' U R' U L U' F R 
-At idx   484: alg improved to length 13 with gain  2: B2 R2 U' B L F R' F' L' B' U R2 B2 
-At idx   505: alg improved to length 13 with gain  3: F R U R2 U F R B' D' R2 D F2 B 
-At idx   512: alg improved to length 13 with gain  2: U2 L' U' L F R U B U' B' U R' F' 
-At idx   515: alg improved to length 13 with gain  2: F' U L U2 L U' L' U L' U2 L' U F 
-At idx   516: alg improved to length 13 with gain  3: U' F R U' R' F' L' U B' U' B U L 
-At idx   518: alg improved to length 13 with gain  5: U' F2 R2 F U' L F' L' F U F' R2 F2 
-At idx   546: alg improved to length 13 with gain  6: B U B2 D' R D' F2 R' D2 B2 U' L' B' 
-At idx   552: alg improved to length 13 with gain  4: U2 B' U' R U R2 U R2 U2 R2 U' R B 
-At idx   566: alg improved to length 13 with gain  1: U2 R D' B2 D R' U2 L2 B L' B' U L2 
-At idx   576: alg improved to length 13 with gain  3: U F2 L R2 D L D' L' D' R2 F L' F 
-At idx   581: alg improved to length 13 with gain  3: U2 F' L2 D2 B2 L' D2 F L' F U2 R' F' 
-At idx   583: alg improved to length 13 with gain  3: U R' U' F' U F2 L2 F' R' F L2 F' R2 
-At idx   590: alg improved to length 13 with gain  1: R B2 U R2 B R' U' R' U' F B2 R' F' 
-At idx   591: alg improved to length 13 with gain  2: R' F' U' F U R F R B' R B R2 F' 
-At idx   602: alg improved to length 13 with gain  3: F' U F' U2 F2 R B U B' R' F2 U2 F2 
-At idx   620: alg improved to length 13 with gain  2: U' B U B' U B2 R2 F R F' R2 B2 R' 
-At idx   638: alg improved to length 13 with gain  3: U R2 D L' B' L D' R' B U2 B' U' R' 
-At idx   643: alg improved to length 13 with gain  4: U L U L' U2 B2 U' R B' R' B U B2 
-At idx   647: alg improved to length 13 with gain  1: F2 R2 F' R D' F' U F D R' F R2 F2 
-At idx   654: alg improved to length 13 with gain  4: R2 F' R2 U R2 D' F' U' D F' U F2 R2 
-At idx   668: alg improved to length 13 with gain  2: U R' U' R U' B2 L' B2 R B L B' R' 
-At idx   688: alg improved to length 13 with gain  1: L' R U' B U B R B2 R' U R' U' L 
-At idx   694: alg improved to length 13 with gain  2: U2 F' U' F U' F' U F R B U B' R' 
-At idx   710: alg improved to length 13 with gain  2: U2 B F2 L B L' F2 L2 B' L B L2 B2 
-At idx   716: alg improved to length 13 with gain  1: F D R' B D2 F2 L F2 D2 B' R D' F' 
-At idx   721: alg improved to length 13 with gain  4: L F2 L2 U R U' R2 L2 F2 L' F R F' 
-At idx   723: alg improved to length 13 with gain  2: U L' B L2 F2 R' D R F2 L2 B' U L 
-At idx   731: alg improved to length 13 with gain  2: R' U L U' R U L' F U R U' R' F' 
-At idx   747: alg improved to length 13 with gain  1: R B' R' F R' F' R2 B2 L U2 L' B' R' 
-At idx   761: alg improved to length 13 with gain  4: F' U F U R U2 R' B U' F' U F B' 
-At idx   765: alg improved to length 13 with gain  4: U' R U B' R B R2 B' R U' R' U B 
-At idx   767: alg improved to length 13 with gain  2: U2 L U L2 B2 R2 B' L B R2 B U B 
-At idx   768: alg improved to length 13 with gain  3: U F D B' R B R2 B' R B R D' F' 
-At idx   779: alg improved to length 13 with gain  1: U2 L U2 B U' F' U B' U' F2 U' F' L' 
-At idx   782: alg improved to length 13 with gain  3: L' U2 L U2 L' U L F U F' L' U' L 
-At idx   783: alg improved to length 13 with gain  2: B' R2 U F' R2 D2 L2 B' U' L2 U2 D2 B 
-At idx   784: alg improved to length 13 with gain  3: B' R B L' B2 R' B2 U' L U' L' U2 L 
-At idx   787: alg improved to length 13 with gain  1: F U' L' U R2 U' L U R' U R' U' F' 
-At idx   788: alg improved to length 13 with gain  4: U' R B R' U L U' R B' R' B L' B' 
-At idx   789: alg improved to length 13 with gain  3: U2 F' L F' L' F2 L' U R U' L U2 R' 
-At idx   792: alg improved to length 13 with gain  1: B U B2 R B R2 U R2 U B U' B' R' 
-At idx   796: alg improved to length 13 with gain  2: U' F' U' L2 B L' F' L B' L2 F U F 
-At idx   801: alg improved to length 13 with gain  2: F2 R2 U F' R' F U' R2 F2 U L' U2 L 
-At idx   811: alg improved to length 13 with gain  2: F U2 L' B' U' B L2 D F2 D' L' U2 F' 
-At idx   812: alg improved to length 13 with gain  4: L U2 L' U' B' U B' D' F R' F' D B2 
-At idx   813: alg improved to length 13 with gain  3: U B' U2 B2 L' B' L' F R' F R F2 L2 
-At idx   827: alg improved to length 13 with gain  2: U2 B' U2 B L2 D F R' F R F2 D' L2 
-At idx   828: alg improved to length 13 with gain  1: U L R2 F R F U F2 U' F2 L' U2 R 
-At idx   833: alg improved to length 13 with gain  3: U2 R B L U2 L' B' R2 F R F2 U2 F 
-At idx   834: alg improved to length 13 with gain  5: U2 R2 F2 R F U L' U L2 F L' U' R 
-At idx   839: alg improved to length 13 with gain  4: U' F2 L2 F L U B' U B2 L B' U' F 
-At idx   840: alg improved to length 13 with gain  1: U L' U2 L F2 D R B' R B R2 D' F2 
-At idx   850: alg improved to length 13 with gain  1: L U L2 B L B2 U' B U2 B L' B' L 
-At idx   851: alg improved to length 13 with gain  5: L' U R' U2 F' L U2 L' F U2 R U' L 
-At idx   858: alg improved to length 13 with gain  3: U2 F' U' F L F R' F' D' F2 D R L' 
-At idx   860: alg improved to length 13 with gain  5: R' F U F' L D F' D' R2 L' B' R' B 
-At idx   868: alg improved to length 13 with gain  3: U2 R' U2 R2 U R2 U R F2 L F L' F 
-At idx   875: alg improved to length 13 with gain  1: U R B U F' L U' L' U F B' U' R' 
-At idx   888: alg improved to length 13 with gain  3: U L U F' L2 B L' F L B' L2 U' L' 
-At idx   890: alg improved to length 13 with gain  3: F U B' U R U2 B' R' F' B2 L U' L' 
-At idx   894: alg improved to length 13 with gain  2: U' L B L2 D R' U' F2 U R D' B' L' 
-At idx   921: alg improved to length 13 with gain  4: R2 U' R2 U' R2 U2 F' L' F R2 F' L F 
-At idx   925: alg improved to length 13 with gain  5: R U' R' U2 R2 U B U' B2 R' B U' R' 
-At idx   935: alg improved to length 13 with gain  1: L2 D' B D L2 F' L D' L B' D L2 F 
-At idx   949: alg improved to length 13 with gain  1: R B U' L' U2 F' L F U2 L B' U R' 
-At idx   955: alg improved to length 13 with gain  2: R' D2 L2 D2 F2 D' F' D F' D2 L2 D2 R 
-At idx   957: alg improved to length 13 with gain  2: U2 B L U2 F' L' B L2 F L B' L B' 
-At idx   977: alg improved to length 13 with gain  1: U R B U' B D F' L2 F D' B2 U' R' 
-At idx   992: alg improved to length 13 with gain  3: F' L B' U2 B F R' F B D2 B' R F' 
-At idx   994: alg improved to length 13 with gain  2: U2 R F' L2 B L B' L2 F R' F' L' F 
-At idx  1004: alg improved to length 13 with gain  1: U2 L U L' U L2 B2 R B R' B2 L2 B' 
-At idx  1007: alg improved to length 13 with gain  3: U' F2 L2 F' R B' R F B L2 F' R2 F' 
-At idx  1012: alg improved to length 13 with gain  3: F U R' U2 B' R' B R U F' R' U R 
-At idx  1033: alg improved to length 13 with gain  3: R' U2 F U F' R F U2 R' U' R U F' 
-At idx  1037: alg improved to length 13 with gain  3: U' R2 D' L F2 L' D R2 B2 L' B' L B' 
-At idx  1043: alg improved to length 13 with gain  3: B' U B R2 B R2 U' R2 U B2 U' B R2 
-At idx  1045: alg improved to length 13 with gain  3: R' U' F' U' L' B' U2 B L F2 R' F' R2 
-At idx  1050: alg improved to length 13 with gain  4: B' U F2 D R' D' F2 U' L' U2 L U' B 
-At idx  1072: alg improved to length 13 with gain  3: U2 L R F L' B L F' B' R' B L' B' 
-At idx  1101: alg improved to length 13 with gain  1: U2 R' D' L F' L' D R F' L' U L F 
-At idx  1103: alg improved to length 13 with gain  4: U R' F R' F' R2 B2 D B' U2 B D' B2 
-At idx  1104: alg improved to length 13 with gain  1: F2 U' R U2 R' F' L F2 L' U F U' F 
-At idx  1116: alg improved to length 13 with gain  4: U' F' U' L F' L' F2 L F' U F U' L' 
-At idx  1118: alg improved to length 13 with gain  3: U' F' U' L' U B' L F L' U' B U L 
-At idx  1119: alg improved to length 13 with gain  5: R U R2 F' U' F U R U2 R' F R F' 
-At idx  1129: alg improved to length 13 with gain  1: R U' L' U2 R' B' R U' R' U2 B U L 
-At idx  1135: alg improved to length 13 with gain  1: U2 F' L' B L B' L F' B L B' L' F2 
-At idx  1137: alg improved to length 13 with gain  1: R U B2 L' B' U' B U L2 U' L' B2 R' 
-At idx  1139: alg improved to length 13 with gain  4: R' D B2 D' U2 B' R2 B U2 D B2 D' R 
-At idx  1152: alg improved to length 13 with gain  2: R B2 D2 F L' F2 D' B D F D2 R' B 
-At idx  1158: alg improved to length 13 with gain  4: L' R' D2 U R U' R' D2 L F R' F' R2 
-At idx  1159: alg improved to length 13 with gain  2: R D B2 U B2 U' R' U2 R D' R2 U' R 
-At idx  1176: alg improved to length 13 with gain  2: L U2 L' F' U L U L' U2 L' U L F 
-At idx  1180: alg improved to length 13 with gain  3: U' R D L' B L D' R' B L U' L' B' 
-At idx  1195: alg improved to length 13 with gain  4: F R' U F R' F2 U' F R2 U F R2 F2 
-At idx  1203: alg improved to length 13 with gain  3: F2 R' F' R2 B L U' L' B' U R' U F' 
-At idx  1205: alg improved to length 13 with gain  5: B' U' B2 L' B2 R B L2 B' R' B U' L' 
-At idx  1209: alg improved to length 13 with gain  5: R2 B2 R' U B U' B' L U2 L2 B' R' L 
-At idx  1228: alg improved to length 13 with gain  4: L U2 B L B' U L2 U L F' L2 F L2 
-At idx  1237: alg improved to length 13 with gain  3: U F' L2 B L2 B' L F' B L B' L' F2 
-At idx  1251: alg improved to length 13 with gain  2: R B2 R F2 L' D' L' D L2 F2 R' B2 R' 
-At idx  1254: alg improved to length 13 with gain  5: R' F' R U R' F' U' R' F2 R U F2 R 
-At idx  1261: alg improved to length 13 with gain  4: F' U2 F2 D' U2 L' F L U2 D R F' R' 
-At idx  1264: alg improved to length 13 with gain  2: U' R2 U B D2 F' U2 F D2 B' R2 U' R2 
-At idx  1265: alg improved to length 13 with gain  2: U L' U2 L R F U' B U B' U F' R' 
-At idx  1285: alg improved to length 13 with gain  3: R' U2 B L' B' L U2 R B U2 B2 U2 B 
-At idx  1291: alg improved to length 13 with gain  5: U' L F L' B2 D' R' D B2 L U2 F' L' 
-At idx  1314: alg improved to length 13 with gain  1: U F R B U2 F' B' L' F R' F' U2 L 
-At idx  1317: alg improved to length 13 with gain  3: U2 L' B' U2 R B' R' B2 L U' F U' F' 
-At idx  1343: alg improved to length 13 with gain  3: U2 L' F' U' L2 U2 L2 U' L2 U' L2 F L 
-At idx  1359: alg improved to length 13 with gain  1: B R' B2 R2 U' R2 U R2 B U' B R B' 
-At idx  1379: alg improved to length 13 with gain  4: U F' L' F2 D2 B' R' D' B2 D' F' U R2 
-At idx  1380: alg improved to length 13 with gain  2: F2 U' L F U F U' L' U2 R' F R F 
-At idx  1384: alg improved to length 13 with gain  2: R' F' L' U2 L2 U2 L2 U' L2 U' L' F R 
-At idx  1397: alg improved to length 13 with gain  3: U L' U' L U' F R' F2 L F' R F2 L' 
-At idx  1406: alg improved to length 13 with gain  4: U R' U' F D' F2 U F' D F2 R2 U2 R' 
-At idx  1408: alg improved to length 13 with gain  4: R B2 L2 D F D F' D' F' D' L2 B2 R' 
-At idx  1457: alg improved to length 13 with gain  1: B' U' B L B' R2 F2 R F2 R B U' L' 
-At idx  1458: alg improved to length 13 with gain  2: U2 F' L F' D F2 L' U' L F2 D' F2 L' 
-At idx  1485: alg improved to length 13 with gain  6: R F U R' U' F' R U B' R B U' R2 
-At idx  1494: alg improved to length 13 with gain  3: B L2 D L' U L D' L2 B' U B U2 B' 
-At idx  1501: alg improved to length 13 with gain  5: F' U F U L' F R2 D2 B2 D2 R2 F' L 
-At idx  1506: alg improved to length 13 with gain  4: F L' U2 L U F2 U F2 U R U2 R' F 
-At idx  1507: alg improved to length 13 with gain  4: U L' U' B U B2 U B2 U2 B2 U' B L 
-At idx  1508: alg improved to length 13 with gain  1: U2 B' U2 F U F' L2 D' B' D L2 U2 B 
-At idx  1519: alg improved to length 13 with gain  3: F U R U2 R' U' F2 D' B L B' D F 
-At idx  1522: alg improved to length 13 with gain  1: L U L' U2 B' U' R' U' R B L U2 L' 
-At idx  1529: alg improved to length 13 with gain  3: U2 B U' L U F R U' R' F' L' U2 B' 
-At idx  1536: alg improved to length 13 with gain  3: L U L' U2 B' U2 B' R B R2 U' R B 
-At idx  1545: alg improved to length 13 with gain  2: U L F2 R' D F D' F' R F2 L2 U L 
-At idx  1547: alg improved to length 13 with gain  1: R' U' R B U' L U L' U L U' L' B' 
-At idx  1550: alg improved to length 13 with gain  3: F2 L2 F2 U' F2 L2 B D' L' D L F2 B' 
-At idx  1553: alg improved to length 13 with gain  3: U F R2 B' R' F2 B D2 B2 L B2 D2 F 
-At idx  1556: alg improved to length 13 with gain  2: U2 L U L2 B' L U2 B2 R B2 R' U' B 
-At idx  1568: alg improved to length 13 with gain  4: R B' R' U2 F R2 B R2 U' B' U F' B 
-At idx  1572: alg improved to length 13 with gain  9: U R2 B F' U2 L F2 B2 R' U2 F' B L2 
-At idx  1579: alg improved to length 13 with gain  3: L' U' L F2 R B R' F' R B' U R' F' 
-At idx  1585: alg improved to length 13 with gain  2: U2 F2 U R' F' R F' U F U' F U' F2 
-At idx  1597: alg improved to length 13 with gain  2: F2 U L' U B' R' U' R B L2 F' L' F' 
-At idx  1603: alg improved to length 13 with gain  4: R' F' R B' R D2 B' L2 D' B D' R' B 
-At idx  1641: alg improved to length 13 with gain  2: F' U2 F2 R' D R' B2 U' B2 U R2 D' F' 
-At idx  1654: alg improved to length 13 with gain  1: L' D' R B' R' D L2 F R U R' F' L' 
-At idx  1656: alg improved to length 13 with gain  1: U2 F' U' F2 R U R2 D R' D' R2 U' F' 
-At idx  1662: alg improved to length 13 with gain  4: L' U' L F R U R' U F' U F U2 F' 
-At idx  1671: alg improved to length 13 with gain  2: U' L F U' F2 L' B L F L' B2 U B 
-At idx  1682: alg improved to length 13 with gain  2: U R2 D L' B' L D' R' U B U B' R' 
-At idx  1689: alg improved to length 13 with gain  2: U L B' U' L2 U' B U B' L2 U B L' 
-At idx  1690: alg improved to length 13 with gain  2: U2 R' D2 L2 F' L2 D2 R2 L' B L B2 R' 
-At idx  1691: alg improved to length 13 with gain  4: R U' L' U R' U' B2 R B2 L B' R' B 
-At idx  1708: alg improved to length 13 with gain  1: U L F U F' U' F2 R' F2 L' F R F' 
-At idx  1709: alg improved to length 13 with gain  2: F' U' F R2 D L' B' R' L U2 R D' R2 
-At idx  1711: alg improved to length 13 with gain  5: R' U L' U R2 B' R2 U2 R2 B R' U' L 
-At idx  1713: alg improved to length 13 with gain  2: B' F' U2 F2 R' F' R' U' R U B' R2 B2 
-At idx  1717: alg improved to length 13 with gain  3: U2 F' L2 D' U' B' L' B L U D L2 F 
-At idx  1718: alg improved to length 13 with gain  2: F R2 B' R2 F' R B' L' B2 R' B L B' 
-At idx  1722: alg improved to length 13 with gain  2: F R2 B' R2 F' R B2 U' B' R' F' U F 
-At idx  1728: alg improved to length 13 with gain  3: U2 L' U B2 D L D' B2 L U' B2 L2 B2 
-At idx  1730: alg improved to length 13 with gain  2: U' B L F U2 F' B' R' B L' B' U2 R 
-At idx  1741: alg improved to length 13 with gain  1: L' D L B' U' B2 L' B' D' R B2 R' L 
-At idx  1757: alg improved to length 13 with gain  5: R' F U' R B F' U' L F' U L' F B' 
-At idx  1768: alg improved to length 13 with gain  3: U' F' D' B L' B' D F L' B' U B L 
-At idx  1789: alg improved to length 13 with gain  4: B2 L2 R2 F D B D' F D B R2 L2 F2 
-At idx  1802: alg improved to length 13 with gain  4: R B2 R' U' L F U' F' R L2 B' R' L 
-At idx  1803: alg improved to length 13 with gain  3: F2 U' F2 U B L2 D' B2 U B2 L2 D B' 
-At idx  1811: alg improved to length 13 with gain  1: R B L' B' R' U2 L U2 L U2 F' L' F 
-At idx  1814: alg improved to length 13 with gain  5: R D' R' U R2 U' R2 U' R2 U2 R' D R' 
-At idx  1821: alg improved to length 13 with gain  2: U R' F2 R U' F U R' D' F' D R F' 
-At idx  1823: alg improved to length 13 with gain  1: L' U' R2 B U R' B R U' B' R2 U L 
-At idx  1825: alg improved to length 13 with gain  2: U' F' U' F U' F2 B L F L' B' U2 F 
-At idx  1836: alg improved to length 13 with gain  1: U2 B2 U2 R B' R' U2 L2 F' L' F L' B2 
-At idx  1843: alg improved to length 13 with gain  2: L R' F2 U F2 U' F' U2 F' U' R U' L' 
-At idx  1845: alg improved to length 13 with gain  4: F L2 R' F' R F L2 U2 L F' L' U2 F' 
-At idx  1857: alg improved to length 13 with gain  1: U' F R B R' F' R L U' L' U B' R' 
-At idx  1858: alg improved to length 13 with gain  3: F U2 F' U2 F R' U2 B' R' B U2 R F' 
-At idx  1859: alg improved to length 13 with gain  3: U F' L F2 R2 F L' F' R2 F' R U2 R' 
-At idx  1863: alg improved to length 13 with gain  5: U R' U2 B' U' B U' L2 D F' D' R L2 
-At idx  1864: alg improved to length 13 with gain  3: L' B2 L' F2 R D2 B2 R2 F' R F2 L2 F 
-At idx  1876: alg improved to length 13 with gain  2: L F' L' U L2 D2 R B R' D2 L2 U' F 
-At idx  1879: alg improved to length 13 with gain  5: F U R' U' F U L' F R F' L U' F2 
-At idx  1882: alg improved to length 13 with gain  4: U2 F L' U B2 F R' F' R B2 U' L F' 
-At idx  1891: alg improved to length 13 with gain  2: F' R F U' B U2 F U' B' U F2 R' F 
-At idx  1893: alg improved to length 13 with gain  6: F U F' R F R2 U' R2 U R2 U' F' R' 
-At idx  1894: alg improved to length 13 with gain  4: R U2 L' R' B' U F' U F U B U L 
-At idx  1900: alg improved to length 13 with gain  4: B' R B2 F' U2 B' U' R' U' R U F R2 
-At idx  1906: alg improved to length 13 with gain  3: B' R2 F' R' B R' U' R2 F2 R F' U R 
-At idx  1910: alg improved to length 13 with gain  3: U2 B' L F2 R2 F D' F' D R2 F2 L' B 
-At idx  1911: alg improved to length 13 with gain  2: U2 F' U2 F R' F R U F2 U F2 U2 F' 
-At idx  1915: alg improved to length 13 with gain  3: U R' F2 L F R2 L' D2 L2 B' L2 D2 R' 
-At idx  1924: alg improved to length 13 with gain  2: U B F' D' L2 D F L' B' U' B L B' 
-At idx  1929: alg improved to length 13 with gain  2: U L R D2 B L' U2 L B' D2 L' U2 R' 
-At idx  1935: alg improved to length 13 with gain  2: U B D' B U B' U' D B' U L' B' L 
-At idx  1939: alg improved to length 13 with gain  2: R U2 R' U L U' R U L2 U R' U' L 
-At idx  1946: alg improved to length 13 with gain  4: L' B' R' B L B' R2 B R' U2 R' U2 R 
-At idx  1950: alg improved to length 13 with gain  6: R B' L U2 R' F R' L2 D2 L2 F' R L' 
-At idx  1966: alg improved to length 13 with gain  3: U R B L' U2 F' L' F U2 L U2 B' R' 
-At idx  1977: alg improved to length 13 with gain  2: R U B U' B D2 F L F' D2 B R' B 
-At idx  1998: alg improved to length 13 with gain  3: F R' F' U' F R2 U' R2 U2 R2 U R' F' 
-At idx  2003: alg improved to length 13 with gain  7: R' U2 F L2 R U R' U' L2 F2 U2 F R 
-At idx  2013: alg improved to length 13 with gain  5: R' U' R2 B L' B' R' B L2 U2 L' U' B' 
-At idx  2015: alg improved to length 13 with gain  1: U F2 R F U2 F' R' F U2 F L' U2 L 
-At idx  2029: alg improved to length 13 with gain  4: U B U2 R D B D' R2 U2 R B U' B2 
-At idx  2049: alg improved to length 13 with gain  4: F D B2 D R B' D' B' D' F2 L U2 F 
-At idx  2050: alg improved to length 13 with gain  1: U' B U2 R U' L' U R' U' L2 U' L' B' 
-At idx  2054: alg improved to length 13 with gain  3: U' B U B' U R2 F R2 F' U2 F' U2 F 
-At idx  2063: alg improved to length 13 with gain  1: U B U B' R2 D' L F L' D R U2 R 
-At idx  2064: alg improved to length 13 with gain  1: B2 D' F2 R F' R F R2 F2 D B U2 B 
-At idx  2085: alg improved to length 13 with gain  2: R B L U' L' B' L' U' B U B' R' L 
-At idx  2088: alg improved to length 13 with gain  2: F' R2 B' R' B R2 F' R F2 U' L' U' L 
-At idx  2099: alg improved to length 13 with gain  2: L U L' U' R' F2 L F2 R U2 F' L' F 
-At idx  2105: alg improved to length 13 with gain  2: U2 F R U R' U' F2 L2 B L B' L F 
-At idx  2128: alg improved to length 13 with gain  3: R B2 L' B' L U' B' U2 R' U' F' U2 F 
-At idx  2129: alg improved to length 13 with gain  3: R B2 D B' U' B D' B2 U R' F' U F 
-At idx  2148: alg improved to length 13 with gain  5: F U2 F2 U' F' U' F2 U F U L F L' 
-At idx  2149: alg improved to length 13 with gain  5: L F U R' F R' D' B2 D R2 F2 U' L 
-At idx  2157: alg improved to length 13 with gain  1: R U R F2 L2 D' L B2 L' D L2 F2 R2 
-At idx  2158: alg improved to length 13 with gain  5: B' U2 F' L' B2 L' B2 D' B D L2 F B 
-At idx  2166: alg improved to length 13 with gain  2: R2 U' F' R2 F' D F R2 F' D' F2 U R2 
-At idx  2171: alg improved to length 13 with gain  4: U2 F R F' L2 D' B' D L2 F U2 R' F' 
-At idx  2174: alg improved to length 13 with gain  2: L' B' R B' R' B2 L F' L' U' L U F 
-At idx  2175: alg improved to length 13 with gain  7: B2 F R F' R2 B R' F' U2 F2 R' F' B 
-At idx  2176: alg improved to length 13 with gain  3: U2 F' U' F2 D' F L F L' U F' D F2 
-At idx  2192: alg improved to length 13 with gain  4: L F' R2 B' F2 U' R U F2 B R2 F L' 
-At idx  2201: alg improved to length 13 with gain  3: U2 B' U' B L2 U F U' F' L2 B' U B 
-At idx  2210: alg improved to length 13 with gain  1: U F U F' L F2 R' F' R F' L2 U L 
-At idx  2226: alg improved to length 13 with gain  2: R U2 R' U' R2 U B' U' R' U B U2 R' 
-At idx  2229: alg improved to length 13 with gain  2: U F' U2 R' F2 U F2 U' F2 U' R U' F 
-At idx  2243: alg improved to length 13 with gain  1: U B' U' B R2 U B' R' B' R B2 U' R2 
-At idx  2251: alg improved to length 13 with gain  1: U2 L' B' U' F R' U R U' F' B U L 
-At idx  2260: alg improved to length 13 with gain  5: R' F' R2 B2 L2 B' L' U2 L' B' R' U2 F 
-At idx  2276: alg improved to length 13 with gain  3: R U L2 R D R D' R L2 U L F2 L' 
-At idx  2277: alg improved to length 13 with gain  4: U' L' U2 R B' R2 U2 R B R' U2 R L 
-At idx  2291: alg improved to length 13 with gain  3: U R2 F U2 L F L' U2 R F' B' R B 
-At idx  2307: alg improved to length 13 with gain  1: U2 R B U B' U' R' F R U R' U' F' 
-At idx  2316: alg improved to length 13 with gain  3: U' B' L' B U' B' U2 B U' B' U' L B 
-At idx  2318: alg improved to length 13 with gain  1: F U' R2 F2 D' L F' L' D F2 R' U2 R' 
-At idx  2321: alg improved to length 13 with gain  3: U2 R B R2 D2 L F D L2 D R U' F2 
-At idx  2323: alg improved to length 13 with gain  4: F' L F2 U F' U L B L2 B' L U2 L' 
-At idx  2342: alg improved to length 13 with gain  1: U' L R F U2 F' R' L' B2 D' R2 D B2 
-At idx  2346: alg improved to length 13 with gain  4: U F' L2 B L' D L D' L2 F L' B' L 
-At idx  2356: alg improved to length 13 with gain  4: B' R2 B' F L B R2 B' L' B2 R' F' R 
-At idx  2360: alg improved to length 13 with gain  1: U2 R U B' R2 F2 L D L' F2 R2 B R' 
-At idx  2361: alg improved to length 13 with gain  4: U F' R' F2 U F2 U F2 U2 F2 U R F 
-At idx  2369: alg improved to length 13 with gain  2: U2 F' U F2 D U R U' R' D' F2 U' F 
-At idx  2374: alg improved to length 13 with gain  5: B L U' L' R' U' R U R B' R2 U R 
-At idx  2390: alg improved to length 13 with gain  1: U' L F U' B R B' U B R' F' B' L' 
-At idx  2393: alg improved to length 13 with gain  2: B' U2 B L U' L U F U' F2 L' F L' 
-At idx  2407: alg improved to length 13 with gain  1: R' F' U' F U' F R2 F' R2 B U2 B' R 
-At idx  2423: alg improved to length 13 with gain  4: L' U2 R2 B' D L' B L D' B R2 U' L 
-At idx  2430: alg improved to length 13 with gain  4: U F U2 F2 U' F2 R U' R2 F' R2 U' R' 
-At idx  2431: alg improved to length 13 with gain  2: U2 L F U F' U' R' L' F' U' F U R 
-At idx  2438: alg improved to length 13 with gain  3: L' B' R' U2 R2 B R' U' R' U2 L U' R 
-At idx  2443: alg improved to length 13 with gain  3: B L2 D2 R F R' D2 B2 R B' R' B2 L2 
-At idx  2459: alg improved to length 13 with gain  3: B2 R2 B U' L F R' F' L' U B' R2 B2 
-At idx  2471: alg improved to length 13 with gain  5: B' U B L F2 U2 L F L' U2 F2 U' L' 
-At idx  2473: alg improved to length 13 with gain  2: U2 F U' B U' F2 D' L2 D F2 U2 F' B' 
-At idx  2483: alg improved to length 13 with gain  3: U R B U B' U' R' B' U' R' U R B 
-At idx  2488: alg improved to length 13 with gain  2: F U2 L' B' U2 R U2 R' U2 B L U2 F' 
-At idx  2489: alg improved to length 13 with gain  1: L U L' U R' U2 R B2 R B2 R2 U2 R 
-At idx  2497: alg improved to length 13 with gain  4: R U R F2 L2 D' R D2 R' D L2 F2 R2 
-At idx  2508: alg improved to length 13 with gain  3: U2 F' U R' U F2 U F2 U' F2 R U2 F 
-At idx  2528: alg improved to length 13 with gain  2: U2 L F' U2 R' F R U2 F L2 B L B' 
-At idx  2530: alg improved to length 13 with gain  3: U' B' R' U R F B L F' U' F L' F' 
-At idx  2546: alg improved to length 13 with gain  2: U F R2 D' F2 U' L' U' L F2 D R' F' 
-At idx  2548: alg improved to length 13 with gain  5: R B2 L D2 R F R' D2 L B' L2 B' R' 
-At idx  2555: alg improved to length 13 with gain  2: U2 F' U B2 U' R D L2 D L D2 R' F 
-At idx  2566: alg improved to length 13 with gain  1: L' U' L U2 F U' F' L' U2 B L' B' L2 
-At idx  2568: alg improved to length 13 with gain  3: U2 L' U2 R B' R2 U2 R B R' U2 R L 
-At idx  2574: alg improved to length 13 with gain  2: F2 D' B L' B' D F U2 F U2 R U2 R' 
-At idx  2575: alg improved to length 13 with gain  2: U F2 R' D' F2 L F' L' D F2 R U' F' 
-At idx  2592: alg improved to length 13 with gain  4: R U B2 U2 B' F' U B U' F U2 B2 R' 
-At idx  2598: alg improved to length 13 with gain  1: U R B U B' U' B U' B' R' F' U F 
-At idx  2601: alg improved to length 13 with gain  2: U F R' F' R U2 R2 D R' U2 R D' R2 
-At idx  2607: alg improved to length 13 with gain  1: U2 R U B U L' B L B2 R' F' U2 F 
-At idx  2621: alg improved to length 13 with gain  2: F' L' U L F U R2 D L' B2 L D' R2 
-At idx  2645: alg improved to length 13 with gain  3: R' U2 R2 U R2 F' U F R2 B U' B' R' 
-At idx  2647: alg improved to length 13 with gain  3: U L F2 R' F' R F' U L' U L U2 L' 
-At idx  2664: alg improved to length 13 with gain  1: U F D2 L B2 R B R' L' D2 R' F' R2 
-At idx  2677: alg improved to length 13 with gain  3: R' F R B F2 D L2 D' B2 U B U2 F 
-At idx  2689: alg improved to length 13 with gain  4: R' B U' L2 R' D' F2 D R L2 U B' R 
-At idx  2690: alg improved to length 13 with gain  4: R' B L2 R' F L' F' R L F' L2 B' R 
-At idx  2695: alg improved to length 13 with gain  2: B U' R' F2 D' L D F2 R L U' L' B' 
-At idx  2709: alg improved to length 13 with gain  4: U' B L2 D' B2 U' R' U' R B2 D L' B' 
-At idx  2717: alg improved to length 13 with gain  1: U R' U' F R B R' F' R L U L' B' 
-At idx  2719: alg improved to length 13 with gain  2: R' U' F U F2 U F2 U2 F' R B U' B' 
-At idx  2724: alg improved to length 13 with gain  3: U2 B2 U B' U' L U2 B U2 B' L' U B' 
-At idx  2737: alg improved to length 13 with gain  5: R' F' L' U2 L2 F' L' F2 R U' R' U R 
-At idx  2738: alg improved to length 13 with gain  2: R' F' U F R U B U' B' U B U2 B' 
-At idx  2744: alg improved to length 13 with gain  3: B' R2 U2 R' U R' U' R2 U R' U R2 B 
-At idx  2745: alg improved to length 13 with gain  4: F' D' L B' U2 B2 L' B2 U2 B L' D F 
-At idx  2748: alg improved to length 13 with gain  3: L' U L2 F' L D' B L B' L2 D L' F 
-At idx  2764: alg improved to length 13 with gain  4: R B2 L' B R' B2 L2 U F U2 F' L' B' 
-At idx  2773: alg improved to length 13 with gain  3: R' U2 R U B U B' R2 F R F' U R 
-At idx  2776: alg improved to length 13 with gain  1: R U R U' R2 U R F R F' B U2 B' 
-At idx  2780: alg improved to length 13 with gain  6: R' F' U' F2 U R U' R2 F' R2 B U2 B' 
-At idx  2783: alg improved to length 13 with gain  1: U R B U B' U' R' F U R U' R' F' 
-At idx  2788: alg improved to length 13 with gain  1: U B' U R' U R U R B' R' B U2 B 
-At idx  2790: alg improved to length 13 with gain  3: F' U' L F' L' F2 R2 D L' B L D' R2 
-At idx  2803: alg improved to length 13 with gain  2: R B2 L2 D2 R F2 L D2 R' B R' B L 
-At idx  2807: alg improved to length 13 with gain  3: U R' F' U' F U' R B' R B R2 U2 R 
-At idx  2810: alg improved to length 13 with gain  3: B' R B U B' R' B R2 B' R' B U' R' 
-At idx  2818: alg improved to length 13 with gain  1: R2 B' D' R2 F R' F' D R2 B2 U' B' R' 
-At idx  2819: alg improved to length 13 with gain  3: U2 B U' F U F2 L F L' B' L' U L 
-At idx  2824: alg improved to length 13 with gain  2: U2 R' B' U R U R' U2 R U R' B R 
-At idx  2832: alg improved to length 13 with gain  3: B' U2 B2 L' B' L B2 D' B U2 B' D B2 
-At idx  2834: alg improved to length 13 with gain  4: R' U' F' U2 L U L2 U L2 U2 L' F R 
-At idx  2842: alg improved to length 13 with gain  1: U R B' D' B' D B' L2 U' L2 U B' R' 
-At idx  2870: alg improved to length 13 with gain  4: L' B L2 B U L' U L U2 B' L2 B' L 
-At idx  2892: alg improved to length 13 with gain  4: U L2 B2 L' F' L F2 R' F R F2 B2 L2 
-At idx  2900: alg improved to length 13 with gain  3: U2 R' D' L F' L' D R2 B U2 B' U' R' 
-At idx  2907: alg improved to length 13 with gain  2: F' U2 F U2 F R' F' U2 R U R' U R 
-At idx  2910: alg improved to length 13 with gain  1: U L U F' U' F R L' B U2 B' U' R' 
-At idx  2923: alg improved to length 13 with gain  1: R' B L U' F' U F B' R2 B L' B' R' 
-At idx  2930: alg improved to length 13 with gain  3: F2 D' F2 D B' R2 D R2 D' B R2 U' R2 
-At idx  2931: alg improved to length 13 with gain  2: R' F2 D R' B2 D L2 D' B2 R D' F2 R 
-At idx  2934: alg improved to length 13 with gain  1: U' R U2 R' U F' U' L' B' U2 B L F 
-At idx  2943: alg improved to length 13 with gain  1: L' B' R' U2 R U R' U2 R U' B U L 
-At idx  2948: alg improved to length 13 with gain  1: F2 L' U L U L' U' L F2 U2 R U' R' 
-At idx  2950: alg improved to length 13 with gain  3: U' F' D' B L' B' D F2 R U2 R' U' F' 
-At idx  2961: alg improved to length 13 with gain  2: U L R2 F L F' R2 F2 L' F L F2 L2 
-At idx  2991: alg improved to length 13 with gain  3: U R2 U2 B' R' B R2 U R2 U R U2 R 
-At idx  3014: alg improved to length 13 with gain  6: F R B2 U2 B2 R B' R' B' U2 B2 R' F' 
-At idx  3019: alg improved to length 13 with gain  1: U B' U2 B L F U F' L' U B' U B 
-At idx  3022: alg improved to length 13 with gain  2: U' R D' B L R2 U' L' U R2 B' D R' 
-At idx  3027: alg improved to length 13 with gain  4: U L F R U2 R' F' L' U2 B L' B' L 
-At idx  3038: alg improved to length 13 with gain  2: L' B' R' B2 D2 L2 F2 L F2 L D2 B' L 
-At idx  3039: alg improved to length 13 with gain  4: R B' L2 R' F R' F' L2 F R' B R2 F' 
-At idx  3042: alg improved to length 13 with gain  2: U L F' L' B L' F L2 B' U2 B L' B' 
-At idx  3043: alg improved to length 13 with gain  3: F' L D R2 D' L2 U' L U D R2 D' F 
-At idx  3044: alg improved to length 13 with gain  1: U R B' R' B U B U' L U L' U' B' 
-At idx  3066: alg improved to length 13 with gain  3: B' U2 B U2 R' F U2 L2 F' L2 U2 F' R 
-At idx  3067: alg improved to length 13 with gain  1: U R' U' F' U F R F' L' U' L U F 
-At idx  3068: alg improved to length 13 with gain  3: U B' R2 F R F2 R B R' U' F U R 
-At idx  3079: alg improved to length 13 with gain  3: U' B U L U' F L' B' L U F' U' L' 
-At idx  3083: alg improved to length 13 with gain  2: U2 F' U' F U2 R U B L U2 L' B' R' 
-At idx  3084: alg improved to length 13 with gain  3: R' F' L F2 R F2 L2 U2 B' U2 B L F 
-At idx  3094: alg improved to length 13 with gain  2: F U R F' L2 D' B2 D L2 F U2 R' F' 
-At idx  3104: alg improved to length 13 with gain  3: U2 F R2 U B' D B U' B2 D' B2 R2 F' 
-At idx  3110: alg improved to length 13 with gain  3: R B L U' L' B' U2 R' F' L' U L F 
-At idx  3112: alg improved to length 13 with gain  4: U L2 B2 R' F R' D2 R2 B2 R' F' R L2 
-At idx  3117: alg improved to length 13 with gain  2: U' R U B' R2 F R' B R F' R2 U' R' 
-At idx  3122: alg improved to length 13 with gain  5: F' L2 B L' F L2 B2 U2 R' U2 R B L 
-At idx  3128: alg improved to length 13 with gain  2: U R B' R F2 R' B2 U B' U' R F2 R2 
-At idx  3129: alg improved to length 13 with gain  4: R2 D2 L2 D' L' B2 L D' R D2 L2 D2 R 
-At idx  3132: alg improved to length 13 with gain  5: F' U2 B L U B L2 B' U' L' B' U' F 
-At idx  3133: alg improved to length 13 with gain  2: F' U2 F R B U' L U2 L2 B L B2 R' 
-At idx  3141: alg improved to length 13 with gain  4: U2 B L' B' R B' L B2 R' U2 R B' R' 
-At idx  3144: alg improved to length 13 with gain  1: B L2 B2 U2 L' B L' B' L2 U2 B2 L2 B' 
-At idx  3149: alg improved to length 13 with gain  3: F' U2 F2 U L' R U2 R' U L F2 U' F' 
-At idx  3196: alg improved to length 13 with gain  2: U L2 U2 B' R' F' U' F R U B U' L2 
-At idx  3205: alg improved to length 13 with gain  3: U' B' R B2 L2 B R' B' L2 B' L U2 L' 
-At idx  3212: alg improved to length 13 with gain  2: R U R' U' B' U F' U' B L' U' L F 
-At idx  3222: alg improved to length 13 with gain  4: U2 L' F' L2 U L2 U' L' U2 L' U' F L 
-At idx  3223: alg improved to length 13 with gain  4: U B F2 D2 F2 L' B' L F2 B D2 F2 B' 
-At idx  3224: alg improved to length 13 with gain  3: B2 D F2 D R B' D2 B' U2 F2 L' U' L2 
-At idx  3228: alg improved to length 13 with gain  3: U R U2 F' L2 B' L2 F' R' L D2 F2 L' 
-At idx  3237: alg improved to length 13 with gain  2: U B' U2 B2 U B2 U B R2 F R F' R 
-At idx  3242: alg improved to length 13 with gain  4: R' F2 U' F2 L F L' F' U' F' U2 F2 R 
-At idx  3247: alg improved to length 13 with gain  2: R U B R' U L2 U' R U L2 U2 B' R' 
-At idx  3254: alg improved to length 13 with gain  3: R U R2 D B U' R' U B' D' F' R F 
-At idx  3271: alg improved to length 13 with gain  2: U2 L R' U' R U L' F R B' R' F' B 
-At idx  3275: alg improved to length 13 with gain  1: U2 B U2 B' U' R' U R B L U' L' B' 
-At idx  3277: alg improved to length 13 with gain  3: F' L F2 L' F R D2 L' B U2 L D2 R' 
-At idx  3278: alg improved to length 13 with gain  4: B' U F R' B2 D' F D' L' F' D2 F' B' 
-At idx  3282: alg improved to length 13 with gain  1: R U B' L' F2 L B2 L' F2 L U' B' R' 
-At idx  3285: alg improved to length 13 with gain  2: U' L' U' L U' F2 R' L2 F' R F L2 F2 
-At idx  3286: alg improved to length 13 with gain  1: L' U2 B' U B U2 L2 F' L' F L' U' L 
-At idx  3288: alg improved to length 13 with gain  2: R U B' R B2 F2 U B' U' F2 R' U' R' 
-At idx  3296: alg improved to length 13 with gain  5: F2 R2 F L2 B D' B D B2 L2 F' R2 F2 
-At idx  3300: alg improved to length 13 with gain  1: U2 B U L2 D R' F2 R D' L' U L' B' 
-At idx  3308: alg improved to length 13 with gain  3: U L' B' U R' U R2 B2 L' B R' B2 L2 
-At idx  3319: alg improved to length 13 with gain  4: F' R D2 F U B U B' U2 F' D2 R' F 
-At idx  3322: alg improved to length 13 with gain  3: U B' R2 F D' R' D R F' R2 B2 U' B' 
-At idx  3331: alg improved to length 13 with gain  2: R' F' U F R U B U F' U B' U' F 
-At idx  3334: alg improved to length 13 with gain  3: R U R2 B2 R2 U' R' U' F2 L' D2 L F2 
-At idx  3337: alg improved to length 13 with gain  3: U2 B2 U R F2 L' D2 L F2 R' B2 U' B2 
-At idx  3342: alg improved to length 13 with gain  4: R' U2 B U2 R2 D B2 D' R2 U2 B' U' R 
-At idx  3361: alg improved to length 13 with gain  1: U' F' L' B L F L2 B' L2 U' F U' F' 
-At idx  3372: alg improved to length 13 with gain  3: B' U' B2 L F' L2 B' D' L' D L' F L' 
-At idx  3376: alg improved to length 13 with gain  3: F' U2 F L F L' F' D R U2 R' D' F 
-At idx  3381: alg improved to length 13 with gain  2: F' L' F R' F' L U F R U B U2 B' 
-At idx  3388: alg improved to length 13 with gain  3: B L U R' F U' F' U2 L' U' R U' B' 
-At idx  3417: alg improved to length 13 with gain  3: B' U2 L' U' L U L' B2 L' B2 L2 U2 B 
-At idx  3421: alg improved to length 13 with gain  2: B U' F' U L2 B' R B L2 B' R' U' F 
-At idx  3430: alg improved to length 13 with gain  1: R U R F2 L' B2 L' D' L B2 L F2 R2 
-At idx  3433: alg improved to length 13 with gain  2: U2 R' D2 L2 F' L' F D L2 D R U' F2 
-At idx  3441: alg improved to length 13 with gain  3: L' B2 R B R2 U2 R B L U' F U' F' 
-At idx  3464: alg improved to length 13 with gain  2: R U' F U2 F' L2 B2 U' B U B2 R' L2 
-At idx  3470: alg improved to length 13 with gain  2: R U R' U R U2 R' L' U' B' U B L 
-At idx  3478: alg improved to length 13 with gain  1: L F U L' B2 D' R2 D B2 L U2 F' L' 
-At idx  3482: alg improved to length 13 with gain  1: U F' U2 F2 R2 U F2 U F2 U' R2 U' F' 
-At idx  3485: alg improved to length 13 with gain  3: U2 F R B' U2 L' B' L U2 B U2 R' F' 
-At idx  3494: alg improved to length 13 with gain  2: R' U2 B U2 F2 D' L2 D F2 U B' U' R 
-At idx  3503: alg improved to length 13 with gain  1: F U F' U F' U' F U' F' U2 L F L' 
-At idx  3530: alg improved to length 13 with gain  4: L2 B' R2 F' R F' R' F R2 B L' U2 L' 
-At idx  3536: alg improved to length 13 with gain  1: B' D L U B L' B2 U' B D' R' U2 R 
-At idx  3540: alg improved to length 13 with gain  1: U2 R' U F' U F R U' R' F R' F' R2 
-At idx  3543: alg improved to length 13 with gain  2: R2 U R' U' R' F R B U' B' U F' R' 
-At idx  3548: alg improved to length 13 with gain  1: F L U' R U R' U' F' U F U L' F' 
-At idx  3553: alg improved to length 13 with gain  3: F R2 F' U F2 R2 F2 U F U2 F R2 F2 
-At idx  3559: alg improved to length 13 with gain  3: L2 B2 L2 U L' B2 L U' L2 B2 L U L 
-At idx  3566: alg improved to length 13 with gain  2: U F R' F' R U2 R2 D L' B2 L D' R2 
-At idx  3570: alg improved to length 13 with gain  3: U' L' U F D' R2 D F' U2 B U B2 L 
-At idx  3585: alg improved to length 13 with gain  4: U2 L U F' D F2 U' F D' F2 L2 U2 L 
-At idx  3592: alg improved to length 13 with gain  2: U F U F' U F2 L2 B L B' L2 F2 L' 
-At idx  3599: alg improved to length 13 with gain  3: F R B U2 B' U' B U B' U2 R' U' F' 
-At idx  3606: alg improved to length 13 with gain  2: U' B U L B U' F' U B' U' F L' B' 
-At idx  3615: alg improved to length 13 with gain  3: U' F2 L2 B L B' L2 F2 L' U' L' U L 
-At idx  3623: alg improved to length 13 with gain  3: F2 R2 D2 L B L' D' R D' R F' U2 F' 
-At idx  3645: alg improved to length 13 with gain  1: U2 F' D' B' U2 B2 D F' D' B' L2 D F2 
-At idx  3651: alg improved to length 13 with gain  4: F U R' U2 B2 L2 D2 L D2 L B2 U F' 
-At idx  3653: alg improved to length 13 with gain  3: U B F' U' L' U' L U B' L' U L F 
-At idx  3659: alg improved to length 13 with gain  3: F' U' F' D' U' F R U2 R' F' U D F2 
-At idx  3673: alg improved to length 13 with gain  3: F' U' L' U L F2 R2 B' R2 F' R B R' 
-At idx  3676: alg improved to length 13 with gain  2: B' U2 R U R2 B' R' B R2 U' R' U2 B 
-At idx  3678: alg improved to length 13 with gain  1: U R' F' U2 F U' R B' R B R2 U' R 
-At idx  3694: alg improved to length 13 with gain  3: R2 U' R2 U' R2 U F U F' R2 F U' F' 
-At idx  3700: alg improved to length 13 with gain  1: R U2 R2 U' R2 U' R2 U2 F' U' F U R 
-At idx  3707: alg improved to length 13 with gain  2: R B2 L2 D2 F2 R F R' F D2 L2 B2 R' 
-At idx  3717: alg improved to length 13 with gain  1: L D R' F R D' L2 U2 B' U2 B U L 
-At idx  3728: alg improved to length 13 with gain  5: U L' U' L U2 F2 U R U' R2 F' R F' 
-At idx  3735: alg improved to length 13 with gain  5: L' B L B' L2 F' L' F L' U B' U' B 
-At idx  3738: alg improved to length 13 with gain  3: F U R' U2 B' U F' U' B U2 F R F' 
-At idx  3742: alg improved to length 13 with gain  3: U F2 L B L' F B' L' B L2 B' L2 F 
-At idx  3749: alg improved to length 13 with gain  1: U2 R' B' U' R2 U R' B R' U' R U R2 
-At idx  3757: alg improved to length 13 with gain  2: F U R' D U2 L' B2 L B2 U B2 D' F' 
-At idx  3762: alg improved to length 13 with gain  4: R U R U' R' F U R2 U' F' R' U R 
-At idx  3764: alg improved to length 13 with gain  4: U' F' U' L' U2 L F' B D' L' D F2 B' 
-At idx  3773: alg improved to length 13 with gain  1: U L2 F2 R' D F D' F2 R F2 L' F L' 
-At idx  3784: alg improved to length 13 with gain  3: U2 L' F U2 L U' R U2 L' U R' F' L 
-At idx  3785: alg improved to length 13 with gain  2: U F2 L F D2 F B R' F' R2 B' D2 L' 
-At idx  3813: alg improved to length 13 with gain  3: F2 R2 B' F' R B R' F R2 B' R F2 B 
-At idx  3816: alg improved to length 13 with gain  3: B2 D F' L' F D' B' U L U2 L' U' B' 
-At idx  3842: alg improved to length 13 with gain  2: L U F U2 R U' R2 F' L F2 R F2 L2 
-At idx  3851: alg improved to length 13 with gain  3: B2 D' B U2 B' D B U' F U' B U F' 
-At idx  3864: alg improved to length 13 with gain  6: U F U F2 U2 L D' L' U2 L2 D L2 F 
-At idx  3867: alg improved to length 13 with gain  3: B L B' U2 B L' B2 D2 F R' F' D2 B 
-At idx  3872: alg improved to length 13 with gain  4: U2 B' U' R2 D' R U R2 D2 B' D' B2 R' 
-At idx  3890: alg improved to length 13 with gain  4: R' U2 R U2 R U2 F R' F' U2 R2 U2 R 
-At idx  3909: alg improved to length 13 with gain  3: R D2 L' B L2 B2 L2 B L2 B L' D2 R' 
-At idx  3913: alg improved to length 13 with gain  1: U B' U' B U' L F U' R U2 R' F' L' 
-At idx  3927: alg improved to length 13 with gain  1: F' L' F U R' U' F' U2 L U2 F U R 
-At idx  3943: alg improved to length 13 with gain  4: B L B2 D2 F R F' U F U' F' D2 B 
-At idx  3952: alg improved to length 13 with gain  4: L2 B L F' D L D' F B2 U' B U' L 
-At idx  3962: alg improved to length 13 with gain  1: L' U2 F R U R' U B' U' B U2 F' L 
-At idx  3972: alg improved to length 13 with gain  5: R B U B' U R' L' B' R2 B' R2 B2 L 
-At idx  3974: alg improved to length 13 with gain  3: L U F' U' L2 D2 L U L' D2 L2 F L' 
-At idx  3976: alg improved to length 13 with gain  3: R D' R2 F2 D' B L2 B' D F2 R2 D R' 
-At idx  3983: alg improved to length 13 with gain  2: U' R' F R2 B2 L' D L B2 R2 F' U R 
-At idx  3984: alg improved to length 13 with gain  3: F R2 B' R' B R' F2 U2 F U F' U F 
-At idx  3997: alg improved to length 13 with gain  4: R' F R F U2 R' F' R U2 F2 R U2 R' 
-At idx  4010: alg improved to length 13 with gain  3: U2 R' F2 L F L' F2 R' F' R2 B U2 B' 
-At idx  4016: alg improved to length 13 with gain  1: U B' U' R2 F R' B' R F' R2 B U B 
-At idx  4023: alg improved to length 13 with gain  4: F U2 F2 D' U R B2 L' B2 R' U D F 
-At idx  4026: alg improved to length 13 with gain  4: U2 F' U' F2 U2 R' D R U2 R2 D' R2 F' 
-At idx  4030: alg improved to length 13 with gain  1: F R2 B2 D B R D2 R' D B R F' R 
-At idx  4063: alg improved to length 13 with gain  4: U2 R' U' R U' B U' B' U' R B' R' B 
-At idx  4074: alg improved to length 13 with gain  2: U2 B' R B2 U B2 R B R U R2 U2 R' 
-At idx  4077: alg improved to length 13 with gain  2: F2 L2 F U' L U F' L2 F2 U2 R U' R' 
-At idx  4109: alg improved to length 13 with gain  3: U F U F2 L2 B2 L' F L B2 L U L 
-At idx  4112: alg improved to length 13 with gain  1: U R B2 U2 R B R' B' U' B U' B2 R' 
-At idx  4113: alg improved to length 13 with gain  3: B L2 F2 D F D' F' D F D' F L2 B' 
-At idx  4115: alg improved to length 13 with gain  5: B L' B L B2 R U B U' B' R2 U R 
-At idx  4151: alg improved to length 13 with gain  1: U L F U2 R' F' L F2 R F L' F L' 
-At idx  4161: alg improved to length 13 with gain  2: U L U F2 D F' U2 F D' F' U F' L' 
-At idx  4175: alg improved to length 13 with gain  5: U' L F U' F' R' L' B' R U R' B R 
-At idx  4195: alg improved to length 13 with gain  3: U R' F R F' U' F' U L' U' L U F 
-At idx  4201: alg improved to length 13 with gain  4: U' B' R B' R' B2 R' U L U' R U2 L' 
-At idx  4205: alg improved to length 13 with gain  3: U' L' B R2 F D B D' F' B' R2 B' L 
-At idx  4206: alg improved to length 13 with gain  2: R2 D' R2 U R' D R2 B2 U2 B' U' B' R' 
-At idx  4207: alg improved to length 13 with gain  3: U2 R2 F2 L F L' F2 R2 F' U' F' U F 
-At idx  4214: alg improved to length 13 with gain  5: L' U2 L U' R B U B' U2 L' U R' L 
-At idx  4225: alg improved to length 13 with gain  2: F U2 F' U B' U2 F R' U' R F' U2 B 
-At idx  4226: alg improved to length 13 with gain  3: R B' R B R2 U' R' D' L F' L' D R 
-At idx  4237: alg improved to length 13 with gain  3: R U' R B2 L' R' B2 U R' U' L2 U2 L' 
-At idx  4240: alg improved to length 13 with gain  2: L D R U' R U D' F2 L D2 R' D2 L2 
-At idx  4243: alg improved to length 13 with gain  2: U F2 L2 U F' R F U' F' R' F L2 F2 
-At idx  4247: alg improved to length 13 with gain  3: U R B U L B' R' B L' B' R U' R' 
-At idx  4248: alg improved to length 13 with gain  4: R B2 U' B U2 L' B2 L U2 B' U B2 R' 
-At idx  4283: alg improved to length 13 with gain  1: U' R U2 B U' B U L U' L' B2 U2 R' 
-At idx  4289: alg improved to length 13 with gain  2: R U2 R' U2 B U B2 R B U' R2 U2 R 
-At idx  4304: alg improved to length 13 with gain  2: U' L' U L2 D U F U' F' D' L2 U' L 
-At idx  4305: alg improved to length 13 with gain  6: R' U' F' U2 L' U' R U' L U R' F R 
-At idx  4311: alg improved to length 13 with gain  1: L F' L F' R B R2 F D2 L2 F2 R F' 
-At idx  4315: alg improved to length 13 with gain  3: R U' R' U R2 U2 F R2 F' U2 R' U2 R' 
-At idx  4322: alg improved to length 13 with gain  4: U' L U' F' U2 R' F R U2 F2 U' F' L' 
-At idx  4328: alg improved to length 13 with gain  1: U B' U2 B F' L U L2 U L2 U' L' F 
-At idx  4334: alg improved to length 13 with gain  5: U2 L U F U F' R' L D F2 D' R L2 
-At idx  4343: alg improved to length 13 with gain  2: U2 R' F' L F R F2 L' F2 U' R U' R' 
-At idx  4374: alg improved to length 13 with gain  1: F' U2 F' U' R' D2 B' L' B D' R' D' R2 
-At idx  4413: alg improved to length 13 with gain  5: F' U2 F U2 B U' L F' U F L' U B' 
-At idx  4416: alg improved to length 13 with gain  1: B' U2 B L U' R B U B' U2 L' U R' 
-At idx  4417: alg improved to length 13 with gain  2: U2 F' U B D' U' L2 D F2 U2 B' U F' 
-At idx  4419: alg improved to length 13 with gain  1: U F' U B U' F2 U F' B' U2 F U F' 
-At idx  4421: alg improved to length 13 with gain  2: F2 R B' R2 F D2 F' D2 R F2 R B R' 
-At idx  4432: alg improved to length 13 with gain  3: U L2 F2 R' F' R F' L B L B2 U2 B 
-At idx  4448: alg improved to length 13 with gain  1: U' L' F D2 B' D' B2 D' F' U R2 U' L 
-At idx  4451: alg improved to length 13 with gain  5: F2 R F' R U2 R U2 R' B U2 B' R F' 
-At idx  4455: alg improved to length 13 with gain  5: R U' L' B2 U B U2 B U B2 R' U' L 
-At idx  4482: alg improved to length 13 with gain  3: U2 R' U2 R2 B' R' B' L F' L F L2 B2 
-At idx  4483: alg improved to length 13 with gain  2: L U L F' L2 U L F R U' R' U2 L' 
-At idx  4495: alg improved to length 13 with gain  1: U R' U2 R2 U R2 F' U F2 R F2 U F 
-At idx  4497: alg improved to length 13 with gain  4: R U2 R2 U' B' R2 F' B U' F R2 U' R' 
-At idx  4507: alg improved to length 13 with gain  3: F R2 D2 B D2 R F' U' R2 D B2 D' R' 
-At idx  4519: alg improved to length 13 with gain  1: L' U' B' U B U' B U L U' L' B' L 
-At idx  4530: alg improved to length 13 with gain  3: F' U2 F' U2 F2 R U R' F' U' R' F R 
-At idx  4534: alg improved to length 13 with gain  1: U F D' R2 D F' U2 B2 R B' R' U B2 
-At idx  4550: alg improved to length 13 with gain  1: U2 B2 U R' U R B U' B' R B' R' B' 
-At idx  4561: alg improved to length 13 with gain  3: R' B2 D L' U L' U' L D' B2 R' U R2 
-At idx  4566: alg improved to length 13 with gain  3: B L F' L2 F L2 B' U2 R B L' B' R' 
-At idx  4572: alg improved to length 13 with gain  5: R2 F R F2 U2 F2 U2 L F' L' U2 F' R 
-At idx  4573: alg improved to length 13 with gain  1: U B' U' R' U R B L U F U' F' L' 
-At idx  4584: alg improved to length 13 with gain  2: U B' R2 F R F' R2 B' R' B2 L U2 L' 
-At idx  4591: alg improved to length 13 with gain  4: F2 U' F U' F U F U2 B D' L2 D B' 
-At idx  4603: alg improved to length 13 with gain  4: L' U' B' U2 B U' L2 D R' F' R D' L' 
-At idx  4605: alg improved to length 13 with gain  3: U2 L F' L' F U F U' R U R' U' F' 
-At idx  4609: alg improved to length 13 with gain  1: L' B L B' U2 L F' L2 B L' F L2 B' 
-At idx  4613: alg improved to length 13 with gain  3: U' F' L2 D2 B' D B' D' B D2 L' F L' 
-At idx  4615: alg improved to length 13 with gain  1: F R U B' R F2 R' B R F2 R2 U' F' 
-At idx  4626: alg improved to length 13 with gain  1: F' U' B U2 B2 U' R' U R B2 U' F B' 
-At idx  4630: alg improved to length 13 with gain  1: R B2 U R B2 R' B' U' R' U2 R B' R' 
-At idx  4635: alg improved to length 13 with gain  4: R2 U F' U F U' B' R' F B R' F' R' 
-At idx  4651: alg improved to length 13 with gain  1: U R2 U2 F' U F U' F R F' R' U2 R2 
-At idx  4666: alg improved to length 13 with gain  5: U F' U2 R' D' F' D R2 U2 R' F' U F2 
-At idx  4670: alg improved to length 13 with gain  4: F U2 B2 R F R' F' B2 U2 B' R' F' B 
-At idx  4675: alg improved to length 13 with gain  3: U2 F' U2 F2 R' D R U R2 D' R2 U' F' 
-At idx  4677: alg improved to length 13 with gain  2: U L2 U' L U B' U2 L' U2 L B U' L 
-At idx  4678: alg improved to length 13 with gain  4: B' D2 L F' D F2 R' F2 D' F L' D2 B 
-At idx  4681: alg improved to length 13 with gain  2: U F' L F U F' U' L' F U' F' U2 F 
-At idx  4690: alg improved to length 13 with gain  3: U' B' D B2 U L2 U L2 B' U2 B2 D' B2 
-At idx  4694: alg improved to length 13 with gain  1: U F U2 F2 D' U' L' U L D F2 U' F' 
-At idx  4696: alg improved to length 13 with gain  2: B2 L2 B2 R' U' R U R B2 L2 B R' B 
-At idx  4698: alg improved to length 13 with gain  3: B U2 B2 U' R' U R2 B R' U' R' U2 R 
-At idx  4706: alg improved to length 13 with gain  3: R U' L' U2 R2 U' R' U' L U F2 R2 F2 
-At idx  4756: alg improved to length 13 with gain  3: R U2 R2 F2 L F L' F R U R U' R' 
-At idx  4766: alg improved to length 13 with gain  6: R2 F2 L2 B' D' B L D B D' L F2 R2 
-At idx  4778: alg improved to length 13 with gain  3: U2 B U2 L2 F U F' U' L' U L' U2 B' 
-At idx  4789: alg improved to length 13 with gain  2: U F' L2 B L2 F L2 F2 L B' L' F2 L2 
-At idx  4793: alg improved to length 13 with gain  4: U F' L F2 R2 B' D2 B R F2 L' F R 
-At idx  4796: alg improved to length 13 with gain  3: F R2 F2 L' U' L U R U2 R2 U2 R' F 
-At idx  4801: alg improved to length 13 with gain  4: F2 R' F' R U2 F' L' U' L U' F U2 F' 
-At idx  4815: alg improved to length 13 with gain  2: U2 R' U' F2 L F' R' F L' F2 R U R 
-At idx  4817: alg improved to length 13 with gain  4: R U R' F2 L U2 F' D F U2 D' L' F2 
-At idx  4843: alg improved to length 13 with gain  5: F' L F U2 B L2 B' U2 L' U' F U F' 
-At idx  4852: alg improved to length 13 with gain  3: U' B U' R' D F2 D' R U2 L' U' L2 B' 
-At idx  4855: alg improved to length 13 with gain  5: R2 F2 L2 B D2 B' L2 F2 R2 U' B U' B' 
-At idx  4856: alg improved to length 13 with gain  3: U2 R U2 F D R D' F2 U2 F R U' R2 
-At idx  4862: alg improved to length 13 with gain  4: U' R U2 R2 F R F2 L' B' U2 B L F 
-At idx  4869: alg improved to length 13 with gain  2: U2 R' U' R F2 U R' F' R' F R2 U' F2 
-At idx  4871: alg improved to length 13 with gain  1: R D2 L2 B L2 D2 R2 L' U L U' F R 
-At idx  4872: alg improved to length 13 with gain  3: U B2 R B L R D' F D R2 L' U' B 
-At idx  4874: alg improved to length 13 with gain  4: F R2 D2 L2 B L F' D2 R' B' R' U2 B' 
-At idx  4875: alg improved to length 13 with gain  2: F2 D R' D' F' R U2 F R F' R' U' F' 
-At idx  4892: alg improved to length 13 with gain  5: R U R2 F' U' F R2 B U' B' R2 U R 
-At idx  4894: alg improved to length 13 with gain  1: L' B2 R B L' D2 R D2 F D2 F' R2 L2 
-At idx  4895: alg improved to length 13 with gain  2: B L2 U B L B' U' L' B' U2 B L' B' 
-At idx  4915: alg improved to length 13 with gain  4: R U2 B F U2 F' U' F U' F' B' U2 R' 
-At idx  4917: alg improved to length 13 with gain  3: U2 L' U' B' U2 B L' D' R B' R' D L2 
-At idx  4927: alg improved to length 13 with gain  3: F2 D' B L2 B' D F2 U F' L' U L F 
-At idx  4938: alg improved to length 13 with gain  3: R' F D2 R B L B' R' D2 F2 R U2 F 
-At idx  4983: alg improved to length 13 with gain  4: U2 L' B L2 F2 R' D2 R F L2 B' L F 
-At idx  4984: alg improved to length 13 with gain  5: F U R' F R F2 R' L D F' D' R L' 
-At idx  4985: alg improved to length 13 with gain  3: L' U' L U2 R2 B2 L F' D F L' B2 R2 
-At idx  4986: alg improved to length 13 with gain  4: R U2 R' U' F' L' B' U' B U' L U F 
-At idx  4989: alg improved to length 13 with gain  2: U' R D2 L2 B L B' D' L2 D' R' U B2 
-At idx  4994: alg improved to length 13 with gain  3: F2 D R2 U' B2 R' D L2 D' R B2 R2 D' 
-At idx  4995: alg improved to length 13 with gain  3: R U R2 F' L F2 L' F2 R2 U2 R' U F 
-At idx  5022: alg improved to length 13 with gain  1: R2 B' D R D' R' B D B2 D B2 D2 R2 
-At idx  5027: alg improved to length 13 with gain  1: U R' U' F R2 F' R2 U' B U' B' U' R 
-At idx  5029: alg improved to length 13 with gain  3: U2 F2 L B L' F B' L' F U' B' U B 
-At idx  5034: alg improved to length 13 with gain  4: F' U' L' U L F2 U F2 L F L2 U L 
-At idx  5036: alg improved to length 13 with gain  1: U' L' U' B L2 B' L2 U' F U' F' U' L 
-At idx  5038: alg improved to length 13 with gain  3: B F' U' L2 U2 L2 U2 L' U' L' B' U' F 
-At idx  5042: alg improved to length 13 with gain  2: R U2 R' U F2 L2 F U' L' U F' L2 F2 
-At idx  5043: alg improved to length 13 with gain  3: U' B2 D F' L F D' F' L' B' L F B' 
-At idx  5044: alg improved to length 13 with gain  2: U2 L' U2 L2 F2 U L2 U L2 U' F2 U' L' 
-At idx  5067: alg improved to length 13 with gain  3: U' R B L' B L B2 U2 R' U' R U' R' 
-At idx  5077: alg improved to length 13 with gain  2: U F' R D2 L' D' L2 D' R' U B2 U' F 
-At idx  5088: alg improved to length 13 with gain  2: U R F' U' R2 F U' F' U R2 U F R' 
-At idx  5099: alg improved to length 13 with gain  2: U2 F R U' R2 F' L F R F' L2 U L 
-At idx  5105: alg improved to length 13 with gain  5: U' L F L' B U' L U L F' L2 U B' 
-At idx  5114: alg improved to length 13 with gain  4: U B' F U F' U' B U2 L2 B L B' L 
-At idx  5129: alg improved to length 13 with gain  1: U2 R U F U R F R' F' R' U' F' R' 
-At idx  5131: alg improved to length 13 with gain  3: U2 F' D F2 U2 F R' F' R U2 F2 D' F 
-At idx  5138: alg improved to length 13 with gain  1: R2 D' R' B2 L' D L B2 D2 B2 D' B2 R' 
-At idx  5139: alg improved to length 13 with gain  6: F R' F2 D' L2 F L' F' L2 F' D R F2 
-At idx  5148: alg improved to length 13 with gain  1: F U F' U2 L' R' F' U' F U2 L U' R 
-At idx  5158: alg improved to length 13 with gain  2: U2 R' F' L F' L' F2 U2 R U R' U R 
-At idx  5160: alg improved to length 13 with gain  1: F U R U2 R' U F D B' R B D' F2 
-At idx  5184: alg improved to length 13 with gain  6: R D L' B L D' R D' L F' L' D R2 
-At idx  5200: alg improved to length 13 with gain  3: U B R' F2 L F L' F2 R B' R' F' R 
-At idx  5208: alg improved to length 13 with gain  2: R U B U2 L' D' L U L' D L B' R' 
-At idx  5215: alg improved to length 13 with gain  3: R U2 R2 U' F R D R2 D' F' R' U R 
-At idx  5216: alg improved to length 13 with gain  2: B L B' U2 F U' L2 F2 L' F2 L' F' L' 
-At idx  5217: alg improved to length 13 with gain  3: R U R' B L' U2 R U R' U2 L U' B' 
-At idx  5218: alg improved to length 13 with gain  5: U2 L' B L F' L2 D L' D' L B' L2 F 
-At idx  5227: alg improved to length 13 with gain  2: U' R' B D2 B' F' U' F U B D2 B' R 
-At idx  5236: alg improved to length 13 with gain  2: U' B F' U' F U B' L F R' F' R L' 
-At idx  5237: alg improved to length 13 with gain  1: F U L F2 L' R U R2 F' R F' U' F 
-At idx  5247: alg improved to length 13 with gain  3: L' D F2 R U R' F2 L2 U' L' U L2 D' 
-At idx  5253: alg improved to length 13 with gain  3: U' F' L' B L' B' L2 U2 F U F' U F 
-At idx  5283: alg improved to length 13 with gain  2: U' F U' F' U2 F2 U R U' R' F' U' F' 
-At idx  5288: alg improved to length 13 with gain  1: U B L F L' B' R L U' R' U F' L' 
-At idx  5292: alg improved to length 13 with gain  2: U2 B F2 R' D2 L D2 R B2 R2 F2 R2 B 
-At idx  5301: alg improved to length 13 with gain  2: F U2 F' U2 B' R' U F U' R' F' R2 B 
-At idx  5308: alg improved to length 13 with gain  4: F2 R2 B' R2 F' R B R' F' U L' U L 
-At idx  5312: alg improved to length 13 with gain  2: B' U2 F R2 D' R' D2 B' D' R B2 R2 F' 
-At idx  5318: alg improved to length 13 with gain  5: U R B R' F2 D' L' D F2 R U2 B' R' 
-At idx  5330: alg improved to length 13 with gain  1: B' U' R' U R2 D R' U2 R D' R' U2 B 
-At idx  5338: alg improved to length 13 with gain  4: L' B L2 B F2 D R' D B' D2 F2 B' L' 
-At idx  5342: alg improved to length 13 with gain  3: U2 L2 B' L2 B' R B R' L2 B2 L B' L 
-At idx  5343: alg improved to length 13 with gain  3: F' U' L2 D' R B2 R' L U' L' D L2 F 
-At idx  5347: alg improved to length 13 with gain  3: R B' L2 R B' F' D' B D F L2 B R2 
-At idx  5350: alg improved to length 13 with gain  3: U' B2 L2 R D R D' R' D' L2 B R' B 
-At idx  5351: alg improved to length 13 with gain  2: U R' F2 U' L F L' F' L' U L F2 R 
-At idx  5352: alg improved to length 13 with gain  5: R U L' U' F R2 D2 B D2 F' R U' L 
-At idx  5354: alg improved to length 13 with gain  2: U R' F2 D2 L2 F' D2 R F' R U2 B' R' 
-At idx  5373: alg improved to length 13 with gain  1: R' F R2 B' R D2 B' D2 B R' B R' F' 
-At idx  5376: alg improved to length 13 with gain  2: R U R2 F R D F D' F L2 U L2 F 
-At idx  5378: alg improved to length 13 with gain  2: F R' D R2 D' F2 U' F2 R F' B' R2 B 
-At idx  5391: alg improved to length 13 with gain  2: B U' F' U B' U2 F L F' U F U' L' 
-At idx  5409: alg improved to length 13 with gain  2: U' R' U' R F D' R2 U R' U' R2 D F' 
-At idx  5410: alg improved to length 13 with gain  1: U' F U2 F2 U' F' R' F' R2 U' R2 F' R 
-At idx  5412: alg improved to length 13 with gain  2: R B' R D' R F R' F' D R2 B2 U2 B' 
-At idx  5420: alg improved to length 13 with gain  2: U' R B U B' U' R' L' B' U' B U L 
-At idx  5423: alg improved to length 13 with gain  1: U2 R U' L F2 D2 L B2 D L' D F2 L' 
-At idx  5424: alg improved to length 13 with gain  3: F2 R2 B2 L' D' L B2 R2 F2 U L' U2 L 
-At idx  5427: alg improved to length 13 with gain  1: U' F U F' L2 D' R B R' D L U2 L 
-At idx  5429: alg improved to length 13 with gain  2: U' R2 B2 R' B U B' U' R' U R2 B2 R2 
-At idx  5430: alg improved to length 13 with gain  4: U B2 L2 F R' F D2 F2 L2 F R F' B2 
-At idx  5445: alg improved to length 13 with gain  1: F U2 F' U' L' U R' L2 D F' D' R L' 
-At idx  5447: alg improved to length 13 with gain  2: U R' U' R F2 R' D F' U F D' R F2 
-At idx  5451: alg improved to length 13 with gain  1: U' R U B U' B' R' F R U R' U' F' 
-At idx  5453: alg improved to length 13 with gain  1: B L U2 F' U' F U2 L' B' U' R U2 R' 
-At idx  5461: alg improved to length 13 with gain  5: R U R' F U F' R L' B' U' B R' L 
-At idx  5475: alg improved to length 13 with gain  4: R' U' F2 D2 B' L' B D2 F2 U F R F' 
-At idx  5477: alg improved to length 13 with gain  1: R' F2 L' F U F U' F' L U2 F U R 
-At idx  5483: alg improved to length 13 with gain  7: B' R B R B2 L2 D' R' D R L2 B2 R2 
-At idx  5493: alg improved to length 13 with gain  2: R' U2 R U R' U R L F U F' U' L' 
-At idx  5504: alg improved to length 13 with gain  1: B U' F2 L F' U2 F L' F' U B' U F' 
-At idx  5514: alg improved to length 13 with gain  1: B2 D' B2 U F' U2 F B U B2 R2 D B 
-At idx  5516: alg improved to length 13 with gain  3: F R2 B' R' B R D R D' R F2 U F 
-At idx  5518: alg improved to length 13 with gain  5: B2 U L U' L2 B' L U' B' U R' U' R 
-At idx  5519: alg improved to length 13 with gain  1: U2 L' B' U' B U L F' U' L' U L F 
-At idx  5534: alg improved to length 13 with gain  2: U F' R' U' F2 U F' R F' U' F U F2 
-At idx  5553: alg improved to length 13 with gain  3: R2 D' F' D' F2 D R U2 F U R2 D R' 
-At idx  5556: alg improved to length 13 with gain  1: R2 B2 L2 B R' B' L B2 R B2 L B2 R2 
-At idx  5570: alg improved to length 13 with gain  3: R2 B2 L' R' D' B' D B' L2 U R' U L' 
-At idx  5577: alg improved to length 13 with gain  1: U B U B' U F U' R2 U' R2 U R2 F' 
-At idx  5578: alg improved to length 13 with gain  1: R U2 F' R2 F U' F2 U F R2 F U' R' 
-At idx  5580: alg improved to length 13 with gain  2: R F R B' R F' B U2 R U2 R' U2 R2 
-At idx  5595: alg improved to length 13 with gain  1: U' B F U2 B2 D' R2 D B2 U F' U B' 
-At idx  5608: alg improved to length 13 with gain  4: F D R' B' R' B R U R' U' R D' F' 
-At idx  5610: alg improved to length 13 with gain  2: R B' U2 R D2 F D F' D R' U2 R' B 
-At idx  5623: alg improved to length 13 with gain  4: U2 B L F U2 F' L' B' U2 R B' R' B 
-At idx  5631: alg improved to length 13 with gain  4: B' U' R' U R B2 L U' L' B' R' U R 
-At idx  5638: alg improved to length 13 with gain  4: U F' U L U2 L' U' B D L' D' F B' 
-At idx  5642: alg improved to length 13 with gain  2: U R F R2 D L' U' B2 U L D' F' R' 
-At idx  5643: alg improved to length 13 with gain  1: F U' F2 R2 D' B L2 B' D R2 F2 U F' 
-At idx  5653: alg improved to length 13 with gain  2: U F' R U2 F U' B U2 F' U B' R' F 
-At idx  5660: alg improved to length 13 with gain  4: U B' R' U R U R' U' F R' F' R2 B 
-At idx  5668: alg improved to length 13 with gain  2: U' R D L' B L D' R2 F' U2 F U R 
-At idx  5678: alg improved to length 13 with gain  4: U' L' U' L2 D' L B L B' U L' D L2 
-At idx  5689: alg improved to length 13 with gain  2: R U' L U2 R' U2 F U' F' R U2 R' L' 
-At idx  5698: alg improved to length 13 with gain  1: B L R' U2 R U L2 D' B2 D B2 L B 
-At idx  5704: alg improved to length 13 with gain  2: U R' U2 R B L F U F' U2 L' U' B' 
-At idx  5709: alg improved to length 13 with gain  4: B2 U B' L B U' B' L F' L' F L' B' 
-At idx  5728: alg improved to length 13 with gain  3: R D' R2 U2 F' R U2 R' U' R' F D R2 
-At idx  5738: alg improved to length 13 with gain  3: U L' U2 L B U B' L' B U' B' U2 L 
-At idx  5744: alg improved to length 13 with gain  3: F R2 D2 L B L' D2 R2 F' U2 F' U2 F 
-At idx  5758: alg improved to length 13 with gain  6: U2 R2 B2 R U' F R' F' R U R' B2 R2 
-At idx  5768: alg improved to length 13 with gain  1: U2 L F2 D' L2 U' B' U' B L2 D F' L' 
-At idx  5772: alg improved to length 13 with gain  5: R' U R2 F2 D L' B' L D' F2 R2 U' R 
-At idx  5773: alg improved to length 13 with gain  2: R' F2 R2 B' R B R2 D' B L2 B' D F2 
-At idx  5784: alg improved to length 13 with gain  2: U L2 U2 B L' B' U2 F2 R' F' R F' L2 
-At idx  5789: alg improved to length 13 with gain  4: R F' D2 R' U L' U2 L U' R D2 F R' 
-At idx  5794: alg improved to length 13 with gain  6: R2 F L R' D L2 B2 L2 D' R L' F' R2 
-At idx  5800: alg improved to length 13 with gain  3: U F R2 F' U2 F' U2 F R2 U F' U F 
-At idx  5801: alg improved to length 13 with gain  1: U' R U B U' B' R' B U L U' L' B' 
-At idx  5810: alg improved to length 13 with gain  3: U2 R2 D L' B2 L D' R2 F2 L F L' F 
-At idx  5811: alg improved to length 13 with gain  2: U2 F U R U' F' L F R' U F' U' L' 
-At idx  5812: alg improved to length 13 with gain  3: L R F L' B L F' L2 B' R' B L B' 
-At idx  5824: alg improved to length 13 with gain  1: R B2 L2 D L' D' L' B2 R' U2 L' U L 
-At idx  5827: alg improved to length 13 with gain  2: U' L U' R U' L2 D' B2 D L2 U2 R' L' 
-At idx  5837: alg improved to length 13 with gain  8: F2 R2 D' B L2 B' D R2 F2 U F' U F 
-At idx  5848: alg improved to length 13 with gain  3: F U L U F U' F2 R' F2 R F L' F' 
-At idx  5849: alg improved to length 13 with gain  1: F U L R2 D2 L D' B' D' R2 L' F' L' 
-At idx  5854: alg improved to length 13 with gain  2: F' L D2 F' R2 F' R F2 D2 L B L2 F 
-At idx  5859: alg improved to length 13 with gain  2: F U' B D2 R B' U2 B R' D2 B' U F' 
-At idx  5875: alg improved to length 13 with gain  3: U L2 U L' U' F U2 L U2 L' F' U L' 
-At idx  5884: alg improved to length 13 with gain  1: U' R2 U' F' D2 B U2 B' D2 F R2 U R2 
-At idx  5885: alg improved to length 13 with gain  3: B' U2 L' U' L B U' L' U2 L B' U2 B 
-At idx  5886: alg improved to length 13 with gain  1: U R B U2 R' U' R U' R' U2 R B' R' 
-At idx  5888: alg improved to length 13 with gain  5: U2 R' D F' L' R2 U L U' R2 F D' R 
-At idx  5890: alg improved to length 13 with gain  4: U B2 R2 F R2 B R' F' R B L U2 L' 
-At idx  5893: alg improved to length 13 with gain  3: B2 F2 D' R D F' R B U2 R' F' U' B 
-At idx  5895: alg improved to length 13 with gain  1: U2 F' U F U' F2 L F2 U F' U' L' F 
-At idx  5904: alg improved to length 13 with gain  2: L U' B U' L' B D L2 D' L' B2 U2 L' 
-At idx  5910: alg improved to length 13 with gain  3: R U B U' B' R2 F' L' F R F' L F 
-At idx  5926: alg improved to length 13 with gain  3: U' F2 D F2 U2 F R2 U' R2 U' F2 D' F 
-At idx  5950: alg improved to length 13 with gain  7: R2 B' L' F' R' F2 L D2 B2 L' F' L B' 
-At idx  5957: alg improved to length 13 with gain  3: R U2 R' U' F' U' F' D' B L' B' D F2 
-At idx  5962: alg improved to length 13 with gain  2: R B2 R' B R B2 R' L' B R B' R' L 
-At idx  5963: alg improved to length 13 with gain  3: F L' U' L2 F' L' F2 U L F L' U2 F2 
-At idx  5976: alg improved to length 13 with gain  4: F U' B U' F2 L2 D F' D' F2 B L2 B2 
-At idx  5977: alg improved to length 13 with gain  3: U L' R' F' R B' R' F B L B' R B 
-At idx  5979: alg improved to length 13 with gain  3: L2 D' B2 D L' U2 L D' B2 D L' U2 L' 
-At idx  5981: alg improved to length 13 with gain  4: F R' F' R2 U R' F' U' F U' R U2 R' 
-At idx  5989: alg improved to length 13 with gain  2: R U B U' B' R' L' U2 L U L' U L 
-At idx  5994: alg improved to length 13 with gain  5: F' L B L2 U L2 U' L' B' U L' U' F 
-At idx  6001: alg improved to length 13 with gain  3: U F' L' U' L B U' L' U L U F B' 
-At idx  6003: alg improved to length 13 with gain  5: U F2 U R' D' L2 D' F' L F L2 D2 R 
-At idx  6007: alg improved to length 13 with gain  2: U2 L2 R' F' L' F' U' F2 U F2 R U2 L' 
-At idx  6010: alg improved to length 13 with gain  1: U2 R' U F' U F U F R' F' R U2 R 
-At idx  6011: alg improved to length 13 with gain  1: B U L U2 F' L' U' L U L F L2 B' 
-At idx  6014: alg improved to length 13 with gain  4: B U' F U' F' U L U2 L' F U2 F' B' 
-At idx  6016: alg improved to length 13 with gain  1: R' D' U2 F U2 F U2 F' U2 D R2 U' R' 
-At idx  6036: alg improved to length 13 with gain  1: F U F' U2 F U2 R B' R B R2 U' F' 
-At idx  6052: alg improved to length 13 with gain  2: U F R' F' R U' L U' R U L' U R' 
-At idx  6082: alg improved to length 13 with gain  3: F R2 F' R B' R B R' F R2 F2 U2 F 
-At idx  6093: alg improved to length 13 with gain  2: F' U' L U' B F' L2 F2 B' U' F' L' F 
-At idx  6100: alg improved to length 13 with gain  4: R U2 R' F R' F' R' D L' B2 L D' R2 
-At idx  6101: alg improved to length 13 with gain  1: F U2 F' L2 B L B' L2 U F U' F' L' 
-At idx  6102: alg improved to length 13 with gain  2: U' L U F2 D F2 U' F' D' F L2 U2 L 
-At idx  6140: alg improved to length 13 with gain  1: U L U2 L' U' B' U B L F U' F' L' 
-At idx  6152: alg improved to length 13 with gain  1: L B' U2 B U L2 U L2 U' F' L2 F L' 
-At idx  6156: alg improved to length 13 with gain  3: F2 U' L2 F L' F' L' U F2 U L U2 L' 
-At idx  6190: alg improved to length 13 with gain  6: F U2 F' L2 B L B R B2 L B' R' B 
-At idx  6205: alg improved to length 13 with gain  4: R U' R2 F R' B' D' R D F' R' B R2 
-At idx  6208: alg improved to length 13 with gain  2: U L2 U F R B' U2 B R' F' L2 U' L2 
-At idx  6217: alg improved to length 13 with gain  2: U R' B L2 D F D' L B' R B L B' 
-At idx  6226: alg improved to length 13 with gain  7: U R F2 R2 F2 R' F' L F D2 R2 D2 L' 
-At idx  6229: alg improved to length 13 with gain  2: U' R' B' R2 U' R U F R2 B R' F' R2 
-At idx  6232: alg improved to length 13 with gain  2: U' R' U2 L F R' F' R2 L' U R' U R 
-At idx  6233: alg improved to length 13 with gain  3: U F R2 B' R2 F' R B' L' B' L B' R' 
-At idx  6236: alg improved to length 13 with gain  3: U2 L' B L2 F2 L B' L' F2 L' F U2 F' 
-At idx  6247: alg improved to length 13 with gain  2: U' L F U F' U' L' F' U' L' U L F 
-At idx  6249: alg improved to length 13 with gain  3: F2 R2 F2 R' U2 R2 U' L' U2 R2 U' R' L 
-At idx  6251: alg improved to length 13 with gain  5: B2 U' B2 U' B2 U B' D' B U B' D B' 
-At idx  6257: alg improved to length 13 with gain  2: F U2 F' U' F U' F' R U B U' B' R' 
-At idx  6261: alg improved to length 13 with gain  3: L2 B R2 F' D' L' D' L' F R2 B2 U B 
-At idx  6262: alg improved to length 13 with gain  2: U' F R F' L F B R' F' R B' R' L' 
-At idx  6266: alg improved to length 13 with gain  4: F2 U' L2 B2 D R2 D2 B' D L B' U' L 
-At idx  6274: alg improved to length 13 with gain  3: U' L' F R2 B2 D' R D R' B2 R2 F' L 
-At idx  6276: alg improved to length 13 with gain  2: B U2 B' U' B U' F B' U R U' R' F' 
-At idx  6281: alg improved to length 13 with gain  2: U2 F R' F' R U2 F2 L' B L' B' L2 F2 
-At idx  6301: alg improved to length 13 with gain  1: U' B U' R2 D2 L2 B D2 R2 U' B' U' F 
-At idx  6310: alg improved to length 13 with gain  5: U' L F2 R D2 R F L2 B L F2 R2 F' 
-At idx  6329: alg improved to length 13 with gain  1: U R' U' R2 D' R F R F' U R' D R2 
-At idx  6332: alg improved to length 13 with gain  5: U2 L2 D' B2 R B R' B D B L B' L 
-At idx  6343: alg improved to length 13 with gain  4: U2 L U' B' D R2 D' B U2 F' U' F2 L' 
-At idx  6350: alg improved to length 13 with gain  3: U' B' R2 U' F D' F' U F2 D F2 R2 B 
-At idx  6354: alg improved to length 13 with gain  2: U' R2 F2 R F' U' F U R U' R2 F2 R2 
-At idx  6371: alg improved to length 13 with gain  1: R' F R U2 F U2 R' F' R U2 L F2 L' 
-At idx  6384: alg improved to length 13 with gain  1: R U2 F' U2 B L' U' L U' B' U2 F R' 
-At idx  6398: alg improved to length 13 with gain  5: L U2 L2 U' L2 U' L D' R B2 R' D L2 
-At idx  6406: alg improved to length 13 with gain  3: U2 B' U' B U' L2 F' L2 F U2 F U2 F' 
-At idx  6409: alg improved to length 13 with gain  2: U2 L2 F2 L2 U' L U F U' F' L F2 L2 
-At idx  6412: alg improved to length 13 with gain  3: U R' U' R U2 B U L F U2 F' L' B' 
-At idx  6420: alg improved to length 13 with gain  6: R B2 D L' D' B2 U' D2 L' U L D2 R' 
-At idx  6422: alg improved to length 13 with gain  1: U L U2 B L B' U' L' F L U' L' F' 
-At idx  6423: alg improved to length 13 with gain  3: U R B U B2 R2 D' R' D R' B U' R' 
-At idx  6433: alg improved to length 13 with gain  3: F U2 F' U' F R' U' R F' U' R' U2 R 
-At idx  6434: alg improved to length 13 with gain  1: U' L F2 U' B' U R U R' U' F2 B L' 
-At idx  6437: alg improved to length 13 with gain  2: U2 F' L' U' L U' F R' F R F2 U2 F 
-At idx  6444: alg improved to length 13 with gain  5: B' R B U2 L' R U R' U' B2 R2 B2 L 
-At idx  6447: alg improved to length 13 with gain  4: B U' B R2 F' L2 F' D B2 L2 F' R2 F' 
-At idx  6496: alg improved to length 13 with gain  2: U2 B F D2 R B' U2 B R' D2 B' U2 F' 
-At idx  6511: alg improved to length 13 with gain  2: B2 R2 B U' R' U R F R' F' B' R2 B2 
-At idx  6524: alg improved to length 13 with gain  3: U2 R' F2 D2 L' D L' D' L D2 F' R F' 
-At idx  6525: alg improved to length 13 with gain  2: R U2 F R F' U R' U' B R U2 R' B' 
-At idx  6531: alg improved to length 13 with gain  2: U' F' U' F R2 D B' L' B' L B2 D' R2 
-At idx  6534: alg improved to length 13 with gain  5: B F U' F' U B' L' B' U2 B2 L' B' L2 
-At idx  6537: alg improved to length 13 with gain  2: B' U' R' U' F U2 L F' L' U2 F' R B 
-At idx  6546: alg improved to length 13 with gain  6: R F' L2 D2 F' D B2 D' F D2 L2 F R' 
-At idx  6548: alg improved to length 13 with gain  4: R2 U R B2 D F' L F D' B R2 B R' 
-At idx  6554: alg improved to length 13 with gain  3: R D L' B' L R' U B' R B R D' R2 
-At idx  6561: alg improved to length 13 with gain  3: F2 R2 B' R' F D2 B' L' F' B D2 F2 B 
-At idx  6573: alg improved to length 13 with gain  1: U F D B U2 B2 D' F D B R2 D' F2 
-At idx  6579: alg improved to length 13 with gain  5: U F U R U R' F B' D R2 D' F2 B 
-At idx  6609: alg improved to length 13 with gain  4: R U2 R2 U2 R U R F R2 F' R2 U R 
-At idx  6613: alg improved to length 13 with gain  1: U2 L U' B2 D2 F2 L D2 B2 U' L' U' R 
-At idx  6618: alg improved to length 13 with gain  4: U R' U2 R B U' B2 D' F R' F' D B 
-At idx  6619: alg improved to length 13 with gain  2: R F D2 L2 B D' B' U2 B D L2 D2 R 
-At idx  6620: alg improved to length 13 with gain  3: U' L2 R F' D2 B D2 F R2 F2 L2 F2 R 
-At idx  6621: alg improved to length 13 with gain  4: U R U2 R' F' U F2 D B' R B D' F' 
-At idx  6633: alg improved to length 13 with gain  1: U' B' R' F' U2 F R U B U' L U2 L' 
-At idx  6635: alg improved to length 13 with gain  4: B' F R' F2 U2 F B2 L' F D2 F' L B' 
-At idx  6640: alg improved to length 13 with gain  5: U' L' B L' B' D' B' R B' R' B2 D L2 
-At idx  6652: alg improved to length 13 with gain  5: U' R' F R F2 L2 B L B2 U2 B L F 
-At idx  6655: alg improved to length 13 with gain  2: B' R' F R' B2 F' U' F' U F B2 R2 B 
-At idx  6656: alg improved to length 13 with gain  2: R' F R2 B' R F' D2 F2 D F2 D R2 B 
-At idx  6671: alg improved to length 13 with gain  2: U2 B R U' L U' L' U R' F' B' U2 F 
-At idx  6681: alg improved to length 13 with gain  4: R' F' U2 L U2 L' U2 F R U L U' L' 
-At idx  6687: alg improved to length 13 with gain  2: U2 B' L' B2 U' B U R B2 L B' R' B2 
-At idx  6691: alg improved to length 13 with gain  1: F' U2 F U R U R L' D B D' R2 L 
-At idx  6692: alg improved to length 13 with gain  1: R B' R D2 L2 F' B D F D R2 U2 F 
-At idx  6697: alg improved to length 13 with gain  5: L R' U L2 U2 R U' L' B2 R L2 B2 R' 
-At idx  6701: alg improved to length 13 with gain  1: U R' F' U' B L' U L U' F B' U R 
-At idx  6702: alg improved to length 13 with gain  3: F U' F2 L F' L' F2 U2 R' F R U' F' 
-At idx  6716: alg improved to length 13 with gain  3: R B L B' R' U2 B2 L2 F' L' F L2 B2 
-At idx  6717: alg improved to length 13 with gain  3: U2 B2 D' B' D2 F' L' F D' L B' U' L' 
-At idx  6727: alg improved to length 13 with gain  3: F' L' B L2 D2 F' D' F D' L B' L2 F 
-At idx  6734: alg improved to length 13 with gain  2: R U B U' B' R' F U' B' U F' U' B 
-At idx  6736: alg improved to length 13 with gain  6: U F2 D R2 B2 D' F' D B' U2 B' D' F' 
-At idx  6741: alg improved to length 13 with gain  8: L' B' R' U2 F' U F2 R' F' R2 B U' L 
-At idx  6749: alg improved to length 13 with gain  2: U' F' U' L' U L F B U L U' L' B' 
-At idx  6754: alg improved to length 13 with gain  2: R U R2 F R2 B' R' F' R B2 U B' R' 
-At idx  6759: alg improved to length 13 with gain  1: U R U2 L' R' U2 F2 L2 F L2 F U2 L 
-At idx  6786: alg improved to length 13 with gain  5: U' L F' L' B L2 D' L D L' F L2 B' 
-At idx  6796: alg improved to length 13 with gain  2: U2 R D' R U R' U' D R' U B' R' B 
-At idx  6809: alg improved to length 13 with gain  2: U R' D' U' F2 U F' U' F' U F' D R 
-At idx  6811: alg improved to length 13 with gain  3: R' U2 R2 B2 D B2 R' U R B2 D' B2 R' 
-At idx  6815: alg improved to length 13 with gain  4: F U2 R U' L R' U L' U L U2 L' F' 
-At idx  6816: alg improved to length 13 with gain  1: R U B U' B' R' F U F' U F U2 F' 
-At idx  6859: alg improved to length 13 with gain  1: L F' L' F U2 F U2 R2 B' R' B R' F' 
-At idx  6860: alg improved to length 13 with gain  2: U R' D' F U' F U F U' F2 U D R 
-At idx  6872: alg improved to length 13 with gain  2: R B' U2 L' B L U2 B R' U R U' R' 
-At idx  6875: alg improved to length 13 with gain  5: R B R D L' D F' D F D2 L D' R2 
-At idx  6885: alg improved to length 13 with gain  2: F U R2 U R' F' R F R U2 F' U R2 
-At idx  6892: alg improved to length 13 with gain  2: R' F' U2 L U2 L' U2 F U L U' R L' 
-At idx  6904: alg improved to length 13 with gain  4: R2 B2 R' U' B' U' R' U2 R B U B R' 
-At idx  6915: alg improved to length 13 with gain  3: U' L' B L U' R L' B2 R' U' B' U L 
-At idx  6919: alg improved to length 13 with gain  3: R U' R2 F2 U' R F R' U F2 R2 U R' 
-At idx  6921: alg improved to length 13 with gain  3: B2 L2 F R2 F R' B R B R2 F L2 F 
-At idx  6943: alg improved to length 13 with gain  4: R' U' R U' L U2 B2 L2 B' L2 B' U2 L' 
-At idx  6946: alg improved to length 13 with gain  1: B D' R2 F2 D' L' D' L D2 F2 R2 D B' 
-At idx  6947: alg improved to length 13 with gain  3: U F2 R2 B' R' B R2 F2 L F R F' L' 
-At idx  6964: alg improved to length 13 with gain  1: F' L' B2 U' R' U R B' L' B' L2 U F 
-At idx  6968: alg improved to length 13 with gain  5: U2 L U F U2 F' R' L D F D' R L2 
-At idx  6970: alg improved to length 13 with gain  2: R' U2 L' D2 R D R2 D L U' B2 U' R 
-At idx  6975: alg improved to length 13 with gain  2: F U F' U2 R' F' U' F' R' F2 R U R 
-At idx  6983: alg improved to length 13 with gain  2: F U R' D' R' D2 L B2 L' D' R2 U' F' 
-At idx  6990: alg improved to length 13 with gain  4: R B2 D U L U' L' F' L' F D' B2 R' 
-At idx  6991: alg improved to length 13 with gain  4: U2 L' B' U' B R U' B' U B U R' L 
-At idx  6998: alg improved to length 13 with gain  1: R B' R' U2 B U B L U' L' B2 U B 
-At idx  6999: alg improved to length 13 with gain  3: F2 R2 U2 F L F L' F2 U2 R2 F' R' F' 
-At idx  7013: alg improved to length 13 with gain  1: U' R' U L U' R2 U R' L' U2 R U R' 
-At idx  7015: alg improved to length 13 with gain  4: F' U2 F2 D F' R' U R U' F R D' F' 
-At idx  7016: alg improved to length 13 with gain  4: B L2 R B2 R' U L U' R B2 R' L2 B' 
-At idx  7031: alg improved to length 13 with gain  5: B2 D2 F2 L' F' D' L' B D2 R F' D B 
-At idx  7033: alg improved to length 13 with gain  2: U R' U R2 D U B U' B' D' R2 U' R 
-At idx  7034: alg improved to length 13 with gain  4: L' B2 U2 B U R' B' U B2 L B' R B 
-At idx  7037: alg improved to length 13 with gain  3: F2 R2 B' F2 R B R' F2 R2 B' R F2 B 
-At idx  7039: alg improved to length 13 with gain  2: U R2 B2 U' R F' R' U R F R' B2 R2 
-At idx  7044: alg improved to length 13 with gain  1: F' L F2 D L2 B' R B L2 F D' L' F2 
-At idx  7045: alg improved to length 13 with gain  1: U F L U F2 U' F2 L' U L F2 L' F' 
-At idx  7047: alg improved to length 13 with gain  2: U B' R B L' B R' B2 L U2 L' B L 
-At idx  7049: alg improved to length 13 with gain  4: U2 R' F' U L' U L F R U' B U' B' 
-At idx  7052: alg improved to length 13 with gain  2: U L' U' B' U' R B' R' B2 L F U2 F' 
-At idx  7060: alg improved to length 13 with gain  5: B' F U' R' B R B' U R F' B2 U2 B' 
-At idx  7062: alg improved to length 13 with gain  4: F2 U F2 R' D F D' F' R D' L2 D L2 
-At idx  7063: alg improved to length 13 with gain  3: U' R B' R' B2 L2 F' L B L' F L2 B2 
-At idx  7064: alg improved to length 13 with gain  5: L' R' D2 L2 F' R2 L' B' L U2 R' F L' 
-At idx  7084: alg improved to length 13 with gain  2: L' B L B' R U' L U R' F U F' L' 
-At idx  7085: alg improved to length 13 with gain  4: L F2 L' U L2 B2 R' D' R' D2 R2 B2 L2 
-At idx  7095: alg improved to length 13 with gain  3: R U B F D2 F' U2 F D2 F' U B' R' 
-At idx  7109: alg improved to length 13 with gain  1: U2 F R U R' U' R F' L F R' F' L' 
-At idx  7110: alg improved to length 13 with gain  2: U' F' U2 F U2 F R2 B2 R F' R' B2 R2 
-At idx  7111: alg improved to length 13 with gain  3: B F' U L2 U2 F U F D F D' F2 B' 
-At idx  7113: alg improved to length 13 with gain  1: U2 L U L' U B2 R L2 B R' B' L2 B2 
-At idx  7114: alg improved to length 13 with gain  4: L U L' B2 U2 B U B' U B2 L U' L' 
-At idx  7115: alg improved to length 13 with gain  2: U L U L' U L U' L' B' R' U' R B 
-At idx  7145: alg improved to length 13 with gain  6: R B L U2 L' U B2 R2 F R2 B R' F' 
-At idx  7163: alg improved to length 13 with gain  3: F2 R' F2 U' F U R2 B' R B R2 U2 F' 
-At idx  7164: alg improved to length 13 with gain  3: U2 F' L' B' L F L D2 R2 F' R2 D2 L' 
-At idx  7165: alg improved to length 13 with gain  3: U' B' U R U2 F R' F' U2 R2 U R B 
-At idx  7170: alg improved to length 13 with gain  2: R' F' U' L' F R' F' L F2 R F' U R 
-At idx  7171: alg improved to length 13 with gain  1: U' B L' U2 F' L F U2 L B2 R B R' 
-At idx  7176: alg improved to length 13 with gain  5: R2 F2 L' B U' L' D2 L U B' L F2 R2 
-At idx  7186: alg improved to length 13 with gain  4: F2 L2 B2 D2 R D R' D B2 L' F L' F 
-At idx  7200: alg improved to length 13 with gain  4: R' F' L' U2 L2 F R F' L' F B U2 B' 
-At idx  7210: alg improved to length 13 with gain  5: U2 L' B' U B R L F R' U' R F' R' 
-At idx  7221: alg improved to length 13 with gain  2: U B' R2 F R F' U R U' B L U' L' 
-At idx  7230: alg improved to length 13 with gain  1: U2 R B U B' R' F2 B D' L' D F2 B' 
-At idx  7235: alg improved to length 13 with gain  4: U2 L' U2 L F U' F2 D' B L' B' D F 
-At idx  7246: alg improved to length 13 with gain  3: F U F L B2 L' F L F B2 L2 U L 
-At idx  7258: alg improved to length 13 with gain  1: L U2 L2 U' L2 U' L D' L U2 L' D L2 
-At idx  7276: alg improved to length 13 with gain  3: U2 F L' U' F2 U' L U L' F2 U L F' 
-At idx  7278: alg improved to length 13 with gain  4: U' L F R' F' L' F2 L2 F' R F L2 F2 
-At idx  7284: alg improved to length 13 with gain  1: U2 F' U' L F2 L' F2 U' R U' R' U' F 
-At idx  7292: alg improved to length 13 with gain  4: U' B U L U2 L' F' B D L D' F B2 
-At idx  7297: alg improved to length 13 with gain  4: L' U' L U2 F R2 B' R' B U2 R' U' F' 
-At idx  7307: alg improved to length 13 with gain  1: U' F D' R2 D F' U2 B2 R B' R' U B2 
-At idx  7318: alg improved to length 13 with gain  3: U R' D B2 D' U' F' U F D B2 D' R 
-At idx  7320: alg improved to length 13 with gain  2: U2 F R U R2 U' F U F' R F U' F2 
-At idx  7322: alg improved to length 13 with gain  1: L' U' B' U R' B L F B' R' F' R2 B 
-At idx  7336: alg improved to length 13 with gain  4: R2 U' F' R2 F' D B U2 B' D' F2 U R2 
-At idx  7341: alg improved to length 13 with gain  2: R' F' R U' F' U' F U' R U' R' U' F 
-At idx  7355: alg improved to length 13 with gain  4: R D B' L2 B' L B' L' B2 L2 B D' R' 
-At idx  7376: alg improved to length 13 with gain  3: U2 F R U2 F' U' F2 R' F' R2 U' R2 F' 
-At idx  7382: alg improved to length 13 with gain  2: F' U' F2 R' F' R F2 B D' L' D F2 B' 
-At idx  7394: alg improved to length 13 with gain  4: U2 R2 B2 L' B R' B2 L2 U L' U B' R' 
-At idx  7398: alg improved to length 13 with gain  3: U B' L' B' L2 U2 L' U B' R' U' R B' 
-At idx  7407: alg improved to length 13 with gain  2: R' U2 R' D' R U R' D R2 U' R' U2 R 
-At idx  7411: alg improved to length 13 with gain  2: U F R' U2 B' R B U2 R F2 L F L' 
-At idx  7415: alg improved to length 13 with gain  2: R B U B' U' B U' B' U B U B' R' 
-At idx  7425: alg improved to length 13 with gain  3: U' L' U R B' R2 U' R U' B' L' B2 L2 
-At idx  7429: alg improved to length 13 with gain  8: F2 R' F' L' F' L2 D2 F' R2 B' R' F L' 
-At idx  7443: alg improved to length 13 with gain  3: F' U' L U F U' F2 L2 B L' B' L2 F2 
-At idx  7450: alg improved to length 13 with gain  2: U F U' B U2 F2 D' L2 U D B' U' F 
-At idx  7457: alg improved to length 13 with gain  1: F U R' F D U2 B R B' U2 D' R F2 
-At idx  7467: alg improved to length 13 with gain  2: U R' F' R2 U R B' R F R2 B U R' 
-At idx  7469: alg improved to length 13 with gain  6: U2 F R F' L U' F U F R' F2 U L' 
-At idx  7475: alg improved to length 13 with gain  1: U' F2 L F R' F2 L' U' F' U F2 R F 
-At idx  7478: alg improved to length 13 with gain  3: U' B2 L' F' L F B' L B' U F U' F' 
-At idx  7479: alg improved to length 13 with gain  3: F' U B L F' L' F2 B' R B U' B' R' 
-At idx  7482: alg improved to length 13 with gain  1: U2 F2 U F L' U' L U F U' F2 U' F2 
-At idx  7494: alg improved to length 13 with gain  2: U2 B' R B' R2 F R2 D' R D F' R2 B2 
-At idx  7496: alg improved to length 13 with gain  1: U' R' U2 L U L' B2 D' R' D B2 U2 R 
-At idx  7497: alg improved to length 13 with gain  5: F2 R' D R D2 F' U2 F D2 R' D' R F2 
-At idx  7500: alg improved to length 13 with gain  2: L U' B L' B' U' R B L B' R' U2 L' 
-At idx  7504: alg improved to length 13 with gain  1: R U B' U' B' R' B' U' B2 U2 B2 U2 B' 
-At idx  7509: alg improved to length 13 with gain  4: B U' F' L' B L B2 R' F U F' R F 
-At idx  7546: alg improved to length 13 with gain  2: U R U R' U2 R' F' U' F U R2 U R' 
-At idx  7549: alg improved to length 13 with gain  4: L' U2 L F R U' R' U' F' U L' U2 L 
-At idx  7563: alg improved to length 13 with gain  4: R' F' U' F' D' F' D F' R2 U' R2 U2 R 
-At idx  7592: alg improved to length 13 with gain  2: U' B U L U' L' F B' R U R' U' F' 
-At idx  7605: alg improved to length 13 with gain  3: U2 F' U2 F2 R' U F2 U F2 U' R U' F' 
-At idx  7619: alg improved to length 13 with gain  4: R' F L2 B F L' F L F2 B' L2 F' R 
-At idx  7622: alg improved to length 13 with gain  1: U2 R' U2 R U2 R B2 L2 B R' B' L2 B2 
-At idx  7623: alg improved to length 13 with gain  2: B F' U B2 U' F B' R U B' U' B2 R' 
-At idx  7630: alg improved to length 13 with gain  1: L' B L' B R2 D2 L' F' L D2 R2 B2 L2 
-At idx  7640: alg improved to length 13 with gain  2: F R' U2 L F D' F D F2 L' U2 R F' 
-At idx  7641: alg improved to length 13 with gain  3: U' F L F' U F U2 F' U F U L' F' 
-At idx  7649: alg improved to length 13 with gain  3: U R B U' B' U' R D L' B L D' R2 
-At idx  7652: alg improved to length 13 with gain  4: U L U' R U R2 F R F' L' F' U F 
-At idx  7656: alg improved to length 13 with gain  5: U2 R2 B2 R F R' B2 R2 B' R' F' R B 
-At idx  7667: alg improved to length 13 with gain  1: F' R D2 F U' B U B' U F' D2 R' F 
-At idx  7680: alg improved to length 13 with gain  4: R U' L' U B' R2 U' R U' B' L' B2 L2 
-At idx  7682: alg improved to length 13 with gain  2: U2 L' D L2 U F2 U F2 L' U2 L2 D' L2 
-At idx  7701: alg improved to length 13 with gain  3: R' U' R U' R B2 D2 L2 D' L2 D' B2 R' 
-At idx  7704: alg improved to length 13 with gain  1: R2 F' R2 U' R2 F2 U' F' U D' F' D R2 
-At idx  7714: alg improved to length 13 with gain  2: U2 F2 R2 U' F L' F' U F L F' R2 F2 
-At idx  7715: alg improved to length 13 with gain  1: U R' F2 U' L D' L' U L2 D L2 F2 R 
-At idx  7719: alg improved to length 13 with gain  4: R2 B' L' F L2 B L2 F' D2 R' L B' R' 
-At idx  7720: alg improved to length 13 with gain  2: B U2 B' U' R2 U' F' U F2 R F' U' R 
-At idx  7721: alg improved to length 13 with gain  4: R U2 B F R2 D B D' R2 F' B' U2 R' 
-At idx  7728: alg improved to length 13 with gain  4: L' R B R' B' R2 D2 L' F' L D2 R2 L 
-At idx  7744: alg improved to length 13 with gain  3: U2 B U L' B L B2 L' B U' B' U L 
-At idx  7747: alg improved to length 13 with gain  3: F R B R B R2 F' L U2 R L' B R' 
-At idx  7749: alg improved to length 13 with gain  2: U2 R U2 L' U L U2 R' L' B' U B L 
-At idx  7751: alg improved to length 13 with gain  3: R U2 R' B' U R U B' R' B2 L U' L' 
-At idx  7756: alg improved to length 13 with gain  3: U R' U' F2 D' F' D F2 U F R2 U' R' 
-At idx  7768: alg improved to length 13 with gain  1: U2 F R U' L B L' U L B' R' L' F' 
-At idx  7770: alg improved to length 13 with gain  1: B2 F' D L' D' F B D' F R F' D B 
-At idx  7774: alg improved to length 13 with gain  5: F L2 R U L2 D' B2 D R' L U2 L' F' 
-At idx  7780: alg improved to length 13 with gain  4: F2 L2 B2 D2 L B2 L F2 R2 U2 B' R' B 
-At idx  7806: alg improved to length 13 with gain  3: U2 R' U2 R U2 L' B R L' B R' B' L2 
-At idx  7810: alg improved to length 13 with gain  2: B L2 U L' F' L2 F L2 U L U2 L2 B' 
-At idx  7814: alg improved to length 13 with gain  3: U' B U2 B' R B' R' U' B2 U' B2 U2 B 
-At idx  7815: alg improved to length 13 with gain  1: U F' L' U L F R U R' U' R U' R' 
-At idx  7834: alg improved to length 13 with gain  4: U' B2 L2 F' L B' L2 F2 U F' U L' B' 
-At idx  7837: alg improved to length 13 with gain  2: U' B' R B R' U2 B2 L F' L F L2 B2 
-At idx  7841: alg improved to length 13 with gain  2: U2 L' R' B' U2 B R L F2 D R2 D' F2 
-At idx  7842: alg improved to length 13 with gain  1: F U2 F' U' R' F R U' F' U' F' U F 
-At idx  7847: alg improved to length 13 with gain  3: L' U2 L2 F' L' F L U L2 U L2 U2 L' 
-At idx  7850: alg improved to length 13 with gain  1: B D F R' F2 D2 L D2 F2 R F' D' B' 
-At idx  7857: alg improved to length 13 with gain  4: F2 L' D2 L' F L2 F2 R F' U2 B U2 R' 
-At idx  7860: alg improved to length 13 with gain  1: B L U L U2 L2 B2 D2 R2 D R2 D B 
-At idx  7870: alg improved to length 13 with gain  3: U R2 U F U' F2 D R2 D' R2 F U' R2 
-At idx  7888: alg improved to length 13 with gain  1: R' B R U' L U' R U' L' U R2 B' R 
-At idx  7893: alg improved to length 13 with gain  1: U' R U R' F R2 B' R' B R' F2 U F 
-At idx  7895: alg improved to length 13 with gain  2: U2 B' U' B L2 D R' F' R D' L' U2 L' 
-At idx  7905: alg improved to length 13 with gain  1: R' U' R' U L U' R F' U F R U L' 
-At idx  7920: alg improved to length 13 with gain  1: U R2 B2 R2 B U' F' U2 B2 U' B' U' F 
-At idx  7923: alg improved to length 13 with gain  2: U L' U' L B D' L2 U L' U' L2 D B' 
-At idx  7935: alg improved to length 13 with gain  2: F' U2 F2 U2 F U2 F' U2 F U2 F2 U2 F' 
-At idx  7939: alg improved to length 13 with gain  3: R U B U' R B' R D2 L' F L D2 R 
-At idx  7941: alg improved to length 13 with gain  2: U F R2 D2 B2 R D2 F' R F' U2 L F 
-At idx  7949: alg improved to length 13 with gain  2: B' F2 L2 B2 L' F L2 B U2 B L F B 
-At idx  7950: alg improved to length 13 with gain  2: U2 F2 D' B L' B' D B L F L' F B' 
-At idx  7952: alg improved to length 13 with gain  3: U B2 R' B R2 F' U2 F2 R F' U2 R' B 
-At idx  7954: alg improved to length 13 with gain  1: B' U2 B L' B L B2 U2 R' U' R U B 
-At idx  7956: alg improved to length 13 with gain  2: R' U' R B L U2 L' U' L U L' U' B' 
-At idx  7971: alg improved to length 13 with gain  3: B L2 F D2 B D B' D2 F2 D' L2 F B' 
-At idx  7975: alg improved to length 13 with gain  1: U' R2 U R' U R' U' R B' R B U' R2 
-At idx  7996: alg improved to length 13 with gain  3: U F2 L' F2 L' B L F2 B' L2 F L' F 
-At idx  7998: alg improved to length 13 with gain  5: U2 B U B' U2 R2 U' F' U F2 R F' R 
-At idx  7999: alg improved to length 13 with gain  3: F' U2 R2 D' F' D R2 U2 F U B U' B' 
-At idx  8002: alg improved to length 13 with gain  2: R U R' U R2 U R U R2 U' R' U' R2 
-At idx  8019: alg improved to length 13 with gain  3: L2 R' F' D2 L U2 L' D2 F L U2 R L 
-At idx  8025: alg improved to length 13 with gain  1: U' F2 U F2 R' F R F R' F R U' F2 
-At idx  8027: alg improved to length 13 with gain  1: F R2 F' U R' U F' U2 F R F R F' 
-At idx  8036: alg improved to length 13 with gain  3: L2 U' L2 U B L2 U L2 U' B' L2 U L2 
-At idx  8039: alg improved to length 13 with gain  1: L U2 F' U2 F U R U' R' L' F' U F 
-At idx  8041: alg improved to length 13 with gain  1: U R2 U R F' U' F U R U' R2 U' R2 
-At idx  8042: alg improved to length 13 with gain  3: F R' F' R U R B U2 B' R' F' U F 
-At idx  8051: alg improved to length 13 with gain  4: U' F' U2 F2 R' F' R2 B L U2 L' B' R' 
-At idx  8055: alg improved to length 13 with gain  3: U2 F2 U2 L' U L U' L F L' F' U2 F2 
-At idx  8059: alg improved to length 13 with gain  3: R' F' U F2 R' F' R U2 R U' B U2 B' 
-At idx  8075: alg improved to length 13 with gain  2: R B' D2 F D U F' U' F' D B U' R 
-At idx  8083: alg improved to length 13 with gain  5: R' F' L U2 L2 U' L2 U' L2 U' L F R 
-At idx  8085: alg improved to length 13 with gain  2: U2 R2 U' F' L' B U2 B' L F R2 U R2 
-At idx  8091: alg improved to length 13 with gain  3: R' F' U' F2 R2 F' R2 U' B U' B' U' R 
-At idx  8094: alg improved to length 13 with gain  3: U2 L U F U' R U2 R' F' L' B' U2 B 
-At idx  8096: alg improved to length 13 with gain  1: U L' B R2 B2 U2 B U2 L2 B R2 B' L' 
-At idx  8109: alg improved to length 13 with gain  2: U L U F2 U' L' U2 R' F' R F' U' F2 
-At idx  8113: alg improved to length 13 with gain  1: U2 L U F U' F' L' F R U R' U' F' 
-At idx  8126: alg improved to length 13 with gain  1: F' R B' R B F2 R2 F U' B U' F2 B' 
-At idx  8132: alg improved to length 13 with gain  1: U2 F U2 B' F' U2 L2 B2 L B2 L U2 B 
-At idx  8135: alg improved to length 13 with gain  4: R U2 R' U' R U2 B' R B R2 F' U F 
-At idx  8143: alg improved to length 13 with gain  2: R' F' L' F R F' L U B U' F U B' 
-At idx  8147: alg improved to length 13 with gain  4: U F R F2 D2 B L D B2 D F U' L2 
-At idx  8149: alg improved to length 13 with gain  1: L' R U B2 U2 B' U' B' U' B2 L U R' 
-At idx  8150: alg improved to length 13 with gain  3: R2 F2 U' F2 U F2 R L' F' U2 F R L 
-At idx  8162: alg improved to length 13 with gain  2: U B2 R2 F R F' R2 B2 R' U' R' U R 
-At idx  8176: alg improved to length 13 with gain  2: U2 F R U' B U2 R' U' F' U R B' R' 
-At idx  8186: alg improved to length 13 with gain  4: U R F' U L2 R B' R' B L2 U' F R' 
-At idx  8193: alg improved to length 13 with gain  3: U L F2 R' F' R F2 L F L2 B' U2 B 
-At idx  8200: alg improved to length 13 with gain  2: L F' R' F' D2 U B' L B U' D2 R L' 
-At idx  8221: alg improved to length 13 with gain  4: U' B2 D' R2 F R F' R D R B R' B 
-At idx  8222: alg improved to length 13 with gain  4: B' U' B2 F' L' B2 U B U2 L2 U L' F 
-At idx  8236: alg improved to length 13 with gain  3: U' F' U2 F2 U F2 U F L2 B L B' L 
-At idx  8240: alg improved to length 13 with gain  3: B L F U2 F2 L2 F U2 F U2 F' L B' 
-At idx  8245: alg improved to length 13 with gain  6: U R B R' F U' R U R B' R2 U F' 
-At idx  8256: alg improved to length 13 with gain  2: U' B U B' U R2 F B2 R F' R' B2 R2 
-At idx  8258: alg improved to length 13 with gain  3: F U2 L F2 L' F' L2 B D2 F' D2 L2 B' 
-At idx  8270: alg improved to length 13 with gain  5: B' F U R2 D' R U' R' D R2 F' U' B 
-At idx  8272: alg improved to length 13 with gain  1: U B U2 B' F' R' U L' U' L U' R F 
-At idx  8277: alg improved to length 13 with gain  3: U' R2 U2 F' L' B' U' B L U F U' R2 
-At idx  8286: alg improved to length 13 with gain  1: B' R' U2 R U2 F U R' U' R F' U' B 
-At idx  8288: alg improved to length 13 with gain  2: U' L2 D' L' D2 R' F' R D' F L' U' F' 
-At idx  8289: alg improved to length 13 with gain  2: R B U B U' R' U2 L' B' L B' U' B2 
-At idx  8290: alg improved to length 13 with gain  3: U B' F' D2 L' B U2 B' L D2 B U2 F 
-At idx  8294: alg improved to length 13 with gain  3: U2 B U L2 D L' U' L2 D' L B2 U B 
-At idx  8301: alg improved to length 13 with gain  4: R2 U2 R F2 D2 L2 B L2 D2 F2 R' U2 R2 
-At idx  8303: alg improved to length 13 with gain  2: F U2 F' U2 R' U L' U' R B' U' B L 
-At idx  8309: alg improved to length 13 with gain  3: U L U' F U R B U' B' R' F' U2 L' 
-At idx  8339: alg improved to length 13 with gain  2: L R D2 L D' R' B2 R2 D2 L' D R2 L' 
-At idx  8340: alg improved to length 13 with gain  2: U L R2 F' R2 F R2 F L2 B2 R2 B2 L 
-At idx  8342: alg improved to length 13 with gain  5: U F2 R2 B' R F D' F' D R' B R2 F2 
-At idx  8349: alg improved to length 13 with gain  2: U2 B U2 B' U' B L' U' B' U B L B' 
-At idx  8374: alg improved to length 13 with gain  2: U' R' U' F' U' L F' L' F2 R B U2 B' 
-At idx  8391: alg improved to length 13 with gain  3: U2 R' U' F R2 B' R F' R' B R2 U R 
-At idx  8396: alg improved to length 13 with gain  1: U' R U2 B2 L U L' U' B' U B' U2 R' 
-At idx  8400: alg improved to length 13 with gain  3: U2 F' L B2 R D L D' R' L' B2 L' F 
-At idx  8402: alg improved to length 13 with gain  3: U2 F2 U F2 R' F R U F U' F U' F2 
-At idx  8405: alg improved to length 13 with gain  1: U2 L U F L U' R' U L' U' R F' L' 
-At idx  8408: alg improved to length 13 with gain  4: L' B L B U' R D B' D' R' B U B2 
-At idx  8409: alg improved to length 13 with gain  1: L F R U' R' F' L' B2 R B R' U B 
-At idx  8410: alg improved to length 13 with gain  4: U' L2 R B R B' L2 B2 R' B R B2 R2 
-At idx  8429: alg improved to length 13 with gain  4: U F' R' F2 U F2 U' F' U2 F' U' R F 
-At idx  8439: alg improved to length 13 with gain  1: L2 F U' R U R' L U L' F' L U' L 
-At idx  8441: alg improved to length 13 with gain  3: L' R' U2 R' D' B2 L F2 L' B2 D R2 L 
-At idx  8451: alg improved to length 13 with gain  1: L' B2 D2 R' F' R2 F D R' B' D B' L 
-At idx  8458: alg improved to length 13 with gain  3: L U' R D' B2 D R' U2 L' U' L2 U2 L 
-At idx  8461: alg improved to length 13 with gain  3: L2 B L B' L' B2 D2 F' R' F D2 B2 L2 
-At idx  8462: alg improved to length 13 with gain  5: B D2 U' F' U F D2 L2 D F' D' L2 B' 
-At idx  8464: alg improved to length 13 with gain  3: F U' B D' L2 D B' U2 F U F2 U2 F' 
-At idx  8474: alg improved to length 13 with gain  2: U2 F R2 B D2 B R F2 L F R2 B2 R' 
-At idx  8490: alg improved to length 13 with gain  3: U' B2 R' B2 R' F R F' B2 R2 B R' B 
-At idx  8501: alg improved to length 13 with gain  3: U2 B2 U2 R' F' L' U' L F U R U' B2 
-At idx  8533: alg improved to length 13 with gain  2: U L R B U2 B' R' L' F2 D' L2 D F2 
-At idx  8535: alg improved to length 13 with gain  4: F' U R B2 L B' L' B L' B2 R' U F 
-At idx  8538: alg improved to length 13 with gain  2: U2 R U2 R B R' U' R' U R B' U2 R' 
-At idx  8539: alg improved to length 13 with gain  1: B U' F U F2 L F L2 U L2 U' L' B' 
-At idx  8543: alg improved to length 13 with gain  4: L B' R2 F2 R U F2 U' R' F2 R2 B L' 
-At idx  8548: alg improved to length 13 with gain  2: F' L' U' L U L2 F' R2 F L2 F' R2 F2 
-At idx  8554: alg improved to length 13 with gain  2: F U L2 D2 R2 B R2 D R B' R' D L2 
-At idx  8557: alg improved to length 13 with gain  2: F2 R2 F2 R U R U' R' F R' F R2 F2 
-At idx  8558: alg improved to length 13 with gain  3: L' B2 L2 B U' B' L2 B' L B' L U L' 
-At idx  8562: alg improved to length 13 with gain  3: L' U' L F U R U R' U R U' R' F' 
-At idx  8575: alg improved to length 13 with gain  3: U2 F2 U2 R' F' R F2 U F2 U F U2 F 
-At idx  8580: alg improved to length 13 with gain  2: B U L2 U2 L2 R' U L2 U' R U2 L2 B' 
-At idx  8608: alg improved to length 13 with gain  4: U F U R' D R2 U' R D' R2 F2 U2 F 
-At idx  8612: alg improved to length 13 with gain  3: F R' F' R U2 F2 L F2 R' F' L' F R 
-At idx  8637: alg improved to length 13 with gain  2: U' R U R' U2 F' U' F2 R' F' R2 U2 R' 
-At idx  8638: alg improved to length 13 with gain  5: B L' B' L2 F2 R' F' R2 U R' U F' L' 
-At idx  8641: alg improved to length 13 with gain  3: U B U2 F' L F L' B' L' B2 L' B2 L2 
-At idx  8642: alg improved to length 13 with gain  3: U R B U' B D B' U2 B D' B2 U' R' 
-At idx  8652: alg improved to length 13 with gain  3: F U R2 U2 R F' R' U2 R F R U' F' 
-At idx  8665: alg improved to length 13 with gain  2: U2 B2 U L D2 R' U2 R D2 L' B2 U' B2 
-At idx  8671: alg improved to length 13 with gain  4: R U F R2 D U B R' B' U' R D' F' 
-At idx  8672: alg improved to length 13 with gain  4: U' B' L' B2 U B2 U' B' U2 B' U' L B 
-At idx  8680: alg improved to length 13 with gain  1: U R B U B' U' R' F' L' U' L U F 
-At idx  8699: alg improved to length 13 with gain  2: U R B R2 U' R' F R' B' R2 F' U' R 
-At idx  8710: alg improved to length 13 with gain  2: U R' F' L' U L U' R B' R' F R B 
-At idx  8717: alg improved to length 13 with gain  1: B R D' R' U' R D L U' L' U R' B' 
-At idx  8719: alg improved to length 13 with gain  3: R' U' F' U2 F R B U B' U' B U' B' 
-At idx  8721: alg improved to length 13 with gain  2: U F U2 L U' R' U L' U' R2 U' R' F' 
-At idx  8735: alg improved to length 13 with gain  1: L F L' R' U2 R B L F U2 F2 L' B' 
-At idx  8747: alg improved to length 13 with gain  5: R' B L2 D F D' L B' R2 B L B' R' 
-At idx  8754: alg improved to length 13 with gain  3: U' L' F R2 D B D' R F' L F R F' 
-At idx  8763: alg improved to length 13 with gain  1: B D' L B2 U' L' U2 L U B2 L' D B' 
-At idx  8774: alg improved to length 13 with gain  1: U F R2 U' R2 U R2 U F' U' B U' B' 
-At idx  8776: alg improved to length 13 with gain  3: U' B U B2 R2 F2 R' B R F2 R U R 
-At idx  8780: alg improved to length 13 with gain  2: U R' U2 F' R B' R' F R2 B R2 U2 R 
-At idx  8784: alg improved to length 13 with gain  2: U2 L2 B F2 D B D' B' D' F2 L B' L 
-At idx  8794: alg improved to length 13 with gain  1: U2 R B L B' R' F B U' F' U L' B' 
-At idx  8818: alg improved to length 13 with gain  2: R' B2 L' B' L F' U' F U B2 R2 B R' 
-At idx  8822: alg improved to length 13 with gain  3: R' F' L F' L R2 B L B' R2 L F2 R 
-At idx  8836: alg improved to length 13 with gain  1: R' F' U' F U F' R' U' R F R' U R2 
-At idx  8837: alg improved to length 13 with gain  3: U2 L' U B U2 R B' R' U2 B2 U B L 
-At idx  8839: alg improved to length 13 with gain  1: U2 F' L2 F' R2 F B L B' L F' R2 F2 
-At idx  8840: alg improved to length 13 with gain  3: U' L' B2 D' U' R' B' R B U D B2 L 
-At idx  8851: alg improved to length 13 with gain  2: U2 L F R U2 R' L' B' L F' L' U2 B 
-At idx  8853: alg improved to length 13 with gain  2: R' F R2 U R2 D R' D' R' U' R2 F' R 
-At idx  8855: alg improved to length 13 with gain  3: U B' R2 D2 F' D F' D' F D2 R' B R' 
-At idx  8862: alg improved to length 13 with gain  1: U F U2 F' L' B' R' U2 R U' B U L 
-At idx  8868: alg improved to length 13 with gain  5: U B2 L2 B R B' R2 F R' F' R2 L2 B2 
-At idx  8870: alg improved to length 13 with gain  4: L' R B' L U2 L' B2 L' B R B' R2 L2 
-At idx  8880: alg improved to length 13 with gain  4: F' L2 D' U' L2 D L D' L U D L2 F 
-At idx  8882: alg improved to length 13 with gain  3: U L' B' U B2 U2 B2 U' B2 U' B' U L 
-At idx  8886: alg improved to length 13 with gain  4: U' R B U' L U' L' B' R' U F' U F 
-At idx  8888: alg improved to length 13 with gain  3: R B L U' L' B2 R2 D' R' D R' B R' 
-At idx  8893: alg improved to length 13 with gain  2: F' U' L U F U' F R' F2 L' F2 R F' 
-At idx  8896: alg improved to length 13 with gain  4: F' U2 R' F U L F L' F' U' R U2 F 
-At idx  8902: alg improved to length 13 with gain  1: U' R B U2 L' B' R B2 L B R' B R' 
-At idx  8908: alg improved to length 13 with gain  2: U' R U2 R2 F R F2 U F U2 R U' R' 
-At idx  8916: alg improved to length 13 with gain  3: F U2 L F' L F2 L' F' L F' L2 U2 F' 
-At idx  8926: alg improved to length 13 with gain  2: U R2 U' R F R' U R U' F2 U F R 
-At idx  8941: alg improved to length 13 with gain  3: R U R' B2 U' R' L2 F R F' L2 U B2 
-At idx  8944: alg improved to length 13 with gain  6: F2 U R2 D R D' F D' F' D R U' F2 
-At idx  8951: alg improved to length 13 with gain  2: U R' F L2 B D F D' F' B' L2 F' R 
-At idx  8952: alg improved to length 13 with gain  2: F2 L2 F L' U' L B L2 B2 U2 F U B 
-At idx  8981: alg improved to length 13 with gain  3: R' F' U2 F U F U2 F' U' F U' F' R 
-At idx  8983: alg improved to length 13 with gain  3: U' F2 R2 B' R' B R' F2 U2 L F' L' F 
-At idx  8985: alg improved to length 13 with gain  2: L U F' U' R' F2 R F L' U2 R U R' 
-At idx  8991: alg improved to length 13 with gain  1: R B' U' B2 U' B2 U2 B R' U R U2 R' 
-At idx  8999: alg improved to length 13 with gain  4: U L R U2 L' B L U2 L2 B' L U2 R' 
-At idx  9005: alg improved to length 13 with gain  5: U' B' R2 F' D2 F' R' B2 L' B' R2 F2 R 
-At idx  9015: alg improved to length 13 with gain  1: U' R U2 F R2 F R2 F2 U2 R' L' U2 L 
-At idx  9044: alg improved to length 13 with gain  2: B U L U2 F U' F2 L2 B L' F L2 B2 
-At idx  9047: alg improved to length 13 with gain  2: R' U' F' U2 L' U L U' F R B U2 B' 
-At idx  9053: alg improved to length 13 with gain  2: F R U R' U' F' B' R' F R' F' R2 B 
-At idx  9054: alg improved to length 13 with gain  3: U2 R U' B2 F' D L D' F B R B R2 
-At idx  9064: alg improved to length 13 with gain  2: F R2 B' D B' D' B2 R2 U R U' R' F' 
-At idx  9071: alg improved to length 13 with gain  1: R U' L2 D' B D B' L2 U L2 B R' L2 
-At idx  9075: alg improved to length 13 with gain  5: R' U2 F U R' F' R2 F U' F' R' U2 R 
-At idx  9076: alg improved to length 13 with gain  2: F2 D R' D' F U' F2 D R U R D' F' 
-At idx  9090: alg improved to length 13 with gain  3: U F' U L2 R D' B' D R' L' F' L' F2 
-At idx  9095: alg improved to length 13 with gain  2: U R' U B' U R2 U R2 U' R2 B U2 R 
-At idx  9096: alg improved to length 13 with gain  5: U R D L U2 L D' R D L2 B2 D' R2 
-At idx  9098: alg improved to length 13 with gain  4: F U R' U' F' U F2 L2 F' R F L2 F2 
-At idx  9106: alg improved to length 13 with gain  4: L U L' F' L B L2 F B' U F' L' F 
-At idx  9111: alg improved to length 13 with gain  3: B' U' R2 U R' F' U' F U' R' U2 R' B 
-At idx  9113: alg improved to length 13 with gain  4: F U F' U L' U L2 D R' F R D' L' 
-At idx  9117: alg improved to length 13 with gain  3: U' B U' F U2 B2 D' R2 U D F' U' B 
-At idx  9127: alg improved to length 13 with gain  4: F' U L' B2 R B R2 U2 R U' B L F 
-At idx  9128: alg improved to length 13 with gain  5: F R' F' R B U B2 R B U' R2 U2 R 
-At idx  9129: alg improved to length 13 with gain  2: L U L' U L F' L2 F L2 B' U2 B L' 
-At idx  9136: alg improved to length 13 with gain  2: R B L U L2 U' B' U B L U' B' R' 
-At idx  9145: alg improved to length 13 with gain  3: U R U2 R2 F D' F' U' F2 D F2 U R 
-At idx  9148: alg improved to length 13 with gain  2: F2 R' F' L R F' L' U' L F L' U F' 
-At idx  9170: alg improved to length 13 with gain  1: U R F R2 F' U' F R2 U R2 U' F' R' 
-At idx  9172: alg improved to length 13 with gain  1: U F2 U' F' R U R' U' F' U F2 U F2 
-At idx  9176: alg improved to length 13 with gain  4: R U' R' U2 L R U' R' U2 F U' F' L' 
-At idx  9194: alg improved to length 13 with gain  3: U B R B2 U' B2 U' B2 U2 B2 U' R' B' 
-At idx  9202: alg improved to length 13 with gain  2: U' R' F R2 U R2 F R F U F2 U2 F' 
-At idx  9203: alg improved to length 13 with gain  5: L F R2 D L B2 L' D2 R D R F' L' 
-At idx  9221: alg improved to length 13 with gain  6: U R' U' R2 U2 B' D B U2 B2 D' B2 R' 
-At idx  9227: alg improved to length 13 with gain  4: L' U2 B' R U R2 U R2 U2 R' U2 B L 
-At idx  9234: alg improved to length 13 with gain  4: U' R B' R' B U2 R' F' L' U2 L F R 
-At idx  9243: alg improved to length 13 with gain  6: L R' F2 L D' R F2 L' U R2 L' B2 R2 
-At idx  9255: alg improved to length 13 with gain  3: F' U' F U2 R' F' L' U L U' F2 R F' 
+R D' U' F2 U' L' U2 L F2 D R' U2 R' 
+R' U2 R B' D' B U' F B' R' F' D B 
+U' L' U' L F2 R U R' U' F2 L' U L 
+R2 B' L2 R D2 L' F L D2 R2 L2 B R' 
+F R' F R F' R B' R' F R2 B R2 F2 
+U' R U' L U L2 B L B' R' B' U B 
+U B' F U' B U F' R B L' B' R' L 
+R U B U' B2 R D2 L' F L D2 R2 B 
+F' D2 R D2 L' F2 U2 L' D2 B R2 D2 L2 
+U R B U' B2 R' F R B R' F2 U F 
+U2 F' U' L' U L2 B2 L' F' L B2 L' F2 
+U L' U2 R B' R' B L B L2 B L2 B2 
+R U2 F2 R2 B' R F' R B2 U2 F' B' R' 
+U2 L' B' U' B U L B U L U' L' B' 
+R U B U B' U' R2 L D' F2 D R L' 
+U F2 R' B' R F' B R F' U B U' B' 
+U' L2 U2 B' U B U' B L B' L' U2 L2 
+F R2 B' D B' D F L' F' D2 B2 R2 F' 
+U2 B' U' B R D' B2 U B' U' B2 D R' 
+U B U B' R2 U' F' U F R2 B U' B' 
+F L2 R2 D' L B L2 D R2 F L' U' F2 
+U2 L B' R2 D' F' D R' B L' B' R' B 
+U2 L' F' L2 D' R U B2 U' R' D F L 
+B L U2 L' B R2 F' D L2 D' F R2 B2 
+U' R2 U B L F' U2 F L' B' R2 U' R2 
+F R2 B2 D2 R U2 L' F2 D2 L U2 R F' 
+F U' R U' R' U L' U R U' R' L F' 
+R' F2 U' F U' R2 B' D2 B' L2 D2 B2 R' 
+R U B U B2 R2 D' R' D R' B U2 R' 
+R' U2 R U2 F R B2 R' D' R D F' B2 
+B' R D R' U2 L' B2 L U2 R2 D' R2 B 
+U R' F2 D' U' L' F' L F U D F2 R 
+U R U2 L' U R' U' B' R2 B' R2 B2 L 
+U' F U2 B' U B U2 F' B' R' U R B 
+R U L' B' L2 F U F' U R L' B2 R2 
+U R B U B' R2 F R F2 L' U L F 
+U L F R U2 R' U F' L' U B' U B 
+U B F U2 B' U' B U2 F2 U B' U' F 
+R U' L D2 B L' U L B' D2 L' U R' 
+U' B' U2 B U B' U B2 U L U' L' B' 
+U' L' B2 U' B2 L B' L' B' U B' L B' 
+L U F U' R U2 R2 F' L F2 R F2 L2 
+F R2 B2 D2 B D R' D B R2 F' U' R 
+B U2 B' R B2 R2 B' U2 B R2 B R' B 
+U' B U2 B' R' F' L' U2 L U' F U R 
+U L U' F U' F' U' F' L F L' U2 L' 
+R B' R2 D2 R B U2 B U2 L' F2 L B' 
+U' R U2 L' U' L F2 D R D' F2 U2 R' 
+U F U R2 U F2 U' F2 U' R2 F2 U2 F 
+U' F' U' L' U2 L F' D' B L' B' D F2 
+U2 L D R' F R F2 R' F R F D' L' 
+U L2 D' L' D2 R' F' R D' F L' U' F' 
+U' L B' R2 F2 D R' D' R F2 R2 B L' 
+B' R B U2 L F2 L B2 R2 D2 B2 L2 F2 
+F' L U L U2 L' U2 L2 U F L U2 L' 
+R' U2 L2 R U L2 D' B2 D B2 L' B2 L 
+U' B D F' L F L2 F' L F L D' B' 
+U2 B' R' U R' D' R U2 R' D R2 U B 
+L' U2 L U' R U2 B L' U L B' U2 R' 
+U L U L' U2 B2 U' R' U R2 B R' B 
+L F R F' L F L' U R' U' L F' L2 
+R U2 R2 F R F R2 L F L' F' R2 F2 
+F L' U2 R2 D B2 D' R' U' R' L U F' 
+R' U2 R U2 R B' R2 U F' U' F R B 
+U2 R U2 L' B' R B R2 L U' R U' R' 
+F L' D2 L U2 L' D2 L F' U' F U' F' 
+U F2 D B' R B D' B' R' F' R F' B 
+U2 R' F' R U' L' U R' U L U' F R 
+B2 R2 U' B L F R' F' L' B' U R2 B2 
+F R U R2 U F R B' D' R2 D F2 B 
+U2 L' U' L F R U B U' B' U R' F' 
+F' U L U2 L U' L' U L' U2 L' U F 
+U' F R U' R' F' L' U B' U' B U L 
+U' F2 R2 F U' L F' L' F U F' R2 F2 
+B U B2 D' R D' F2 R' D2 B2 U' L' B' 
+U2 B' U' R U R2 U R2 U2 R2 U' R B 
+U2 R D' B2 D R' U2 L2 B L' B' U L2 
+U F2 L R2 D L D' L' D' R2 F L' F 
+U2 F' L2 D2 B2 L' D2 F L' F U2 R' F' 
+U R' U' F' U F2 L2 F' R' F L2 F' R2 
+R B2 U R2 B R' U' R' U' F B2 R' F' 
+R' F' U' F U R F R B' R B R2 F' 
+F' U F' U2 F2 R B U B' R' F2 U2 F2 
+U' B U B' U B2 R2 F R F' R2 B2 R' 
+U R2 D L' B' L D' R' B U2 B' U' R' 
+U L U L' U2 B2 U' R B' R' B U B2 
+F2 R2 F' R D' F' U F D R' F R2 F2 
+R2 F' R2 U R2 D' F' U' D F' U F2 R2 
+U R' U' R U' B2 L' B2 R B L B' R' 
+L' R U' B U B R B2 R' U R' U' L 
+U2 F' U' F U' F' U F R B U B' R' 
+U2 B F2 L B L' F2 L2 B' L B L2 B2 
+F D R' B D2 F2 L F2 D2 B' R D' F' 
+L F2 L2 U R U' R2 L2 F2 L' F R F' 
+U L' B L2 F2 R' D R F2 L2 B' U L 
+R' U L U' R U L' F U R U' R' F' 
+R B' R' F R' F' R2 B2 L U2 L' B' R' 
+F' U F U R U2 R' B U' F' U F B' 
+U' R U B' R B R2 B' R U' R' U B 
+U2 L U L2 B2 R2 B' L B R2 B U B 
+U F D B' R B R2 B' R B R D' F' 
+U2 L U2 B U' F' U B' U' F2 U' F' L' 
+L' U2 L U2 L' U L F U F' L' U' L 
+B' R2 U F' R2 D2 L2 B' U' L2 U2 D2 B 
+B' R B L' B2 R' B2 U' L U' L' U2 L 
+F U' L' U R2 U' L U R' U R' U' F' 
+U' R B R' U L U' R B' R' B L' B' 
+U2 F' L F' L' F2 L' U R U' L U2 R' 
+B U B2 R B R2 U R2 U B U' B' R' 
+U' F' U' L2 B L' F' L B' L2 F U F 
+F2 R2 U F' R' F U' R2 F2 U L' U2 L 
+F U2 L' B' U' B L2 D F2 D' L' U2 F' 
+L U2 L' U' B' U B' D' F R' F' D B2 
+U B' U2 B2 L' B' L' F R' F R F2 L2 
+U2 B' U2 B L2 D F R' F R F2 D' L2 
+U L R2 F R F U F2 U' F2 L' U2 R 
+U2 R B L U2 L' B' R2 F R F2 U2 F 
+U2 R2 F2 R F U L' U L2 F L' U' R 
+U' F2 L2 F L U B' U B2 L B' U' F 
+U L' U2 L F2 D R B' R B R2 D' F2 
+L U L2 B L B2 U' B U2 B L' B' L 
+L' U R' U2 F' L U2 L' F U2 R U' L 
+U2 F' U' F L F R' F' D' F2 D R L' 
+R' F U F' L D F' D' R2 L' B' R' B 
+U2 R' U2 R2 U R2 U R F2 L F L' F 
+U R B U F' L U' L' U F B' U' R' 
+U L U F' L2 B L' F L B' L2 U' L' 
+F U B' U R U2 B' R' F' B2 L U' L' 
+U' L B L2 D R' U' F2 U R D' B' L' 
+R2 U' R2 U' R2 U2 F' L' F R2 F' L F 
+R U' R' U2 R2 U B U' B2 R' B U' R' 
+L2 D' B D L2 F' L D' L B' D L2 F 
+R B U' L' U2 F' L F U2 L B' U R' 
+R' D2 L2 D2 F2 D' F' D F' D2 L2 D2 R 
+U2 B L U2 F' L' B L2 F L B' L B' 
+U R B U' B D F' L2 F D' B2 U' R' 
+F' L B' U2 B F R' F B D2 B' R F' 
+U2 R F' L2 B L B' L2 F R' F' L' F 
+U2 L U L' U L2 B2 R B R' B2 L2 B' 
+U' F2 L2 F' R B' R F B L2 F' R2 F' 
+F U R' U2 B' R' B R U F' R' U R 
+R' U2 F U F' R F U2 R' U' R U F' 
+U' R2 D' L F2 L' D R2 B2 L' B' L B' 
+B' U B R2 B R2 U' R2 U B2 U' B R2 
+R' U' F' U' L' B' U2 B L F2 R' F' R2 
+B' U F2 D R' D' F2 U' L' U2 L U' B 
+U2 L R F L' B L F' B' R' B L' B' 
+U2 R' D' L F' L' D R F' L' U L F 
+U R' F R' F' R2 B2 D B' U2 B D' B2 
+F2 U' R U2 R' F' L F2 L' U F U' F 
+U' F' U' L F' L' F2 L F' U F U' L' 
+U' F' U' L' U B' L F L' U' B U L 
+R U R2 F' U' F U R U2 R' F R F' 
+R U' L' U2 R' B' R U' R' U2 B U L 
+U2 F' L' B L B' L F' B L B' L' F2 
+R U B2 L' B' U' B U L2 U' L' B2 R' 
+R' D B2 D' U2 B' R2 B U2 D B2 D' R 
+R B2 D2 F L' F2 D' B D F D2 R' B 
+L' R' D2 U R U' R' D2 L F R' F' R2 
+R D B2 U B2 U' R' U2 R D' R2 U' R 
+L U2 L' F' U L U L' U2 L' U L F 
+U' R D L' B L D' R' B L U' L' B' 
+F R' U F R' F2 U' F R2 U F R2 F2 
+F2 R' F' R2 B L U' L' B' U R' U F' 
+B' U' B2 L' B2 R B L2 B' R' B U' L' 
+R2 B2 R' U B U' B' L U2 L2 B' R' L 
+L U2 B L B' U L2 U L F' L2 F L2 
+U F' L2 B L2 B' L F' B L B' L' F2 
+R B2 R F2 L' D' L' D L2 F2 R' B2 R' 
+R' F' R U R' F' U' R' F2 R U F2 R 
+F' U2 F2 D' U2 L' F L U2 D R F' R' 
+U' R2 U B D2 F' U2 F D2 B' R2 U' R2 
+U L' U2 L R F U' B U B' U F' R' 
+R' U2 B L' B' L U2 R B U2 B2 U2 B 
+U' L F L' B2 D' R' D B2 L U2 F' L' 
+U F R B U2 F' B' L' F R' F' U2 L 
+U2 L' B' U2 R B' R' B2 L U' F U' F' 
+U2 L' F' U' L2 U2 L2 U' L2 U' L2 F L 
+B R' B2 R2 U' R2 U R2 B U' B R B' 
+U F' L' F2 D2 B' R' D' B2 D' F' U R2 
+F2 U' L F U F U' L' U2 R' F R F 
+R' F' L' U2 L2 U2 L2 U' L2 U' L' F R 
+U L' U' L U' F R' F2 L F' R F2 L' 
+U R' U' F D' F2 U F' D F2 R2 U2 R' 
+R B2 L2 D F D F' D' F' D' L2 B2 R' 
+B' U' B L B' R2 F2 R F2 R B U' L' 
+U2 F' L F' D F2 L' U' L F2 D' F2 L' 
+R F U R' U' F' R U B' R B U' R2 
+B L2 D L' U L D' L2 B' U B U2 B' 
+F' U F U L' F R2 D2 B2 D2 R2 F' L 
+F L' U2 L U F2 U F2 U R U2 R' F 
+U L' U' B U B2 U B2 U2 B2 U' B L 
+U2 B' U2 F U F' L2 D' B' D L2 U2 B 
+F U R U2 R' U' F2 D' B L B' D F 
+L U L' U2 B' U' R' U' R B L U2 L' 
+U2 B U' L U F R U' R' F' L' U2 B' 
+L U L' U2 B' U2 B' R B R2 U' R B 
+U L F2 R' D F D' F' R F2 L2 U L 
+R' U' R B U' L U L' U L U' L' B' 
+F2 L2 F2 U' F2 L2 B D' L' D L F2 B' 
+U F R2 B' R' F2 B D2 B2 L B2 D2 F 
+U2 L U L2 B' L U2 B2 R B2 R' U' B 
+R B' R' U2 F R2 B R2 U' B' U F' B 
+U R2 B F' U2 L F2 B2 R' U2 F' B L2 
+L' U' L F2 R B R' F' R B' U R' F' 
+U2 F2 U R' F' R F' U F U' F U' F2 
+F2 U L' U B' R' U' R B L2 F' L' F' 
+R' F' R B' R D2 B' L2 D' B D' R' B 
+F' U2 F2 R' D R' B2 U' B2 U R2 D' F' 
+L' D' R B' R' D L2 F R U R' F' L' 
+U2 F' U' F2 R U R2 D R' D' R2 U' F' 
+L' U' L F R U R' U F' U F U2 F' 
+U' L F U' F2 L' B L F L' B2 U B 
+U R2 D L' B' L D' R' U B U B' R' 
+U L B' U' L2 U' B U B' L2 U B L' 
+U2 R' D2 L2 F' L2 D2 R2 L' B L B2 R' 
+R U' L' U R' U' B2 R B2 L B' R' B 
+U L F U F' U' F2 R' F2 L' F R F' 
+F' U' F R2 D L' B' R' L U2 R D' R2 
+R' U L' U R2 B' R2 U2 R2 B R' U' L 
+B' F' U2 F2 R' F' R' U' R U B' R2 B2 
+U2 F' L2 D' U' B' L' B L U D L2 F 
+F R2 B' R2 F' R B' L' B2 R' B L B' 
+F R2 B' R2 F' R B2 U' B' R' F' U F 
+U2 L' U B2 D L D' B2 L U' B2 L2 B2 
+U' B L F U2 F' B' R' B L' B' U2 R 
+L' D L B' U' B2 L' B' D' R B2 R' L 
+R' F U' R B F' U' L F' U L' F B' 
+U' F' D' B L' B' D F L' B' U B L 
+B2 L2 R2 F D B D' F D B R2 L2 F2 
+R B2 R' U' L F U' F' R L2 B' R' L 
+F2 U' F2 U B L2 D' B2 U B2 L2 D B' 
+R B L' B' R' U2 L U2 L U2 F' L' F 
+R D' R' U R2 U' R2 U' R2 U2 R' D R' 
+U R' F2 R U' F U R' D' F' D R F' 
+L' U' R2 B U R' B R U' B' R2 U L 
+U' F' U' F U' F2 B L F L' B' U2 F 
+U2 B2 U2 R B' R' U2 L2 F' L' F L' B2 
+L R' F2 U F2 U' F' U2 F' U' R U' L' 
+F L2 R' F' R F L2 U2 L F' L' U2 F' 
+U' F R B R' F' R L U' L' U B' R' 
+F U2 F' U2 F R' U2 B' R' B U2 R F' 
+U F' L F2 R2 F L' F' R2 F' R U2 R' 
+U R' U2 B' U' B U' L2 D F' D' R L2 
+L' B2 L' F2 R D2 B2 R2 F' R F2 L2 F 
+L F' L' U L2 D2 R B R' D2 L2 U' F 
+F U R' U' F U L' F R F' L U' F2 
+U2 F L' U B2 F R' F' R B2 U' L F' 
+F' R F U' B U2 F U' B' U F2 R' F 
+F U F' R F R2 U' R2 U R2 U' F' R' 
+R U2 L' R' B' U F' U F U B U L 
+B' R B2 F' U2 B' U' R' U' R U F R2 
+B' R2 F' R' B R' U' R2 F2 R F' U R 
+U2 B' L F2 R2 F D' F' D R2 F2 L' B 
+U2 F' U2 F R' F R U F2 U F2 U2 F' 
+U R' F2 L F R2 L' D2 L2 B' L2 D2 R' 
+U B F' D' L2 D F L' B' U' B L B' 
+U L R D2 B L' U2 L B' D2 L' U2 R' 
+U B D' B U B' U' D B' U L' B' L 
+R U2 R' U L U' R U L2 U R' U' L 
+L' B' R' B L B' R2 B R' U2 R' U2 R 
+R B' L U2 R' F R' L2 D2 L2 F' R L' 
+U R B L' U2 F' L' F U2 L U2 B' R' 
+R U B U' B D2 F L F' D2 B R' B 
+F R' F' U' F R2 U' R2 U2 R2 U R' F' 
+R' U2 F L2 R U R' U' L2 F2 U2 F R 
+R' U' R2 B L' B' R' B L2 U2 L' U' B' 
+U F2 R F U2 F' R' F U2 F L' U2 L 
+U B U2 R D B D' R2 U2 R B U' B2 
+F D B2 D R B' D' B' D' F2 L U2 F 
+U' B U2 R U' L' U R' U' L2 U' L' B' 
+U' B U B' U R2 F R2 F' U2 F' U2 F 
+U B U B' R2 D' L F L' D R U2 R 
+B2 D' F2 R F' R F R2 F2 D B U2 B 
+R B L U' L' B' L' U' B U B' R' L 
+F' R2 B' R' B R2 F' R F2 U' L' U' L 
+L U L' U' R' F2 L F2 R U2 F' L' F 
+U2 F R U R' U' F2 L2 B L B' L F 
+R B2 L' B' L U' B' U2 R' U' F' U2 F 
+R B2 D B' U' B D' B2 U R' F' U F 
+F U2 F2 U' F' U' F2 U F U L F L' 
+L F U R' F R' D' B2 D R2 F2 U' L 
+R U R F2 L2 D' L B2 L' D L2 F2 R2 
+B' U2 F' L' B2 L' B2 D' B D L2 F B 
+R2 U' F' R2 F' D F R2 F' D' F2 U R2 
+U2 F R F' L2 D' B' D L2 F U2 R' F' 
+L' B' R B' R' B2 L F' L' U' L U F 
+B2 F R F' R2 B R' F' U2 F2 R' F' B 
+U2 F' U' F2 D' F L F L' U F' D F2 
+L F' R2 B' F2 U' R U F2 B R2 F L' 
+U2 B' U' B L2 U F U' F' L2 B' U B 
+U F U F' L F2 R' F' R F' L2 U L 
+R U2 R' U' R2 U B' U' R' U B U2 R' 
+U F' U2 R' F2 U F2 U' F2 U' R U' F 
+U B' U' B R2 U B' R' B' R B2 U' R2 
+U2 L' B' U' F R' U R U' F' B U L 
+R' F' R2 B2 L2 B' L' U2 L' B' R' U2 F 
+R U L2 R D R D' R L2 U L F2 L' 
+U' L' U2 R B' R2 U2 R B R' U2 R L 
+U R2 F U2 L F L' U2 R F' B' R B 
+U2 R B U B' U' R' F R U R' U' F' 
+U' B' L' B U' B' U2 B U' B' U' L B 
+F U' R2 F2 D' L F' L' D F2 R' U2 R' 
+U2 R B R2 D2 L F D L2 D R U' F2 
+F' L F2 U F' U L B L2 B' L U2 L' 
+U' L R F U2 F' R' L' B2 D' R2 D B2 
+U F' L2 B L' D L D' L2 F L' B' L 
+B' R2 B' F L B R2 B' L' B2 R' F' R 
+U2 R U B' R2 F2 L D L' F2 R2 B R' 
+U F' R' F2 U F2 U F2 U2 F2 U R F 
+U2 F' U F2 D U R U' R' D' F2 U' F 
+B L U' L' R' U' R U R B' R2 U R 
+U' L F U' B R B' U B R' F' B' L' 
+B' U2 B L U' L U F U' F2 L' F L' 
+R' F' U' F U' F R2 F' R2 B U2 B' R 
+L' U2 R2 B' D L' B L D' B R2 U' L 
+U F U2 F2 U' F2 R U' R2 F' R2 U' R' 
+U2 L F U F' U' R' L' F' U' F U R 
+L' B' R' U2 R2 B R' U' R' U2 L U' R 
+B L2 D2 R F R' D2 B2 R B' R' B2 L2 
+B2 R2 B U' L F R' F' L' U B' R2 B2 
+B' U B L F2 U2 L F L' U2 F2 U' L' 
+U2 F U' B U' F2 D' L2 D F2 U2 F' B' 
+U R B U B' U' R' B' U' R' U R B 
+F U2 L' B' U2 R U2 R' U2 B L U2 F' 
+L U L' U R' U2 R B2 R B2 R2 U2 R 
+R U R F2 L2 D' R D2 R' D L2 F2 R2 
+U2 F' U R' U F2 U F2 U' F2 R U2 F 
+U2 L F' U2 R' F R U2 F L2 B L B' 
+U' B' R' U R F B L F' U' F L' F' 
+U F R2 D' F2 U' L' U' L F2 D R' F' 
+R B2 L D2 R F R' D2 L B' L2 B' R' 
+U2 F' U B2 U' R D L2 D L D2 R' F 
+L' U' L U2 F U' F' L' U2 B L' B' L2 
+U2 L' U2 R B' R2 U2 R B R' U2 R L 
+F2 D' B L' B' D F U2 F U2 R U2 R' 
+U F2 R' D' F2 L F' L' D F2 R U' F' 
+R U B2 U2 B' F' U B U' F U2 B2 R' 
+U R B U B' U' B U' B' R' F' U F 
+U F R' F' R U2 R2 D R' U2 R D' R2 
+U2 R U B U L' B L B2 R' F' U2 F 
+F' L' U L F U R2 D L' B2 L D' R2 
+R' U2 R2 U R2 F' U F R2 B U' B' R' 
+U L F2 R' F' R F' U L' U L U2 L' 
+U F D2 L B2 R B R' L' D2 R' F' R2 
+R' F R B F2 D L2 D' B2 U B U2 F 
+R' B U' L2 R' D' F2 D R L2 U B' R 
+R' B L2 R' F L' F' R L F' L2 B' R 
+B U' R' F2 D' L D F2 R L U' L' B' 
+U' B L2 D' B2 U' R' U' R B2 D L' B' 
+U R' U' F R B R' F' R L U L' B' 
+R' U' F U F2 U F2 U2 F' R B U' B' 
+U2 B2 U B' U' L U2 B U2 B' L' U B' 
+R' F' L' U2 L2 F' L' F2 R U' R' U R 
+R' F' U F R U B U' B' U B U2 B' 
+B' R2 U2 R' U R' U' R2 U R' U R2 B 
+F' D' L B' U2 B2 L' B2 U2 B L' D F 
+L' U L2 F' L D' B L B' L2 D L' F 
+R B2 L' B R' B2 L2 U F U2 F' L' B' 
+R' U2 R U B U B' R2 F R F' U R 
+R U R U' R2 U R F R F' B U2 B' 
+R' F' U' F2 U R U' R2 F' R2 B U2 B' 
+U R B U B' U' R' F U R U' R' F' 
+U B' U R' U R U R B' R' B U2 B 
+F' U' L F' L' F2 R2 D L' B L D' R2 
+R B2 L2 D2 R F2 L D2 R' B R' B L 
+U R' F' U' F U' R B' R B R2 U2 R 
+B' R B U B' R' B R2 B' R' B U' R' 
+R2 B' D' R2 F R' F' D R2 B2 U' B' R' 
+U2 B U' F U F2 L F L' B' L' U L 
+U2 R' B' U R U R' U2 R U R' B R 
+B' U2 B2 L' B' L B2 D' B U2 B' D B2 
+R' U' F' U2 L U L2 U L2 U2 L' F R 
+U R B' D' B' D B' L2 U' L2 U B' R' 
+L' B L2 B U L' U L U2 B' L2 B' L 
+U L2 B2 L' F' L F2 R' F R F2 B2 L2 
+U2 R' D' L F' L' D R2 B U2 B' U' R' 
+F' U2 F U2 F R' F' U2 R U R' U R 
+U L U F' U' F R L' B U2 B' U' R' 
+R' B L U' F' U F B' R2 B L' B' R' 
+F2 D' F2 D B' R2 D R2 D' B R2 U' R2 
+R' F2 D R' B2 D L2 D' B2 R D' F2 R 
+U' R U2 R' U F' U' L' B' U2 B L F 
+L' B' R' U2 R U R' U2 R U' B U L 
+F2 L' U L U L' U' L F2 U2 R U' R' 
+U' F' D' B L' B' D F2 R U2 R' U' F' 
+U L R2 F L F' R2 F2 L' F L F2 L2 
+U R2 U2 B' R' B R2 U R2 U R U2 R 
+F R B2 U2 B2 R B' R' B' U2 B2 R' F' 
+U B' U2 B L F U F' L' U B' U B 
+U' R D' B L R2 U' L' U R2 B' D R' 
+U L F R U2 R' F' L' U2 B L' B' L 
+L' B' R' B2 D2 L2 F2 L F2 L D2 B' L 
+R B' L2 R' F R' F' L2 F R' B R2 F' 
+U L F' L' B L' F L2 B' U2 B L' B' 
+F' L D R2 D' L2 U' L U D R2 D' F 
+U R B' R' B U B U' L U L' U' B' 
+B' U2 B U2 R' F U2 L2 F' L2 U2 F' R 
+U R' U' F' U F R F' L' U' L U F 
+U B' R2 F R F2 R B R' U' F U R 
+U' B U L U' F L' B' L U F' U' L' 
+U2 F' U' F U2 R U B L U2 L' B' R' 
+R' F' L F2 R F2 L2 U2 B' U2 B L F 
+F U R F' L2 D' B2 D L2 F U2 R' F' 
+U2 F R2 U B' D B U' B2 D' B2 R2 F' 
+R B L U' L' B' U2 R' F' L' U L F 
+U L2 B2 R' F R' D2 R2 B2 R' F' R L2 
+U' R U B' R2 F R' B R F' R2 U' R' 
+F' L2 B L' F L2 B2 U2 R' U2 R B L 
+U R B' R F2 R' B2 U B' U' R F2 R2 
+R2 D2 L2 D' L' B2 L D' R D2 L2 D2 R 
+F' U2 B L U B L2 B' U' L' B' U' F 
+F' U2 F R B U' L U2 L2 B L B2 R' 
+U2 B L' B' R B' L B2 R' U2 R B' R' 
+B L2 B2 U2 L' B L' B' L2 U2 B2 L2 B' 
+F' U2 F2 U L' R U2 R' U L F2 U' F' 
+U L2 U2 B' R' F' U' F R U B U' L2 
+U' B' R B2 L2 B R' B' L2 B' L U2 L' 
+R U R' U' B' U F' U' B L' U' L F 
+U2 L' F' L2 U L2 U' L' U2 L' U' F L 
+U B F2 D2 F2 L' B' L F2 B D2 F2 B' 
+B2 D F2 D R B' D2 B' U2 F2 L' U' L2 
+U R U2 F' L2 B' L2 F' R' L D2 F2 L' 
+U B' U2 B2 U B2 U B R2 F R F' R 
+R' F2 U' F2 L F L' F' U' F' U2 F2 R 
+R U B R' U L2 U' R U L2 U2 B' R' 
+R U R2 D B U' R' U B' D' F' R F 
+U2 L R' U' R U L' F R B' R' F' B 
+U2 B U2 B' U' R' U R B L U' L' B' 
+F' L F2 L' F R D2 L' B U2 L D2 R' 
+B' U F R' B2 D' F D' L' F' D2 F' B' 
+R U B' L' F2 L B2 L' F2 L U' B' R' 
+U' L' U' L U' F2 R' L2 F' R F L2 F2 
+L' U2 B' U B U2 L2 F' L' F L' U' L 
+R U B' R B2 F2 U B' U' F2 R' U' R' 
+F2 R2 F L2 B D' B D B2 L2 F' R2 F2 
+U2 B U L2 D R' F2 R D' L' U L' B' 
+U L' B' U R' U R2 B2 L' B R' B2 L2 
+F' R D2 F U B U B' U2 F' D2 R' F 
+U B' R2 F D' R' D R F' R2 B2 U' B' 
+R' F' U F R U B U F' U B' U' F 
+R U R2 B2 R2 U' R' U' F2 L' D2 L F2 
+U2 B2 U R F2 L' D2 L F2 R' B2 U' B2 
+R' U2 B U2 R2 D B2 D' R2 U2 B' U' R 
+U' F' L' B L F L2 B' L2 U' F U' F' 
+B' U' B2 L F' L2 B' D' L' D L' F L' 
+F' U2 F L F L' F' D R U2 R' D' F 
+F' L' F R' F' L U F R U B U2 B' 
+B L U R' F U' F' U2 L' U' R U' B' 
+B' U2 L' U' L U L' B2 L' B2 L2 U2 B 
+B U' F' U L2 B' R B L2 B' R' U' F 
+R U R F2 L' B2 L' D' L B2 L F2 R2 
+U2 R' D2 L2 F' L' F D L2 D R U' F2 
+L' B2 R B R2 U2 R B L U' F U' F' 
+R U' F U2 F' L2 B2 U' B U B2 R' L2 
+R U R' U R U2 R' L' U' B' U B L 
+L F U L' B2 D' R2 D B2 L U2 F' L' 
+U F' U2 F2 R2 U F2 U F2 U' R2 U' F' 
+U2 F R B' U2 L' B' L U2 B U2 R' F' 
+R' U2 B U2 F2 D' L2 D F2 U B' U' R 
+F U F' U F' U' F U' F' U2 L F L' 
+L2 B' R2 F' R F' R' F R2 B L' U2 L' 
+B' D L U B L' B2 U' B D' R' U2 R 
+U2 R' U F' U F R U' R' F R' F' R2 
+R2 U R' U' R' F R B U' B' U F' R' 
+F L U' R U R' U' F' U F U L' F' 
+F R2 F' U F2 R2 F2 U F U2 F R2 F2 
+L2 B2 L2 U L' B2 L U' L2 B2 L U L 
+U F R' F' R U2 R2 D L' B2 L D' R2 
+U' L' U F D' R2 D F' U2 B U B2 L 
+U2 L U F' D F2 U' F D' F2 L2 U2 L 
+U F U F' U F2 L2 B L B' L2 F2 L' 
+F R B U2 B' U' B U B' U2 R' U' F' 
+U' B U L B U' F' U B' U' F L' B' 
+U' F2 L2 B L B' L2 F2 L' U' L' U L 
+F2 R2 D2 L B L' D' R D' R F' U2 F' 
+U2 F' D' B' U2 B2 D F' D' B' L2 D F2 
+F U R' U2 B2 L2 D2 L D2 L B2 U F' 
+U B F' U' L' U' L U B' L' U L F 
+F' U' F' D' U' F R U2 R' F' U D F2 
+F' U' L' U L F2 R2 B' R2 F' R B R' 
+B' U2 R U R2 B' R' B R2 U' R' U2 B 
+U R' F' U2 F U' R B' R B R2 U' R 
+R2 U' R2 U' R2 U F U F' R2 F U' F' 
+R U2 R2 U' R2 U' R2 U2 F' U' F U R 
+R B2 L2 D2 F2 R F R' F D2 L2 B2 R' 
+L D R' F R D' L2 U2 B' U2 B U L 
+U L' U' L U2 F2 U R U' R2 F' R F' 
+L' B L B' L2 F' L' F L' U B' U' B 
+F U R' U2 B' U F' U' B U2 F R F' 
+U F2 L B L' F B' L' B L2 B' L2 F 
+U2 R' B' U' R2 U R' B R' U' R U R2 
+F U R' D U2 L' B2 L B2 U B2 D' F' 
+R U R U' R' F U R2 U' F' R' U R 
+U' F' U' L' U2 L F' B D' L' D F2 B' 
+U L2 F2 R' D F D' F2 R F2 L' F L' 
+U2 L' F U2 L U' R U2 L' U R' F' L 
+U F2 L F D2 F B R' F' R2 B' D2 L' 
+F2 R2 B' F' R B R' F R2 B' R F2 B 
+B2 D F' L' F D' B' U L U2 L' U' B' 
+L U F U2 R U' R2 F' L F2 R F2 L2 
+B2 D' B U2 B' D B U' F U' B U F' 
+U F U F2 U2 L D' L' U2 L2 D L2 F 
+B L B' U2 B L' B2 D2 F R' F' D2 B 
+U2 B' U' R2 D' R U R2 D2 B' D' B2 R' 
+R' U2 R U2 R U2 F R' F' U2 R2 U2 R 
+R D2 L' B L2 B2 L2 B L2 B L' D2 R' 
+U B' U' B U' L F U' R U2 R' F' L' 
+F' L' F U R' U' F' U2 L U2 F U R 
+B L B2 D2 F R F' U F U' F' D2 B 
+L2 B L F' D L D' F B2 U' B U' L 
+L' U2 F R U R' U B' U' B U2 F' L 
+R B U B' U R' L' B' R2 B' R2 B2 L 
+L U F' U' L2 D2 L U L' D2 L2 F L' 
+R D' R2 F2 D' B L2 B' D F2 R2 D R' 
+U' R' F R2 B2 L' D L B2 R2 F' U R 
+F R2 B' R' B R' F2 U2 F U F' U F 
+R' F R F U2 R' F' R U2 F2 R U2 R' 
+U2 R' F2 L F L' F2 R' F' R2 B U2 B' 
+U B' U' R2 F R' B' R F' R2 B U B 
+F U2 F2 D' U R B2 L' B2 R' U D F 
+U2 F' U' F2 U2 R' D R U2 R2 D' R2 F' 
+F R2 B2 D B R D2 R' D B R F' R 
+U2 R' U' R U' B U' B' U' R B' R' B 
+U2 B' R B2 U B2 R B R U R2 U2 R' 
+F2 L2 F U' L U F' L2 F2 U2 R U' R' 
+U F U F2 L2 B2 L' F L B2 L U L 
+U R B2 U2 R B R' B' U' B U' B2 R' 
+B L2 F2 D F D' F' D F D' F L2 B' 
+B L' B L B2 R U B U' B' R2 U R 
+U L F U2 R' F' L F2 R F L' F L' 
+U L U F2 D F' U2 F D' F' U F' L' 
+U' L F U' F' R' L' B' R U R' B R 
+U R' F R F' U' F' U L' U' L U F 
+U' B' R B' R' B2 R' U L U' R U2 L' 
+U' L' B R2 F D B D' F' B' R2 B' L 
+R2 D' R2 U R' D R2 B2 U2 B' U' B' R' 
+U2 R2 F2 L F L' F2 R2 F' U' F' U F 
+L' U2 L U' R B U B' U2 L' U R' L 
+F U2 F' U B' U2 F R' U' R F' U2 B 
+R B' R B R2 U' R' D' L F' L' D R 
+R U' R B2 L' R' B2 U R' U' L2 U2 L' 
+L D R U' R U D' F2 L D2 R' D2 L2 
+U F2 L2 U F' R F U' F' R' F L2 F2 
+U R B U L B' R' B L' B' R U' R' 
+R B2 U' B U2 L' B2 L U2 B' U B2 R' 
+U' R U2 B U' B U L U' L' B2 U2 R' 
+R U2 R' U2 B U B2 R B U' R2 U2 R 
+U' L' U L2 D U F U' F' D' L2 U' L 
+R' U' F' U2 L' U' R U' L U R' F R 
+L F' L F' R B R2 F D2 L2 F2 R F' 
+R U' R' U R2 U2 F R2 F' U2 R' U2 R' 
+U' L U' F' U2 R' F R U2 F2 U' F' L' 
+U B' U2 B F' L U L2 U L2 U' L' F 
+U2 L U F U F' R' L D F2 D' R L2 
+U2 R' F' L F R F2 L' F2 U' R U' R' 
+F' U2 F' U' R' D2 B' L' B D' R' D' R2 
+F' U2 F U2 B U' L F' U F L' U B' 
+B' U2 B L U' R B U B' U2 L' U R' 
+U2 F' U B D' U' L2 D F2 U2 B' U F' 
+U F' U B U' F2 U F' B' U2 F U F' 
+F2 R B' R2 F D2 F' D2 R F2 R B R' 
+U L2 F2 R' F' R F' L B L B2 U2 B 
+U' L' F D2 B' D' B2 D' F' U R2 U' L 
+F2 R F' R U2 R U2 R' B U2 B' R F' 
+R U' L' B2 U B U2 B U B2 R' U' L 
+U2 R' U2 R2 B' R' B' L F' L F L2 B2 
+L U L F' L2 U L F R U' R' U2 L' 
+U R' U2 R2 U R2 F' U F2 R F2 U F 
+R U2 R2 U' B' R2 F' B U' F R2 U' R' 
+F R2 D2 B D2 R F' U' R2 D B2 D' R' 
+L' U' B' U B U' B U L U' L' B' L 
+F' U2 F' U2 F2 R U R' F' U' R' F R 
+U F D' R2 D F' U2 B2 R B' R' U B2 
+U2 B2 U R' U R B U' B' R B' R' B' 
+R' B2 D L' U L' U' L D' B2 R' U R2 
+B L F' L2 F L2 B' U2 R B L' B' R' 
+R2 F R F2 U2 F2 U2 L F' L' U2 F' R 
+U B' U' R' U R B L U F U' F' L' 
+U B' R2 F R F' R2 B' R' B2 L U2 L' 
+F2 U' F U' F U F U2 B D' L2 D B' 
+L' U' B' U2 B U' L2 D R' F' R D' L' 
+U2 L F' L' F U F U' R U R' U' F' 
+L' B L B' U2 L F' L2 B L' F L2 B' 
+U' F' L2 D2 B' D B' D' B D2 L' F L' 
+F R U B' R F2 R' B R F2 R2 U' F' 
+F' U' B U2 B2 U' R' U R B2 U' F B' 
+R B2 U R B2 R' B' U' R' U2 R B' R' 
+R2 U F' U F U' B' R' F B R' F' R' 
+U R2 U2 F' U F U' F R F' R' U2 R2 
+U F' U2 R' D' F' D R2 U2 R' F' U F2 
+F U2 B2 R F R' F' B2 U2 B' R' F' B 
+U2 F' U2 F2 R' D R U R2 D' R2 U' F' 
+U L2 U' L U B' U2 L' U2 L B U' L 
+B' D2 L F' D F2 R' F2 D' F L' D2 B 
+U F' L F U F' U' L' F U' F' U2 F 
+U' B' D B2 U L2 U L2 B' U2 B2 D' B2 
+U F U2 F2 D' U' L' U L D F2 U' F' 
+B2 L2 B2 R' U' R U R B2 L2 B R' B 
+B U2 B2 U' R' U R2 B R' U' R' U2 R 
+R U' L' U2 R2 U' R' U' L U F2 R2 F2 
+R U2 R2 F2 L F L' F R U R U' R' 
+R2 F2 L2 B' D' B L D B D' L F2 R2 
+U2 B U2 L2 F U F' U' L' U L' U2 B' 
+U F' L2 B L2 F L2 F2 L B' L' F2 L2 
+U F' L F2 R2 B' D2 B R F2 L' F R 
+F R2 F2 L' U' L U R U2 R2 U2 R' F 
+F2 R' F' R U2 F' L' U' L U' F U2 F' 
+U2 R' U' F2 L F' R' F L' F2 R U R 
+R U R' F2 L U2 F' D F U2 D' L' F2 
+F' L F U2 B L2 B' U2 L' U' F U F' 
+U' B U' R' D F2 D' R U2 L' U' L2 B' 
+R2 F2 L2 B D2 B' L2 F2 R2 U' B U' B' 
+U2 R U2 F D R D' F2 U2 F R U' R2 
+U' R U2 R2 F R F2 L' B' U2 B L F 
+U2 R' U' R F2 U R' F' R' F R2 U' F2 
+R D2 L2 B L2 D2 R2 L' U L U' F R 
+U B2 R B L R D' F D R2 L' U' B 
+F R2 D2 L2 B L F' D2 R' B' R' U2 B' 
+F2 D R' D' F' R U2 F R F' R' U' F' 
+R U R2 F' U' F R2 B U' B' R2 U R 
+L' B2 R B L' D2 R D2 F D2 F' R2 L2 
+B L2 U B L B' U' L' B' U2 B L' B' 
+R U2 B F U2 F' U' F U' F' B' U2 R' 
+U2 L' U' B' U2 B L' D' R B' R' D L2 
+F2 D' B L2 B' D F2 U F' L' U L F 
+R' F D2 R B L B' R' D2 F2 R U2 F 
+U2 L' B L2 F2 R' D2 R F L2 B' L F 
+F U R' F R F2 R' L D F' D' R L' 
+L' U' L U2 R2 B2 L F' D F L' B2 R2 
+R U2 R' U' F' L' B' U' B U' L U F 
+U' R D2 L2 B L B' D' L2 D' R' U B2 
+F2 D R2 U' B2 R' D L2 D' R B2 R2 D' 
+R U R2 F' L F2 L' F2 R2 U2 R' U F 
+R2 B' D R D' R' B D B2 D B2 D2 R2 
+U R' U' F R2 F' R2 U' B U' B' U' R 
+U2 F2 L B L' F B' L' F U' B' U B 
+F' U' L' U L F2 U F2 L F L2 U L 
+U' L' U' B L2 B' L2 U' F U' F' U' L 
+B F' U' L2 U2 L2 U2 L' U' L' B' U' F 
+R U2 R' U F2 L2 F U' L' U F' L2 F2 
+U' B2 D F' L F D' F' L' B' L F B' 
+U2 L' U2 L2 F2 U L2 U L2 U' F2 U' L' 
+U' R B L' B L B2 U2 R' U' R U' R' 
+U F' R D2 L' D' L2 D' R' U B2 U' F 
+U R F' U' R2 F U' F' U R2 U F R' 
+U2 F R U' R2 F' L F R F' L2 U L 
+U' L F L' B U' L U L F' L2 U B' 
+U B' F U F' U' B U2 L2 B L B' L 
+U2 R U F U R F R' F' R' U' F' R' 
+U2 F' D F2 U2 F R' F' R U2 F2 D' F 
+R2 D' R' B2 L' D L B2 D2 B2 D' B2 R' 
+F R' F2 D' L2 F L' F' L2 F' D R F2 
+F U F' U2 L' R' F' U' F U2 L U' R 
+U2 R' F' L F' L' F2 U2 R U R' U R 
+F U R U2 R' U F D B' R B D' F2 
+R D L' B L D' R D' L F' L' D R2 
+U B R' F2 L F L' F2 R B' R' F' R 
+R U B U2 L' D' L U L' D L B' R' 
+R U2 R2 U' F R D R2 D' F' R' U R 
+B L B' U2 F U' L2 F2 L' F2 L' F' L' 
+R U R' B L' U2 R U R' U2 L U' B' 
+U2 L' B L F' L2 D L' D' L B' L2 F 
+U' R' B D2 B' F' U' F U B D2 B' R 
+U' B F' U' F U B' L F R' F' R L' 
+F U L F2 L' R U R2 F' R F' U' F 
+L' D F2 R U R' F2 L2 U' L' U L2 D' 
+U' F' L' B L' B' L2 U2 F U F' U F 
+U' F U' F' U2 F2 U R U' R' F' U' F' 
+U B L F L' B' R L U' R' U F' L' 
+U2 B F2 R' D2 L D2 R B2 R2 F2 R2 B 
+F U2 F' U2 B' R' U F U' R' F' R2 B 
+F2 R2 B' R2 F' R B R' F' U L' U L 
+B' U2 F R2 D' R' D2 B' D' R B2 R2 F' 
+U R B R' F2 D' L' D F2 R U2 B' R' 
+B' U' R' U R2 D R' U2 R D' R' U2 B 
+L' B L2 B F2 D R' D B' D2 F2 B' L' 
+U2 L2 B' L2 B' R B R' L2 B2 L B' L 
+F' U' L2 D' R B2 R' L U' L' D L2 F 
+R B' L2 R B' F' D' B D F L2 B R2 
+U' B2 L2 R D R D' R' D' L2 B R' B 
+U R' F2 U' L F L' F' L' U L F2 R 
+R U L' U' F R2 D2 B D2 F' R U' L 
+U R' F2 D2 L2 F' D2 R F' R U2 B' R' 
+R' F R2 B' R D2 B' D2 B R' B R' F' 
+R U R2 F R D F D' F L2 U L2 F 
+F R' D R2 D' F2 U' F2 R F' B' R2 B 
+B U' F' U B' U2 F L F' U F U' L' 
+U' R' U' R F D' R2 U R' U' R2 D F' 
+U' F U2 F2 U' F' R' F' R2 U' R2 F' R 
+R B' R D' R F R' F' D R2 B2 U2 B' 
+U' R B U B' U' R' L' B' U' B U L 
+U2 R U' L F2 D2 L B2 D L' D F2 L' 
+F2 R2 B2 L' D' L B2 R2 F2 U L' U2 L 
+U' F U F' L2 D' R B R' D L U2 L 
+U' R2 B2 R' B U B' U' R' U R2 B2 R2 
+U B2 L2 F R' F D2 F2 L2 F R F' B2 
+F U2 F' U' L' U R' L2 D F' D' R L' 
+U R' U' R F2 R' D F' U F D' R F2 
+U' R U B U' B' R' F R U R' U' F' 
+B L U2 F' U' F U2 L' B' U' R U2 R' 
+R U R' F U F' R L' B' U' B R' L 
+R' U' F2 D2 B' L' B D2 F2 U F R F' 
+R' F2 L' F U F U' F' L U2 F U R 
+B' R B R B2 L2 D' R' D R L2 B2 R2 
+R' U2 R U R' U R L F U F' U' L' 
+B U' F2 L F' U2 F L' F' U B' U F' 
+B2 D' B2 U F' U2 F B U B2 R2 D B 
+F R2 B' R' B R D R D' R F2 U F 
+B2 U L U' L2 B' L U' B' U R' U' R 
+U2 L' B' U' B U L F' U' L' U L F 
+U F' R' U' F2 U F' R F' U' F U F2 
+R2 D' F' D' F2 D R U2 F U R2 D R' 
+R2 B2 L2 B R' B' L B2 R B2 L B2 R2 
+R2 B2 L' R' D' B' D B' L2 U R' U L' 
+U B U B' U F U' R2 U' R2 U R2 F' 
+R U2 F' R2 F U' F2 U F R2 F U' R' 
+R F R B' R F' B U2 R U2 R' U2 R2 
+U' B F U2 B2 D' R2 D B2 U F' U B' 
+F D R' B' R' B R U R' U' R D' F' 
+R B' U2 R D2 F D F' D R' U2 R' B 
+U2 B L F U2 F' L' B' U2 R B' R' B 
+B' U' R' U R B2 L U' L' B' R' U R 
+U F' U L U2 L' U' B D L' D' F B' 
+U R F R2 D L' U' B2 U L D' F' R' 
+F U' F2 R2 D' B L2 B' D R2 F2 U F' 
+U F' R U2 F U' B U2 F' U B' R' F 
+U B' R' U R U R' U' F R' F' R2 B 
+U' R D L' B L D' R2 F' U2 F U R 
+U' L' U' L2 D' L B L B' U L' D L2 
+R U' L U2 R' U2 F U' F' R U2 R' L' 
+B L R' U2 R U L2 D' B2 D B2 L B 
+U R' U2 R B L F U F' U2 L' U' B' 
+B2 U B' L B U' B' L F' L' F L' B' 
+R D' R2 U2 F' R U2 R' U' R' F D R2 
+U L' U2 L B U B' L' B U' B' U2 L 
+F R2 D2 L B L' D2 R2 F' U2 F' U2 F 
+U2 R2 B2 R U' F R' F' R U R' B2 R2 
+U2 L F2 D' L2 U' B' U' B L2 D F' L' 
+R' U R2 F2 D L' B' L D' F2 R2 U' R 
+R' F2 R2 B' R B R2 D' B L2 B' D F2 
+U L2 U2 B L' B' U2 F2 R' F' R F' L2 
+R F' D2 R' U L' U2 L U' R D2 F R' 
+R2 F L R' D L2 B2 L2 D' R L' F' R2 
+U F R2 F' U2 F' U2 F R2 U F' U F 
+U' R U B U' B' R' B U L U' L' B' 
+U2 R2 D L' B2 L D' R2 F2 L F L' F 
+U2 F U R U' F' L F R' U F' U' L' 
+L R F L' B L F' L2 B' R' B L B' 
+R B2 L2 D L' D' L' B2 R' U2 L' U L 
+U' L U' R U' L2 D' B2 D L2 U2 R' L' 
+F2 R2 D' B L2 B' D R2 F2 U F' U F 
+F U L U F U' F2 R' F2 R F L' F' 
+F U L R2 D2 L D' B' D' R2 L' F' L' 
+F' L D2 F' R2 F' R F2 D2 L B L2 F 
+F U' B D2 R B' U2 B R' D2 B' U F' 
+U L2 U L' U' F U2 L U2 L' F' U L' 
+U' R2 U' F' D2 B U2 B' D2 F R2 U R2 
+B' U2 L' U' L B U' L' U2 L B' U2 B 
+U R B U2 R' U' R U' R' U2 R B' R' 
+U2 R' D F' L' R2 U L U' R2 F D' R 
+U B2 R2 F R2 B R' F' R B L U2 L' 
+B2 F2 D' R D F' R B U2 R' F' U' B 
+U2 F' U F U' F2 L F2 U F' U' L' F 
+L U' B U' L' B D L2 D' L' B2 U2 L' 
+R U B U' B' R2 F' L' F R F' L F 
+U' F2 D F2 U2 F R2 U' R2 U' F2 D' F 
+R2 B' L' F' R' F2 L D2 B2 L' F' L B' 
+R U2 R' U' F' U' F' D' B L' B' D F2 
+R B2 R' B R B2 R' L' B R B' R' L 
+F L' U' L2 F' L' F2 U L F L' U2 F2 
+F U' B U' F2 L2 D F' D' F2 B L2 B2 
+U L' R' F' R B' R' F B L B' R B 
+L2 D' B2 D L' U2 L D' B2 D L' U2 L' 
+F R' F' R2 U R' F' U' F U' R U2 R' 
+R U B U' B' R' L' U2 L U L' U L 
+F' L B L2 U L2 U' L' B' U L' U' F 
+U F' L' U' L B U' L' U L U F B' 
+U F2 U R' D' L2 D' F' L F L2 D2 R 
+U2 L2 R' F' L' F' U' F2 U F2 R U2 L' 
+U2 R' U F' U F U F R' F' R U2 R 
+B U L U2 F' L' U' L U L F L2 B' 
+B U' F U' F' U L U2 L' F U2 F' B' 
+R' D' U2 F U2 F U2 F' U2 D R2 U' R' 
+F U F' U2 F U2 R B' R B R2 U' F' 
+U F R' F' R U' L U' R U L' U R' 
+F R2 F' R B' R B R' F R2 F2 U2 F 
+F' U' L U' B F' L2 F2 B' U' F' L' F 
+R U2 R' F R' F' R' D L' B2 L D' R2 
+F U2 F' L2 B L B' L2 U F U' F' L' 
+U' L U F2 D F2 U' F' D' F L2 U2 L 
+U L U2 L' U' B' U B L F U' F' L' 
+L B' U2 B U L2 U L2 U' F' L2 F L' 
+F2 U' L2 F L' F' L' U F2 U L U2 L' 
+F U2 F' L2 B L B R B2 L B' R' B 
+R U' R2 F R' B' D' R D F' R' B R2 
+U L2 U F R B' U2 B R' F' L2 U' L2 
+U R' B L2 D F D' L B' R B L B' 
+U R F2 R2 F2 R' F' L F D2 R2 D2 L' 
+U' R' B' R2 U' R U F R2 B R' F' R2 
+U' R' U2 L F R' F' R2 L' U R' U R 
+U F R2 B' R2 F' R B' L' B' L B' R' 
+U2 L' B L2 F2 L B' L' F2 L' F U2 F' 
+U' L F U F' U' L' F' U' L' U L F 
+F2 R2 F2 R' U2 R2 U' L' U2 R2 U' R' L 
+B2 U' B2 U' B2 U B' D' B U B' D B' 
+F U2 F' U' F U' F' R U B U' B' R' 
+L2 B R2 F' D' L' D' L' F R2 B2 U B 
+U' F R F' L F B R' F' R B' R' L' 
+F2 U' L2 B2 D R2 D2 B' D L B' U' L 
+U' L' F R2 B2 D' R D R' B2 R2 F' L 
+B U2 B' U' B U' F B' U R U' R' F' 
+U2 F R' F' R U2 F2 L' B L' B' L2 F2 
+U' B U' R2 D2 L2 B D2 R2 U' B' U' F 
+U' L F2 R D2 R F L2 B L F2 R2 F' 
+U R' U' R2 D' R F R F' U R' D R2 
+U2 L2 D' B2 R B R' B D B L B' L 
+U2 L U' B' D R2 D' B U2 F' U' F2 L' 
+U' B' R2 U' F D' F' U F2 D F2 R2 B 
+U' R2 F2 R F' U' F U R U' R2 F2 R2 
+R' F R U2 F U2 R' F' R U2 L F2 L' 
+R U2 F' U2 B L' U' L U' B' U2 F R' 
+L U2 L2 U' L2 U' L D' R B2 R' D L2 
+U2 B' U' B U' L2 F' L2 F U2 F U2 F' 
+U2 L2 F2 L2 U' L U F U' F' L F2 L2 
+U R' U' R U2 B U L F U2 F' L' B' 
+R B2 D L' D' B2 U' D2 L' U L D2 R' 
+U L U2 B L B' U' L' F L U' L' F' 
+U R B U B2 R2 D' R' D R' B U' R' 
+F U2 F' U' F R' U' R F' U' R' U2 R 
+U' L F2 U' B' U R U R' U' F2 B L' 
+U2 F' L' U' L U' F R' F R F2 U2 F 
+B' R B U2 L' R U R' U' B2 R2 B2 L 
+B U' B R2 F' L2 F' D B2 L2 F' R2 F' 
+U2 B F D2 R B' U2 B R' D2 B' U2 F' 
+B2 R2 B U' R' U R F R' F' B' R2 B2 
+U2 R' F2 D2 L' D L' D' L D2 F' R F' 
+R U2 F R F' U R' U' B R U2 R' B' 
+U' F' U' F R2 D B' L' B' L B2 D' R2 
+B F U' F' U B' L' B' U2 B2 L' B' L2 
+B' U' R' U' F U2 L F' L' U2 F' R B 
+R F' L2 D2 F' D B2 D' F D2 L2 F R' 
+R2 U R B2 D F' L F D' B R2 B R' 
+R D L' B' L R' U B' R B R D' R2 
+F2 R2 B' R' F D2 B' L' F' B D2 F2 B 
+U F D B U2 B2 D' F D B R2 D' F2 
+U F U R U R' F B' D R2 D' F2 B 
+R U2 R2 U2 R U R F R2 F' R2 U R 
+U2 L U' B2 D2 F2 L D2 B2 U' L' U' R 
+U R' U2 R B U' B2 D' F R' F' D B 
+R F D2 L2 B D' B' U2 B D L2 D2 R 
+U' L2 R F' D2 B D2 F R2 F2 L2 F2 R 
+U R U2 R' F' U F2 D B' R B D' F' 
+U' B' R' F' U2 F R U B U' L U2 L' 
+B' F R' F2 U2 F B2 L' F D2 F' L B' 
+U' L' B L' B' D' B' R B' R' B2 D L2 
+U' R' F R F2 L2 B L B2 U2 B L F 
+B' R' F R' B2 F' U' F' U F B2 R2 B 
+R' F R2 B' R F' D2 F2 D F2 D R2 B 
+U2 B R U' L U' L' U R' F' B' U2 F 
+R' F' U2 L U2 L' U2 F R U L U' L' 
+U2 B' L' B2 U' B U R B2 L B' R' B2 
+F' U2 F U R U R L' D B D' R2 L 
+R B' R D2 L2 F' B D F D R2 U2 F 
+L R' U L2 U2 R U' L' B2 R L2 B2 R' 
+U R' F' U' B L' U L U' F B' U R 
+F U' F2 L F' L' F2 U2 R' F R U' F' 
+R B L B' R' U2 B2 L2 F' L' F L2 B2 
+U2 B2 D' B' D2 F' L' F D' L B' U' L' 
+F' L' B L2 D2 F' D' F D' L B' L2 F 
+R U B U' B' R' F U' B' U F' U' B 
+U F2 D R2 B2 D' F' D B' U2 B' D' F' 
+L' B' R' U2 F' U F2 R' F' R2 B U' L 
+U' F' U' L' U L F B U L U' L' B' 
+R U R2 F R2 B' R' F' R B2 U B' R' 
+U R U2 L' R' U2 F2 L2 F L2 F U2 L 
+U' L F' L' B L2 D' L D L' F L2 B' 
+U2 R D' R U R' U' D R' U B' R' B 
+U R' D' U' F2 U F' U' F' U F' D R 
+R' U2 R2 B2 D B2 R' U R B2 D' B2 R' 
+F U2 R U' L R' U L' U L U2 L' F' 
+R U B U' B' R' F U F' U F U2 F' 
+L F' L' F U2 F U2 R2 B' R' B R' F' 
+U R' D' F U' F U F U' F2 U D R 
+R B' U2 L' B L U2 B R' U R U' R' 
+R B R D L' D F' D F D2 L D' R2 
+F U R2 U R' F' R F R U2 F' U R2 
+R' F' U2 L U2 L' U2 F U L U' R L' 
+R2 B2 R' U' B' U' R' U2 R B U B R' 
+U' L' B L U' R L' B2 R' U' B' U L 
+R U' R2 F2 U' R F R' U F2 R2 U R' 
+B2 L2 F R2 F R' B R B R2 F L2 F 
+R' U' R U' L U2 B2 L2 B' L2 B' U2 L' 
+B D' R2 F2 D' L' D' L D2 F2 R2 D B' 
+U F2 R2 B' R' B R2 F2 L F R F' L' 
+F' L' B2 U' R' U R B' L' B' L2 U F 
+U2 L U F U2 F' R' L D F D' R L2 
+R' U2 L' D2 R D R2 D L U' B2 U' R 
+F U F' U2 R' F' U' F' R' F2 R U R 
+F U R' D' R' D2 L B2 L' D' R2 U' F' 
+R B2 D U L U' L' F' L' F D' B2 R' 
+U2 L' B' U' B R U' B' U B U R' L 
+R B' R' U2 B U B L U' L' B2 U B 
+F2 R2 U2 F L F L' F2 U2 R2 F' R' F' 
+U' R' U L U' R2 U R' L' U2 R U R' 
+F' U2 F2 D F' R' U R U' F R D' F' 
+B L2 R B2 R' U L U' R B2 R' L2 B' 
+B2 D2 F2 L' F' D' L' B D2 R F' D B 
+U R' U R2 D U B U' B' D' R2 U' R 
+L' B2 U2 B U R' B' U B2 L B' R B 
+F2 R2 B' F2 R B R' F2 R2 B' R F2 B 
+U R2 B2 U' R F' R' U R F R' B2 R2 
+F' L F2 D L2 B' R B L2 F D' L' F2 
+U F L U F2 U' F2 L' U L F2 L' F' 
+U B' R B L' B R' B2 L U2 L' B L 
+U2 R' F' U L' U L F R U' B U' B' 
+U L' U' B' U' R B' R' B2 L F U2 F' 
+B' F U' R' B R B' U R F' B2 U2 B' 
+F2 U F2 R' D F D' F' R D' L2 D L2 
+U' R B' R' B2 L2 F' L B L' F L2 B2 
+L' R' D2 L2 F' R2 L' B' L U2 R' F L' 
+L' B L B' R U' L U R' F U F' L' 
+L F2 L' U L2 B2 R' D' R' D2 R2 B2 L2 
+R U B F D2 F' U2 F D2 F' U B' R' 
+U2 F R U R' U' R F' L F R' F' L' 
+U' F' U2 F U2 F R2 B2 R F' R' B2 R2 
+B F' U L2 U2 F U F D F D' F2 B' 
+U2 L U L' U B2 R L2 B R' B' L2 B2 
+L U L' B2 U2 B U B' U B2 L U' L' 
+U L U L' U L U' L' B' R' U' R B 
+R B L U2 L' U B2 R2 F R2 B R' F' 
+F2 R' F2 U' F U R2 B' R B R2 U2 F' 
+U2 F' L' B' L F L D2 R2 F' R2 D2 L' 
+U' B' U R U2 F R' F' U2 R2 U R B 
+R' F' U' L' F R' F' L F2 R F' U R 
+U' B L' U2 F' L F U2 L B2 R B R' 
+R2 F2 L' B U' L' D2 L U B' L F2 R2 
+F2 L2 B2 D2 R D R' D B2 L' F L' F 
+R' F' L' U2 L2 F R F' L' F B U2 B' 
+U2 L' B' U B R L F R' U' R F' R' 
+U B' R2 F R F' U R U' B L U' L' 
+U2 R B U B' R' F2 B D' L' D F2 B' 
+U2 L' U2 L F U' F2 D' B L' B' D F 
+F U F L B2 L' F L F B2 L2 U L 
+L U2 L2 U' L2 U' L D' L U2 L' D L2 
+U2 F L' U' F2 U' L U L' F2 U L F' 
+U' L F R' F' L' F2 L2 F' R F L2 F2 
+U2 F' U' L F2 L' F2 U' R U' R' U' F 
+U' B U L U2 L' F' B D L D' F B2 
+L' U' L U2 F R2 B' R' B U2 R' U' F' 
+U' F D' R2 D F' U2 B2 R B' R' U B2 
+U R' D B2 D' U' F' U F D B2 D' R 
+U2 F R U R2 U' F U F' R F U' F2 
+L' U' B' U R' B L F B' R' F' R2 B 
+R2 U' F' R2 F' D B U2 B' D' F2 U R2 
+R' F' R U' F' U' F U' R U' R' U' F 
+R D B' L2 B' L B' L' B2 L2 B D' R' 
+U2 F R U2 F' U' F2 R' F' R2 U' R2 F' 
+F' U' F2 R' F' R F2 B D' L' D F2 B' 
+U2 R2 B2 L' B R' B2 L2 U L' U B' R' 
+U B' L' B' L2 U2 L' U B' R' U' R B' 
+R' U2 R' D' R U R' D R2 U' R' U2 R 
+U F R' U2 B' R B U2 R F2 L F L' 
+R B U B' U' B U' B' U B U B' R' 
+U' L' U R B' R2 U' R U' B' L' B2 L2 
+F2 R' F' L' F' L2 D2 F' R2 B' R' F L' 
+F' U' L U F U' F2 L2 B L' B' L2 F2 
+U F U' B U2 F2 D' L2 U D B' U' F 
+F U R' F D U2 B R B' U2 D' R F2 
+U R' F' R2 U R B' R F R2 B U R' 
+U2 F R F' L U' F U F R' F2 U L' 
+U' F2 L F R' F2 L' U' F' U F2 R F 
+U' B2 L' F' L F B' L B' U F U' F' 
+F' U B L F' L' F2 B' R B U' B' R' 
+U2 F2 U F L' U' L U F U' F2 U' F2 
+U2 B' R B' R2 F R2 D' R D F' R2 B2 
+U' R' U2 L U L' B2 D' R' D B2 U2 R 
+F2 R' D R D2 F' U2 F D2 R' D' R F2 
+L U' B L' B' U' R B L B' R' U2 L' 
+R U B' U' B' R' B' U' B2 U2 B2 U2 B' 
+B U' F' L' B L B2 R' F U F' R F 
+U R U R' U2 R' F' U' F U R2 U R' 
+L' U2 L F R U' R' U' F' U L' U2 L 
+R' F' U' F' D' F' D F' R2 U' R2 U2 R 
+U' B U L U' L' F B' R U R' U' F' 
+U2 F' U2 F2 R' U F2 U F2 U' R U' F' 
+R' F L2 B F L' F L F2 B' L2 F' R 
+U2 R' U2 R U2 R B2 L2 B R' B' L2 B2 
+B F' U B2 U' F B' R U B' U' B2 R' 
+L' B L' B R2 D2 L' F' L D2 R2 B2 L2 
+F R' U2 L F D' F D F2 L' U2 R F' 
+U' F L F' U F U2 F' U F U L' F' 
+U R B U' B' U' R D L' B L D' R2 
+U L U' R U R2 F R F' L' F' U F 
+U2 R2 B2 R F R' B2 R2 B' R' F' R B 
+F' R D2 F U' B U B' U F' D2 R' F 
+R U' L' U B' R2 U' R U' B' L' B2 L2 
+U2 L' D L2 U F2 U F2 L' U2 L2 D' L2 
+R' U' R U' R B2 D2 L2 D' L2 D' B2 R' 
+R2 F' R2 U' R2 F2 U' F' U D' F' D R2 
+U2 F2 R2 U' F L' F' U F L F' R2 F2 
+U R' F2 U' L D' L' U L2 D L2 F2 R 
+R2 B' L' F L2 B L2 F' D2 R' L B' R' 
+B U2 B' U' R2 U' F' U F2 R F' U' R 
+R U2 B F R2 D B D' R2 F' B' U2 R' 
+L' R B R' B' R2 D2 L' F' L D2 R2 L 
+U2 B U L' B L B2 L' B U' B' U L 
+F R B R B R2 F' L U2 R L' B R' 
+U2 R U2 L' U L U2 R' L' B' U B L 
+R U2 R' B' U R U B' R' B2 L U' L' 
+U R' U' F2 D' F' D F2 U F R2 U' R' 
+U2 F R U' L B L' U L B' R' L' F' 
+B2 F' D L' D' F B D' F R F' D B 
+F L2 R U L2 D' B2 D R' L U2 L' F' 
+F2 L2 B2 D2 L B2 L F2 R2 U2 B' R' B 
+U2 R' U2 R U2 L' B R L' B R' B' L2 
+B L2 U L' F' L2 F L2 U L U2 L2 B' 
+U' B U2 B' R B' R' U' B2 U' B2 U2 B 
+U F' L' U L F R U R' U' R U' R' 
+U' B2 L2 F' L B' L2 F2 U F' U L' B' 
+U' B' R B R' U2 B2 L F' L F L2 B2 
+U2 L' R' B' U2 B R L F2 D R2 D' F2 
+F U2 F' U' R' F R U' F' U' F' U F 
+L' U2 L2 F' L' F L U L2 U L2 U2 L' 
+B D F R' F2 D2 L D2 F2 R F' D' B' 
+F2 L' D2 L' F L2 F2 R F' U2 B U2 R' 
+B L U L U2 L2 B2 D2 R2 D R2 D B 
+U R2 U F U' F2 D R2 D' R2 F U' R2 
+R' B R U' L U' R U' L' U R2 B' R 
+U' R U R' F R2 B' R' B R' F2 U F 
+U2 B' U' B L2 D R' F' R D' L' U2 L' 
+R' U' R' U L U' R F' U F R U L' 
+U R2 B2 R2 B U' F' U2 B2 U' B' U' F 
+U L' U' L B D' L2 U L' U' L2 D B' 
+F' U2 F2 U2 F U2 F' U2 F U2 F2 U2 F' 
+R U B U' R B' R D2 L' F L D2 R 
+U F R2 D2 B2 R D2 F' R F' U2 L F 
+B' F2 L2 B2 L' F L2 B U2 B L F B 
+U2 F2 D' B L' B' D B L F L' F B' 
+U B2 R' B R2 F' U2 F2 R F' U2 R' B 
+B' U2 B L' B L B2 U2 R' U' R U B 
+R' U' R B L U2 L' U' L U L' U' B' 
+B L2 F D2 B D B' D2 F2 D' L2 F B' 
+U' R2 U R' U R' U' R B' R B U' R2 
+U F2 L' F2 L' B L F2 B' L2 F L' F 
+U2 B U B' U2 R2 U' F' U F2 R F' R 
+F' U2 R2 D' F' D R2 U2 F U B U' B' 
+R U R' U R2 U R U R2 U' R' U' R2 
+L2 R' F' D2 L U2 L' D2 F L U2 R L 
+U' F2 U F2 R' F R F R' F R U' F2 
+F R2 F' U R' U F' U2 F R F R F' 
+L2 U' L2 U B L2 U L2 U' B' L2 U L2 
+L U2 F' U2 F U R U' R' L' F' U F 
+U R2 U R F' U' F U R U' R2 U' R2 
+F R' F' R U R B U2 B' R' F' U F 
+U' F' U2 F2 R' F' R2 B L U2 L' B' R' 
+U2 F2 U2 L' U L U' L F L' F' U2 F2 
+R' F' U F2 R' F' R U2 R U' B U2 B' 
+R B' D2 F D U F' U' F' D B U' R 
+R' F' L U2 L2 U' L2 U' L2 U' L F R 
+U2 R2 U' F' L' B U2 B' L F R2 U R2 
+R' F' U' F2 R2 F' R2 U' B U' B' U' R 
+U2 L U F U' R U2 R' F' L' B' U2 B 
+U L' B R2 B2 U2 B U2 L2 B R2 B' L' 
+U L U F2 U' L' U2 R' F' R F' U' F2 
+U2 L U F U' F' L' F R U R' U' F' 
+F' R B' R B F2 R2 F U' B U' F2 B' 
+U2 F U2 B' F' U2 L2 B2 L B2 L U2 B 
+R U2 R' U' R U2 B' R B R2 F' U F 
+R' F' L' F R F' L U B U' F U B' 
+U F R F2 D2 B L D B2 D F U' L2 
+L' R U B2 U2 B' U' B' U' B2 L U R' 
+R2 F2 U' F2 U F2 R L' F' U2 F R L 
+U B2 R2 F R F' R2 B2 R' U' R' U R 
+U2 F R U' B U2 R' U' F' U R B' R' 
+U R F' U L2 R B' R' B L2 U' F R' 
+U L F2 R' F' R F2 L F L2 B' U2 B 
+L F' R' F' D2 U B' L B U' D2 R L' 
+U' B2 D' R2 F R F' R D R B R' B 
+B' U' B2 F' L' B2 U B U2 L2 U L' F 
+U' F' U2 F2 U F2 U F L2 B L B' L 
+B L F U2 F2 L2 F U2 F U2 F' L B' 
+U R B R' F U' R U R B' R2 U F' 
+U' B U B' U R2 F B2 R F' R' B2 R2 
+F U2 L F2 L' F' L2 B D2 F' D2 L2 B' 
+B' F U R2 D' R U' R' D R2 F' U' B 
+U B U2 B' F' R' U L' U' L U' R F 
+U' R2 U2 F' L' B' U' B L U F U' R2 
+B' R' U2 R U2 F U R' U' R F' U' B 
+U' L2 D' L' D2 R' F' R D' F L' U' F' 
+R B U B U' R' U2 L' B' L B' U' B2 
+U B' F' D2 L' B U2 B' L D2 B U2 F 
+U2 B U L2 D L' U' L2 D' L B2 U B 
+R2 U2 R F2 D2 L2 B L2 D2 F2 R' U2 R2 
+F U2 F' U2 R' U L' U' R B' U' B L 
+U L U' F U R B U' B' R' F' U2 L' 
+L R D2 L D' R' B2 R2 D2 L' D R2 L' 
+U L R2 F' R2 F R2 F L2 B2 R2 B2 L 
+U F2 R2 B' R F D' F' D R' B R2 F2 
+U2 B U2 B' U' B L' U' B' U B L B' 
+U' R' U' F' U' L F' L' F2 R B U2 B' 
+U2 R' U' F R2 B' R F' R' B R2 U R 
+U' R U2 B2 L U L' U' B' U B' U2 R' 
+U2 F' L B2 R D L D' R' L' B2 L' F 
+U2 F2 U F2 R' F R U F U' F U' F2 
+U2 L U F L U' R' U L' U' R F' L' 
+L' B L B U' R D B' D' R' B U B2 
+L F R U' R' F' L' B2 R B R' U B 
+U' L2 R B R B' L2 B2 R' B R B2 R2 
+U F' R' F2 U F2 U' F' U2 F' U' R F 
+L2 F U' R U R' L U L' F' L U' L 
+L' R' U2 R' D' B2 L F2 L' B2 D R2 L 
+L' B2 D2 R' F' R2 F D R' B' D B' L 
+L U' R D' B2 D R' U2 L' U' L2 U2 L 
+L2 B L B' L' B2 D2 F' R' F D2 B2 L2 
+B D2 U' F' U F D2 L2 D F' D' L2 B' 
+F U' B D' L2 D B' U2 F U F2 U2 F' 
+U2 F R2 B D2 B R F2 L F R2 B2 R' 
+U' B2 R' B2 R' F R F' B2 R2 B R' B 
+U2 B2 U2 R' F' L' U' L F U R U' B2 
+U L R B U2 B' R' L' F2 D' L2 D F2 
+F' U R B2 L B' L' B L' B2 R' U F 
+U2 R U2 R B R' U' R' U R B' U2 R' 
+B U' F U F2 L F L2 U L2 U' L' B' 
+L B' R2 F2 R U F2 U' R' F2 R2 B L' 
+F' L' U' L U L2 F' R2 F L2 F' R2 F2 
+F U L2 D2 R2 B R2 D R B' R' D L2 
+F2 R2 F2 R U R U' R' F R' F R2 F2 
+L' B2 L2 B U' B' L2 B' L B' L U L' 
+L' U' L F U R U R' U R U' R' F' 
+U2 F2 U2 R' F' R F2 U F2 U F U2 F 
+B U L2 U2 L2 R' U L2 U' R U2 L2 B' 
+U F U R' D R2 U' R D' R2 F2 U2 F 
+F R' F' R U2 F2 L F2 R' F' L' F R 
+U' R U R' U2 F' U' F2 R' F' R2 U2 R' 
+B L' B' L2 F2 R' F' R2 U R' U F' L' 
+U B U2 F' L F L' B' L' B2 L' B2 L2 
+U R B U' B D B' U2 B D' B2 U' R' 
+F U R2 U2 R F' R' U2 R F R U' F' 
+U2 B2 U L D2 R' U2 R D2 L' B2 U' B2 
+R U F R2 D U B R' B' U' R D' F' 
+U' B' L' B2 U B2 U' B' U2 B' U' L B 
+U R B U B' U' R' F' L' U' L U F 
+U R B R2 U' R' F R' B' R2 F' U' R 
+U R' F' L' U L U' R B' R' F R B 
+B R D' R' U' R D L U' L' U R' B' 
+R' U' F' U2 F R B U B' U' B U' B' 
+U F U2 L U' R' U L' U' R2 U' R' F' 
+L F L' R' U2 R B L F U2 F2 L' B' 
+R' B L2 D F D' L B' R2 B L B' R' 
+U' L' F R2 D B D' R F' L F R F' 
+B D' L B2 U' L' U2 L U B2 L' D B' 
+U F R2 U' R2 U R2 U F' U' B U' B' 
+U' B U B2 R2 F2 R' B R F2 R U R 
+U R' U2 F' R B' R' F R2 B R2 U2 R 
+U2 L2 B F2 D B D' B' D' F2 L B' L 
+U2 R B L B' R' F B U' F' U L' B' 
+R' B2 L' B' L F' U' F U B2 R2 B R' 
+R' F' L F' L R2 B L B' R2 L F2 R 
+R' F' U' F U F' R' U' R F R' U R2 
+U2 L' U B U2 R B' R' U2 B2 U B L 
+U2 F' L2 F' R2 F B L B' L F' R2 F2 
+U' L' B2 D' U' R' B' R B U D B2 L 
+U2 L F R U2 R' L' B' L F' L' U2 B 
+R' F R2 U R2 D R' D' R' U' R2 F' R 
+U B' R2 D2 F' D F' D' F D2 R' B R' 
+U F U2 F' L' B' R' U2 R U' B U L 
+U B2 L2 B R B' R2 F R' F' R2 L2 B2 
+L' R B' L U2 L' B2 L' B R B' R2 L2 
+F' L2 D' U' L2 D L D' L U D L2 F 
+U L' B' U B2 U2 B2 U' B2 U' B' U L 
+U' R B U' L U' L' B' R' U F' U F 
+R B L U' L' B2 R2 D' R' D R' B R' 
+F' U' L U F U' F R' F2 L' F2 R F' 
+F' U2 R' F U L F L' F' U' R U2 F 
+U' R B U2 L' B' R B2 L B R' B R' 
+U' R U2 R2 F R F2 U F U2 R U' R' 
+F U2 L F' L F2 L' F' L F' L2 U2 F' 
+U R2 U' R F R' U R U' F2 U F R 
+R U R' B2 U' R' L2 F R F' L2 U B2 
+F2 U R2 D R D' F D' F' D R U' F2 
+U R' F L2 B D F D' F' B' L2 F' R 
+F2 L2 F L' U' L B L2 B2 U2 F U B 
+R' F' U2 F U F U2 F' U' F U' F' R 
+U' F2 R2 B' R' B R' F2 U2 L F' L' F 
+L U F' U' R' F2 R F L' U2 R U R' 
+R B' U' B2 U' B2 U2 B R' U R U2 R' 
+U L R U2 L' B L U2 L2 B' L U2 R' 
+U' B' R2 F' D2 F' R' B2 L' B' R2 F2 R 
+U' R U2 F R2 F R2 F2 U2 R' L' U2 L 
+B U L U2 F U' F2 L2 B L' F L2 B2 
+R' U' F' U2 L' U L U' F R B U2 B' 
+F R U R' U' F' B' R' F R' F' R2 B 
+U2 R U' B2 F' D L D' F B R B R2 
+F R2 B' D B' D' B2 R2 U R U' R' F' 
+R U' L2 D' B D B' L2 U L2 B R' L2 
+R' U2 F U R' F' R2 F U' F' R' U2 R 
+F2 D R' D' F U' F2 D R U R D' F' 
+U F' U L2 R D' B' D R' L' F' L' F2 
+U R' U B' U R2 U R2 U' R2 B U2 R 
+U R D L U2 L D' R D L2 B2 D' R2 
+F U R' U' F' U F2 L2 F' R F L2 F2 
+L U L' F' L B L2 F B' U F' L' F 
+B' U' R2 U R' F' U' F U' R' U2 R' B 
+F U F' U L' U L2 D R' F R D' L' 
+U' B U' F U2 B2 D' R2 U D F' U' B 
+F' U L' B2 R B R2 U2 R U' B L F 
+F R' F' R B U B2 R B U' R2 U2 R 
+L U L' U L F' L2 F L2 B' U2 B L' 
+R B L U L2 U' B' U B L U' B' R' 
+U R U2 R2 F D' F' U' F2 D F2 U R 
+F2 R' F' L R F' L' U' L F L' U F' 
+U R F R2 F' U' F R2 U R2 U' F' R' 
+U F2 U' F' R U R' U' F' U F2 U F2 
+R U' R' U2 L R U' R' U2 F U' F' L' 
+U B R B2 U' B2 U' B2 U2 B2 U' R' B' 
+U' R' F R2 U R2 F R F U F2 U2 F' 
+L F R2 D L B2 L' D2 R D R F' L' 
+U R' U' R2 U2 B' D B U2 B2 D' B2 R' 
+L' U2 B' R U R2 U R2 U2 R' U2 B L 
+U' R B' R' B U2 R' F' L' U2 L F R 
+L R' F2 L D' R F2 L' U R2 L' B2 R2 
+F' U' F U2 R' F' L' U L U' F2 R F' 
