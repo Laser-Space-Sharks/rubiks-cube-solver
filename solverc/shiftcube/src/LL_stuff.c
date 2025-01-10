@@ -267,9 +267,9 @@ void LL_find_improvements_to_depth_n(cube_alg_table_s* ct, uint8_t n, size_t sta
             alg_s* alg = bidirectional_1LLL_search(&ct->table[idx].key, end_ct, n);
             if (alg == NULL) {
                 continue;
-            } else {
-                printf("WE FOUND index %zu at depth %zu\n", idx, n);
-            }
+            }// else {
+                //printf("WE FOUND index %zu at depth %zu\n", idx, n);
+            //}
 
             total_found++;
             if (alg->length < current_length) {

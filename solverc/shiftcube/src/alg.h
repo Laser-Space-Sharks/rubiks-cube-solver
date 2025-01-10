@@ -6,8 +6,8 @@
 
 
 typedef struct {
-    size_t size;
-    size_t length;
+    uint8_t size;
+    uint8_t length;
     move_t *moves;
 } alg_s;
 
