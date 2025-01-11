@@ -233,14 +233,11 @@ int bidirectional_recursion_1LLL_dumbFast_DFS(shift_cube_s *cube, const cube_alg
     return 0;
 }
 
-static alg_s* bidirectional_1LLL_search(const shift_cube_s *start, const cube_alg_table_s* end_ct, uint8_t max_depth) {
-    uint8_t start_depth = max_depth/2;
-    uint8_t end_depth = (max_depth+1)/2;
-
-    if (start_depth > MAX_CUBE_TABLE_DEPTH) {
-        printf("Attempted to recurse too deep for cube_table\n");
-        return NULL;
-    }
+static alg_s* bidirectional_1LLL_search(const shift_cube_s *start, const cube_alg_table_s* end_ct, size_t end_depth, size_t start_depth) {
+    //if (start_depth > MAX_CUBE_TABLE_DEPTH) {
+    //    printf("Attempted to recurse too deep for cube_table\n");
+    //    return NULL;
+    //}
 
     if (cube_alg_table_lookup(end_ct, start)) {
         alg_s* end_alg = alg_copy(cube_alg_table_lookup(end_ct, start));
@@ -255,7 +252,7 @@ static alg_s* bidirectional_1LLL_search(const shift_cube_s *start, const cube_al
     shift_cube_s end_cube   = SOLVED_SHIFTCUBE;
 
     bool found = false;
-    if (start_depth == 7 && end_depth == 7) {
+    if (start_depth >= 7) {
         uint8_t depth = start_depth;
         if (bidirectional_recursion_1LLL_dumbFast_DFS(&start_cube, end_ct, start_alg, depth)) {
             alg_free(end_alg);
@@ -291,24 +288,32 @@ static alg_s* bidirectional_1LLL_search(const shift_cube_s *start, const cube_al
 void LL_find_improvements_to_depth_n(cube_alg_table_s* ct, uint8_t n, size_t start_ind) {
     size_t total_found, total_improved;
     total_found = total_improved = 0;
+    size_t end_depth = (n+1)/2;
+    if (end_depth > 7) end_depth = 7;
+    size_t start_depth = n-end_depth;
 
-    cube_alg_table_s *end_ct   = cube_alg_table_create(cube_table_depth_sizes[(n+1)/2]);
-    uint8_t end_depth = (n+1)/2;
+    cube_alg_table_s *end_ct   = cube_alg_table_create(cube_table_depth_sizes[end_depth]);
     shift_cube_s end_cube = SOLVED_SHIFTCUBE;
-    alg_s *end_alg   = alg_create((n+1)/2);
+    alg_s *end_alg   = alg_create(end_depth);
 
     for (uint8_t depth = 0; depth <= end_depth; depth++) {
         bidirectional_recursion_1LLL_build_end_ct(&end_cube, end_ct, end_alg, depth);
     }
 
     size_t tried = 0;
+    size_t total_algs_to_try = 0;
+    for (size_t idx = start_ind; idx < ct->size; idx++) {
+        if (ct->table[idx].alg.moves == NULL) continue;
+        if (ct->table[idx].alg.length <= n) continue;
+        total_algs_to_try++;
+    }
     for (size_t idx = start_ind; idx < ct->size; idx++) {
         if (ct->table[idx].alg.moves == NULL) continue;
         if (ct->table[idx].alg.length <= n) continue;
 
         uint8_t current_length = ct->table[idx].alg.length;
 
-        alg_s* alg = bidirectional_1LLL_search(&ct->table[idx].key, end_ct, n);
+        alg_s* alg = bidirectional_1LLL_search(&ct->table[idx].key, end_ct, end_depth, start_depth);
         tried++;
         if (alg == NULL) {
             continue;
@@ -321,7 +326,7 @@ void LL_find_improvements_to_depth_n(cube_alg_table_s* ct, uint8_t n, size_t sta
             total_improved++;
             free(ct->table[idx].alg.moves);
             ct->table[idx].alg = alg_static_copy(alg);
-            printf("On try %5zu: alg improved to length %2zu with gain %2zu: ", tried, alg->length, current_length - alg->length);
+            printf("On try %4zu/%4zu: alg improved to length %2zu with gain %2zu: ", tried, total_algs_to_try, alg->length, current_length - alg->length);
             print_alg(alg);
         }
         alg_free(alg);
@@ -352,4 +357,3 @@ void print_improved_1LLL_algs() {
     cube_alg_table_free(LL_table);
     cube_alg_table_free(uniq_cases);
 }
-
