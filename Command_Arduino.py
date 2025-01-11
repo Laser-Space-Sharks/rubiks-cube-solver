@@ -1,6 +1,6 @@
 import serial
 
-ARDUINO = serial.Serial(port='COM4', baudrate=9600, timeout=.1)
+ARDUINO = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=.1)
 
 def push_robotNums_to_arduino(nums: list[int]):
     bitstring = ''.join([str((num>>i)&1) for num in nums for i in range(12)])
