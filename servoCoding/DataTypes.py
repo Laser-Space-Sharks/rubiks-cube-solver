@@ -199,6 +199,14 @@ class RobotState:
     #    return self.as2B()
     def __repr__(self):
         return f"RobotState({self.U}, {self.R}, {self.D}, {self.L})"
+    def from_string(robotstate: str):
+        # N.E.S.W.U0.R0.D0.L0
+        return RobotState(
+            ArmState(robotstate[0]=='N', int(robotstate[9])),
+            ArmState(robotstate[2]=='E', int(robotstate[12])),
+            ArmState(robotstate[4]=='S', int(robotstate[15])),
+            ArmState(robotstate[6]=='W', int(robotstate[18])),
+        )
 @dataclass(frozen=True, eq=True)
 class State:
     persp: Orientation
