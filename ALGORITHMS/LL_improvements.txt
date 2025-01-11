@@ -3681,3 +3681,33 @@ U2 F R' U' R' U R2 U R' U2 B' R2 B U' F'
 U R D2 B L2 D2 R F2 D' F' L F2 L D R2 
 U L U' F2 R B' F2 R B R' F2 R' F2 U L' 
 U F R B' F D2 B2 R D2 R' D2 R' B' R F2 
+On try    1/  30: alg improved to length 16 with gain  2: U2 L2 R2 D2 R F L2 U' R B L U' R2 F R2 L' 
+On try    2/  30: alg improved to length 16 with gain  2: R U R' B' U' R2 U2 R U F R U R2 U' F' B 
+On try    3/  30: alg improved to length 16 with gain  5: U R' U' R2 B' R2 U' R U2 F U' B2 U F' U B' 
+On try    4/  30: alg improved to length 16 with gain  5: U L R' F' L' U F2 D B' R2 B U2 D' F' U2 R 
+On try    5/  30: alg improved to length 16 with gain  2: U2 F R D2 F' R2 U B' R2 B U' R2 F D2 R' F' 
+On try    6/  30: alg improved to length 16 with gain  2: U F2 L2 R2 B' D' B' L' D L B R' B R' L2 F2 
+On try    7/  30: alg improved to length 16 with gain  1: U B U2 L' B' L2 F U R U2 R2 U2 R F' U L' 
+On try    8/  30: alg improved to length 16 with gain  2: U R B' R' B U' F U' B U F' U2 L U' L' B' 
+On try    9/  30: alg improved to length 16 with gain  5: U R U R2 F R2 U R' U2 B' U F2 U' B U' F 
+On try   10/  30: alg improved to length 16 with gain  2: U L F' L2 U L F U R F2 D R2 D' F2 U2 R' 
+On try   11/  30: alg improved to length 16 with gain  2: U2 R U2 B U' L U2 L' U B' U' B U2 B' U R' 
+On try   12/  30: alg improved to length 16 with gain  5: U R F2 R2 F U' F2 L F2 L' F2 U F' R2 F2 R' 
+On try   13/  30: alg improved to length 16 with gain  1: U R' F' U' F R' F2 D2 B' L2 B D2 F2 R U R 
+On try   14/  30: alg improved to length 16 with gain  2: U R B U' L2 U L U' L2 U B D L D' B2 R' 
+On try   15/  30: alg improved to length 16 with gain  2: U R B U B' U2 L U' R' U L' U R' F R F' 
+On try   16/  30: alg improved to length 16 with gain  1: U R B D2 R' B2 U L' B2 L U' B2 R D2 B' R' 
+On try   17/  30: alg improved to length 16 with gain  2: U R U2 R' U2 F' U' F L U L' B2 D' R' D B2 
+On try   18/  30: alg improved to length 16 with gain  1: U B2 F2 D2 B R F2 U' B L F U' B2 R F' B2 
+On try   19/  30: alg improved to length 16 with gain  4: U R U B' D' F R2 F' R D B R2 U2 R' U2 R 
+On try   20/  30: alg improved to length 16 with gain  2: U R U2 F R2 F D2 L B' R D2 F L2 F U2 L 
+On try   21/  30: alg improved to length 16 with gain  1: U R B2 R D2 L F2 L F L2 D2 R' B2 R2 U2 R 
+On try   22/  30: alg improved to length 16 with gain  1: U R' U2 L2 U' F' L' U L2 F L U2 R F' L F 
+On try   23/  30: alg improved to length 16 with gain  1: U R2 F' R F' L' U2 F2 D' L' D F2 L2 F' R L' 
+On try   24/  30: alg improved to length 16 with gain  2: U R' U F' U2 F U' R U2 B U' L U2 L' U B' 
+On try   25/  30: alg improved to length 16 with gain  2: R U B U2 L U2 F' L F L2 B' R' U F' U2 F 
+On try   26/  30: alg improved to length 16 with gain  2: U' B2 F2 D2 F L B2 U' F R B U' F2 L F2 B' 
+On try   27/  30: alg improved to length 16 with gain  1: U R B' R B' L F L F' D2 R F R' L2 B2 R2 
+On try   28/  30: alg improved to length 16 with gain  1: U L' B L U' L2 B' L B' U' R B R2 U2 R L 
+On try   29/  30: alg improved to length 16 with gain  1: R B2 R' B2 R B R U B2 U2 R' U2 B2 U' R2 B 
+On try   30/  30: alg improved to length 16 with gain  1: U R2 B F2 L' B L' F' D' F L D L F2 B2 R2 
