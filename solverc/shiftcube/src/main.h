@@ -9,9 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static const char* LL_IMPROVEMENTS_PATH = "../../ALGORITHMS/LL_improvements.txt";
-static const char* OLD_LL_PATH = "../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt";
-static const char* LL_PATH = "../../ALGORITHMS/NEW_NEW_1LLLS.txt";
+static const char* LL_PATH = "../../ALGORITHMS/FULL_1LLL_ALGORITHMS.txt";
 static const char* F2L_PATH = "../../ALGORITHMS/FULL_F2L_ALGORITHMS.txt";
 static const char* INTER_MOVE_TABLE_PATH = "../../servoCoding/ServoOptimizationTable.txt";
 static const char* INTER_MOVE_TABLE_RSS_PATH = "../../servoCoding/ServoOptimizationTable_other_rootpaths.txt";

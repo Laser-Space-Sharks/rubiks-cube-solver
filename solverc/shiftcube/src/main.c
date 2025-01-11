@@ -337,7 +337,7 @@ int main(int argc, char *argv[]) {
         alg_s* alg = alg_from_alg_str(argv[1]);
         alg_free(alg);
     } else {
-        //test_cube_solve(scrambles, NUM_TESTS);
+        test_cube_solve(scrambles, NUM_TESTS);
 
         //test_shiftcube_moves();
         //test_cube18B_moves();
@@ -351,7 +351,7 @@ int main(int argc, char *argv[]) {
         //test_solve_and_compile(scrambles, NUM_TESTS);
 
         //test_1LLL();
-        test_LL_improvements();
+        //test_LL_improvements();
         //print_improved_1LLL_algs();
     }
 
