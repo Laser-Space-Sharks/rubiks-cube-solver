@@ -5,14 +5,10 @@ ARDUINO = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=None, write_
 def push_robotNums_to_arduino(nums: list[int]):
     num_bits = len(nums)*16
     num_bytes = num_bits//8
-    total_num = 0
+    Bytes = []
     for num in nums:
-        total_num <<= 16
-        total_num |= (num<<4)
-    Bytes = [0 for _ in range(num_bytes)]
-    for i in range(num_bits):
-        Bytes[i//8] <<= 1
-        Bytes[i//8] |= (total_num>>(num_bits-1-i))&1
+        Bytes.append(num>>8)
+        Bytes.append(num&(2**8 - 1))
     for byte in Bytes: 
         if byte > 255: raise ValueError("BYTE WAS NOT A BYTE!")
     if len(Bytes) == 0: raise ValueError("BYTES WAS NOTHING")
