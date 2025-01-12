@@ -32,6 +32,7 @@ typedef struct inter_move_table inter_move_table_s;
 
 void print_RobotState(RobotState_s servos);
 void print_State(State_s state);
+uint16_t RobotState_to_uint16t(const RobotState_s* state);
 bool compare_states(const State_s* state1, const State_s* state2);
 
 inter_move_table_s* inter_move_table_create();

@@ -640,6 +640,18 @@ uint16_t RobotState_to_RobotStateNum(const RobotState_s* state) {
     bitmask *= 3; bitmask += state->L;
     return bitmask;
 }
+uint16_t RobotState_to_uint16t(const RobotState_s* state) {
+    uint16_t bitmask = 0;
+    bitmask <<= 1; bitmask |= state->n;
+    bitmask <<= 1; bitmask |= state->e;
+    bitmask <<= 1; bitmask |= state->s;
+    bitmask <<= 1; bitmask |= state->w;
+    bitmask <<= 2; bitmask |= state->U;
+    bitmask <<= 2; bitmask |= state->R;
+    bitmask <<= 2; bitmask |= state->D;
+    bitmask <<= 2; bitmask |= state->L;
+    return bitmask;
+}
 
 bool compare_RobotStates(const RobotState_s* state1, const RobotState_s* state2) {
     return (
