@@ -262,7 +262,7 @@ def addFaceToCubeScan(faceArray, orientation, cubeArray):
     return cubeArray
 
 def getCenterColor(image):
-    centerPiece = image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3]
+    centerPiece = image[IMG_HEIGHT//3:2*(IMG_HEIGHT)//3, IMG_WIDTH//3:2*(IMG_WIDTH)//3]
     return colorAnalysis(centerPiece)
 
 #######################################################
