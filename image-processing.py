@@ -70,6 +70,25 @@ UPPER_BOUND_COLORS = [
     asarray([89, 255, 255]), # green
 ]
 
+PEICE_CONNECTION_TABLE = [
+    # UP
+    [[[], [5, 2, 1], []], 
+    [[1, 0, 1], [], [3, 0, 1]], 
+    [[], [2, 0, 1], []]],
+    # FRONT
+    [[[], [0, 2, 1], []],
+    [[1, 1, 2], [], [3, 1, 0]],
+    [[], [4, 0, 1], []]],
+    # DOWN
+    [[[], [2, 2, 1], []], 
+    [[1, 2, 1], [], [3, 2, 1]], 
+    [[], [5, 0, 1], []]],
+    # BACK 
+    [[[], [4, 2, 1], []], 
+    [[1, 1, 0], [], [3, 1, 2]], 
+    [[], [0, 0, 1], []]]
+]
+
 #######################################################
 ####### File Actions ##################################
 #######################################################
@@ -253,32 +272,56 @@ def getCenterColor(image):
 # USE BEFORE SHIFT CUBE!!!!!!!
 # https://puzzling.stackexchange.com/questions/53846/how-to-determine-whether-a-rubiks-cube-is-solvable
 def errorDetection(cubeArray):
-    sortedCubeArray = []
-    for i in range(6):
-        sortedCubeArray.append(faceSearch(cubeArray, FACE_ORDER[i]))
-    if (sum(sortedCubeArray) != 135):
-        return -1
-    if(checkCenters(sortedCubeArray)):
-        return 4
-    if (checkCornerRotations(sortedCubeArray)):
+    if (sum(cubeArray) != 135):
         return 0
-    if (checkEdgeParity(sortedCubeArray)):
+    if (!checkEdgeParity(cubeArray)):
         return 2
-    if (checkPurmutationParity(sortedCubeArray)):
-        return 3
+    # if (!checkCornerRotations(cubeArray)):
+    #     return 3
+    # if (!checkPurmutationParity(cubeArray)):
+    #     return 4
     return 1
 
-
 def checkCornerRotations(cubeArray):
-    return False
+    return True
 
 def checkEdgeParity(cubeArray):
     c = 0
     faceToCheck[0, 2, 4, 5]
+    for i in range(4):
+        peice = cubeArray[faceToCheck[i]][1][0]
+        peiceConCords = [i][1][0]
+        peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
+        c += checkEdge(peice, peiceCon)
+        peice = cubeArray[faceToCheck[i]][1][2]
+        peiceConCords = [i][1][2]
+        peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
+        c += checkEdge(peice, peiceCon)
+        if i % 2 == 0:
+            continue
+        peice = cubeArray[faceToCheck[i]][0][1]
+        peiceConCords = [i][0][1]
+        peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
+        c += checkEdge(peice, peiceCon)
+        peice = cubeArray[faceToCheck[i]][2][1]
+        peiceConCords = [i][2][1]
+        peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
+        c += checkEdge(peice, peiceCon)
+    if c % 2 == 0:
+        return True
     return False
 
+def checkEdge(peice, peiceCon):
+    if peice == 1 or peice == 3:
+        return 0
+    if peice == 2 or peice == 4:
+        return 1
+    if peiceCon == 2 or peiceCon == 4:
+        return 0
+    return 1
+
 def checkPurmutationParity(cubeArray):
-    return False
+    return True
     
 #######################################################
 ####### Format to ShiftCube ###########################
