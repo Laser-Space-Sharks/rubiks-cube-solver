@@ -1,6 +1,6 @@
 from bisect import bisect_left
-from Robot_values import *
-from DataTypes import *
+from .Robot_values import *
+from .DataTypes import *
 import sys
 sys.setrecursionlimit(100000)
 '''
