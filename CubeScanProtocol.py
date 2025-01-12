@@ -41,16 +41,21 @@ from Command_Arduino import push_robotNums_to_arduino
 from servoCoding.Optimizer import calc_weight_of_path
 import time
 
+StartState = State(Orientation('U', 1), RobotState.from_string("n.e.s.w.U0.R0.D0.L0"))
 DefO = Orientation('F', 0)
 def Move_to_face1() -> Orientation:
     '''
     ('U', 1) n.E.s.W.U1.R1.D2.L1   ************
     '''
-    #next_states = [
-    #    RobotState.from_string("n.E.s.W.U1.R1.D2.L1"),
-    #]
-    #push_robotNums_to_arduino([i.as2B() for i in next_states])
-    #time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
+    next_states = [
+        RobotState.from_string("n.e.s.w.U0.R0.D0.L0"),
+        RobotState.from_string("N.e.S.w.U0.R1.D0.L1"),
+        RobotState.from_string("N.E.S.W.U0.R1.D0.L1"),
+        RobotState.from_string("n.E.s.W.U0.R1.D0.L1"),
+        RobotState.from_string("n.E.s.W.U1.R1.D2.L1"),
+    ]
+    push_robotNums_to_arduino([i.as2B() for i in next_states])
+    time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('U', 1)
 
 def Move_to_face2() -> Orientation:
