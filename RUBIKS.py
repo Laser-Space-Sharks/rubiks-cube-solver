@@ -38,7 +38,7 @@ while True:
         cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "up"), O1, cubeArr)
         for i in range(2, 6):
             O: Orientation = Move_to_faceN(i)
-            cubeArr = addFaceToCubeScan(scanFace(colorsArray))
+            cubeArr = addFaceToCubeScan(scanFace(colorsArray), O, cubeArr)
         shiftCubeArr = convertToShiftCube(cubeArr)
 
 
