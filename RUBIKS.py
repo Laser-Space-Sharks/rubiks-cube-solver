@@ -28,7 +28,7 @@ while True:
         O2: Orientation = Move_to_faceN(1)
         fcolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "front", False))
         colorsArray = genColorsArray(fcolor, ucolor)
-        cubeArr = zeros(shape=6, 3, 3)
+        cubeArr = zeros(shape=(6, 3, 3))
         cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "front"), O2, cubeArr)
         cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "up"), O1, cubeArr)
         # Scan rest of cube and convert to shift cube
