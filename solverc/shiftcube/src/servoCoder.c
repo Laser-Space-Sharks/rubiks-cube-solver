@@ -242,7 +242,8 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
     //printf("\n");
     char* arr_of_stateNumStrs[space_count+1];
     for (int i = 0; i < space_count+1; ++i) {
-        arr_of_stateNumStrs[i] = (char*)calloc(sizeof(char), stateNumStrLengths[i]+1);
+        arr_of_stateNumStrs[i] = (char*)malloc(sizeof(char)*(stateNumStrLengths[i]+1));
+        arr_of_stateNumStrs[i][stateNumStrLengths[i]] = 0;
     }
     index = 0;
     size_t last_set = 0;
@@ -333,7 +334,8 @@ bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
     //printf("\n");
     char* arr_of_stateNumStrs[space_count+1];
     for (int i = 0; i < space_count+1; ++i) {
-        arr_of_stateNumStrs[i] = (char*)calloc(sizeof(char), stateNumStrLengths[i]+1);
+        arr_of_stateNumStrs[i] = (char*)malloc(sizeof(char)*(stateNumStrLengths[i]+1));
+        arr_of_stateNumStrs[i][stateNumStrLengths[i]] = 0;
     }
     index = 0;
     size_t last_set = 0;
