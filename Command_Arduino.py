@@ -13,7 +13,7 @@ def push_robotNums_to_arduino(nums: list[int]):
     for i in range(num_bits):
         Bytes[i//8] <<= 1
         Bytes[i//8] |= (total_num>>(num_bits-1-i))&1
-    if (num_bytes & 1 == 1): bytes[-1] <<= 4
+    if (num_bytes & 1 == 1): Bytes[-1] <<= 4
     for byte in Bytes: 
         if byte > 256: raise ValueError("BYTE WAS NOT A BYTE!")
     ARDUINO.write(bytes(Bytes))
