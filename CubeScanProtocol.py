@@ -143,3 +143,13 @@ def Move_to_face6() -> Orientation:
     push_robotNums_to_arduino([i.as2B() for i in next_states])
     time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('R', 2)
+
+def Move_to_faceN(n: int) -> Orientation|None:
+    match (n):
+        case 0: return Move_to_face1()
+        case 1: return Move_to_face2()
+        case 2: return Move_to_face3()
+        case 3: return Move_to_face4()
+        case 4: return Move_to_face5()
+        case 5: return Move_to_face6()
+        case _: raise ValueError(f"Move_to_faceN: can only take [0,5] but got {n}")
