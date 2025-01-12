@@ -2,7 +2,6 @@
 #include "main.h"
 #include "cube_alg_table.h"
 #include "lookup_tables.h"
-#include "solver.h"
 
 void LL_print_algs_bigger_than_n(const cube_alg_table_s* ct, size_t n) {
     printf("   index  |               cube string representation            | algorithm\n");
@@ -326,7 +325,7 @@ void LL_find_improvements_to_depth_n(cube_alg_table_s* ct, uint8_t n, size_t sta
             total_improved++;
             free(ct->table[idx].alg.moves);
             ct->table[idx].alg = alg_static_copy(alg);
-            printf("On try %4zu/%4zu: alg improved to length %2zu with gain %2zu: ", tried, total_algs_to_try, alg->length, current_length - alg->length);
+            printf("On try %4zu/%4zu: alg improved to length %2hhu with gain %2hhu: ", tried, total_algs_to_try, alg->length, current_length - alg->length);
             print_alg(alg);
         }
         alg_free(alg);

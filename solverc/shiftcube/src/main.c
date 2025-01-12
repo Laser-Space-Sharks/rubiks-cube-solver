@@ -3,7 +3,6 @@
 #include "servoCoder.h"
 #include "shift_cube.h"
 #include "solver.h"
-#include "tests.h"
 
 #include <string.h>
 
@@ -100,7 +99,7 @@ int main(int argc, char *argv[]) {
         alg_free(scramble_alg);
     } else if (input == INPUT_SHIFTCUBE) {
         if (argc - i != 6) {
-            printf("Too many faces passed for shiftcube input\n");
+            printf("Too many faces passed for shiftcube input.\n");
             return 1;
         }
         for (face_e face = FACE_U; i < argc; face++, i++) {
