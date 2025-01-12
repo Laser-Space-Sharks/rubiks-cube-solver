@@ -15,6 +15,7 @@ def push_robotNums_to_arduino(nums: list[int]):
         Bytes[i//8] |= (total_num>>(num_bits-1-i))&1
     for byte in Bytes: 
         if byte > 255: raise ValueError("BYTE WAS NOT A BYTE!")
+    if len(Bytes) == 0: raise ValueError("BYTES WAS NOTHING")
     ARDUINO.write(bytes(Bytes[:2]))
     index = 2
     while index < len(nums):
