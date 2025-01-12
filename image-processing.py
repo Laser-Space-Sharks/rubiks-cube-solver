@@ -17,7 +17,7 @@ from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\
 NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
 imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
-from numpy import asarray, zeros, where, copy, uint32
+from numpy import asarray, zeros, where, copy, uint32, sum, rot90
 # import matplotlib as plt
 from os import chdir
 # from io import BytesIO
@@ -29,10 +29,13 @@ from subprocess import run
 #######################################################
 
 Abbie_img_folder = "/home/aagowl/Downloads/"
+peiceNamesRow = ["upper", "center", "lower"]
+peiceNamesCol = ["left", "center", "right"]
 IMG_WIDTH = 56 # for resolution
 IMG_HEIGHT = 64
 PIECE_SIZE = (IMG_WIDTH//3) * (IMG_HEIGHT//3)
 CUBE_IMG_FOLDER = "/home/pi/cubeImgs/"
+FACE_ORDER = {"U": 0, "R": 1, "F": 2, "L": 3, "B": 4, "D": 5}
 # colors array good for translating numerical colors into english
 # does not work when cube translated into colorblind notation (obvi)
 # use translateToColors() with a colorsArray to translate colorblind notation
@@ -210,8 +213,6 @@ def analyzeFace(image, colorsArray):
             image[2*(IMG_HEIGHT)//3:IMG_HEIGHT, 2*(IMG_WIDTH)//3:IMG_WIDTH]
         ]
     ]
-    peiceNamesRow = ["upper", "center", "lower"]
-    peiceNamesCol = ["left", "center", "right"]
     # represent face as array 
     face = zeros(shape=(3,3))
     for i in range(3):
@@ -224,42 +225,70 @@ def analyzeFace(image, colorsArray):
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
             # print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
-
     return face
 
 def scanFace(colorsArray, readSavedImg=False, filename=""):
     if readSavedImg:
-        image = imread(f"{Abbie_img_folder}{filename}.jpg", IMREAD_COLOR) # CHANGE
+        image = imread(f"{CUBE_IMG_FOLDER}{filename}.jpg", IMREAD_COLOR) # CHANGE
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     normalizedImage = cvtColor(image, COLOR_BGR2HSV)
     return analyzeFace(normalizedImage, colorsArray)
 
+def addFaceToCubeScan(faceArray, orientation, cubeArray):
+    # rotate cube properly
+    rot90(m, k=orientation.rot, axes=(1,0))
+    # put in cube array properly
+    cubeArray[FACE_ORDER[orientation.face]] = faceArray
+    return cubeArray
+
 def getCenterColor(image):
     centerPiece = image[IMG_SIZE//3:2*(IMG_SIZE)//3, IMG_SIZE//3:2*(IMG_SIZE)//3]
     return colorAnalysis(centerPiece)
 
+#######################################################
+####### ERROR DECTECTION!!! ###########################
+#######################################################
 # test to see if cube is impossible
-def errorCorrection(cubeArray):
-    
-    return -1
+# USE BEFORE SHIFT CUBE!!!!!!!
+# https://puzzling.stackexchange.com/questions/53846/how-to-determine-whether-a-rubiks-cube-is-solvable
+def errorDetection(cubeArray):
+    sortedCubeArray = []
+    for i in range(6):
+        sortedCubeArray.append(faceSearch(cubeArray, FACE_ORDER[i]))
+    if (sum(sortedCubeArray) != 135):
+        return -1
+    if(checkCenters(sortedCubeArray)):
+        return 4
+    if (checkCornerRotations(sortedCubeArray)):
+        return 0
+    if (checkEdgeParity(sortedCubeArray)):
+        return 2
+    if (checkPurmutationParity(sortedCubeArray)):
+        return 3
+    return 1
+
+
+def checkCornerRotations(cubeArray):
+    return False
+
+def checkEdgeParity(cubeArray):
+    c = 0
+    faceToCheck[0, 2, 4, 5]
+    return False
+
+def checkPurmutationParity(cubeArray):
+    return False
     
 #######################################################
 ####### Format to ShiftCube ###########################
 #######################################################
-def faceSearch(cubeArray, query):
-    for face in cubeArray:
-        if face[1][1] == query:
-            return face
-    return -1
-
 def convertToShiftCube(cubeArray):
     shiftCube = zeros(shape=6, dtype=uint32)
     # face order is the order in which you will save to
     # the shift cube, written in Colorblind notation
-    faceOrder = [0, 1, 2, 3, 4, 5]
     for i in range(6):
-        face = faceSearch(cubeArray, faceOrder[i])
+        face = cubeArray[i]
         faceNum = uint32(0); k = 1; j = 0; c = 0
         while c < 8:
             peice = uint32(face[k][j])
