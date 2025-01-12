@@ -130,7 +130,7 @@ def is_valid_state(state: State):
     if L == ArmState(1, 1) == D: return False
     if R == ArmState(1, 1) == U: return False
     if L == ArmState(1, 1) == U: return False
-    return (D.e == 1 or (R == ArmState(1, 1) and L.e == 1) or (L == ArmState(1, 1) and R.e == 1))
+    return (D.e or (R == ArmState(1, 1) and L.e) or (L == ArmState(1, 1) and R.e))
 def y1(state: State):
     cubeRot = CubeRotation("Y")
     persp, U, R, D, L = state.unpack()
