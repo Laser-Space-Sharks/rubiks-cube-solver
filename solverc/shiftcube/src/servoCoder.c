@@ -448,12 +448,13 @@ inter_move_table_s* inter_move_table_create() {
     for (int j = 0; j < ht->RSS.length; j++) {
         numRSSInterPathNodes += ht->RSS.paths[j].size;
     }
+    /*
     printf("In the INTER_MOVE_TABLE, there are %zu SubEntries, %zu RSSSubEntries, %zu InterPathNodes, %zu RSSInterPathNodes\n", 
         numSubEntries,
         numRSSSubEntries,
         numInterPathNodes,
         numRSSInterPathNodes
-    );
+    ); */
 
     return ht;
 }
@@ -916,7 +917,7 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
     } free(stateAfterMove_arr);
     size_t numTies = 0;
     while(MinHeap_pluck_min(minheap)->weight == current_node->weight) numTies++;
-    printf("DIJKSTRA FINISHED!: Min Distance: %lf, Amount Plucked: %zu/%zu, # other equal candidates: %zu\n", current_node->weight, amountPlucked, total_nodes_from_alg_secs(alg_sections, numAlgSecs), numTies);
+    //printf("DIJKSTRA FINISHED!: Min Distance: %lf, Amount Plucked: %zu/%zu, # other equal candidates: %zu\n", current_node->weight, amountPlucked, total_nodes_from_alg_secs(alg_sections, numAlgSecs), numTies);
     *EndNode = current_node; //printf("\tline 860\n");
 }
 DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode) {
