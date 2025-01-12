@@ -9,11 +9,11 @@ def push_robotNums_to_arduino(nums: list[int]):
     for num in nums:
         total_num <<= 12
         total_num |= num
-    bytes = [0 for _ in range(num_bytes)]
+    Bytes = [0 for _ in range(num_bytes)]
     for i in range(num_bits):
-        bytes[i//8] <<= 1
-        bytes[i//8] |= (total_num>>(num_bits-1-i))&1
+        Bytes[i//8] <<= 1
+        Bytes[i//8] |= (total_num>>(num_bits-1-i))&1
     if (num_bytes & 1 == 1): bytes[-1] <<= 4
-    for byte in bytes: 
+    for byte in Bytes: 
         if byte > 256: raise ValueError("BYTE WAS NOT A BYTE!")
-    ARDUINO.write(''.join([chr(i) for i in bytes]))
+    ARDUINO.write(bytes(''.join([chr(i) for i in bytes])))
