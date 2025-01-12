@@ -29,7 +29,7 @@ typedef enum outputs {
     "\n" \
     "Inputs:\n" \
     "  scramble         pass the scramble as a string.\n" \
-    "  shiftcube        pass the shiftcube faces as 6 uints\n" \
+    "  shiftcube        pass the shiftcube faces as 6 printed uint32_ts separated by spaces\n" \
     "Outputs:\n" \
     "  alg              prints the solution as an algorithm.\n" \
     "  servocode        print converted solution in servocode.\n" \
