@@ -407,5 +407,3 @@ def test(frontCenterColor, upCenterColor):
     print("Cube Scanned!!")
     print(cubeArray)
     print(f"Converted to shift cube: {convertToShiftCube(cubeArray)}")
-
-testFromSaved(2, 0) # blue, yellow
