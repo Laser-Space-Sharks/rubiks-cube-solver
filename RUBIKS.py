@@ -3,15 +3,7 @@
 #######################################################
 
 # vauge stuff that needs to happen:
-# run(["./solverc/shiftcube/solver", 
-#    "-i", "shiftcube", 
-#     "-o", "servocode", 
-#     f"{shiftCubeArr[0]}", 
-#     f"{shiftCubeArr[1]}", 
-#     f"{shiftCubeArr[2]}", 
-#     f"{shiftCubeArr[3]}", 
-#     f"{shiftCubeArr[4]}", 
-#     f"{shiftCubeArr[5]}"])
+
 
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 from CubeScanProtocol import Move_to_faceN
@@ -27,7 +19,8 @@ GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 10 to be an input 
 while True:
     if GPIO.input(10) == GPIO.HIGH:
         print("Button was pushed!")
-        #Start solving!
+        # Start solving!
+        # Start Scanning and initalize colors
         O1: Orientation = Move_to_faceN(0)
         ucolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "up", false))
         O2: Orientation = Move_to_faceN(1)
@@ -36,10 +29,23 @@ while True:
         cubeArr = zeros(shape=6)
         cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "front"), O2, cubeArr)
         cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "up"), O1, cubeArr)
+        # Scan rest of cube and convert to shift cube
         for i in range(2, 6):
             O: Orientation = Move_to_faceN(i)
             cubeArr = addFaceToCubeScan(scanFace(colorsArray), O, cubeArr)
         shiftCubeArr = convertToShiftCube(cubeArr)
+        # run solverc
+        run([
+            "./solverc/shiftcube/solver", 
+            "-i", "shiftcube", 
+            "-o", "servocode", 
+            f"{shiftCubeArr[0]}", 
+            f"{shiftCubeArr[1]}",
+            f"{shiftCubeArr[2]}", 
+            f"{shiftCubeArr[3]}", 
+            f"{shiftCubeArr[4]}", 
+            f"{shiftCubeArr[5]}"])
+
 
 
 
