@@ -1,4 +1,4 @@
-from DataTypes import State, Orientation, RobotState, ArmState
+from .DataTypes import State, Orientation, RobotState, ArmState
 
 '''
 #define halfTurn 500 //in Milliseconds
