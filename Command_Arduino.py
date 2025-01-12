@@ -3,8 +3,7 @@ import serial
 ARDUINO = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=None, write_timeout=None)
 
 def push_robotNums_to_arduino(nums: list[int]):
-    num_bits = len(nums)*16
-    num_bytes = num_bits//8
+    print(nums)
     Bytes = []
     for num in nums:
         Bytes.append(num>>8)
