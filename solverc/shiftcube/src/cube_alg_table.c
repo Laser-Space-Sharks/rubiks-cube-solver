@@ -1,8 +1,6 @@
 #include "shift_cube.h"
 #include "solver_print.h"
 #include "cube_alg_table.h"
-#include "lookup_tables.h"
-#include "solver.h"
 
 cube_alg_table_s* cube_alg_table_create(size_t size) {
     cube_alg_table_s *ct = (cube_alg_table_s*)malloc(sizeof(cube_alg_table_s));

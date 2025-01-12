@@ -185,7 +185,7 @@ void test_cube_solve(const char** scrambles, int num_tests) {
             printf("It didn't solve it, this is bad...\n");
         }
         cube = SOLVED_SHIFTCUBE;
-        printf("Solution (%zu moves): ", solve->length);
+        printf("Solution (%hhu moves): ", solve->length);
         print_alg(solve);
         sum += solve->length;
         alg_free(solve);
@@ -206,9 +206,9 @@ void test_simplifier_1case(char* algstr, char* simplifiedalgstr) {
     alg_s* simplified = alg_from_alg_str(simplifiedalgstr);
     if (alg->length != simplified->length) {
         printf("ALGS DON'T MATCH:\n");
-        printf("Length of alg: %zu\n", alg->length);
+        printf("Length of alg: %hhu\n", alg->length);
         print_alg(alg);
-        printf("Length of simplified: %zu\n", simplified->length);
+        printf("Length of simplified: %hhu\n", simplified->length);
         print_alg(simplified);
     } else {
         shift_cube_s cube1 = SOLVED_SHIFTCUBE, cube2 = SOLVED_SHIFTCUBE;
@@ -283,7 +283,7 @@ void test_solve_and_compile(const char** scrambles, size_t num_tests) {
             printf("It didn't solve it, this is bad...\n");
         }
         cube = SOLVED_SHIFTCUBE;
-        printf("Solution (%zu moves): ", solve->length);
+        printf("Solution (%hhu moves): ", solve->length);
         print_alg(solve);
         RobotSolution robosolution = servoCode_compiler_Ofastest(solve, INTER_MOVE_TABLE);
         for (size_t i = 0; i < robosolution.size; i++) {

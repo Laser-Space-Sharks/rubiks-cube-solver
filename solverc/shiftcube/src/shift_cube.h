@@ -26,7 +26,7 @@
  *
  */
 
-typedef struct {
+typedef struct shift_cube {
     uint32_t state[NUM_FACES];
 } shift_cube_s;
 
