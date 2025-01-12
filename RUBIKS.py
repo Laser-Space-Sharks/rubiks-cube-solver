@@ -6,9 +6,11 @@
 
 
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
-from CubeScanProtocol import Move_to_faceN
+from CubeScanProtocol import Move_to_faceN, Move_to_default
 from servoCoding.DataTypes import Orientation
-from image_processing import getCenterColor, CUBE_IMG_FOLDER, captureImg, genColorsArray, addFaceToCubeScan, convertToShiftCube, scanFace
+from image_processing import getCenterColor, CUBE_IMG_FOLDER,\
+captureImg, genColorsArray, addFaceToCubeScan, convertToShiftCube, scanFace,\
+errorDetection
 from subprocess import run 
 from numpy import zeros 
 
@@ -35,6 +37,9 @@ while True:
         for i in range(2, 6):
             O: Orientation = Move_to_faceN(i)
             cubeArr = addFaceToCubeScan(scanFace(colorsArray), O, cubeArr)
+        if (not errorDetection(cubeArr)):
+            Move_to_default()
+            continue
         shiftCubeArr = convertToShiftCube(cubeArr)
         # run solverc
         run([
