@@ -16,7 +16,7 @@
 #   Move_to_faceN(i)
 #   cubeArr = addFaceToCubeArray(scanCube(colorsArray))
 #  shiftCubeArr = convertToShiftCube(cubeArr)
-# run(["./solver", 
+# run(["./solverc/shiftcube/solver", 
 #    "-i", "shiftcube", 
 #     "-o", "servocode", 
 #     f"{shiftCubeArr[0]}", 
