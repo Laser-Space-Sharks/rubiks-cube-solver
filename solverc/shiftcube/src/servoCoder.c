@@ -74,10 +74,10 @@ typedef struct inter_move_table {
 // (('R', 2), (90, 1), (90, 1), (180, 0), (0, 0))    
 static const State_s ROBOT_START_STATE = {
     .persp = (Orientation_s) {
-        FACE_F, 0
+        FACE_R, 2
     },
     .servos = (RobotState_s) {
-        1,1,1,1,0,0,0,0
+        0,1,0,1,2,1,0,1
     }
 };
 
