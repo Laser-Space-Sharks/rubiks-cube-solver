@@ -329,6 +329,6 @@ def Optimize_for_alg(algstr: str):
         print(f"{node.servos.asCommand()} : {node.servos.as2B()}")
     return pathWithoutGaps
 
-
-Algorithm = "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2"
-Optimize_for_alg(sys.argv[1])
+if __name__ == "__main__":
+    Algorithm = "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2"
+    Optimize_for_alg(sys.argv[1])
