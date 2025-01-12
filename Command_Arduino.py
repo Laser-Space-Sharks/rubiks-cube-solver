@@ -18,7 +18,7 @@ def push_robotNums_to_arduino(nums: list[int]):
     ARDUINO.write(bytes(Bytes[:2]))
     index = 2
     while index < len(nums):
-        if (ARDUINO.in_waiting() > 0):
+        if (ARDUINO.in_waiting > 0):
             ARDUINO.reset_input_buffer()
             if index < len(nums)*2: 
                 ARDUINO.write(bytes(Bytes[index:index+2]))
