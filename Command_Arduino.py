@@ -1,6 +1,6 @@
 import serial
 
-ARDUINO = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=1, write_timeout=1)
+ARDUINO = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=None, write_timeout=None)
 
 def push_robotNums_to_arduino(nums: list[int]):
     num_bits = len(nums)*16
