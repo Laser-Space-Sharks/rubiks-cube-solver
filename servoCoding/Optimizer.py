@@ -117,10 +117,6 @@ def get_inter_move_table():
         
     return inter_move_table
 
-INTER_MOVE_TABLE: dict[State, list[tuple[float, State, list[State]]]] = get_inter_move_table()
-
-print(f"WE GOT THE INTER_MOVE_TABLE: length {len(INTER_MOVE_TABLE)}")
-
 def state_can_do_move(move: Move, state: State):
     face = Orientation_to_arr6[state.persp][faces_to_nums[move.face]]
     if (face == 'F' or face == 'B'): return False
@@ -187,7 +183,7 @@ def algstr_to_alg(algstr: str):
         for mv in algstr.strip().split()
     ]
 
-def Optimize_for_alg(algstr: str):
+def Optimize_for_alg(algstr: str, INTER_MOVE_TABLE):
     print(algstr)
     alg = algstr_to_alg(algstr)
     alg_sections = []
@@ -330,5 +326,7 @@ def Optimize_for_alg(algstr: str):
     return pathWithoutGaps
 
 if __name__ == "__main__":
+    INTER_MOVE_TABLE: dict[State, list[tuple[float, State, list[State]]]] = get_inter_move_table()
+    print(f"WE GOT THE INTER_MOVE_TABLE: length {len(INTER_MOVE_TABLE)}")
     Algorithm = "F D' R2 D' L' F L B' U R D' R F' U2 F D R U' F' D2 L U' R2 B' U2"
-    Optimize_for_alg(sys.argv[1])
+    Optimize_for_alg(sys.argv[1], INTER_MOVE_TABLE)
