@@ -7,9 +7,8 @@ def push_robotNums_to_arduino(nums: list[int]):
     num_bytes = (num_bits + 4)//8
     total_num = 0
     for num in nums:
-        for i in range(11,-1,-1):
-            total_num <<= 1
-            total_num |= ((num>>i)&1)
+        total_num <<= 12
+        total_num |= num
     bytes = [0 for _ in range(num_bytes)]
     for i in range(num_bits):
         bytes[i//8] <<= 1
