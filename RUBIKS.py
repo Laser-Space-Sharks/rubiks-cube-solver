@@ -38,6 +38,7 @@ while True:
             O: Orientation = Move_to_faceN(i)
             cubeArr = addFaceToCubeScan(scanFace(colorsArray), O, cubeArr)
         if (not errorDetection(cubeArr)):
+            print("Cube scan failed!")
             Move_to_default()
             continue
         shiftCubeArr = convertToShiftCube(cubeArr)
