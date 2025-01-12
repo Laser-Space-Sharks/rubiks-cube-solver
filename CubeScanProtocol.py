@@ -49,9 +49,9 @@ def Move_to_face1() -> Orientation:
     '''
     next_states = [
         RobotState.from_string("N.e.S.w.U0.R1.D0.L1"),
-        #RobotState.from_string("N.E.S.W.U0.R1.D0.L1"),
-        #RobotState.from_string("n.E.s.W.U0.R1.D0.L1"),
-        #RobotState.from_string("n.E.s.W.U1.R1.D2.L1"),
+        RobotState.from_string("N.E.S.W.U0.R1.D0.L1"),
+        RobotState.from_string("n.E.s.W.U0.R1.D0.L1"),
+        RobotState.from_string("n.E.s.W.U1.R1.D2.L1"),
     ]
     push_robotNums_to_arduino([i.as2B() for i in next_states])
     time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
