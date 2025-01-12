@@ -24,9 +24,9 @@ while True:
         # Start solving!
         # Start Scanning and initalize colors
         O1: Orientation = Move_to_faceN(0)
-        ucolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "up", false))
+        ucolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "up", False))
         O2: Orientation = Move_to_faceN(1)
-        fcolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "front", false))
+        fcolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "front", False))
         colorsArray = genColorsArray(fcolor, ucolor)
         cubeArr = zeros(shape=6)
         cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "front"), O2, cubeArr)
