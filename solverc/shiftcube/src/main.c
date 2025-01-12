@@ -3,6 +3,7 @@
 #include "servoCoder.h"
 #include "shift_cube.h"
 #include "solver.h"
+#include "tests.h"
 
 #include <string.h>
 
@@ -117,6 +118,10 @@ int main(int argc, char *argv[]) {
     cube_table_s *f2l_table = gen_f2l_table();
     cube_alg_table_s *ll_table = gen_last_layer_table();
     alg_s *solve = solve_cube(cube, f2l_table, ll_table);
+    if (!solve) {
+        return 1;
+    }
+
     if (output == OUTPUT_ALG) {
         print_alg(solve);
         alg_free(solve);
@@ -133,6 +138,7 @@ int main(int argc, char *argv[]) {
     }
     free(servo_code.solution);
     inter_move_table_free(inter_move_table);
+    cleanup_solver();
 
     return 0;
 }

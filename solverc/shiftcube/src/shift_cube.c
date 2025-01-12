@@ -241,7 +241,7 @@ void old_apply_move(shift_cube_s *c, move_s m) {
     c->state[target_sface(SIDE_L)] |= rolq(sfacelets[SIDE_L], side_roll(SIDE_L));
 }
 
-static inline void swap_sides(uint32_t *face1_bits, uint32_t *face2_bits,
+static inline void old_swap_sides(uint32_t *face1_bits, uint32_t *face2_bits,
                               face_e face1, face_e face2,
                               side_e face1_s, side_e face2_s) {
     *face1_bits = rolq(*face1_bits, new_move_bitrolls[face1_s][face2_s]);
@@ -251,158 +251,118 @@ static inline void swap_sides(uint32_t *face1_bits, uint32_t *face2_bits,
     *face1_bits = rolq(*face1_bits, -new_move_bitrolls[face1_s][face2_s]);
 }
 
+static inline void swap_sides(shift_cube_s *c, face_e f1, 
+                                  face_e f2, side_e s1, side_e s2) {
+    c->state[f1]  = rolq(c->state[f1], new_move_bitrolls[s1][s2]);
+    c->state[f1] ^= c->state[f2] & side_masks[s2];
+    c->state[f2] ^= c->state[f1] & side_masks[s2];
+    c->state[f1] ^= c->state[f2] & side_masks[s2];
+    c->state[f1]  = rolq(c->state[f1], new_move_bitrolls[s2][s1]);
+}
+
 void apply_move(shift_cube_s *c, move_e m) {
     switch (m) {
         case MOVE_U:
             c->state[FACE_U] = rolq(c->state[FACE_U], 8);
-            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_R]),
-                       FACE_B, FACE_R, SIDE_U, SIDE_U);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_B]),
-                       FACE_L, FACE_B, SIDE_U, SIDE_U);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_L]),
-                       FACE_F, FACE_L, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_B, FACE_R, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_L, FACE_B, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_F, FACE_L, SIDE_U, SIDE_U);
             break;
         case MOVE_U2:
             c->state[FACE_U] = rolq(c->state[FACE_U], 16);
-            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_F]),
-                       FACE_B, FACE_F, SIDE_U, SIDE_U);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
-                       FACE_L, FACE_R, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_B, FACE_F, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_L, FACE_R, SIDE_U, SIDE_U);
             break;
         case MOVE_U3:
             c->state[FACE_U] = rolq(c->state[FACE_U], 24);
-            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_B]),
-                       FACE_R, FACE_B, SIDE_U, SIDE_U);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_R]),
-                       FACE_F, FACE_R, SIDE_U, SIDE_U);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_F]),
-                       FACE_L, FACE_F, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_R, FACE_B, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_F, FACE_R, SIDE_U, SIDE_U);
+            swap_sides(c, FACE_L, FACE_F, SIDE_U, SIDE_U);
             break;
         case MOVE_R:
             c->state[FACE_R] = rolq(c->state[FACE_R], 8);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_B]),
-                       FACE_U, FACE_B, SIDE_R, SIDE_L);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_U]),
-                       FACE_F, FACE_U, SIDE_R, SIDE_R);
-            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_F]),
-                       FACE_D, FACE_F, SIDE_R, SIDE_R);
+            swap_sides(c, FACE_U, FACE_B, SIDE_R, SIDE_L);
+            swap_sides(c, FACE_F, FACE_U, SIDE_R, SIDE_R);
+            swap_sides(c, FACE_D, FACE_F, SIDE_R, SIDE_R);
             break;
         case MOVE_R2:
             c->state[FACE_R] = rolq(c->state[FACE_R], 16);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
-                       FACE_U, FACE_D, SIDE_R, SIDE_R);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_B]),
-                       FACE_F, FACE_B, SIDE_R, SIDE_L);
+            swap_sides(c, FACE_U, FACE_D, SIDE_R, SIDE_R);
+            swap_sides(c, FACE_F, FACE_B, SIDE_R, SIDE_L);
             break;
         case MOVE_R3:
             c->state[FACE_R] = rolq(c->state[FACE_R], 24);
-            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_D]),
-                       FACE_B, FACE_D, SIDE_L, SIDE_R);
-            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_F]),
-                       FACE_D, FACE_F, SIDE_R, SIDE_R);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_U]),
-                       FACE_F, FACE_U, SIDE_R, SIDE_R);
+            swap_sides(c, FACE_B, FACE_D, SIDE_L, SIDE_R);
+            swap_sides(c, FACE_D, FACE_F, SIDE_R, SIDE_R);
+            swap_sides(c, FACE_F, FACE_U, SIDE_R, SIDE_R);
             break;
         case MOVE_F:
             c->state[FACE_F] = rolq(c->state[FACE_F], 8);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_R]),
-                       FACE_U, FACE_R, SIDE_D, SIDE_L);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_U]),
-                       FACE_L, FACE_U, SIDE_R, SIDE_D);
-            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_L]),
-                       FACE_D, FACE_L, SIDE_U, SIDE_R);
+            swap_sides(c, FACE_U, FACE_R, SIDE_D, SIDE_L);
+            swap_sides(c, FACE_L, FACE_U, SIDE_R, SIDE_D);
+            swap_sides(c, FACE_D, FACE_L, SIDE_U, SIDE_R);
             break;
         case MOVE_F2:
             c->state[FACE_F] = rolq(c->state[FACE_F], 16);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
-                       FACE_U, FACE_D, SIDE_D, SIDE_U);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
-                       FACE_L, FACE_R, SIDE_R, SIDE_L);
+            swap_sides(c, FACE_U, FACE_D, SIDE_D, SIDE_U);
+            swap_sides(c, FACE_L, FACE_R, SIDE_R, SIDE_L);
             break;
         case MOVE_F3:
             c->state[FACE_F] = rolq(c->state[FACE_F], 24);
-            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_D]),
-                       FACE_R, FACE_D, SIDE_L, SIDE_U);
-            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_L]),
-                       FACE_D, FACE_L, SIDE_U, SIDE_R);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_U]),
-                       FACE_L, FACE_U, SIDE_R, SIDE_D);
+            swap_sides(c, FACE_R, FACE_D, SIDE_L, SIDE_U);
+            swap_sides(c, FACE_D, FACE_L, SIDE_U, SIDE_R);
+            swap_sides(c, FACE_L, FACE_U, SIDE_R, SIDE_D);
             break;
         case MOVE_L:
             c->state[FACE_L] = rolq(c->state[FACE_L], 8);
-            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_F]),
-                       FACE_D, FACE_F, SIDE_L, SIDE_L);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_U]),
-                       FACE_U, FACE_F, SIDE_L, SIDE_L);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_B]),
-                       FACE_U, FACE_B, SIDE_L, SIDE_R);
+            swap_sides(c, FACE_D, FACE_F, SIDE_L, SIDE_L);
+            swap_sides(c, FACE_U, FACE_F, SIDE_L, SIDE_L);
+            swap_sides(c, FACE_U, FACE_B, SIDE_L, SIDE_R);
             break;
         case MOVE_L2:
             c->state[FACE_L] = rolq(c->state[FACE_L], 16);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
-                       FACE_U, FACE_D, SIDE_L, SIDE_L);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_B]),
-                       FACE_F, FACE_B, SIDE_L, SIDE_R);
+            swap_sides(c, FACE_U, FACE_D, SIDE_L, SIDE_L);
+            swap_sides(c, FACE_F, FACE_B, SIDE_L, SIDE_R);
             break;
         case MOVE_L3:
             c->state[FACE_L] = rolq(c->state[FACE_L], 24);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_F]),
-                       FACE_U, FACE_F, SIDE_L, SIDE_L);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_D]),
-                       FACE_F, FACE_D, SIDE_L, SIDE_L);
-            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_B]),
-                       FACE_D, FACE_B, SIDE_L, SIDE_R);
+            swap_sides(c, FACE_U, FACE_F, SIDE_L, SIDE_L);
+            swap_sides(c, FACE_F, FACE_D, SIDE_L, SIDE_L);
+            swap_sides(c, FACE_D, FACE_B, SIDE_L, SIDE_R);
             break;
         case MOVE_B:
             c->state[FACE_B] = rolq(c->state[FACE_B], 8);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_U]),
-                       FACE_L, FACE_U, SIDE_L, SIDE_U);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_R]),
-                       FACE_R, FACE_U, SIDE_U, SIDE_R);
-            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_D]),
-                       FACE_R, FACE_D, SIDE_R, SIDE_D);
+            swap_sides(c, FACE_U, FACE_R, SIDE_U, SIDE_R);
+            swap_sides(c, FACE_R, FACE_D, SIDE_R, SIDE_D);
+            swap_sides(c, FACE_D, FACE_L, SIDE_D, SIDE_L);
             break;
         case MOVE_B2:
             c->state[FACE_B] = rolq(c->state[FACE_B], 16);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_D]),
-                       FACE_U, FACE_D, SIDE_U, SIDE_D);
-            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_L]),
-                       FACE_R, FACE_L, SIDE_R, SIDE_L);
+            swap_sides(c, FACE_U, FACE_D, SIDE_U, SIDE_D);
+            swap_sides(c, FACE_R, FACE_L, SIDE_R, SIDE_L);
             break;
         case MOVE_B3:
             c->state[FACE_B] = rolq(c->state[FACE_B], 24);
-            swap_sides(&(c->state[FACE_U]), &(c->state[FACE_L]),
-                       FACE_U, FACE_L, SIDE_U, SIDE_L);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_D]),
-                       FACE_L, FACE_D, SIDE_L, SIDE_D);
-            swap_sides(&(c->state[FACE_D]), &(c->state[FACE_R]),
-                       FACE_D, FACE_R, SIDE_D, SIDE_R);
-
+            swap_sides(c, FACE_R, FACE_U, SIDE_R, SIDE_U);
+            swap_sides(c, FACE_U, FACE_L, SIDE_U, SIDE_L);
+            swap_sides(c, FACE_L, FACE_D, SIDE_L, SIDE_D);
             break;
         case MOVE_D:
             c->state[FACE_D] = rolq(c->state[FACE_D], 8);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_B]),
-                       FACE_L, FACE_B, SIDE_D, SIDE_D);
-            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_R]),
-                       FACE_B, FACE_R, SIDE_D, SIDE_D);
-            swap_sides(&(c->state[FACE_R]), &(c->state[FACE_F]),
-                       FACE_R, FACE_F, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_L, FACE_B, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_B, FACE_R, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_R, FACE_F, SIDE_D, SIDE_D);
             break;
         case MOVE_D2:
             c->state[FACE_D] = rolq(c->state[FACE_D], 16);
-            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_F]),
-                       FACE_B, FACE_F, SIDE_D, SIDE_D);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_R]),
-                       FACE_L, FACE_R, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_B, FACE_F, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_L, FACE_R, SIDE_D, SIDE_D);
             break;
         case MOVE_D3:
             c->state[FACE_D] = rolq(c->state[FACE_D], 24);
-            swap_sides(&(c->state[FACE_B]), &(c->state[FACE_R]),
-                       FACE_B, FACE_R, SIDE_D, SIDE_D);
-            swap_sides(&(c->state[FACE_L]), &(c->state[FACE_B]),
-                       FACE_L, FACE_B, SIDE_D, SIDE_D);
-            swap_sides(&(c->state[FACE_F]), &(c->state[FACE_L]),
-                       FACE_F, FACE_L, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_B, FACE_R, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_L, FACE_B, SIDE_D, SIDE_D);
+            swap_sides(c, FACE_F, FACE_L, SIDE_D, SIDE_D);
             break;
         case MOVE_NULL:
             break;

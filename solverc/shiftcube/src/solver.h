@@ -13,7 +13,8 @@ void cleanup_solver();
 int stage_recursion(shift_cube_s *cube, const shift_cube_s *mask, const shift_cube_s *goal, alg_s *moves, uint8_t depth);
 alg_s* solve_stage(shift_cube_s cube, shift_cube_s mask);
 
-int bidirectional_recursion(shift_cube_s *cube, cube_table_s *our_ct, cube_table_s *other_ct, alg_s *moves, uint8_t depth);
+int bidirectional_recursion(shift_cube_s *cube, cube_alg_table_s *our_ct, 
+                            cube_alg_table_s *other_ct, alg_s *moves, uint8_t depth);
 alg_s* bidirectional_search(const shift_cube_s *start, const shift_cube_s *goal, uint8_t max_depth);
 
 alg_s* solve_cross(shift_cube_s cube);
@@ -23,9 +24,5 @@ alg_s* solve_f2l(shift_cube_s cube);
 
 cube_table_s* gen_f2l_table();
 cube_alg_table_s* gen_last_layer_table();
-
-//cube_table_s* generate_last_layer_table(const char *filename);
-//cube_table_s* generate_f2l_table(const char *filename);
-
 
 #endif // SOLVER_H
