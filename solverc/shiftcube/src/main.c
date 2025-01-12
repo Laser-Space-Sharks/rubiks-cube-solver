@@ -35,14 +35,15 @@ typedef enum outputs {
     "  servocode        print converted solution in servocode.\n" \
     "\n" \
     "Examples:\n" \
-    "./solver -i alg -o servocode \"F U2 R3\"  Apply the inputted alg to a cube then output solution as servocode\n" \
-    "./solver -o alg \"F2 B2 R2 L2 U2 D2\"     Apply the algorithm to a cube then output solution alg.\n"
+    "./solver -i scramble -o servocode \"F U2 R3\"  Apply the input scramble to a cube then output solution as servocode\n" \
+    "./solver -o alg \"F2 B2 R2 L2 U2 D2\"          Apply the algorithm to a cube then output solution alg.\n"
 
 int main(int argc, char *argv[]) {
     input_e input = INPUT_SCRAMBLE;
     output_e output = OUTPUT_ALG;
     if (argc == 1) {
         printf("Not enough arguments provided.\n");
+        printf("Try './solver --help' for more information.\n");
         return 1;
     }
 
