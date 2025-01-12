@@ -274,7 +274,7 @@ def getCenterColor(image):
 def errorDetection(cubeArray):
     if (sum(cubeArray) != 135):
         return 0
-    if (!checkEdgeParity(cubeArray)):
+    if (not checkEdgeParity(cubeArray)):
         return 2
     # if (!checkCornerRotations(cubeArray)):
     #     return 3
