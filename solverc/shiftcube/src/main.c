@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
     RobotSolution servo_code = servoCode_compiler_Ofastest(solve, inter_move_table);
     for (size_t i = 0; i < servo_code.size; i++) {
         RobotState_s state = servo_code.solution[i];
-        printf("%hu ", RobotState_to_uint16t(&state));
+        print_RobotState(state); printf(" ");
     }
     free(servo_code.solution);
     inter_move_table_free(inter_move_table);
