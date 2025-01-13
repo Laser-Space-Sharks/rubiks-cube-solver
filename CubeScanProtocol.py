@@ -45,7 +45,7 @@ StartState = State(Orientation('U', 1), RobotState.from_string("n.e.s.w.U0.R0.D0
 DefO = Orientation('F', 0)
 
 def Move_to_default():
-    push_robotNums_to_arduino([RobotState.from_string("n.e.s.w.U0.R0.D0.L0").as2B()])
+    push_robotStrs_to_arduino(["n.e.s.w.U0.R0.D0.L0"])
 
 def Move_to_face1() -> Orientation:
     '''

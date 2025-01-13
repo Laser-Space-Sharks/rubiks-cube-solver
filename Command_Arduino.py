@@ -3,7 +3,7 @@ import serial
 ARDUINO = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=None, write_timeout=None)
 
 def push_robotStrs_to_arduino(strs: list[str]):
-    #print(nums)
+    print(strs)
     ARDUINO.write(f"{strs[0]}\n".encode('utf-8'))
     index = 1
     while index < len(strs):
