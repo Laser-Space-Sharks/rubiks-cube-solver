@@ -29,7 +29,7 @@ typedef enum outputs {
     "\n" \
     "Inputs:\n" \
     "  scramble         pass the scramble as a string.\n" \
-    "  shiftcube        pass the shiftcube faces as 6 printed uint32_ts separated by spaces\n" \
+    "  shiftcube        pass the shiftcube faces as 6 hexadecimal integers separated by spaces\n" \
     "Outputs:\n" \
     "  alg              prints the solution as an algorithm.\n" \
     "  servocode        print converted solution in servocode.\n" \
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
         }
         for (face_e face = FACE_U; i < argc; face++, i++) {
             char *end_ptr;
-            uint32_t face_data = strtoul(argv[i], &end_ptr, 10);
+            uint32_t face_data = strtoul(argv[i], &end_ptr, 16);
             if (argv[i] == end_ptr || face_data > SOLVED_FACE_D) {
                 printf("%d doesn't convert to a valid shiftcube face\n", face);
                 return 1;
@@ -119,6 +119,8 @@ int main(int argc, char *argv[]) {
     cube_alg_table_s *ll_table = gen_last_layer_table();
     alg_s *solve = solve_cube(cube, f2l_table, ll_table);
     if (!solve) {
+        printf("Invalid cube:\n");
+        print_cube_map_colors(cube);
         return 1;
     }
 
