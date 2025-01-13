@@ -129,7 +129,9 @@ def captureImg(directory, filename, delete=True):
         "--width", 
         f"{IMG_WIDTH}",
         "--height",
-        f"{IMG_HEIGHT}"])
+        f"{IMG_HEIGHT}"
+        "--viewfinder-width", "60", 
+        "--viewfinder-height", "60"])
     
     # read image into cv2, which uses bgr by default
     image = imread(f"{directory}{filename}.jpg", IMREAD_COLOR)
