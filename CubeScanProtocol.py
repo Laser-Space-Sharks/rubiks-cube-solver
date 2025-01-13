@@ -59,15 +59,13 @@ def Move_to_face1() -> Orientation:
         RobotState.from_string("n.E.s.W.U0.R1.D0.L1"),
         RobotState.from_string("n.E.s.W.U1.R1.D2.L1"),
     ]'''
-    next_states = [
+    push_robotStrs_to_arduino([
         "n.e.s.w.U0.R0.D0.L0",
         "N.e.S.w.U0.R1.D0.L1",
         "N.E.S.W.U0.R1.D0.L1",
         "n.E.s.W.U0.R1.D0.L1",
         "n.E.s.W.U1.R1.D2.L1",
-    ]
-    #push_robotNums_to_arduino([i.as2B() for i in next_states])
-    push_robotStrs_to_arduino(next_states)
+    ])
     #time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('U', 1)
 
@@ -77,12 +75,11 @@ def Move_to_face2() -> Orientation:
     N.e.S.w.U0.R1.D2.L1
     ('F', 1) N.e.S.w.U1.R1.D1.L2   ************
     '''
-    next_states = [
-        RobotState.from_string("n.E.S.W.U0.R1.D2.L1"),
-        RobotState.from_string("N.e.S.w.U0.R1.D2.L1"),
-        RobotState.from_string("N.e.S.w.U1.R1.D1.L2"),
-    ]
-    push_robotNums_to_arduino([i.as2B() for i in next_states])
+    push_robotStrs_to_arduino([
+        "n.E.S.W.U0.R1.D2.L1",
+        "N.e.S.w.U0.R1.D2.L1",
+        "N.e.S.w.U1.R1.D1.L2",
+    ])
     #time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('F', 1)
 
@@ -92,12 +89,11 @@ def Move_to_face3() -> Orientation:
     n.E.S.W.U2.R1.D0.L1
     ('D', 1) n.E.s.W.U1.R1.D0.L1   ************
     '''
-    next_states = [
-        RobotState.from_string("N.e.S.w.U2.R1.D0.L1"),
-        RobotState.from_string("n.E.S.W.U2.R1.D0.L1"),
-        RobotState.from_string("n.E.s.W.U1.R1.D0.L1"),
-    ]
-    push_robotNums_to_arduino([i.as2B() for i in next_states])
+    push_robotStrs_to_arduino([
+        "N.e.S.w.U2.R1.D0.L1",
+        "n.E.S.W.U2.R1.D0.L1",
+        "n.E.s.W.U1.R1.D0.L1",
+    ])
     #time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('D', 1)
 
@@ -115,20 +111,19 @@ def Move_to_face4() -> Orientation:
     n.E.S.W.U1.R1.D2.L1
     ('L', 2) n.E.s.W.U0.R1.D2.L1   ************
     '''
-    next_states = [
-        RobotState.from_string("n.E.S.W.U2.R1.D0.L1"),
-        RobotState.from_string("n.e.S.w.U2.R1.D0.L1"),
-        RobotState.from_string("n.e.S.w.U2.R1.D0.L2"),
-        RobotState.from_string("n.E.S.W.U1.R1.D0.L2"),
-        RobotState.from_string("n.E.s.W.U2.R1.D0.L2"),
-        RobotState.from_string("n.E.s.W.U1.R2.D2.L1"),
-        RobotState.from_string("n.E.S.W.U0.R2.D2.L1"),
-        RobotState.from_string("n.e.S.W.U1.R2.D2.L1"),
-        RobotState.from_string("n.e.S.W.U0.R1.D2.L1"),
-        RobotState.from_string("n.E.S.W.U1.R1.D2.L1"),
-        RobotState.from_string("n.E.s.W.U0.R1.D2.L1"),
-    ]
-    push_robotNums_to_arduino([i.as2B() for i in next_states])
+    push_robotStrs_to_arduino([
+        "n.E.S.W.U2.R1.D0.L1",
+        "n.e.S.w.U2.R1.D0.L1",
+        "n.e.S.w.U2.R1.D0.L2",
+        "n.E.S.W.U1.R1.D0.L2",
+        "n.E.s.W.U2.R1.D0.L2",
+        "n.E.s.W.U1.R2.D2.L1",
+        "n.E.S.W.U0.R2.D2.L1",
+        "n.e.S.W.U1.R2.D2.L1",
+        "n.e.S.W.U0.R1.D2.L1",
+        "n.E.S.W.U1.R1.D2.L1",
+        "n.E.s.W.U0.R1.D2.L1",
+    ])
     #time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('L', 2)
 
@@ -138,12 +133,11 @@ def Move_to_face5() -> Orientation:
     N.e.S.w.U0.R1.D2.L1
     ('B', 2) N.e.S.w.U1.R1.D1.L2   ************
     '''
-    next_states = [
-        RobotState.from_string("n.E.S.W.U0.R1.D2.L1"),
-        RobotState.from_string("N.e.S.w.U0.R1.D2.L1"),
-        RobotState.from_string("N.e.S.w.U1.R1.D1.L2"),
-    ]
-    push_robotNums_to_arduino([i.as2B() for i in next_states])
+    push_robotStrs_to_arduino([
+        "n.E.S.W.U0.R1.D2.L1",
+        "N.e.S.w.U0.R1.D2.L1",
+        "N.e.S.w.U1.R1.D1.L2",
+    ])
     #time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('B', 2)
 
@@ -153,12 +147,11 @@ def Move_to_face6() -> Orientation:
     N.E.S.W.U2.R1.D0.L1
     ('R', 2) n.E.s.W.U2.R1.D0.L1   ************
     '''
-    next_states = [
-        RobotState.from_string("N.e.S.w.U2.R1.D0.L1"),
-        RobotState.from_string("N.E.S.W.U2.R1.D0.L1"),
-        RobotState.from_string("n.E.s.W.U2.R1.D0.L1"),
-    ]
-    push_robotNums_to_arduino([i.as2B() for i in next_states])
+    push_robotStrs_to_arduino([
+        "N.e.S.w.U2.R1.D0.L1",
+        "N.E.S.W.U2.R1.D0.L1",
+        "n.E.s.W.U2.R1.D0.L1",
+    ])
     #time.sleep(calc_weight_of_path([State(DefO, i) for i in next_states]))
     return Orientation('R', 2)
 
