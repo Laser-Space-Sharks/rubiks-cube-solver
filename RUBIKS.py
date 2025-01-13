@@ -43,7 +43,7 @@ while True:
             continue
         shiftCubeArr = convertToShiftCube(cubeArr)
         # run solverc
-        run([
+        solverOut = run([
             "./solverc/shiftcube/solverpi", 
             "-i", "shiftcube", 
             "-o", "servocode", 
@@ -52,7 +52,8 @@ while True:
             f"{shiftCubeArr[2]}", 
             f"{shiftCubeArr[3]}", 
             f"{shiftCubeArr[4]}", 
-            f"{shiftCubeArr[5]}"])
+            f"{shiftCubeArr[5]}"],
+            check=True, stdout=PIPE).stdout
 
 
 
