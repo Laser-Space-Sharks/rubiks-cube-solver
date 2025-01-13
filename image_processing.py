@@ -126,7 +126,8 @@ def captureImg(directory, filename, delete=True):
     run([
         "libcamera-still", 
         "-o", 
-        f"{filename}.jpg", 
+        f"{filename}.jpg",
+        "-v", "0", 
         "--width", 
         f"{IMG_WIDTH}",
         "--height",
