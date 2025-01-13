@@ -35,17 +35,19 @@ def scanCube():
     for i in range(2, 6):
         O: Orientation = Move_to_faceN(i)
         cubeArr = addFaceToCubeScan(scanFace(colorsArray), O, cubeArr)
-    if (not errorDetection(cubeArr)):
-        print("Cube scan failed!")
-        Move_to_default()
-        continue
-    return convertToShiftCube(cubeArr)
+    
+    return 
 
 while True:
     if GPIO.input(10) == GPIO.HIGH:
         print("Button was pushed!")
         # Start solving!
-        shiftCubeArr = scanCube()
+        cubeArr = scanCube()
+        if (not errorDetection(cubeArr)):
+            print("Cube scan failed!")
+            Move_to_default()
+            continue
+        shiftCubeArr = convertToShiftCube(cubeArr)
         # run solverc
         solverOut = run([
             "./solverc/shiftcube/solverpi", 
