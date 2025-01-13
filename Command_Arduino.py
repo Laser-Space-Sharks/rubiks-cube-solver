@@ -2,6 +2,17 @@ import serial
 
 ARDUINO = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=None, write_timeout=None)
 
+def push_robotStrs_to_arduino(strs: list[str]):
+    #print(nums)
+    ARDUINO.write(strs[0].enciode('utf-8'))
+    index = 1
+    while index < len(strs):
+        if (ARDUINO.in_waiting > 0):
+            ARDUINO.reset_input_buffer()
+            if index < len(strs): 
+                ARDUINO.write(bytes(strs[index]))
+                index += 1
+
 def push_robotNums_to_arduino(nums: list[int]):
     print(nums)
     Bytes = []
