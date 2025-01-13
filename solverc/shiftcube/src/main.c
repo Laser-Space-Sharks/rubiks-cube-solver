@@ -119,6 +119,8 @@ int main(int argc, char *argv[]) {
     cube_alg_table_s *ll_table = gen_last_layer_table();
     alg_s *solve = solve_cube(cube, f2l_table, ll_table);
     if (!solve) {
+        printf("Invalid cube:\n");
+        print_cube_map_colors(cube);
         return 1;
     }
 
