@@ -129,7 +129,7 @@ def captureImg(directory, filename, delete=True):
         "--width", 
         f"{IMG_WIDTH}",
         "--height",
-        f"{IMG_HEIGHT}"
+        f"{IMG_HEIGHT}",
         "--viewfinder-width", "60", 
         "--viewfinder-height", "60"])
     
