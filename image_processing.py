@@ -255,6 +255,7 @@ def scanFace(colorsArray, readSavedImg=False, filename=""):
     return analyzeFace(normalizedImage, colorsArray)
 
 def addFaceToCubeScan(faceArray, orientation, cubeArray):
+    print(translateToColors(faceArray, colorsArray))
     # rotate cube properly
     rot90(faceArray, k=orientation.rot, axes=(1,0))
     # put in cube array properly
