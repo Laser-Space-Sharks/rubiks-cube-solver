@@ -248,6 +248,7 @@ def analyzeFace(image, colorsArray):
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
             # print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
+    print(face)
     print(translateToColors(face, colorsArray))
     return face
 
