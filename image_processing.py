@@ -246,6 +246,7 @@ def analyzeFace(image, colorsArray):
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
             # print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
+    print(translateToColors(face, colorsArray))
     return face
 
 def scanFace(colorsArray, readSavedImg=False, filename=""):
@@ -257,7 +258,6 @@ def scanFace(colorsArray, readSavedImg=False, filename=""):
     return analyzeFace(normalizedImage, colorsArray)
 
 def addFaceToCubeScan(faceArray, orientation, cubeArray):
-    print(translateToColors(faceArray, colorsArray))
     # rotate cube properly
     rot90(faceArray, k=orientation.rot, axes=(1,0))
     # put in cube array properly
