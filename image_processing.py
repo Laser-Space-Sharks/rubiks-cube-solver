@@ -204,7 +204,9 @@ def translateToColors(faceArray, colorsArray):
     faceColors = [["", "", ""],["", "", ""],["", "", ""]]
     for i in range(3):
         for j in range(3):
-            faceColors[i][j] = COLORS[int(where(colorsArray == faceArray[i][j].item())[0].item())]
+            thing = where(colorsArray == faceArray[i][j].item())[0].item()
+            print(thing)
+            faceColors[i][j] = COLORS[int(thing)]
     
     return faceColors
 
