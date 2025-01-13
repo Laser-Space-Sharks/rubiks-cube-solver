@@ -204,9 +204,7 @@ def translateToColors(faceArray, colorsArray):
     faceColors = [["", "", ""],["", "", ""],["", "", ""]]
     for i in range(3):
         for j in range(3):
-            thing = argwhere(colorsArray == faceArray[i][j])[0]
-            print(thing)
-            faceColors[i][j] = COLORS[int(thing)]
+            faceColors[i][j] = COLORS[int(argwhere(colorsArray == faceArray[i][j])[0])]
     
     return faceColors
 
@@ -248,7 +246,6 @@ def analyzeFace(image, colorsArray):
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
             # print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
-    print(face)
     print(translateToColors(face, colorsArray))
     return face
 
