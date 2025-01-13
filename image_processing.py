@@ -17,7 +17,7 @@ from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\
 NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
 imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
-from numpy import asarray, zeros, where, copy, uint32, sum, rot90
+from numpy import asarray, zeros, argwhere, copy, uint32, sum, rot90
 # import matplotlib as plt
 from os import chdir
 # from io import BytesIO
@@ -204,7 +204,7 @@ def translateToColors(faceArray, colorsArray):
     faceColors = [["", "", ""],["", "", ""],["", "", ""]]
     for i in range(3):
         for j in range(3):
-            thing = where(colorsArray == faceArray[i][j])[0]
+            thing = argwhere(colorsArray == faceArray[i][j])[0]
             print(thing)
             faceColors[i][j] = COLORS[int(thing)]
     
