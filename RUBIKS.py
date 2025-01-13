@@ -35,8 +35,7 @@ def scanCube():
     for i in range(2, 6):
         O: Orientation = Move_to_faceN(i)
         cubeArr = addFaceToCubeScan(scanFace(colorsArray), O, cubeArr)
-    
-    return 
+    return cubeArr
 
 while True:
     if GPIO.input(10) == GPIO.HIGH:
