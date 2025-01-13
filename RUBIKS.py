@@ -53,12 +53,12 @@ while True:
             "./solverc/shiftcube/solverpi", 
             "-i", "shiftcube", 
             "-o", "servocode", 
-            f"{shiftCubeArr[0]}", 
-            f"{shiftCubeArr[1]}",
-            f"{shiftCubeArr[2]}", 
-            f"{shiftCubeArr[3]}", 
-            f"{shiftCubeArr[4]}", 
-            f"{shiftCubeArr[5]}"],
+            f"{shiftCubeArr[0]:x}", 
+            f"{shiftCubeArr[1]:x}",
+            f"{shiftCubeArr[2]:x}", 
+            f"{shiftCubeArr[3]:x}", 
+            f"{shiftCubeArr[4]:x}", 
+            f"{shiftCubeArr[5]:x}"],
             check=True, stdout=PIPE).stdout
         push_robotStrs_to_arduino(solverOut.split())
 
