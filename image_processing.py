@@ -19,7 +19,7 @@ imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
 from numpy import asarray, zeros, argwhere, copy, uint32, sum, rot90
 # import matplotlib as plt
-from os import chdir
+from os import chdir, environ
 # from io import BytesIO
 from subprocess import run
 
@@ -121,6 +121,7 @@ def delImg(directory, filename):
 ####### CAPTURE IMAGE WITH LIBCAMERA #######
 def captureImg(directory, filename, delete=True):
     chdir(directory)
+    environ["LIBCAMERA_LOG_LEVELS"] = "3"
     # capture image using libcamera with specified resolution
     run([
         "libcamera-still", 
