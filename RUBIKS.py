@@ -43,6 +43,7 @@ while True:
         print("Button was pushed!")
         # Start solving!
         cubeArr = scanCube()
+        print(cubeArr)
         if (not errorDetection(cubeArr)):
             print("Cube scan failed!")
             Move_to_default()
