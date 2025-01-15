@@ -142,7 +142,7 @@ def execute(servo_str: str) -> None:
                 for k in range(8):
                     previous_servo_state[k] = current_servo_state[k]
                 #hardware debugging delay used to assess and fix cube positioning as needed, comment out once finalized
-                sleep(3)
+                #sleep(3)
             #When reaching a space or period, the next servo data is stored in the index thereafter
             start = i+1
 
