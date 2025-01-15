@@ -16,15 +16,15 @@ from time import sleep
 setwarnings(False) # Ignore warnings from GPIO
 setmode(BOARD) # Use physical pin numbering
 setup(10, IN, pull_up_down=PUD_DOWN) # Set pin 10 to be an input pin and set initial value to be pulled low (off)
-setup(3, OUT)
-output(3, LOW)
+setup(11, OUT)
+output(11, LOW)
 
 print("Ready To Go!")
 
 def flashLight():
-    output(3, HIGH)
+    output(11, HIGH)
     sleep(0.25)
-    output(3, LOW)
+    output(11, LOW)
 
 def scanCube():
     # Start Scanning and initalize colors
