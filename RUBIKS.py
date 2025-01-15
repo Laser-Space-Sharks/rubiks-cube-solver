@@ -2,7 +2,7 @@
 ####### Main cube Program!!! ##########################
 #######################################################
 
-from RPi.GPIO import setwarnings, setmode, setup, input, HIGH, BOARD, PUD_DOWN, IN
+from RPi.GPIO import setwarnings, setmode, setup, input, HIGH, LOW, BOARD, PUD_DOWN, IN, output
 from CubeScanProtocol import Move_to_faceN
 from servoCoding.DataTypes import Orientation
 from image_processing import getCenterColor, CUBE_IMG_FOLDER,\
@@ -11,12 +11,20 @@ errorDetection
 from ServoController import execute, move_to_default
 from subprocess import run 
 from numpy import zeros
+from time import sleep
 
 setwarnings(False) # Ignore warnings from GPIO
 setmode(BOARD) # Use physical pin numbering
 setup(10, IN, pull_up_down=PUD_DOWN) # Set pin 10 to be an input pin and set initial value to be pulled low (off)
+setup(3, OUT)
+output(3, LOW)
 
 print("Ready To Go!")
+
+def flashLight():
+    output(3, HIGH)
+    sleep(0.25)
+    output(3, LOW)
 
 def scanCube():
     # Start Scanning and initalize colors
@@ -40,6 +48,7 @@ def scanCube():
     return cubeArr
 
 while True:
+    flashLight()
     if input(10) == HIGH:
         print("Button was pushed!")
         # Start solving!
