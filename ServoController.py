@@ -41,7 +41,7 @@ CLAW_MAX_ANGLE = 270
 #Time in seconds for each move to complete
 QUARTER_TURN_TIME = 0.35
 HALF_TURN_TIME = 0.5
-ENGAGE_TIME = 0.375
+ENGAGE_TIME = 0.3
 
 #Stores the angles of the previous servo state in the format N E S W U R D L 
 previous_servo_state = [0 for _ in range(8)]
