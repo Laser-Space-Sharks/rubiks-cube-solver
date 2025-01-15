@@ -19,12 +19,6 @@ setup(10, IN, pull_up_down=PUD_DOWN) # Set pin 10 to be an input pin and set ini
 setup(11, OUT)
 output(11, LOW)
 
-print("Ready To Go!")
-
-def flashLight():
-    output(11, HIGH)
-    sleep(0.25)
-    output(11, LOW)
 
 def scanCube():
     # Start Scanning and initalize colors
@@ -49,6 +43,7 @@ def scanCube():
 
 while True:
     output(11, HIGH)
+    print("Ready To Go!")
     if input(10) == HIGH:
         output(11, LOW)
         print("Button was pushed!")
