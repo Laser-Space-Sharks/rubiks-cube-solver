@@ -368,20 +368,6 @@ def convertToShiftCube(cubeArray):
 ####### Testing #######################################
 #######################################################
 
-def testScan(frontCenterColor, upCenterColor, filename):
-    print("------------------------------")
-    print("Starting Test!")
-    print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
-    colorsArray = genColorsArray(frontCenterColor, upCenterColor)
-    print("colors array generated")
-    print(f"Colors array: {colorsArray}")
-    print("Starting Face Scan!")
-    faceArray = scanFace(colorsArray, True, filename)
-    print("face scanned!")
-    print(faceArray)
-    print(translateToColors(faceArray, colorsArray))
-    return faceArray
-
 def testFromSaved(frontCenterColor, upCenterColor):
     print("------------------------------")
     print("Starting Test!")
@@ -394,25 +380,6 @@ def testFromSaved(frontCenterColor, upCenterColor):
     imageNames = ["wholecube1", "wholecube2","wholecube3","wholecube4","wholecube5","wholecube6"]
     for i in range(6):
         faceArray = scanFace(colorsArray, True, imageNames[i])
-        print(f"face {i} scanned!")
-        print(faceArray)
-        print(translateToColors(faceArray, colorsArray))
-        cubeArray.append(faceArray)
-    print("Cube Scanned!!")
-    print(cubeArray)
-    print(f"Converted to shift cube: {convertToShiftCube(cubeArray)}")
-
-def test(frontCenterColor, upCenterColor):
-    print("------------------------------")
-    print("Starting Test!")
-    print(f"Generating colors array with {COLORS[frontCenterColor]} facing front and {COLORS[upCenterColor]} facing up")
-    colorsArray = genColorsArray(frontCenterColor, upCenterColor)
-    print("colors array generated")
-    print(f"Colors array: {colorsArray}")
-    print("Starting Cube Scan!")
-    cubeArray = []
-    for i in range(6):
-        faceArray = scanFace(colorsArray)
         print(f"face {i} scanned!")
         print(faceArray)
         print(translateToColors(faceArray, colorsArray))
