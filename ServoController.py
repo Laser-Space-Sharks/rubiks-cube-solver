@@ -153,29 +153,30 @@ def move_to_default() -> None:
 	print("Servos Powered Off!")
 
 #This while loop is used for hardware debugging purposes only, comment out when finalized
-while True:
-	angle = int(input("Enter servo angle: "))
-	servo = input("Enter servo character: ")
-	match(servo):
-		case 'N':
-			servo_north.angle = angle
-		case 'E':
-			servo_east.angle = angle
-		case 'S':
-			servo_south.angle = angle
-		case 'W':
-			servo_west.angle = angle
-		case 'U':
-			servo_U.angle = angle
-		case 'R':
-			servo_R.angle = angle
-		case 'D':
-			servo_D.angle = angle
-		case 'L':
-			servo_L.angle = angle
-		case '0':
-			move_to_default()
-			exit()
-		case '1':
-			user_str = input("Enter test string: ")
-			execute(user_str)
+if __name__ == "__main__":
+	while True:
+		angle = int(input("Enter servo angle: "))
+		servo = input("Enter servo character: ")
+		match(servo):
+			case 'N':
+				servo_north.angle = angle
+			case 'E':
+				servo_east.angle = angle
+			case 'S':
+				servo_south.angle = angle
+			case 'W':
+				servo_west.angle = angle
+			case 'U':
+				servo_U.angle = angle
+			case 'R':
+				servo_R.angle = angle
+			case 'D':
+				servo_D.angle = angle
+			case 'L':
+				servo_L.angle = angle
+			case '0':
+				move_to_default()
+				exit()
+			case '1':
+				user_str = input("Enter test string: ")
+				execute(user_str)
