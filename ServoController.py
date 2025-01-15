@@ -25,7 +25,14 @@ SOUTH_DISENGAGE_ANGLE = 45  #screwed in at 0
 WEST_ENGAGE_ANGLE = 130
 WEST_DISENGAGE_ANGLE = 35  #screwed in at 0
 
+# Fine tuned angles for the claw servos
+U_ANGLES = [0, 88, 186]
+R_ANGLES = [0, 90, 188]
+D_ANGLES = [0, 83, 180]
+L_ANGLES = [0, 91, 188]
+
 #Stats of our metal Claw Servos (MG90S 360 degrees)
+
 CLAW_MIN_PULSE = 0.5/1000
 CLAW_MAX_PULSE = 2.5/1000
 CLAW_MIN_ANGLE = 0
@@ -94,21 +101,21 @@ def execute(servo_str: str) -> None:
 					servo_west.angle = WEST_DISENGAGE_ANGLE
 					current_servo_state[3] = 0
 				case 'U':
-					angle = (int(servo_str[start+1]))*90
+					angle = U_ANGLES[int(servo_str[start+1])]
 					servo_U.angle = angle
-					current_servo_state[4] = angle
+					current_servo_state[4] = int(servo_str[start+1])
 				case 'R':
-					angle = (int(servo_str[start+1]))*90
+					angle = R_ANGLES[int(servo_str[start+1])]
 					servo_R.angle = angle
-					current_servo_state[5] = angle
+					current_servo_state[5] = int(servo_str[start+1])
 				case 'D':
-					angle = (int(servo_str[start+1]))*90
+					angle = D_ANGLES[int(servo_str[start+1])]
 					servo_D.angle = angle
-					current_servo_state[6] = angle
+					current_servo_state[6] = int(servo_str[start+1])
 				case 'L':
-					angle = (int(servo_str[start+1]))*90
+					angle = L_ANGLES[int(servo_str[start+1])]
 					servo_L.angle = angle
-					current_servo_state[7] = angle
+					current_servo_state[7] = int(servo_str[start+1])
 			#if the character wasnt a period then a delay is neccessary, calculated by the longest move made
 			if(servo_str[i] == ' ' or i == length-1):
 				#with the current model our claws only move 180 degrees maximum
@@ -117,7 +124,7 @@ def execute(servo_str: str) -> None:
 				for j in range(5, 8):
 					if(abs(current_servo_state[j] - previous_servo_state[j]) > max):
 							max = abs(current_servo_state[j] - previous_servo_state[j])
-				if(max == 180):
+				if(max == 2):
 					sleep(HALF_TURN_TIME)
 				#The next longest time is an engage or disengage
 				#If there is a delta engage for any of the engage servos, the engage delay is used
