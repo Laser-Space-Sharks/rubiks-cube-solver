@@ -50,14 +50,19 @@ previous_servo_state = [0 for _ in range(8)]
 #Angle and Pulses are set up, as well as setting the Pi's GPIO pins to their factory output
 #This is so we send a hardware PWM signal rather than a software one (removes jittering)
 servo_north = AngularServo(26, min_angle = ENGAGE_MIN_ANGLE, max_angle = ENGAGE_MAX_ANGLE, min_pulse_width = ENGAGE_MIN_PULSE, max_pulse_width = ENGAGE_MAX_PULSE, pin_factory = PiGPIOFactory())
-servo_east =  AngularServo(19, min_angle = ENGAGE_MIN_ANGLE, max_angle = ENGAGE_MAX_ANGLE, min_pulse_width = ENGAGE_MIN_PULSE, max_pulse_width = ENGAGE_MAX_PULSE, pin_factory = PiGPIOFactory())
+servo_east  = AngularServo(19, min_angle = ENGAGE_MIN_ANGLE, max_angle = ENGAGE_MAX_ANGLE, min_pulse_width = ENGAGE_MIN_PULSE, max_pulse_width = ENGAGE_MAX_PULSE, pin_factory = PiGPIOFactory())
 servo_south = AngularServo(13, min_angle = ENGAGE_MIN_ANGLE, max_angle = ENGAGE_MAX_ANGLE, min_pulse_width = ENGAGE_MIN_PULSE, max_pulse_width = ENGAGE_MAX_PULSE, pin_factory = PiGPIOFactory())
-servo_west =   AngularServo(6, min_angle = ENGAGE_MIN_ANGLE, max_angle = ENGAGE_MAX_ANGLE, min_pulse_width = ENGAGE_MIN_PULSE, max_pulse_width = ENGAGE_MAX_PULSE, pin_factory = PiGPIOFactory())
+servo_west  = AngularServo( 6, min_angle = ENGAGE_MIN_ANGLE, max_angle = ENGAGE_MAX_ANGLE, min_pulse_width = ENGAGE_MIN_PULSE, max_pulse_width = ENGAGE_MAX_PULSE, pin_factory = PiGPIOFactory())
 
 servo_U = AngularServo(21, min_angle = CLAW_MIN_ANGLE, max_angle = CLAW_MAX_ANGLE, min_pulse_width = CLAW_MIN_PULSE, max_pulse_width = CLAW_MAX_PULSE, pin_factory = PiGPIOFactory())
-servo_R =  AngularServo(7, min_angle = CLAW_MIN_ANGLE, max_angle = CLAW_MAX_ANGLE, min_pulse_width = CLAW_MIN_PULSE, max_pulse_width = CLAW_MAX_PULSE, pin_factory = PiGPIOFactory())
-servo_D =  AngularServo(8, min_angle = CLAW_MIN_ANGLE, max_angle = CLAW_MAX_ANGLE, min_pulse_width = CLAW_MIN_PULSE, max_pulse_width = CLAW_MAX_PULSE, pin_factory = PiGPIOFactory())
+servo_R = AngularServo( 7, min_angle = CLAW_MIN_ANGLE, max_angle = CLAW_MAX_ANGLE, min_pulse_width = CLAW_MIN_PULSE, max_pulse_width = CLAW_MAX_PULSE, pin_factory = PiGPIOFactory())
+servo_D = AngularServo( 8, min_angle = CLAW_MIN_ANGLE, max_angle = CLAW_MAX_ANGLE, min_pulse_width = CLAW_MIN_PULSE, max_pulse_width = CLAW_MAX_PULSE, pin_factory = PiGPIOFactory())
 servo_L = AngularServo(25, min_angle = CLAW_MIN_ANGLE, max_angle = CLAW_MAX_ANGLE, min_pulse_width = CLAW_MIN_PULSE, max_pulse_width = CLAW_MAX_PULSE, pin_factory = PiGPIOFactory())
+
+servo_north.angle = NORTH_DISENGAGE_ANGLE
+servo_east.angle  = EAST_DISENGAGE_ANGLE
+servo_south.angle = SOUTH_DISENGAGE_ANGLE
+servo_west.angle  = WEST_DISENGAGE_ANGLE
 
 #Function that takes in a servo string and commands the servos, void function
 #servo string must be in the format n.e.s.w.U0.R0.D0.L0
