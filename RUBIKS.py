@@ -31,10 +31,14 @@ def scanCube():
     cubeArr = zeros(shape=(6, 3, 3))
     cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "front"), O2, cubeArr)
     cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "up"), O1, cubeArr)
+    if cubeArr is None:
+        return None
     # Scan rest of cube and convert to shift cube
     for i in range(2, 6):
         O: Orientation = Move_to_faceN(i)
         cubeArr = addFaceToCubeScan(scanFace(colorsArray), O, cubeArr)
+        if cubeArr is None:
+            return None
     return cubeArr
 
 while True:
@@ -42,6 +46,9 @@ while True:
         print("Button was pushed!")
         # Start solving!
         cubeArr = scanCube()
+        if cubeArr is None:
+            print("Too dark to scan cube! Please try again with better lighting.")
+            continue
         print(cubeArr)
         if (not errorDetection(cubeArr)):
             print("Cube scan failed!")

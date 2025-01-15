@@ -52,20 +52,23 @@ RIGHT_FACE_COLOR_ARRAY = [
 ]
 
 # determines what colors are defined as in HSV
+# H is on a scale from 0-180
+# S is on a scale from 0-255
+# V is on a scale from 0-255
 LOWER_BOUND_COLORS = [
     asarray([25, 50, 70]), # yellow
     asarray([159, 50, 70]), # red
     asarray([90, 50, 70]), # blue
-    asarray([0, 0, 170]), # white
+    asarray([0, 0, 70]), # white
     asarray([7, 50, 70]), # orange
     asarray([36, 50, 70]), # green
 ]
 
 UPPER_BOUND_COLORS = [
-    asarray([52, 255, 255]), # yellow
-    asarray([205, 255, 255]), # red
+    asarray([35, 255, 255]), # yellow
+    asarray([180, 255, 255]), # red
     asarray([128, 255, 255]), # blue
-    asarray([190, 47, 255]), # white
+    asarray([180, 47, 255]), # white
     asarray([24, 255, 255]), # orange
     asarray([89, 255, 255]), # green
 ]
@@ -160,8 +163,8 @@ def colorAnalysis(peice):
         # waitKey(0) # CHANGE
         # find the percentage of the piece that is in that color range
         percent = (countNonZero(mask)/(PIECE_SIZE)) * 100
-        # if more than 55% of the peice is that color, return the color
-        if percent >= 55 or (i == 1 and redColorCheck(peiceCopy, mask) >= 55):
+        # if more than 60% of the peice is that color, return the color
+        if percent >= 60 or (i == 1 and redColorCheck(peiceCopy, mask) >= 55):
             return i
     # if nothing hits its probably white
     return 3
@@ -172,6 +175,14 @@ def redColorCheck(peiceCopy, mask1):
     mask2 = inRange(peiceCopy, red2Lower, red2Upper)
     result = bitwise_or(mask1, mask2)
     return (countNonZero(result)/(PIECE_SIZE)) * 100
+
+def brightnessCheck(cubeImg):
+    # returns true if too dark
+    brightnessUpper = asarray([180, 255, 70])
+    mask = inRange(cubeImg, asarray([0, 0, 0]), brightnessUpper)
+    if ((countNonZero(mask)/(IMG_SIZE)) * 100) >= 50:
+        return True
+    return False
 
 def genColorsArray(frontCenterColor, upCenterColor):
     # returns an array with elements representing cube faces
@@ -258,9 +269,13 @@ def scanFace(colorsArray, readSavedImg=False, filename=""):
     else:
         image = captureImg(CUBE_IMG_FOLDER, "cubeFace")
     normalizedImage = cvtColor(image, COLOR_BGR2HSV)
+    if brightnessCheck(image):
+        return None
     return analyzeFace(normalizedImage, colorsArray)
 
 def addFaceToCubeScan(faceArray, orientation, cubeArray):
+    if faceArray is None or cubeArray is None:
+        return None
     # rotate cube properly
     rot90(faceArray, k=orientation.rot, axes=(1,0))
     # put in cube array properly
