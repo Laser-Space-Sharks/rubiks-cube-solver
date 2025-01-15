@@ -2,18 +2,15 @@
 ####### Main cube Program!!! ##########################
 #######################################################
 
-# vauge stuff that needs to happen:
-
-
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
-from CubeScanProtocol import Move_to_faceN, Move_to_default
+from CubeScanProtocol import Move_to_faceN
 from servoCoding.DataTypes import Orientation
 from image_processing import getCenterColor, CUBE_IMG_FOLDER,\
 captureImg, genColorsArray, addFaceToCubeScan, convertToShiftCube, scanFace,\
 errorDetection
-from Command_Arduino import push_robotStrs_to_arduino
+from ServoController import execute, move_to_default
 from subprocess import run 
-from numpy import zeros 
+from numpy import zeros
 
 GPIO.setwarnings(False) # Ignore warnings from GPIO
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
@@ -52,7 +49,7 @@ while True:
         print(cubeArr)
         if (not errorDetection(cubeArr)):
             print("Cube scan failed!")
-            Move_to_default()
+            move_to_default()
             continue
         shiftCubeArr = convertToShiftCube(cubeArr)
         # run solverc
@@ -65,12 +62,7 @@ while True:
             f"{shiftCubeArr[2]:x}", 
             f"{shiftCubeArr[3]:x}", 
             f"{shiftCubeArr[4]:x}", 
-            f"{shiftCubeArr[5]:x}"],
-            check=True, stdout=PIPE).stdout
-        push_robotStrs_to_arduino(solverOut.split())
-
-
-
-
-
-
+            f"{shiftCubeArr[5]:x}"
+        ], check=True, stdout=PIPE).stdout
+        for i in solverOut.strip().split(): execute(i)
+        move_to_default()
