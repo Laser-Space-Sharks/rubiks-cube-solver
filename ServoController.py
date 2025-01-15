@@ -29,7 +29,7 @@ WEST_DISENGAGE_ANGLE = 20   #screwed in at 0
 CLAW_MIN_PULSE = 0.5/1000
 CLAW_MAX_PULSE = 2.5/1000
 CLAW_MIN_ANGLE = 0
-CLAW_MAX_ANGLE = 360
+CLAW_MAX_ANGLE = 270
 
 #Time in seconds for each move to complete
 QUARTER_TURN_TIME = 0.35
@@ -113,22 +113,22 @@ def execute(servo_str: str) -> None:
 			if(servo_str[i] == ' ' or i == length-1):
 				#with the current model our claws only move 180 degrees maximum
 				#if the delta claw movement is 180 degrees then the half turn delay will be used
-				max = abs(current_servo_state[4] - servo_state[4])
+				max = abs(current_servo_state[4] - previous_servo_state[4])
 				for j in range(5, 8):
-					if(abs(current_servo_state[j] - servo_state[j]) > max):
-							max = abs(current_servo_state[j] - servo_state[j])
+					if(abs(current_servo_state[j] - previous_servo_state[j]) > max):
+							max = abs(current_servo_state[j] - previous_servo_state[j])
 				if(max == 180):
 					sleep(HALF_TURN_TIME)
 				#The next longest time is an engage or disengage
 				#If there is a delta engage for any of the engage servos, the engage delay is used
-				elif(current_servo_state[0] - servo_state[0] != 0 or current_servo_state[1] - servo_state[1] != 0 or current_servo_state[2] - servo_state[2] != 0 or current_servo_state[3] - servo_state[3] != 0):
+				elif(current_servo_state[0] - previous_servo_state[0] != 0 or current_servo_state[1] - previous_servo_state[1] != 0 or current_servo_state[2] - previous_servo_state[2] != 0 or current_servo_state[3] - previous_servo_state[3] != 0):
 					sleep(ENGAGE_TIME)
 				#else the shortest delay is used, which is the quarter turn
 				else:
 					sleep(QUARTER_TURN_TIME)
 				#copies over the current servo state to the previous servo state
 				for k in range(8):
-					servo_state[k] = current_servo_state[k]
+					previous_servo_state[k] = current_servo_state[k]
 				#hardware debugging delay used to assess and fix cube positioning as needed, comment out once finalized
 				sleep(3)
 			#When reaching a space or period, the next servo data is stored in the index thereafter
