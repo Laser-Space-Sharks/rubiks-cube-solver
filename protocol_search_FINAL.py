@@ -16,29 +16,13 @@ Etime = 0.375
 dEtime = 0.375
 rot1time = 0.35
 rot2time = 0.5
-rot3time = 0.65
-rot4time = 0.8
 
-Y1time = rot1time
-Y2time = rot2time
-Y3time = rot1time
-X1time = rot1time
-X3time = rot1time
+Y1time = 0.35
+Y2time = 0.5
+Y3time = 0.35
+X1time = 0.35
+X3time = 0.35
 
-Umax = 180
-Rmax = 180
-Dmax = 180
-Lmax = 180
-
-Umin = 0
-Rmin = 0
-Dmin = 0
-Lmin = 0
-
-U_angles = [i for i in range(Umin, Umax+1, 90)]
-R_angles = [i for i in range(Rmin, Rmax+1, 90)]
-D_angles = [i for i in range(Dmin, Dmax+1, 90)]
-L_angles = [i for i in range(Lmin, Lmax+1, 90)]
 #######################################################################################################
 ######                                                                                           ######
 ######                                   CREATE TOTAL WEIGHTED GRAPH                             ######
@@ -54,26 +38,6 @@ ROT_TRAINS = {'F': (('U', 0), ('R', 0), ('D', 2), ('L', 0)),
 #########################################################
 ##                      FUNCTIONS                      ##
 #########################################################
-def is_valid_state(state):
-    R, L, U, D = state
-    if R == (90, 1) and D == (90, 1): return False
-    if L == (90, 1) and D == (90, 1): return False
-    if R == (90, 1) and U == (90, 1): return False
-    if L == (90, 1) and U == (90, 1): return False
-    return (D[1] == 1 or (R == (90, 1) and L[1] == 1) or (L == (90, 1) and R[1] == 1))
-def valid_step(state, state2):
-    if state == state2: return False
-    _, R, L, U, D = state
-    _, R2, L2, U2, D2 = state2
-    for v1, v2 in zip(state[1:], state2[1:]):
-        if v1[0] != v2[0] and (v1[1] or v2[1]): return False
-    Etoggling = [(U[1]!=U2[1]), (R[1]!=R2[1]), (D[1]!=D2[1]), (L[1]!=L2[1])]
-    if Etoggling[0] and Etoggling[1] and (U[0]//90)%2 == (R[0]//90)%2 == 1: return False
-    if Etoggling[1] and Etoggling[2] and (R[0]//90)%2 == (D[0]//90)%2 == 1: return False
-    if Etoggling[2] and Etoggling[3] and (D[0]//90)%2 == (L[0]//90)%2 == 1: return False
-    if Etoggling[3] and Etoggling[0] and (L[0]//90)%2 == (U[0]//90)%2 == 1: return False
-    if Etoggling[2] and (Etoggling[1] or Etoggling[3]): return False
-    return True
 def persp_shift_y(persp0: tuple[str, int]):
     AdjFacesToNums = {'U': 0, 'R': 1, 'D': 2, 'L': 3}
     thing = ROT_TRAINS[persp0[0]][(AdjFacesToNums['R']+persp0[1])%4]
@@ -92,47 +56,46 @@ def persp_shift_x3(persp0: tuple[str, int]):
     AdjFacesToNums = {'U': 0, 'R': 1, 'D': 2, 'L': 3}
     thing = ROT_TRAINS[persp0[0]][(AdjFacesToNums['U']+persp0[1])%4]
     return (thing[0], (persp0[1] + thing[1])%4)
+def is_valid_state(state):
+    R, L, U, D = state
+    if R == (90, 1) and D == (90, 1): return False
+    if L == (90, 1) and D == (90, 1): return False
+    if R == (90, 1) and U == (90, 1): return False
+    if L == (90, 1) and U == (90, 1): return False
+    return (D[1] == 1 or (R == (90, 1) and L[1] == 1) or (L == (90, 1) and R[1] == 1))
 def y1(state):
     persp, R, L, U, D = state
     a = set()
-    if (R[1], L[1], U[1], D[1]) == (0, 0, 1, 1) and U[0] <= Umax-90 and D[0] >= Dmin+90:
-        for R2, L2 in product(R_angles, L_angles):
+    if (R[1], L[1], U[1], D[1]) == (0, 0, 1, 1) and  U[0] < 180 and D[0] > 0:
+        for R2, L2 in product((0, 90, 180), (0, 90, 180)):
             a.add((persp_shift_y(persp), (R2, 0), (L2, 0), (U[0]+90, 1), (D[0]-90, 1)))
     return a
 def y3(state):
     persp, R, L, U, D = state
     a = set()
-    if (R[1], L[1], U[1], D[1]) == (0, 0, 1, 1) and U[0] >= Umin+90 and D[0] <= Dmax-90:
-        for R2, L2 in product(R_angles, L_angles):
+    if (R[1], L[1], U[1], D[1]) == (0, 0, 1, 1) and  U[0] > 0 and D[0] < 180:
+        for R2, L2 in product((0, 90, 180), (0, 90, 180)):
             a.add((persp_shift_y3(persp), (R2, 0), (L2, 0), (U[0]-90, 1), (D[0]+90, 1)))
     return a
 def y2(state):
     persp, R, L, U, D = state
     a = set()
-    if (R[1], L[1], U[1], D[1]) != (0, 0, 1, 1): return a
-    if U[0] <= Umax-180 and D[0] >= Dmin+180:
-        for R2, L2 in product(R_angles, L_angles):
-            a.add((persp_shift_y2(persp), (R2, 0), (L2, 0), (U[0]+180, 1), (D[0]-180, 1)))
-    if U[0] >= Umin+180 and D[0] <= Dmax-180:
-        for R2, L2 in product(R_angles, L_angles):
-            a.add((persp_shift_y2(persp), (R2, 0), (L2, 0), (U[0]-180, 1), (D[0]+180, 1)))
+    if (R[1], L[1], U[1], D[1]) == (0, 0, 1, 1) and abs(U[0]-D[0])==180:
+        for R2, L2 in product((0, 90, 180), (0, 90, 180)):
+            a.add((persp_shift_y2(persp), (R2, 0), (L2, 0), (D[0], 1), (U[0], 1)))
     return a
 def x1(state):
     persp, R, L, U, D = state
     a = set()
-    if (R[1], L[1], U[1], D[1]) != (1, 1, 0, 0): return a
-    if ((R[0]//90)%2 == (L[0]//90)%2): return a
-    if R[0] <= Rmax-90 and L[0] >= Lmin+90:
-        for U2, D2 in product(U_angles, D_angles):
+    if (R[1], L[1], U[1], D[1]) == (1, 1, 0, 0) and  (R[0], L[0]) in ((90, 180), (0, 90)):
+        for U2, D2 in product((0, 90, 180), (0, 90, 180)):
             a.add((persp_shift_x(persp), (R[0]+90, 1), (L[0]-90, 1), (U2, 0), (D2, 0)))
     return a
 def x3(state):
     persp, R, L, U, D = state
     a = set()
-    if (R[1], L[1], U[1], D[1]) != (1, 1, 0, 0): return a
-    if ((R[0]//90)%2 == (L[0]//90)%2): return a
-    if R[0] >= Rmin+90 and L[0] <= Lmax-90:
-        for U2, D2 in product(U_angles, D_angles):
+    if (R[1], L[1], U[1], D[1]) == (1, 1, 0, 0) and  (R[0], L[0]) in ((180, 90), (90, 0)):
+        for U2, D2 in product((0, 90, 180), (0, 90, 180)):
             a.add((persp_shift_x3(persp), (R[0]-90, 1), (L[0]+90, 1), (U2, 0), (D2, 0)))
     return a
 def calc_weight(state, state2):
@@ -142,63 +105,61 @@ def calc_weight(state, state2):
         elif (v1[1], v2[1]) == (1, 0): MAX = max(MAX, dEtime)
         elif abs(v1[0] - v2[0]) == 90: MAX = max(MAX, rot1time)
         elif abs(v1[0] - v2[0]) == 180: MAX = max(MAX, rot2time)
-        elif abs(v1[0] - v2[0]) == 270: MAX = max(MAX, rot3time)
-        elif abs(v1[0] - v2[0]) == 360: MAX = max(MAX, rot4time)
     return MAX
+def valid_step(state, state2):
+    if state == state2: return False
+    _, R, L, U, D = state
+    _, R2, L2, U2, D2 = state2
+    for v1, v2 in zip(state[1:], state2[1:]):
+        if v1[0] != v2[0] and (v1[1] or v2[1]): return False
+    Etoggling = [(U[1]!=U2[1]), (R[1]!=R2[1]), (D[1]!=D2[1]), (L[1]!=L2[1])]
+    if Etoggling[0] and Etoggling[1] and U[0] == R[0] == 90: return False
+    if Etoggling[1] and Etoggling[2] and R[0] == D[0] == 90: return False
+    if Etoggling[2] and Etoggling[3] and D[0] == L[0] == 90: return False
+    if Etoggling[3] and Etoggling[0] and L[0] == U[0] == 90: return False
+    if Etoggling[2] and (Etoggling[1] or Etoggling[3]): return False
+    return True
 #########################################################
 ##                         GO                          ##
 #########################################################
 possible_things = {}
 persps = list(product("URFLBD", range(4)))
 
-for state in product(persps, list(product(R_angles, (0, 1))), list(product(L_angles, (0, 1))), list(product(U_angles, (0, 1))), list(product(D_angles, (0, 1)))):
+servo_states = [(0, 0), (90, 0), (180, 0),
+                (0, 1), (90, 1), (180, 1)]
+for state in product(persps, servo_states, servo_states, servo_states, servo_states):
     if is_valid_state(state[1:]):
         possible_things[state] = []
 
 # y1
-for state in product(persps, [(i, 0) for i in R_angles],
-                             [(i, 0) for i in L_angles],
-                             [(i, 1) for i in U_angles[:-1]],
-                             [(i, 1) for i in D_angles[1:]]):
+for state in product(persps, [(0, 0), (90, 0), (180, 0)],
+                             [(0, 0), (90, 0), (180, 0)],
+                             [(90, 1), (0, 1)],
+                             [(180, 1), (90, 1)]):
     possible_things[state].extend([(max(calc_weight(state, i), Y1time), i) for i in y1(state)])
 # y2
-for state in product(persps, [(i, 0) for i in R_angles], 
-                             [(i, 0) for i in L_angles],
-                             [(i, 1) for i in U_angles[:-2]], 
-                             [(i, 1) for i in D_angles[2:]]):
-    possible_things[state].extend([(max(calc_weight(state, i), Y2time), i) for i in y2(state)])
-for state in product(persps, [(i, 0) for i in R_angles], 
-                             [(i, 0) for i in L_angles],
-                             [(i, 1) for i in U_angles[2:]], 
-                             [(i, 1) for i in D_angles[:-2]]):
+for persp, R, L, (U, D) in product(persps, [(0, 0), (90, 0), (180, 0)],
+                                    [(0, 0), (90, 0), (180, 0)],
+                                    [((0, 1), (180, 1)), ((180, 1), (0, 1))]):
+    state = (persp, R, L, U, D)
     possible_things[state].extend([(max(calc_weight(state, i), Y2time), i) for i in y2(state)])
 # y3
-for state in product(persps, [(i, 0) for i in R_angles],
-                             [(i, 0) for i in L_angles],
-                             [(i, 1) for i in U_angles[1:]],
-                             [(i, 1) for i in D_angles[:-1]]):
+for state in product(persps, [(0, 0), (90, 0), (180, 0)],
+                             [(0, 0), (90, 0), (180, 0)],
+                             [(90, 1), (180, 1)],
+                             [(0, 1), (90, 1)]):
     possible_things[state].extend([(max(calc_weight(state, i), Y3time), i) for i in y3(state)])
 # x1
-for state in product(persps, [(i, 1) for i in R_angles[0:len(R_angles)-1:2]],
-                             [(i, 1) for i in L_angles[1:len(L_angles):2]],
-                             [(i, 0) for i in U_angles],
-                             [(i, 0) for i in D_angles]):
-    possible_things[state].extend([(max(calc_weight(state, i), X1time), i) for i in x1(state)])
-for state in product(persps, [(i, 1) for i in R_angles[1:len(R_angles)-1:2]],
-                             [(i, 1) for i in L_angles[2:len(L_angles):2]],
-                             [(i, 0) for i in U_angles],
-                             [(i, 0) for i in D_angles]):
+for persp, (R, L), U, D in product(persps, [((90, 1), (180, 1)), ((0, 1), (90, 1))],
+                                           [(0, 0), (90, 0), (180, 0)],
+                                           [(0, 0), (90, 0), (180, 0)]):
+    state = (persp, R, L, U, D)
     possible_things[state].extend([(max(calc_weight(state, i), X1time), i) for i in x1(state)])
 # x3
-for state in product(persps, [(i, 1) for i in R_angles[1:len(R_angles):2]],
-                             [(i, 1) for i in L_angles[0:len(L_angles)-1:2]],
-                             [(i, 0) for i in U_angles],
-                             [(i, 0) for i in D_angles]):
-    possible_things[state].extend([(max(calc_weight(state, i), X3time), i) for i in x3(state)])
-for state in product(persps, [(i, 1) for i in R_angles[2:len(R_angles):2]],
-                             [(i, 1) for i in L_angles[1:len(L_angles)-1:2]],
-                             [(i, 0) for i in U_angles],
-                             [(i, 0) for i in D_angles]):
+for persp, (R, L), U, D in product(persps, [((90, 1), (0, 1)), ((180, 1), (90, 1))],
+                                           [(0, 0), (90, 0), (180, 0)],
+                                           [(0, 0), (90, 0), (180, 0)]):
+    state = (persp, R, L, U, D)
     possible_things[state].extend([(max(calc_weight(state, i), X3time), i) for i in x3(state)])
 
 '''
@@ -207,12 +168,12 @@ We then connected all the nodes we could with all the cube rotations we could.
 Now, we will finish by focusing on no cube rotations, and permutating the possible and valid individual arm movements.
 '''
 for state in possible_things.keys():
-    _, R, L, U, D = state
-    R2states = [(R[0], 0), R] if R[1] else [(R[0], 1)] + [(i, 0) for i in R_angles]
-    L2states = [(L[0], 0), L] if L[1] else [(L[0], 1)] + [(i, 0) for i in L_angles]
-    U2states = [(U[0], 0), U] if U[1] else [(U[0], 1)] + [(i, 0) for i in U_angles]
-    D2states = [(D[0], 0), D] if D[1] else [(D[0], 1)] + [(i, 0) for i in D_angles]
-    for state2 in product([state[0]], R2states, L2states, U2states, D2states):
+    states2 = []
+    for i in range(1, 5):
+        if state[i][1]: states2.append([(state[i][0], 0), state[i]])
+        else: states2.append([(state[i][0], 1), (0, 0), (90, 0), (180, 0)])
+    for a1, a2, a3, a4 in product(states2[0], states2[1], states2[2], states2[3]):
+        state2 = (state[0], a1, a2, a3, a4)
         if is_valid_state(state2[1:]) and valid_step(state, state2):
             possible_things[state].append((calc_weight(state, state2), state2))
 print(f"# of possible servo states: {len(list(possible_things.keys()))}")
