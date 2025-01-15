@@ -41,9 +41,9 @@ def scanCube():
             return None
     return cubeArr
 
+print("Ready To Go!")
 while True:
     output(11, HIGH)
-    print("Ready To Go!")
     if input(10) == HIGH:
         output(11, LOW)
         print("Button was pushed!")
@@ -52,11 +52,14 @@ while True:
         # error checking 
         if cubeArr is None:
             print("Too dark to scan cube! Please try again with better lighting.")
+            move_to_default()
+            print("Ready To Go!")
             continue
         print(cubeArr)
         if (not errorDetection(cubeArr)):
             print("Cube scan failed!")
             move_to_default()
+            print("Ready To Go!")
             continue
         shiftCubeArr = convertToShiftCube(cubeArr)
         # run solverc
@@ -73,3 +76,4 @@ while True:
         ], check=True, stdout=PIPE).stdout
         for i in solverOut.strip().split(): execute(i)
         move_to_default()
+        print("Ready To Go!")
