@@ -29,7 +29,7 @@ WEST_DISENGAGE_ANGLE = 20   #screwed in at 0
 CLAW_MIN_PULSE = 0.5/1000
 CLAW_MAX_PULSE = 2.5/1000
 CLAW_MIN_ANGLE = 0
-CLAW_MAX_ANGLE = 270
+CLAW_MAX_ANGLE = 360
 
 #Time in seconds for each move to complete
 QUARTER_TURN_TIME = 0.35
