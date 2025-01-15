@@ -48,8 +48,9 @@ def scanCube():
     return cubeArr
 
 while True:
-    flashLight()
+    output(11, HIGH)
     if input(10) == HIGH:
+        output(11, LOW)
         print("Button was pushed!")
         # Start solving!
         cubeArr = scanCube()
