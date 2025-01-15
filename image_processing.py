@@ -1,17 +1,3 @@
-# Things that need to happen here
-# in not a lot of detail and probably wrong
-# libcamera-still -o test.jpg --width 60 --height 60
-# 1. Normalize
-# 2. Split image into 9 sections representing the peices
-# 3. Cycle through the peices centers 
-# 4. identify the color usng cv2.inRange 
-# 5. correct centers for white/logo error 
-# using opposing center rules
-# Then store the cube
-
-# capture and normalize Image
-# image = normalizeImg(captureImg(CUBE_IMG_FOLDER, "cubeScan"))
-
 ####### IMPORTS #######
 from cv2 import imwrite, imread, IMREAD_COLOR, split, normalize,\
 NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
@@ -293,6 +279,8 @@ def getCenterColor(image):
 # USE BEFORE SHIFT CUBE!!!!!!!
 # https://puzzling.stackexchange.com/questions/53846/how-to-determine-whether-a-rubiks-cube-is-solvable
 def errorDetection(cubeArray):
+    # returns false if invalid cube
+    # returns true if no problem detected
     if (sum(cubeArray) != 135):
         return 0
     if (not checkEdgeParity(cubeArray)):
@@ -310,6 +298,7 @@ def checkEdgeParity(cubeArray):
     c = 0
     faceToCheck[0, 2, 4, 5]
     for i in range(4):
+        # check top and bottom edges
         peice = cubeArray[faceToCheck[i]][1][0]
         peiceConCords = [i][1][0]
         peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
@@ -318,8 +307,10 @@ def checkEdgeParity(cubeArray):
         peiceConCords = [i][1][2]
         peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
         c += checkEdge(peice, peiceCon)
+        # only some of the faces need these edges to be checked
         if i % 2 == 0:
             continue
+        # check side edges
         peice = cubeArray[faceToCheck[i]][0][1]
         peiceConCords = [i][0][1]
         peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
@@ -328,6 +319,7 @@ def checkEdgeParity(cubeArray):
         peiceConCords = [i][2][1]
         peiceCon = cubeArray[peiceConCords[0], peiceConCords[1], peiceConCords[2]]
         c += checkEdge(peice, peiceCon)
+    # must be divisible by two to be a valid cube
     if c % 2 == 0:
         return True
     return False
