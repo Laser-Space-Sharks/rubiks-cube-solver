@@ -17,6 +17,7 @@ peiceNamesRow = ["upper", "center", "lower"]
 peiceNamesCol = ["left", "center", "right"]
 IMG_WIDTH = 56 # for resolution
 IMG_HEIGHT = 64
+IMG_SIZE = 64 * 56
 PIECE_SIZE = (IMG_WIDTH//3) * (IMG_HEIGHT//3)
 CUBE_IMG_FOLDER = "/home/pi/cubeImgs/"
 FACE_ORDER = {"U": 0, "R": 1, "F": 2, "L": 3, "B": 4, "D": 5}
