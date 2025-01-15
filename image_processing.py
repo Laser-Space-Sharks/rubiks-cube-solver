@@ -4,9 +4,7 @@ NORM_MINMAX, cvtColor, COLOR_BGR2HSV, COLOR_HSV2BGR, merge, inRange,\
 imshow, countNonZero, waitKey, bitwise_or, imdecode
 # from picamera2 import Picamera2
 from numpy import asarray, zeros, argwhere, copy, uint32, sum, rot90
-# import matplotlib as plt
 from os import chdir, environ
-# from io import BytesIO
 from subprocess import run
 
 #######################################################
