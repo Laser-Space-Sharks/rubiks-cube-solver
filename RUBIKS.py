@@ -2,7 +2,7 @@
 ####### Main cube Program!!! ##########################
 #######################################################
 
-from RPi.GPIO import setwarnings, setmode, setup, input, HIGH, LOW, BOARD, PUD_DOWN, IN, output
+from RPi.GPIO import setwarnings, setmode, setup, input, HIGH, LOW, BOARD, PUD_DOWN, IN, OUT, output
 from CubeScanProtocol import Move_to_faceN
 from servoCoding.DataTypes import Orientation
 from image_processing import getCenterColor, CUBE_IMG_FOLDER,\
