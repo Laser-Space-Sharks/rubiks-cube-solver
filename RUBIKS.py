@@ -9,9 +9,10 @@ from image_processing import getCenterColor, CUBE_IMG_FOLDER,\
 captureImg, genColorsArray, addFaceToCubeScan, convertToShiftCube, scanFace,\
 errorDetection
 from ServoController import execute, move_to_default
-from subprocess import run, PIPE
-from numpy import zeros
+from subprocess import run, Popen, PIPE
+from numpy import zeros, asarray
 from time import sleep
+from io import TextIOWrapper
 
 setwarnings(False) # Ignore warnings from GPIO
 setmode(BOARD) # Use physical pin numbering
@@ -48,32 +49,35 @@ while True:
         output(11, LOW)
         print("Button was pushed!")
         # Start solving!
-        cubeArr = scanCube()
-        # error checking 
-        if cubeArr is None:
-            print("Too dark to scan cube! Please try again with better lighting.")
-            move_to_default()
-            print("Ready To Go!")
-            continue
-        print(cubeArr)
-        if (not errorDetection(cubeArr)):
-            print("Cube scan failed!")
-            move_to_default()
-            print("Ready To Go!")
-            continue
-        shiftCubeArr = convertToShiftCube(cubeArr)
+        # cubeArr = scanCube()
+        # # error checking 
+        # if cubeArr is None:
+        #     print("Too dark to scan cube! Please try again with better lighting.")
+        #     move_to_default()
+        #     print("Ready To Go!")
+        #     continue
+        # print(cubeArr)
+        # if (not errorDetection(cubeArr)):
+        #     print("Cube scan failed!")
+        #     move_to_default()
+        #     print("Ready To Go!")
+        #     continue
+        # shiftCubeArr = convertToShiftCube(cubeArr)
         # run solverc
-        solverOut = run([
-            "/home/pi/Documents/rubiks-cube-solver/solverc/shiftcube/solverpi", 
-            "-i", "shiftcube", 
-            "-o", "servocode", 
-            f"{shiftCubeArr[0]:x}", 
-            f"{shiftCubeArr[1]:x}",
-            f"{shiftCubeArr[2]:x}", 
-            f"{shiftCubeArr[3]:x}", 
-            f"{shiftCubeArr[4]:x}", 
-            f"{shiftCubeArr[5]:x}"
-        ], check=True, stdout=PIPE).stdout
-        for i in str(solverOut).strip().split(): execute(i)
+        shiftCubeArr = asarray([0x51515151, 0x31313131, 0x42424242, 0x13131313, 0x24242424, 0x05050505])
+        solverOut = Popen(
+            "/home/pi/Documents/rubiks-cube-solver/solverc/shiftcube/solverpi " +
+            "-i shiftcube -o servocode " +
+            f"{shiftCubeArr[0]:x} " +
+            f"{shiftCubeArr[1]:x} " +
+            f"{shiftCubeArr[2]:x} " +
+            f"{shiftCubeArr[3]:x} " +
+            f"{shiftCubeArr[4]:x} " +
+            f"{shiftCubeArr[5]:x} ",
+            cwd="/home/pi/Documents/rubiks-cube-solver/solverc/shiftcube/",
+            shell=True, close_fds=True, stdout=PIPE).stdout
+        for i in TextIOWrapper(solverOut, encoding="utf-8"):
+            print(f"Executing servocode: {i}")
+            execute(i)
         move_to_default()
         print("Ready To Go!")
