@@ -42,7 +42,7 @@ RIGHT_FACE_COLOR_ARRAY = [
 # S is on a scale from 0-255
 # V is on a scale from 0-255
 LOWER_BOUND_COLORS = [
-    asarray([ 25, 50, 70]), # yellow
+    asarray([ 25, 60, 70]), # yellow
     asarray([159, 50, 70]), # red
     asarray([ 90, 50, 70]), # blue
     asarray([  0,  0, 70]), # white
