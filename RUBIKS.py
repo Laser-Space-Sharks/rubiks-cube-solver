@@ -49,22 +49,20 @@ while True:
         output(11, LOW)
         print("Button was pushed!")
         # Start solving!
-        # cubeArr = scanCube()
-        # # error checking 
-        # if cubeArr is None:
-        #     print("Too dark to scan cube! Please try again with better lighting.")
-        #     move_to_default()
-        #     print("Ready To Go!")
-        #     continue
-        # print(cubeArr)
-        # if (not errorDetection(cubeArr)):
-        #     print("Cube scan failed!")
-        #     move_to_default()
-        #     print("Ready To Go!")
-        #     continue
-        # shiftCubeArr = convertToShiftCube(cubeArr)
-        # run solverc
-        shiftCubeArr = asarray([0x51515151, 0x31313131, 0x42424242, 0x13131313, 0x24242424, 0x05050505])
+        cubeArr = scanCube()
+        # error checking 
+        if cubeArr is None:
+            print("Too dark to scan cube! Please try again with better lighting.")
+            move_to_default()
+            print("Ready To Go!")
+            continue
+        print(cubeArr)
+        if (not errorDetection(cubeArr)):
+            print("Cube scan failed!")
+            move_to_default()
+            print("Ready To Go!")
+            continue
+        shiftCubeArr = convertToShiftCube(cubeArr)
         solverOut = Popen(
             "/home/pi/Documents/rubiks-cube-solver/solverc/shiftcube/solverpi " +
             "-i shiftcube -o servocode " +
