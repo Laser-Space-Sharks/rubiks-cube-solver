@@ -42,6 +42,23 @@ cube_alg_entry_s* cube_alg_table_get_insertion_index(const cube_alg_table_s *ct,
     } return &ct->table[index];
 }
 
+bool cube_alg_table_shallow_insert(cube_alg_table_s *ct, const shift_cube_s *key, alg_s *moves) {
+    cube_alg_entry_s *entry = cube_alg_table_get_insertion_index(ct, key);
+
+    if (!entry) return false;
+
+    if (entry->alg.moves) {
+        free(entry->alg.moves);
+        entry->alg = *moves;
+        return true;
+    }
+
+    entry->key = *key;
+    entry->alg = *moves;
+    ct->entries++;
+    return true;
+}
+
 bool cube_alg_table_overwrite(cube_alg_table_s *ct, const shift_cube_s *key, const alg_s *moves) {
     if (ct == NULL || key == NULL || moves == NULL) {
         return false;

@@ -246,7 +246,9 @@ alg_s* alg_from_str(const char *str) {
         return NULL;
     }
 
-    alg_s *alg = alg_create(MIN_LIST_RESIZE);
+    size_t num_moves = 0;
+
+    alg_s *alg = alg_create(16);
     for (size_t i = 0; str[i]; i++) {
         if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n') 
             continue;
@@ -258,7 +260,7 @@ alg_s* alg_from_str(const char *str) {
             return NULL;
         }
 
-        alg_insert(alg, 3*face, alg->length);
+        alg_append(alg, 3*face);
         switch (str[i+1]) {
             case '1':
                 break;
@@ -337,7 +339,7 @@ bool alg_compare(const alg_s *a, const alg_s *b) {
 
 alg_list_s *get_alg_family(const alg_s* alg) {
     alg_list_s* alg_list = alg_list_create(16);
-    
+
     alg_list_append(alg_list, alg);
     alg_list_append(alg_list, alg);
     alg_invert(&alg_list->list[1]);

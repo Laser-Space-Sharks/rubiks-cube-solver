@@ -7,13 +7,13 @@
 
 #include <string.h>
 
-typedef enum inputs {
+typedef enum input {
     INPUT_SCRAMBLE,
     INPUT_SHIFTCUBE,
     NUM_INPUTS,
 } input_e;
 
-typedef enum outputs {
+typedef enum output {
     OUTPUT_ALG,
     OUTPUT_SERVOCODE,
     NUM_OUTPUTS,
@@ -126,20 +126,20 @@ int main(int argc, char *argv[]) {
 
     if (output == OUTPUT_ALG) {
         print_alg(solve);
-        alg_free(solve);
-        cube_table_free(f2l_table);
-        cube_alg_table_free(ll_table);
-        return 0;
+    } else if (output == OUTPUT_SERVOCODE) {
+        inter_move_table_s *inter_move_table = inter_move_table_create();
+        RobotSolution servo_code = servoCode_compiler_Ofastest(solve, inter_move_table);
+        for (size_t i = 0; i < servo_code.size; i++) {
+            RobotState_s state = servo_code.solution[i];
+            print_RobotState(state); printf(" ");
+        }
+        free(servo_code.solution);
+        inter_move_table_free(inter_move_table);
     }
 
-    inter_move_table_s *inter_move_table = inter_move_table_create();
-    RobotSolution servo_code = servoCode_compiler_Ofastest(solve, inter_move_table);
-    for (size_t i = 0; i < servo_code.size; i++) {
-        RobotState_s state = servo_code.solution[i];
-        print_RobotState(state); printf(" ");
-    }
-    free(servo_code.solution);
-    inter_move_table_free(inter_move_table);
+    alg_free(solve);
+    cube_table_free(f2l_table);
+    cube_alg_table_free(ll_table);
     cleanup_solver();
 
     return 0;
