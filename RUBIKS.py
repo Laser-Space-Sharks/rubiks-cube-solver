@@ -64,7 +64,7 @@ while True:
         shiftCubeArr = convertToShiftCube(cubeArr)
         # run solverc
         solverOut = run([
-            "/home/pi/rubiks-cube-solver/solverc/shiftcube/solverpi", 
+            "/home/pi/Documents/rubiks-cube-solver/solverc/shiftcube/solverpi", 
             "-i", "shiftcube", 
             "-o", "servocode", 
             f"{shiftCubeArr[0]:x}", 
