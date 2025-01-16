@@ -9,7 +9,7 @@ from image_processing import getCenterColor, CUBE_IMG_FOLDER,\
 captureImg, genColorsArray, addFaceToCubeScan, convertToShiftCube, scanFace,\
 errorDetection
 from ServoController import execute, move_to_default
-from subprocess import run 
+from subprocess import run, PIPE
 from numpy import zeros
 from time import sleep
 
@@ -74,6 +74,6 @@ while True:
             f"{shiftCubeArr[4]:x}", 
             f"{shiftCubeArr[5]:x}"
         ], check=True, stdout=PIPE).stdout
-        for i in solverOut.strip().split(): execute(i)
+        for i in str(solverOut).strip().split(): execute(i)
         move_to_default()
         print("Ready To Go!")
