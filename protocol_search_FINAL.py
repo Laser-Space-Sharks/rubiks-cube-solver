@@ -12,8 +12,8 @@ TIME = time.perf_counter()
 #define quarterTurn 350 //in Milliseconds
 #define engageTime 375 //in Milliseconds
 '''
-Etime = 0.375
-dEtime = 0.375
+Etime = 0.300
+dEtime = 0.300
 rot1time = 0.35
 rot2time = 0.5
 

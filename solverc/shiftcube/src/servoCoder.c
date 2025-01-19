@@ -19,8 +19,8 @@
 #define quarterTurn 350 //in Milliseconds
 #define engageTime 375 //in Milliseconds
 */
-#define Etime 0.375
-#define dEtime 0.375
+#define Etime 0.300
+#define dEtime 0.300
 #define rot1time 0.35
 #define rot2time 0.5
 
@@ -74,10 +74,10 @@ typedef struct inter_move_table {
 // (('R', 2), (90, 1), (90, 1), (180, 0), (0, 0))    
 static const State_s ROBOT_START_STATE = {
     .persp = (Orientation_s) {
-        FACE_R, 2
+        FACE_R, 0
     },
     .servos = (RobotState_s) {
-        0,1,0,1,2,1,0,1
+        0,1,0,1,0,1,2,1
     }
 };
 
