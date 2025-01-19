@@ -64,9 +64,9 @@ The ShiftCube is a way of representing the faces of the cube with 6 32-bit unsig
 
 ```
 this represents the face of the cube, and here the numbers represent the order of the pieces as they are stored in the ShiftCube.
-[[7] [6] [5]]
-[[0] [x] [4]]
-[[1] [2] [3]]
+[[0] [1] [2]]
+[[7] [x] [3]]
+[[6] [5] [4]]
 ```
 
 ### Cube18B
