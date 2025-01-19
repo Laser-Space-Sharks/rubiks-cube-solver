@@ -71,8 +71,10 @@ represent the order of the pieces as they are stored in the ShiftCube.
 ```
 
 ### Cube18B
-The Cube18B is way of representating where each piece on the cube is, including piece orientation. There are 20 pieces on the cube, but because of parity and collisions, you only need to store 18 of them to uniquely represent any rubiks cube. 
-Every cubie we define as a position and an orientation on the cube, of which there are 48. Originally, we represented every cubie as a tuple of which colors are on which faces, and every piece was represented as a solved cubie (the colors match the faces). So say the piece (F, R, D) was at cubie (F, R, D), that means the blue, red, and white piece is exactly where it would be on a solved cube. If however, that same (F, R, D) piece was instead at cubie (B, L, U), then the blue facelet would be on the B face, the red facelet would be on the L face, and the white facelet would be on U face. This completely encodes the position and orientation of the (F, R, D) piece on the cube. For performance and simplicity when coding however, the cubies are instead defined in a 48-long enum s.t. you can also index an array with a cubie.
+The Cube18B is way of representating where each piece on the cube is, including piece orientation. There are 20 pieces on the cube, but because of parity and collisions, you only need to store 18 of them to uniquely represent any rubiks cube.
+
+Every cubie we define as a position and an orientation of a piece on the cube, and there are 48 cubies. Originally, we represented every cubie as a tuple of which colors are on which faces, and every piece was represented as a solved cubie (the colors match the faces). So say the piece (F, R, D) was at cubie (F, R, D), that means the blue, red, and white piece is exactly where it would be on a solved cube. If however, that same (F, R, D) piece was instead at cubie (B, L, U), then the blue facelet would be on the B face, the red facelet would be on the L face, and the white facelet would be on U face. This completely encodes the position and orientation of the (F, R, D) piece on the cube. For performance and simplicity when coding however, the cubies are instead defined in a 48-long enum s.t. you can also index an array with a cubie.
+
 With this practice, since every cubie is less than 48, every cubie is a byte. The thusly named Cube18B is thus represented as an 18-long uint8_t array where every index is associated with a piece and every value is a cubie. 
 
 The Solved Cube18B in our code:
