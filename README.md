@@ -86,4 +86,4 @@ static const cube18B_s SOLVED_CUBE18B = {
     }
 };
 ```
-Breaking the pieces up also allows you to apply moves and cube algorithms to pieces individually and out-of-order. When recognizing cases in CFOP, it is much more useful to know to where piece x is than to know what piece is at x.
+Breaking the pieces up also allows you to apply moves and cube algorithms to pieces individually and out-of-order. When recognizing cases in CFOP, it is much more useful to know where piece x is than to know what piece is at x.
