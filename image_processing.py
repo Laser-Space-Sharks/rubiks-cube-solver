@@ -142,9 +142,8 @@ def colorAnalysis(peice):
     for i in range(6):
         # mask all colors except the color we are looking for right now
         # turns into an array where everything that is set to 255 is in that range, everything else is 0
-        peiceCopy = peice
+        peiceCopy = peice.copy()
         mask = inRange(peiceCopy, LOWER_BOUND_COLORS[i], UPPER_BOUND_COLORS[i])
-        # print(f"checking for {COLORS[i]}")
         # imshow('Mask', mask) # CHANGE
         # waitKey(0) # CHANGE
         # find the percentage of the piece that is in that color range
@@ -183,17 +182,17 @@ def genColorsArray(frontCenterColor, upCenterColor):
     # Here ifs are used to eliminate out of bounds errors.
     # Exploits fact that the same colors are always opposite of eachother
     #down
-    if upCenterColor + 3 < 5:
+    if upCenterColor + 3 <= 5:
         colorsArray[upCenterColor + 3] = 5
     else:
         colorsArray[upCenterColor - 3] = 5
     #back
-    if frontCenterColor + 3 < 5:
+    if frontCenterColor + 3 <= 5:
         colorsArray[frontCenterColor + 3] = 4
     else:
         colorsArray[frontCenterColor - 3] = 4
     #left
-    if rightCenterColor + 3 < 5:
+    if rightCenterColor + 3 <= 5:
         colorsArray[rightCenterColor + 3] = 3
     else:
         colorsArray[rightCenterColor - 3] = 3
@@ -245,7 +244,6 @@ def analyzeFace(image, colorsArray):
             # waitKey(0) # CHANGE
             peiceColor = colorAnalysis(peice)
             face[i][j] = colorsArray[peiceColor]
-            print(f"Piece Color: {peiceColor}, colorsArray[peiceColor]: {colorsArray[peiceColor]}")
             # print(f"The {peiceNamesRow[i]} {peiceNamesCol[j]} peice is {COLORS[peiceColor]}")
     print(translateToColors(face, colorsArray))
     return face
@@ -264,13 +262,14 @@ def addFaceToCubeScan(faceArray, orientation, cubeArray):
     if faceArray is None or cubeArray is None:
         return None
     # rotate cube properly
-    rot90(faceArray, k=orientation.rot, axes=(1,0))
+    faceArray = rot90(faceArray, k=orientation.rot, axes=(1,0))
     # put in cube array properly
     cubeArray[FACE_ORDER[orientation.face]] = faceArray
     return cubeArray
 
 def getCenterColor(image):
-    centerPiece = image[IMG_HEIGHT//3:2*(IMG_HEIGHT)//3, IMG_WIDTH//3:2*(IMG_WIDTH)//3]
+    normalizedImage = cvtColor(image, COLOR_BGR2HSV)
+    centerPiece = normalizedImage[IMG_HEIGHT//3:2*(IMG_HEIGHT)//3, IMG_WIDTH//3:2*(IMG_WIDTH)//3]
     return colorAnalysis(centerPiece)
 
 #######################################################
@@ -345,24 +344,11 @@ def convertToShiftCube(cubeArray):
     # face order is the order in which you will save to
     # the shift cube, written in Colorblind notation
     for i in range(6):
-        face = cubeArray[i]
-        faceNum = uint32(0); k = 1; j = 0; c = 0
-        while c < 8:
-            peice = uint32(face[k][j])
-            # print(f"face {i} peice[{k}][{j}] faceNum so far: {faceNum} \n peice: {peice}")
-            faceNum = faceNum << (4) # move over a nibble
-            faceNum += peice
-            # traverse in loop around center
-            if j == 0 and k != 2:
-                k+=1
-            elif k == 2 and j != 2:
-                j+=1
-            elif j == 2 and k !=0:
-                k-=1
-            elif k == 0:
-                j-=1
-            c+=1
-        shiftCube[i] = faceNum
+        face = asarray(cubeArray[i], dtype=uint32)
+        shiftCube[i] |= face[0][0]       | face[0][1] << 4  | face[0][2] << 8
+        shiftCube[i] |= face[1][0] << 28 |                    face[1][2] << 12
+        shiftCube[i] |= face[2][0] << 24 | face[2][1] << 20 | face[2][2] << 16
+
     return shiftCube
 
 #######################################################
