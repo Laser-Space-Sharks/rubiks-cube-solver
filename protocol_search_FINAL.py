@@ -106,6 +106,14 @@ def calc_weight(state, state2):
         elif abs(v1[0] - v2[0]) == 90: MAX = max(MAX, rot1time)
         elif abs(v1[0] - v2[0]) == 180: MAX = max(MAX, rot2time)
     return MAX
+def calc_action(state, state2):
+    SUM = 0
+    for v1, v2 in zip(state[1:], state2[1:]):
+        if (v1[1], v2[1]) == (0, 1): SUM += Etime
+        elif (v1[1], v2[1]) == (1, 0): SUM += dEtime
+        elif abs(v1[0] - v2[0]) == 90: SUM += rot1time
+        elif abs(v1[0] - v2[0]) == 180: SUM += rot2time
+    return SUM
 def valid_step(state, state2):
     if state == state2: return False
     _, R, L, U, D = state
@@ -136,31 +144,31 @@ for state in product(persps, [(0, 0), (90, 0), (180, 0)],
                              [(0, 0), (90, 0), (180, 0)],
                              [(90, 1), (0, 1)],
                              [(180, 1), (90, 1)]):
-    possible_things[state].extend([(max(calc_weight(state, i), Y1time), i) for i in y1(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), Y1time), i) for i in y1(state)])
 # y2
 for persp, R, L, (U, D) in product(persps, [(0, 0), (90, 0), (180, 0)],
                                     [(0, 0), (90, 0), (180, 0)],
                                     [((0, 1), (180, 1)), ((180, 1), (0, 1))]):
     state = (persp, R, L, U, D)
-    possible_things[state].extend([(max(calc_weight(state, i), Y2time), i) for i in y2(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), Y2time), i) for i in y2(state)])
 # y3
 for state in product(persps, [(0, 0), (90, 0), (180, 0)],
                              [(0, 0), (90, 0), (180, 0)],
                              [(90, 1), (180, 1)],
                              [(0, 1), (90, 1)]):
-    possible_things[state].extend([(max(calc_weight(state, i), Y3time), i) for i in y3(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), Y3time), i) for i in y3(state)])
 # x1
 for persp, (R, L), U, D in product(persps, [((90, 1), (180, 1)), ((0, 1), (90, 1))],
                                            [(0, 0), (90, 0), (180, 0)],
                                            [(0, 0), (90, 0), (180, 0)]):
     state = (persp, R, L, U, D)
-    possible_things[state].extend([(max(calc_weight(state, i), X1time), i) for i in x1(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), X1time), i) for i in x1(state)])
 # x3
 for persp, (R, L), U, D in product(persps, [((90, 1), (0, 1)), ((180, 1), (90, 1))],
                                            [(0, 0), (90, 0), (180, 0)],
                                            [(0, 0), (90, 0), (180, 0)]):
     state = (persp, R, L, U, D)
-    possible_things[state].extend([(max(calc_weight(state, i), X3time), i) for i in x3(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), X3time), i) for i in x3(state)])
 
 '''
 Before, We created empty nodes to address every possible servo state.
@@ -175,7 +183,7 @@ for state in possible_things.keys():
     for a1, a2, a3, a4 in product(states2[0], states2[1], states2[2], states2[3]):
         state2 = (state[0], a1, a2, a3, a4)
         if is_valid_state(state2[1:]) and valid_step(state, state2):
-            possible_things[state].append((calc_weight(state, state2), state2))
+            possible_things[state].append((calc_weight(state, state2), calc_action(state, state2), state2))
 print(f"# of possible servo states: {len(list(possible_things.keys()))}")
 print(f"# of edges in graph: {sum(len(i) for i in possible_things.values())/2}")
 print(f"-------------------------------------")
@@ -190,7 +198,7 @@ print(f"-------------------------------------")
 ##                      FUNCTIONS                      ##
 #########################################################
 def check_connection(node, already_checked: set):
-    for _, node2 in possible_things[node]:
+    for _, _, node2 in possible_things[node]:
         if node2 not in already_checked:
             already_checked.add(node2)
             check_connection(node2, already_checked)
@@ -229,8 +237,8 @@ for statesnum, Real_possible_things in enumerate(POSSIBLE_THINGS, start=1):
     print(f"WITHIN SERVOSPACE{statesnum}: ")
     count2 = 0
     for key, value in Real_possible_things.items():
-        for weight, node in value:
-            if (weight, key) not in Real_possible_things[node]:
+        for weight, action, node in value:
+            if (weight, action, key) not in Real_possible_things[node]:
                 print(f"\tOH NO, {key} -> {node} IS DIRECTED!")
                 count2 += 1
     print(f"\t{count2} edges are directed")
@@ -267,6 +275,143 @@ print(f"-------------------------------------")
 #########################################################
 ##                      FUNCTIONS                      ##
 #########################################################
+class MinHeapNode:
+    def __init__(self, state, weight, action, parent, index):
+        self.state = state
+        self.weight = weight
+        self.action = action
+        self.parent = parent
+        self.index = index
+class MinHeap:
+    def left_child_index(index):
+        return (2*index)+1
+    def right_child_index(index):
+        return 2*(index+1)
+    def parent_ind(index):
+        return (index-1)//2
+    def __init__(self):
+        self.heap = []
+        self.map = {}
+    '''
+    MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) { //printf("\t\tMinHeap_pluck_min() was called!: \n");
+        if (minheap->size == 0) return NULL; 
+        //printf("This plucking time... minheap size was (%zu,%zu), and min was: ", minheap->size, minheap->SupposedSize);
+        //print_MinHeapNode(minheap->heap[0]);
+        //printf("\t\tline 191: minheap->capacity: %zu\n", minheap->capacity);
+        // save minnode
+        MinHeapNode* minnode = minheap->heap[0];
+        // move last into root
+        MinHeapNode* curr_node = minheap->heap[minheap->size-1];
+        minheap->heap[minheap->size-1] = NULL;
+        minheap->size--;
+        if (minheap->size == 0) return minnode;
+        //printf("\t\tline 199\n");
+
+        // bubble down
+        size_t curr_index = 0;
+        size_t left_child_ind = left_child_index(curr_index);
+        size_t right_child_ind = right_child_index(curr_index);
+        while (left_child_ind < minheap->size) {
+            size_t smaller_child_ind = left_child_ind; //printf("\t\t\tline 206: right_child_ind: %zu, left_child_ind: %zu\n", right_child_ind, left_child_ind);
+            //if (minheap->heap[right_child_ind] == NULL) printf("\t\t\tminheap->heap[right_child_ind] == NULL\n");
+            //if (minheap->heap[left_child_ind] == NULL) printf("\t\t\tminheap->heap[left_child_ind] == NULL\n");
+            if (right_child_ind < minheap->size && minheap->heap[right_child_ind]->weight < minheap->heap[left_child_ind]->weight) {
+                smaller_child_ind = right_child_ind;
+            } //printf("\t\t\tline 211\n");
+            if (minheap->heap[smaller_child_ind]->weight < curr_node->weight) { //printf("\t\t\tline 212\n");
+                minheap->heap[smaller_child_ind]->heapIndex = curr_index;
+                minheap->heap[curr_index] = minheap->heap[smaller_child_ind];
+                curr_index = smaller_child_ind;
+                left_child_ind = left_child_index(curr_index);
+                right_child_ind = right_child_index(curr_index); //printf("\t\t\tline 217\n");
+            } else break;
+        } //printf("\t\tline 217\n");
+        minheap->heap[curr_index] = curr_node;
+        curr_node->heapIndex = curr_index;
+        //printf("\t\tline 220\n");
+        return minnode;
+    }
+    '''
+    def heap_pop(self) -> MinHeapNode:
+        if (len(self.heap) == 0): return None
+        minnode = self.heap[0]
+        curr_node = self.heap[-1]
+        self.heap[0] = curr_node
+        self.heap.pop()
+        curr_index = 0
+        left_child_ind = MinHeap.left_child_index(curr_index)
+        right_child_ind = MinHeap.right_child_index(curr_index)
+        while (left_child_ind < len(self.heap)):
+            smaller_child_ind = left_child_ind
+            if (right_child_ind < len(self.heap) and self.heap[right_child_ind].weight < self.heap[left_child_ind].weight):
+                smaller_child_ind = right_child_ind
+            if (self.heap[smaller_child_ind].weight < curr_node.weight):
+                self.heap[smaller_child_ind].index = curr_index
+                self.heap[curr_index] = self.heap[smaller_child_ind]
+                curr_index = smaller_child_ind
+                left_child_ind = MinHeap.left_child_index(curr_index)
+                right_child_ind = MinHeap.right_child_index(curr_index)
+            else: break
+        self.heap[curr_index] = curr_node
+        curr_node.index = curr_index
+        return minnode
+    '''
+    void MinHeap_bubble_up(MinHeap* minheap, size_t curr_index) {
+        MinHeapNode* this_node = minheap->heap[curr_index];
+        while (curr_index > 0) {
+            size_t parent_ind = parent_index(curr_index);
+            if (minheap->heap[parent_ind]->weight > this_node->weight) {
+                minheap->heap[parent_ind]->heapIndex = curr_index;
+                minheap->heap[curr_index] = minheap->heap[parent_ind];
+                curr_index = parent_ind;
+            } else break;
+        }
+        this_node->heapIndex = curr_index;
+        minheap->heap[curr_index] = this_node;
+    }
+    '''
+    def bubble_up(self, curr_index):
+        this_node = self.heap[curr_index]
+        while (curr_index > 0):
+            parent_ind = MinHeap.parent_ind(curr_index)
+            if (self.heap[parent_ind].weight <= this_node.weight): break
+            self.heap[parent_ind].index = curr_index
+            self.heap[curr_index] = self.heap[parent_ind]
+        this_node.index = curr_index
+        self.heap[curr_index] = this_node
+    def update_key(self, )
+
+        
+
+
+
+
+
+
+def Dijkstra(source, graph_dict):
+    l = len(list(graph_dict.keys()))
+    distances = {key: [np.inf,np.inf] for key in graph_dict.keys()}; distances[source] = [0, 0]
+    parents = {source: None}
+    priority_queue_nodes = [source]
+    priority_queue_nums = [0]
+    for i in graph_dict.keys(): 
+        if i != source: 
+            priority_queue_nodes.append(i)
+            priority_queue_nums.append(distances[i])
+    for starting_index in range(l):
+        current_node = priority_queue_nodes[starting_index]
+        for weight, action, neighbor in graph_dict[current_node]:
+            dist = weight + distances[current_node][0]
+            if dist < distances[neighbor]:
+                p1 = priority_queue_nodes.index(neighbor)
+                p2 = bisect_left(priority_queue_nums, dist)
+                priority_queue_nodes.pop(p1)
+                priority_queue_nodes.insert(p2, neighbor)
+                priority_queue_nums.pop(p1)
+                priority_queue_nums.insert(p2, dist)
+                distances[neighbor] = dist
+                parents[neighbor] = current_node
+    return distances, parents
 def Dijkstra(source, graph_dict):
     distances = {key: np.inf for key in graph_dict.keys()}
     distances[source] = 0
@@ -405,7 +550,7 @@ for statesnum, Real_States, Real_possible_things, Real_Picture_States in VALID_G
             distances, parents = Dijkstra(Real_Picture_State, Real_possible_things)
             if np.inf in distances.values(): print('AAAAAAAAAAAAAAAAAAAAAAAAA')
             count += 1
-            print(f"\r\tDijkstra finished! {count}/{sum(len(i) for i in Real_Picture_States.values())}", end='', flush=True)
+            print(f"\r\tDijkstra finished! {count}/{sum(len(j) for j in Real_Picture_States.values())}", end='', flush=True)
             #print(len(distances))
             Picture_Graph[Real_Picture_State] = {}
             for face2 in others[i]:
