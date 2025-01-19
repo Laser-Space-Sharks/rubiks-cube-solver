@@ -7,7 +7,7 @@ from CubeScanProtocol import Move_to_faceN
 from servoCoding.DataTypes import Orientation
 from image_processing import getCenterColor, CUBE_IMG_FOLDER,\
 captureImg, genColorsArray, addFaceToCubeScan, convertToShiftCube, scanFace,\
-errorDetection
+errorDetection, COLORS
 from ServoController import execute, move_to_default
 from subprocess import run, Popen, PIPE
 from numpy import zeros, asarray
@@ -27,11 +27,13 @@ def scanCube():
     ucolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "up", False))
     O2: Orientation = Move_to_faceN(1)
     fcolor = getCenterColor(captureImg(CUBE_IMG_FOLDER, "front", False))
+    print(f"ucolor {COLORS[ucolor]} fcolor {COLORS[fcolor]}")
     colorsArray = genColorsArray(fcolor, ucolor)
     cubeArr = zeros(shape=(6, 3, 3))
     cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "front"), O2, cubeArr)
     cubeArr = addFaceToCubeScan(scanFace(colorsArray, True, "up"), O1, cubeArr)
     #check for error
+    print(colorsArray)
     if cubeArr is None:
         return None
     # Scan rest of cube and convert to shift cube
@@ -63,6 +65,13 @@ while True:
             print("Ready To Go!")
             continue
         shiftCubeArr = convertToShiftCube(cubeArr)
+        print("Generated shift cube:")
+        print(f"{shiftCubeArr[0]:x}")
+        print(f"{shiftCubeArr[1]:x}")
+        print(f"{shiftCubeArr[2]:x}")
+        print(f"{shiftCubeArr[3]:x}")
+        print(f"{shiftCubeArr[4]:x}")
+        print(f"{shiftCubeArr[5]:x}")
         solverOut = Popen(
             "/home/pi/Documents/rubiks-cube-solver/solverc/shiftcube/solverpi " +
             "-i shiftcube -o servocode " +

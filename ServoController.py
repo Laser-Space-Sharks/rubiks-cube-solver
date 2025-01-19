@@ -18,12 +18,12 @@ ENGAGE_MAX_ANGLE = 180
 #Fine tuned angles for the Engage Servos
 NORTH_ENGAGE_ANGLE = 35
 NORTH_DISENGAGE_ANGLE = 155 #screwed in at 180
-EAST_ENGAGE_ANGLE = 30
+EAST_ENGAGE_ANGLE = 40
 EAST_DISENGAGE_ANGLE = 145  #screwed in at 180
 SOUTH_ENGAGE_ANGLE = 140
 SOUTH_DISENGAGE_ANGLE = 45  #screwed in at 0
-WEST_ENGAGE_ANGLE = 130
-WEST_DISENGAGE_ANGLE = 35  #screwed in at 0
+WEST_ENGAGE_ANGLE = 152
+WEST_DISENGAGE_ANGLE = 30  #screwed in at 0
 
 # Fine tuned angles for the claw servos
 U_ANGLES = [0, 88, 186]
