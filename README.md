@@ -76,7 +76,7 @@ Every cubie we define as a position and an orientation on the cube, of which the
 With this practice, since every cubie is less than 48, every cubie is a byte. The thusly named Cube18B is thus represented as an 18-long uint8_t array where every index is associated with a piece and every value is a cubie. 
 The Solved Cube18B in our code:
 ```
-// Each line is a stage of CFOP too.
+// Each of the 3 lines is a stage of CFOP too. Though OLL and PLL became 1LLL.
 static const cube18B_s SOLVED_CUBE18B = {
     .cubies = {
         CUBIE_FD, CUBIE_RD, CUBIE_BD, CUBIE_LD, 
