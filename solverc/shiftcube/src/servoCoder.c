@@ -444,6 +444,7 @@ inter_move_table_s* inter_move_table_create() {
     insert_normal_lines_into_inter_move_table(ht, INTER_MOVE_TABLE_PATH);
     insert_root_lines_into_inter_move_table(ht, INTER_MOVE_TABLE_RSS_PATH);
 
+    /*
     size_t numSubEntries = 0;
     size_t numRSSSubEntries = 0;
     size_t numInterPathNodes = 0;
@@ -458,7 +459,7 @@ inter_move_table_s* inter_move_table_create() {
     numRSSSubEntries += ht->RSS.length;
     for (int j = 0; j < ht->RSS.length; j++) {
         numRSSInterPathNodes += ht->RSS.paths[j].size;
-    }
+    }*/
     /*
     printf("In the INTER_MOVE_TABLE, there are %zu SubEntries, %zu RSSSubEntries, %zu InterPathNodes, %zu RSSInterPathNodes\n", 
         numSubEntries,
@@ -878,12 +879,11 @@ size_t total_nodes_from_alg_secs(MovePair* alg_sections, uint8_t numAlgSecs) {
 }
 
 void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8_t numAlgSecs, const inter_move_table_s* INTER_MOVE_TABLE, MinHeapNode** EndNode) {
-    MinHeap_update_key(minheap, &ROBOT_START_STATE, -1, 0, 0, NULL); //printf("\tline 793\n");
+    MinHeap_update_key(minheap, &ROBOT_START_STATE, -1, 0, 0, 0, NULL); //printf("\tline 793\n");
     State_s* stateAfterMove_arr = malloc(4*sizeof(State_s));
     uint8_t stateAfterMove_len;
 
     MinHeapNode* current_node = MinHeap_pluck_min(minheap); //printf("\tline 797\n");
-    size_t amountPlucked = 1;
 
     const RSS_entry_s* RSS = inter_move_table_get_RSS(INTER_MOVE_TABLE);
     if (MovePair_is_singleMove(alg_sections[0])) { //printf("\tline 822\n");
@@ -944,15 +944,13 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
             }
         }
         current_node = MinHeap_pluck_min(minheap);
-        amountPlucked++;
     } free(stateAfterMove_arr);
-    size_t numTies = 0;
-    while((MinHeapNode* new_node = MinHeap_pluck_min(minheap))->distance == current_node->distance) {
-        numTies++;
-        if (new_node->action < current_node->action) current_node = new_node;
-    }
-    //printf("DIJKSTRA FINISHED!: Min Distance: %lf, Amount Plucked: %zu/%zu, # other equal candidates: %zu\n", current_node->weight, amountPlucked, total_nodes_from_alg_secs(alg_sections, numAlgSecs), numTies);
-    *EndNode = current_node; //printf("\tline 860\n");
+    while(true) {
+        MinHeapNode* new_node = MinHeap_pluck_min(minheap);
+        if (new_node->distance == current_node->distance) {
+            if (new_node->action < current_node->action) current_node = new_node;
+        } else break;
+    } *EndNode = current_node; //printf("\tline 860\n");
 }
 DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode) {
     size_t solve_path_length = 1;

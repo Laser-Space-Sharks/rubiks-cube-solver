@@ -14,24 +14,6 @@ typedef struct MinHeapMap_insertMessage {
     bool NodeIsNew;
 } MinHeapMap_insertMessage;
 
-static const MinHeapNode TEST_CASE = {
-    // (State: ((U, 0), n.E.S.W.U0.R2.D1.L2), algInd: 0, isBefore: 0)
-    .state = {
-        .persp = {
-            .face = FACE_U,
-            .rot = 0
-        },
-        .servos = {
-            0,1,1,1,0,2,1,2
-        }
-    },
-    .algorithm_index = 0,
-    .isBefore = 0,
-    .weight = 0,
-    .parent = NULL,
-    .heapIndex = 0
-};
-
 /*
 typedef struct MinHeapNode {
     State_s state;

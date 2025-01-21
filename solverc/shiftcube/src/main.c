@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
         for (size_t i = 0; i < servo_code.size; i++) {
             RobotState_s state = servo_code.solution[i];
             print_RobotState(state); printf(" ");
-        }
+        } printf("\n");
         free(servo_code.solution);
         inter_move_table_free(inter_move_table);
     }
