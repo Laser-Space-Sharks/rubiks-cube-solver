@@ -2,6 +2,7 @@ from bisect import bisect_left
 import time
 import numpy as np
 from itertools import product
+from dataclasses import dataclass
 import sys
 sys.setrecursionlimit(100000)
 #import numpy as np
@@ -144,31 +145,31 @@ for state in product(persps, [(0, 0), (90, 0), (180, 0)],
                              [(0, 0), (90, 0), (180, 0)],
                              [(90, 1), (0, 1)],
                              [(180, 1), (90, 1)]):
-    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), Y1time), i) for i in y1(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), Y1time), calc_action(state, i), i) for i in y1(state)])
 # y2
 for persp, R, L, (U, D) in product(persps, [(0, 0), (90, 0), (180, 0)],
                                     [(0, 0), (90, 0), (180, 0)],
                                     [((0, 1), (180, 1)), ((180, 1), (0, 1))]):
     state = (persp, R, L, U, D)
-    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), Y2time), i) for i in y2(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), Y2time), calc_action(state, i), i) for i in y2(state)])
 # y3
 for state in product(persps, [(0, 0), (90, 0), (180, 0)],
                              [(0, 0), (90, 0), (180, 0)],
                              [(90, 1), (180, 1)],
                              [(0, 1), (90, 1)]):
-    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), Y3time), i) for i in y3(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), Y3time), calc_action(state, i), i) for i in y3(state)])
 # x1
 for persp, (R, L), U, D in product(persps, [((90, 1), (180, 1)), ((0, 1), (90, 1))],
                                            [(0, 0), (90, 0), (180, 0)],
                                            [(0, 0), (90, 0), (180, 0)]):
     state = (persp, R, L, U, D)
-    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), X1time), i) for i in x1(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), X1time), calc_action(state, i), i) for i in x1(state)])
 # x3
 for persp, (R, L), U, D in product(persps, [((90, 1), (0, 1)), ((180, 1), (90, 1))],
                                            [(0, 0), (90, 0), (180, 0)],
                                            [(0, 0), (90, 0), (180, 0)]):
     state = (persp, R, L, U, D)
-    possible_things[state].extend([(max(calc_weight(state, i), calc_action(state, i), X3time), i) for i in x3(state)])
+    possible_things[state].extend([(max(calc_weight(state, i), X3time), calc_action(state, i), i) for i in x3(state)])
 
 '''
 Before, We created empty nodes to address every possible servo state.
@@ -272,16 +273,16 @@ print(f"-------------------------------------")
 ######                                                                                           ######
 ######                                                                                           ######
 #######################################################################################################
-#########################################################
-##                      FUNCTIONS                      ##
-#########################################################
+#####################################################
+##                      Dijkstra                   ##
+#####################################################
+@dataclass()
 class MinHeapNode:
-    def __init__(self, state, weight, action, parent, index):
-        self.state = state
-        self.weight = weight
-        self.action = action
-        self.parent = parent
-        self.index = index
+    state: tuple[tuple, tuple, tuple, tuple, tuple]
+    distance: float
+    action: float
+    parent: tuple[tuple, tuple, tuple, tuple, tuple]
+    index: int
 class MinHeap:
     def left_child_index(index):
         return (2*index)+1
@@ -290,8 +291,27 @@ class MinHeap:
     def parent_ind(index):
         return (index-1)//2
     def __init__(self):
-        self.heap = []
-        self.map = {}
+        self.heap: list[tuple[tuple, tuple, tuple, tuple, tuple]] = []
+        self.map: dict[tuple[tuple, tuple, tuple, tuple, tuple], MinHeapNode] = {}
+    def bubble_down_root(self):
+        curr_node = self.heap[0]
+        curr_index = 0
+        left_child_ind = 1
+        right_child_ind = 2
+        while (left_child_ind < len(self.heap)):
+            smaller_child_ind = left_child_ind
+            if (right_child_ind < len(self.heap) and self.map[self.heap[right_child_ind]].distance < self.map[self.heap[left_child_ind]].distance):
+                smaller_child_ind = right_child_ind
+            if (self.map[self.heap[smaller_child_ind]].distance >= self.map[curr_node].distance):
+                break
+            self.map[self.heap[smaller_child_ind]].index = curr_index
+            self.heap[curr_index] = self.heap[smaller_child_ind]
+            curr_index = smaller_child_ind
+            left_child_ind = MinHeap.left_child_index(curr_index)
+            right_child_ind = MinHeap.right_child_index(curr_index)
+        self.heap[curr_index] = curr_node
+        self.map[curr_node].index = curr_index
+
     '''
     MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) { //printf("\t\tMinHeap_pluck_min() was called!: \n");
         if (minheap->size == 0) return NULL; 
@@ -332,28 +352,13 @@ class MinHeap:
         return minnode;
     }
     '''
-    def heap_pop(self) -> MinHeapNode:
+    def heap_pop(self) -> tuple[tuple, tuple, tuple, tuple, tuple]:
         if (len(self.heap) == 0): return None
         minnode = self.heap[0]
-        curr_node = self.heap[-1]
-        self.heap[0] = curr_node
+        self.heap[0] = self.heap[-1]
+        self.map[self.heap[0]].index = 0
         self.heap.pop()
-        curr_index = 0
-        left_child_ind = MinHeap.left_child_index(curr_index)
-        right_child_ind = MinHeap.right_child_index(curr_index)
-        while (left_child_ind < len(self.heap)):
-            smaller_child_ind = left_child_ind
-            if (right_child_ind < len(self.heap) and self.heap[right_child_ind].weight < self.heap[left_child_ind].weight):
-                smaller_child_ind = right_child_ind
-            if (self.heap[smaller_child_ind].weight < curr_node.weight):
-                self.heap[smaller_child_ind].index = curr_index
-                self.heap[curr_index] = self.heap[smaller_child_ind]
-                curr_index = smaller_child_ind
-                left_child_ind = MinHeap.left_child_index(curr_index)
-                right_child_ind = MinHeap.right_child_index(curr_index)
-            else: break
-        self.heap[curr_index] = curr_node
-        curr_node.index = curr_index
+        if (self.heap): self.bubble_down_root()
         return minnode
     '''
     void MinHeap_bubble_up(MinHeap* minheap, size_t curr_index) {
@@ -372,46 +377,43 @@ class MinHeap:
     '''
     def bubble_up(self, curr_index):
         this_node = self.heap[curr_index]
+        this_distance = self.map[this_node].distance
         while (curr_index > 0):
             parent_ind = MinHeap.parent_ind(curr_index)
-            if (self.heap[parent_ind].weight <= this_node.weight): break
-            self.heap[parent_ind].index = curr_index
+            if (self.map[self.heap[parent_ind]].distance <= this_distance): break
+            self.map[self.heap[parent_ind]].index = curr_index
             self.heap[curr_index] = self.heap[parent_ind]
-        this_node.index = curr_index
+            curr_index = parent_ind
+        self.map[this_node].index = curr_index
         self.heap[curr_index] = this_node
-    def update_key(self, )
+    def update_key(self, state, distance, action, parent):
+        #print(f"({parent} -> {state}): (dist:{distance}, action:{action})")
+        if state not in self.map:
+            self.map[state] = MinHeapNode(state, distance, action, parent, len(self.heap))
+            self.heap.append(state)
+            #print("\t state was new, bubbling up now")
+            self.bubble_up(self.map[state].index)
+        elif self.map[state].distance > distance or (self.map[state].distance == distance and self.map[state].action > action):
+            if (self.map[state].index == 0 and self.heap[0] != state): print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            self.map[state].distance = distance
+            self.map[state].action = action
+            self.map[state].parent = parent
+            #print("\t state was not new, bubbling up now")
+            self.bubble_up(self.map[state].index)
 
-        
-
-
-
-
-
-
-def Dijkstra(source, graph_dict):
-    l = len(list(graph_dict.keys()))
-    distances = {key: [np.inf,np.inf] for key in graph_dict.keys()}; distances[source] = [0, 0]
-    parents = {source: None}
-    priority_queue_nodes = [source]
-    priority_queue_nums = [0]
-    for i in graph_dict.keys(): 
-        if i != source: 
-            priority_queue_nodes.append(i)
-            priority_queue_nums.append(distances[i])
-    for starting_index in range(l):
-        current_node = priority_queue_nodes[starting_index]
-        for weight, action, neighbor in graph_dict[current_node]:
-            dist = weight + distances[current_node][0]
-            if dist < distances[neighbor]:
-                p1 = priority_queue_nodes.index(neighbor)
-                p2 = bisect_left(priority_queue_nums, dist)
-                priority_queue_nodes.pop(p1)
-                priority_queue_nodes.insert(p2, neighbor)
-                priority_queue_nums.pop(p1)
-                priority_queue_nums.insert(p2, dist)
-                distances[neighbor] = dist
-                parents[neighbor] = current_node
-    return distances, parents
+def Dijkstra_minheap(source, graph_dict):
+    minheap = MinHeap()
+    minheap.update_key(source, 0, 0, None)
+    while ((current_node := minheap.heap_pop()) is not None):
+        for distance, action, neighbor in graph_dict[current_node]:
+            minheap.update_key(
+                neighbor, 
+                minheap.map[current_node].distance + distance, 
+                minheap.map[current_node].action + action, 
+                current_node
+            )
+        #print(current_node)
+    return minheap.map
 def Dijkstra(source, graph_dict):
     distances = {key: np.inf for key in graph_dict.keys()}
     distances[source] = 0
@@ -440,6 +442,13 @@ def Dijkstra(source, graph_dict):
 #########################################################
 ##                         GO                          ##
 #########################################################
+def trace_path_from_MinHeapMap(state1, MinHeapMap, state2):
+    e = []
+    parent = MinHeapMap[state2].parent
+    while parent != state1: 
+        e.append(parent)
+        parent = MinHeapMap[parent].parent
+    return [state1] + e[::-1] + [state2]
 def trace_path(state1, parents, state2):
     e = []
     parent = parents[state2]
@@ -528,8 +537,8 @@ def get_move_between_states(state1, state2):
         if D2[1] == D1[1]+1: move.append("De")
         if D2[1] == D1[1]-1: move.append("De'")
     return '.'.join(move)
-def move_sequence_between_picturestates(state1, parents, state2):
-    e = trace_path(state1, parents, state2)
+def move_sequence_between_picturestates(state1, minheapmap, state2):
+    e = trace_path_from_MinHeapMap(state1, minheapmap, state2)
     e2 = []
     for i in range(len(e)-1):
         e2.append(get_move_between_states(e[i], e[i+1]))
@@ -547,15 +556,14 @@ for statesnum, Real_States, Real_possible_things, Real_Picture_States in VALID_G
     count = 0
     for i, face in enumerate("URFLBD"):
         for Real_Picture_State in Real_Picture_States[face]:
-            distances, parents = Dijkstra(Real_Picture_State, Real_possible_things)
-            if np.inf in distances.values(): print('AAAAAAAAAAAAAAAAAAAAAAAAA')
+            min_heap_map = Dijkstra_minheap(Real_Picture_State, Real_possible_things)
             count += 1
             print(f"\r\tDijkstra finished! {count}/{sum(len(j) for j in Real_Picture_States.values())}", end='', flush=True)
             #print(len(distances))
             Picture_Graph[Real_Picture_State] = {}
             for face2 in others[i]:
                 for Real_Picture_State2 in Real_Picture_States[face2]:
-                    Picture_Graph[Real_Picture_State][Real_Picture_State2] = (distances[Real_Picture_State2], move_sequence_between_picturestates(Real_Picture_State, parents, Real_Picture_State2))
+                    Picture_Graph[Real_Picture_State][Real_Picture_State2] = (min_heap_map[Real_Picture_State2].distance, min_heap_map[Real_Picture_State2].action, move_sequence_between_picturestates(Real_Picture_State, min_heap_map, Real_Picture_State2))
     PICTURE_GRAPHS.append(Picture_Graph)
     print()
 print(f"-------------------------------------")
@@ -568,26 +576,32 @@ print(f"-------------------------------------")
 #########################################################
 ##                      FUNCTIONS                      ##
 #########################################################
-def Step(Path_so_far, Picture_Graph, Picture_States, Options, best: list, cost_so_far):
+def get_path(Path_so_far, Picture_Graph):
+    new_Path_so_far = []
+    for i in range(len(Path_so_far)-1):
+        new_Path_so_far.append((Path_so_far[i], Picture_Graph[Path_so_far[i]][Path_so_far[i+1]][2]))
+    new_Path_so_far.append((Path_so_far[-1], ""))
+    return new_Path_so_far
+def Step(Path_so_far, Picture_Graph, Picture_States, Options, best: list, total_distance_so_far, total_action_so_far):
     if not Options: 
-        if cost_so_far <= best[0]:
-            if cost_so_far < best[0]:
+        if total_distance_so_far <= best[0]:
+            if total_distance_so_far < best[0] or total_action_so_far < best[1]:
                 #print(f'\t--------- protocol duration: {cost_so_far}s ------------')
                 #for i in Path_so_far:
                 #    print(f"\t{i}")
-                best[1].clear()
-                best[0] = cost_so_far
-            new_Path_so_far = []
-            for i in range(len(Path_so_far)-1):
-                new_Path_so_far.append((Path_so_far[i], Picture_Graph[Path_so_far[i]][Path_so_far[i+1]][1]))
-            new_Path_so_far.append((Path_so_far[-1], ""))
-            best[1].append(new_Path_so_far)
+                best[0] = total_distance_so_far
+                best[1] = total_action_so_far
+                best[2].clear()
+                best[2].append(get_path(Path_so_far, Picture_Graph))
+            elif total_distance_so_far == best[0] and total_action_so_far == best[1]:
+                best[2].append(get_path(Path_so_far, Picture_Graph))
         return
     for option in Options:
         for node in Picture_States[option]:
-            cost = Picture_Graph[Path_so_far[-1]][node][0]
-            if cost_so_far + cost <= best[0]:
-                Step(Path_so_far + [node], Picture_Graph, Picture_States, Options - {option}, best, cost_so_far + cost)
+            dist = Picture_Graph[Path_so_far[-1]][node][0]
+            action = Picture_Graph[Path_so_far[-1]][node][1]
+            if total_distance_so_far + dist <= best[0]:
+                Step(Path_so_far + [node], Picture_Graph, Picture_States, Options - {option}, best, total_distance_so_far + dist, total_action_so_far + action)
     #for node, (cost, alg) in Picture_Graph[Path_so_far[-1]].items():
     #    if node[0][0] in Options and cost_so_far + cost <= best[0]:
     #        Step(Path_so_far + [node], Picture_Graph, Picture_States, best, cost_so_far + cost)
@@ -596,22 +610,22 @@ def Step(Path_so_far, Picture_Graph, Picture_States, Options, best: list, cost_s
 #########################################################
 
 
-BEST_PROTOCOLS = [100, []]
+BEST_PROTOCOLS = [100, 400, []]
 print(f"Searching possible UF protocols...")
 for (statesnum, Real_States, Real_possible_things, Real_Picture_States), Picture_Graph in zip(VALID_GROUPS, PICTURE_GRAPHS):
     print(f"WITHIN SERVOSPACE{statesnum}: ")
     count5 = 0
     for node in Real_Picture_States['U']:
         for node2 in Real_Picture_States['F']:
-            Step([node, node2], Picture_Graph, Real_Picture_States, {"U", "R", "F", "L", "B", "D"}-{"U", "F"}, BEST_PROTOCOLS, Picture_Graph[node][node2][0])
+            Step([node, node2], Picture_Graph, Real_Picture_States, {"U", "R", "F", "L", "B", "D"}-{"U", "F"}, BEST_PROTOCOLS, Picture_Graph[node][node2][0], Picture_Graph[node][node2][1])
         count5 += 1
         print(f"\r\tFirst Node affected!: {count5}/{len(Real_Picture_States['U'])}", end='', flush=True)
     print()
 
-print(f"\n# of tied protocols at best weight {BEST_PROTOCOLS[0]}: {len(BEST_PROTOCOLS[1])}")
+print(f"\n# of tied protocols at best distance {BEST_PROTOCOLS[0]} and best action {BEST_PROTOCOLS[1]}: {len(BEST_PROTOCOLS[2])}")
 
 with open("protocols.txt", "w") as file:
-    for protocol in BEST_PROTOCOLS[1]:
+    for protocol in BEST_PROTOCOLS[2]:
         file.write('------------------------------------\n')
         for node, alg in protocol:
             file.write(f"{node} | {alg}\n")

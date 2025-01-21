@@ -35,7 +35,8 @@ typedef struct DijkstraPath {
 typedef struct {                                                  // There will be 735 of these lying around
     State_s endState; // 4 bytes
     uint32_t singleMoveQualifications; // 4 bytes
-    float weight; // 4 bytes
+    float distance; // 4 bytes
+    float action;
     State_s* path; // 4 on 32-bit and 8 on 64-bit
     size_t size; // 4 on 32-bit and 8 on 64-bit                          // In total, these sizes will amount to 6672  ****CHANGE THIS AFTER PROTOCOL_SEARCH
 } RSS_sub_entry_s; // 16 on 32-bit and 24 on 64-bit
@@ -49,7 +50,8 @@ typedef struct {                                                  // There will 
 typedef struct {                                                  // There will be 67620 of these lying around
     State_s endState; // 4 bytes
     uint32_t singleMoveQualifications; // 4 bytes
-    float weight; // 4 bytes
+    float distance; // 4 bytes
+    float action;
     RobotState_s* path; // 4 on 32-bit and 8 on 64-bit
     size_t size; // 4 on 32-bit and 8 on 64-bit                          // In total, these sizes will amount to 587364
 } sub_entry_s; // 16 on 32-bit and 24 on 64-bit
@@ -179,6 +181,7 @@ bool State_is_ROBOT_START_STATE(const State_s* state);
 bool is_valid_state(const State_s* state);
 float calc_weight_of_armstep(bool e1, uint8_t rot1, bool e2, uint8_t rot2);
 float calc_weight_of_step(const State_s* state1, const State_s* state2);
+float calc_action_of_step(const State_s* state1, const State_s* state2);
 
 static inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5);
 static inline bool allequal4(bool a1, bool a2, bool a3, bool a4);
@@ -267,8 +270,10 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
         arr_of_states[i] = stateNum_to_state(arr_of_stateNums[i]);
     }
     float total_weight = 0;
+    float total_action = 0;
     for (int i = 0; i < space_count; ++i) {
         total_weight += calc_weight_of_step(&arr_of_states[i], &arr_of_states[i+1]);
+        total_action += calc_action_of_step(&arr_of_states[i], &arr_of_states[i+1]);
     }
 
     ///////////////////////////////////// INSERT NEW PATH ONTO NODE //////////////////////////////
@@ -285,7 +290,8 @@ bool inter_move_table_insert(inter_move_table_s *ht, const char* line) {
     sub_entry_s sub_entry = {
         .endState = arr_of_states[space_count],
         .singleMoveQualifications = 0,
-        .weight = total_weight,
+        .distance = total_weight,
+        .action = total_action,
         .path = (RobotState_s*)malloc(sizeof(RobotState_s)*(space_count-1)),
         .size = space_count-1
     };
@@ -359,15 +365,18 @@ bool inter_move_table_RSS_insert(inter_move_table_s *ht, const char* line) {
         arr_of_states[i] = stateNum_to_state(arr_of_stateNums[i]);
     }
     float total_weight = 0;
+    float total_action = 0;
     for (int i = 0; i < space_count; ++i) {
         total_weight += calc_weight_of_step(&arr_of_states[i], &arr_of_states[i+1]);
+        total_action += calc_action_of_step(&arr_of_states[i], &arr_of_states[i+1]);
     }
 
     ///////////////////////////////////// INSERT NEW PATH ONTO NODE //////////////////////////////
     ht->RSS.paths[ht->RSS.length] = (RSS_sub_entry_s) {
         .endState = arr_of_states[space_count],
         .singleMoveQualifications = 0,
-        .weight = total_weight,
+        .distance = total_weight,
+        .action = total_action,
         .path = (State_s*)malloc(sizeof(State_s)*(space_count-1)),
         .size = space_count-1
     };
@@ -702,6 +711,14 @@ float calc_weight_of_step(const State_s* state1, const State_s* state2) {
     maxWeight = (maxWeight > arm4) ? maxWeight : arm4;
     return maxWeight;
 }
+float calc_action_of_step(const State_s* state1, const State_s* state2) {
+    float maxWeight = 0;
+    float arm1 = calc_weight_of_armstep(state1->servos.n, state1->servos.U, state2->servos.n, state2->servos.U);
+    float arm2 = calc_weight_of_armstep(state1->servos.e, state1->servos.R, state2->servos.e, state2->servos.R);
+    float arm3 = calc_weight_of_armstep(state1->servos.s, state1->servos.D, state2->servos.s, state2->servos.D);
+    float arm4 = calc_weight_of_armstep(state1->servos.w, state1->servos.L, state2->servos.w, state2->servos.L);
+    return arm1 + arm2 + arm3 + arm4;
+}
 
 static inline bool allequal5(bool a1, bool a2, bool a3, bool a4, bool a5) {
     return (
@@ -830,7 +847,7 @@ void state_after_MovePair(MovePair pair, State_s state, uint8_t* len, State_s* r
 void push_move_edges(MinHeap* minheap, MovePair pair, MinHeapNode* current_node, size_t childN, uint8_t* stateAfterMove_len, State_s* stateAfterMove_arr) {
     state_after_MovePair(pair, current_node->state, stateAfterMove_len, stateAfterMove_arr);
     for (uint8_t stateAfterMoveInd = 0; stateAfterMoveInd < *stateAfterMove_len; stateAfterMoveInd++) {
-        MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], childN, false, current_node->weight + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
+        MinHeap_update_key(minheap, &stateAfterMove_arr[stateAfterMoveInd], childN, false, current_node->distance + calc_weight_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node->action + calc_action_of_step(&current_node->state, &stateAfterMove_arr[stateAfterMoveInd]), current_node);
     }
 }
 
@@ -874,7 +891,7 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
             const RSS_sub_entry_s* path = &RSS->paths[pathInd];
             State_s endState = path->endState; //printf("\t\t\tsingleMoveQualifications was %zu\n", path->singleMoveQualifications);
             if ((((path->singleMoveQualifications)>>(alg_sections[0].move1))&1)) {
-                MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node);
+                MinHeap_update_key(minheap, &endState, 0, true, path->distance, path->action, current_node);
             }
         }
     } else { //printf("\tline 830\n");
@@ -882,7 +899,7 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
             const RSS_sub_entry_s* path = &RSS->paths[pathInd];
             State_s endState = path->endState;
             if ((((path->singleMoveQualifications)>>alg_sections[0].move1)&1) && (((path->singleMoveQualifications)>>alg_sections[0].move2)&1)) {
-                MinHeap_update_key(minheap, &endState, 0, true, path->weight, current_node);
+                MinHeap_update_key(minheap, &endState, 0, true, path->distance, path->action, current_node);
             }
         }
     }
@@ -908,7 +925,7 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
                     const sub_entry_s* path = &entry->paths[pathInd];
                     State_s endState = Undefault_EndState(current_node->state, path->endState);
                     if ((((path->singleMoveQualifications)>>pair.move1)&1)) {
-                        MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node);
+                        MinHeap_update_key(minheap, &endState, N+1, true, current_node->distance + path->distance, current_node->action + path->action, current_node);
                     }
                 }
             } else {
@@ -918,7 +935,7 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
                     const sub_entry_s* path = &entry->paths[pathInd];
                     State_s endState = Undefault_EndState(current_node->state, path->endState);
                     if ((((path->singleMoveQualifications)>>pair.move1)&1) && (((path->singleMoveQualifications)>>pair.move2)&1)) {
-                        MinHeap_update_key(minheap, &endState, N+1, true, current_node->weight + path->weight, current_node);
+                        MinHeap_update_key(minheap, &endState, N+1, true, current_node->distance + path->distance, current_node->action + path->action, current_node);
                     }
                 }
             }
@@ -930,7 +947,10 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
         amountPlucked++;
     } free(stateAfterMove_arr);
     size_t numTies = 0;
-    while(MinHeap_pluck_min(minheap)->weight == current_node->weight) numTies++;
+    while((MinHeapNode* new_node = MinHeap_pluck_min(minheap))->distance == current_node->distance) {
+        numTies++;
+        if (new_node->action < current_node->action) current_node = new_node;
+    }
     //printf("DIJKSTRA FINISHED!: Min Distance: %lf, Amount Plucked: %zu/%zu, # other equal candidates: %zu\n", current_node->weight, amountPlucked, total_nodes_from_alg_secs(alg_sections, numAlgSecs), numTies);
     *EndNode = current_node; //printf("\tline 860\n");
 }

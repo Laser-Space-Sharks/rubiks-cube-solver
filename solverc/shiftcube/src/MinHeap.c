@@ -87,8 +87,9 @@ MinHeapMap_insertMessage MinHeapMap_insert(MinHeapMap *map, const MinHeapNode* k
             .NodeIsNew = true
         };
     } else {
-        if (map->nodes[hash].weight > key->weight) {
-            map->nodes[hash].weight = key->weight;
+        if (map->nodes[hash].distance > key->distance || (map->nodes[hash].distance == key->distance && map->nodes[hash].action > key->action)) {
+            map->nodes[hash].distance = key->distance;
+            map->nodes[hash].action = key->action;
             map->nodes[hash].parent = key->parent;
         }
         return (MinHeapMap_insertMessage) {
@@ -126,18 +127,20 @@ typedef struct MinHeap {
 void print_MinHeapNode(const MinHeapNode* node) {
     if (node->parent == NULL) {
         printf("("); print_State(node->state);
-        printf(", algInd: %d, isBefore: %hhu), weight=%lf, parent=NULL\n",
+        printf(", algInd: %d, isBefore: %hhu), distance=%lf, action=%lf, parent=NULL\n",
             node->algorithm_index,
             node->isBefore,
-            node->weight
+            node->distance,
+            node->action
         );
     } else {
         printf("(");
         print_State(node->state);
-        printf(", algInd: %d, isBefore: %hhu), weight=%lf, parent=(",
+        printf(", algInd: %d, isBefore: %hhu), distance=%lf, action=%lf, parent=(",
             node->algorithm_index,
             node->isBefore,
-            node->weight
+            node->distance,
+            node->action
         );
         print_State(node->parent->state);
         printf(", algInd: %d, isBefore: %hhu)\n", 
@@ -169,7 +172,7 @@ void MinHeap_bubble_up(MinHeap* minheap, size_t curr_index) {
     MinHeapNode* this_node = minheap->heap[curr_index];
     while (curr_index > 0) {
         size_t parent_ind = parent_index(curr_index);
-        if (minheap->heap[parent_ind]->weight > this_node->weight) {
+        if (minheap->heap[parent_ind]->distance > this_node->distance) {
             minheap->heap[parent_ind]->heapIndex = curr_index;
             minheap->heap[curr_index] = minheap->heap[parent_ind];
             curr_index = parent_ind;
@@ -200,10 +203,10 @@ MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) { //printf("\t\tMinHeap_pluck_m
         size_t smaller_child_ind = left_child_ind; //printf("\t\t\tline 206: right_child_ind: %zu, left_child_ind: %zu\n", right_child_ind, left_child_ind);
         //if (minheap->heap[right_child_ind] == NULL) printf("\t\t\tminheap->heap[right_child_ind] == NULL\n");
         //if (minheap->heap[left_child_ind] == NULL) printf("\t\t\tminheap->heap[left_child_ind] == NULL\n");
-        if (right_child_ind < minheap->size && minheap->heap[right_child_ind]->weight < minheap->heap[left_child_ind]->weight) {
+        if (right_child_ind < minheap->size && minheap->heap[right_child_ind]->distance < minheap->heap[left_child_ind]->distance) {
             smaller_child_ind = right_child_ind;
         } //printf("\t\t\tline 211\n");
-        if (minheap->heap[smaller_child_ind]->weight < curr_node->weight) { //printf("\t\t\tline 212\n");
+        if (minheap->heap[smaller_child_ind]->distance < curr_node->distance) { //printf("\t\t\tline 212\n");
             minheap->heap[smaller_child_ind]->heapIndex = curr_index;
             minheap->heap[curr_index] = minheap->heap[smaller_child_ind];
             curr_index = smaller_child_ind;
@@ -216,13 +219,14 @@ MinHeapNode* MinHeap_pluck_min(MinHeap* minheap) { //printf("\t\tMinHeap_pluck_m
     //printf("\t\tline 220\n");
     return minnode;
 }
-void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm_index, bool isBefore, float weight, MinHeapNode* parent) {
+void MinHeap_update_key(MinHeap* minheap, const State_s* state, int8_t algorithm_index, bool isBefore, float distance, float action, MinHeapNode* parent) {
     //printf("\t\tMinHeap_update_key() was called to insert: "); print_State(*state); printf("\n");
     MinHeapNode query = {
         .state = *state,
         .algorithm_index = algorithm_index,
         .isBefore = isBefore,
-        .weight = weight,
+        .distance = distance,
+        .action = action,
         .parent = parent,
         .heapIndex = minheap->size
     };

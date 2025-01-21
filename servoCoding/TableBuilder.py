@@ -179,6 +179,14 @@ def calc_weight(state: State, state2: State):
         elif abs(v1.rot - v2.rot) == 1: MAX = max(MAX, rot1time)
         elif abs(v1.rot - v2.rot) == 2: MAX = max(MAX, rot2time)
     return MAX
+def calc_action(state: State, state2: State):
+    SUM = 0
+    for v1, v2 in zip(state.unpackServos(), state2.unpackServos()):
+        if (v1.e, v2.e) == (0, 1): SUM += Etime
+        elif (v1.e, v2.e) == (1, 0): SUM += dEtime
+        elif abs(v1.rot - v2.rot) == 1: SUM += rot1time
+        elif abs(v1.rot - v2.rot) == 2: SUM += rot2time
+    return SUM
 def is_valid_step(state: State, state2: State):
     if state == state2: return False
     U, R, D, L = state.unpackServos()
@@ -209,7 +217,7 @@ for persp, armU, armR, armD, armL in product(ALLPERSPS, [ArmState(1, 1), ArmStat
                                                         UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in y1(startState):
-        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y1time), endState))
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y1time), calc_action(startState, endState), endState))
 #    if edge_exists(BADSTART, BADEND, TOTAL_STATES):
 #        print(BADSTART)
 #        print(startState)
@@ -222,7 +230,7 @@ for persp, armR, armL, (armU, armD) in product(ALLPERSPS, UNEXTENDED_ARMS,
                                                           [(ArmState(1, 0), ArmState(1, 2)), (ArmState(1, 2), ArmState(1, 0))]):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in y2(startState):
-        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y2time), endState))
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y2time), calc_action(startState, endState), endState))
 #print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 # y3
 for persp, armU, armR, armD, armL in product(ALLPERSPS, [ArmState(1, 1), ArmState(1, 2)],
@@ -231,7 +239,7 @@ for persp, armU, armR, armD, armL in product(ALLPERSPS, [ArmState(1, 1), ArmStat
                                                         UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in y3(startState):
-        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y3time), endState))
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), Y3time), calc_action(startState, endState), endState))
 #print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 # x1
 for persp, (armR, armL), armU, armD in product(ALLPERSPS, [(ArmState(1, 1), ArmState(1, 2)), (ArmState(1, 0), ArmState(1, 1))],
@@ -239,7 +247,7 @@ for persp, (armR, armL), armU, armD in product(ALLPERSPS, [(ArmState(1, 1), ArmS
                                                           UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in x1(startState):
-        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), X1time), endState))
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), X1time), calc_action(startState, endState), endState))
 #print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 # x3
 for persp, (armR, armL), armU, armD in product(ALLPERSPS, [(ArmState(1, 1), ArmState(1, 0)), (ArmState(1, 2), ArmState(1, 1))],
@@ -247,7 +255,7 @@ for persp, (armR, armL), armU, armD in product(ALLPERSPS, [(ArmState(1, 1), ArmS
                                                           UNEXTENDED_ARMS):
     startState = State(persp, RobotState(armU, armR, armD, armL))
     for endState in x3(startState):
-        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), X3time), endState))
+        TOTAL_STATES[startState].append((max(calc_weight(startState, endState), X3time), calc_action(startState, endState), endState))
 #print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 '''
 Before, We created empty nodes to address every possible servo state.
@@ -263,7 +271,7 @@ for startState in TOTAL_STATES.keys():
     for armU, armR, armD, armL in product(*ArmOptions):
         endState = State(startState.persp, RobotState(armU, armR, armD, armL))
         if is_valid_state(endState) and is_valid_step(startState, endState):
-            TOTAL_STATES[startState].append((calc_weight(startState, endState), endState))
+            TOTAL_STATES[startState].append((calc_weight(startState, endState), calc_action(startState, endState), endState))
 #print(edge_exists(BADSTART, BADEND, TOTAL_STATES))
 print(f"# of possible servo states: {len(list(TOTAL_STATES.keys()))}")
 print(f"# of edges in graph: {sum(len(i) for i in TOTAL_STATES.values())/2}")
@@ -306,7 +314,7 @@ print(len(ROBOT_MOVE_STATES))
 ##                      FUNCTIONS                      ##
 #########################################################
 def check_connection(node, already_checked: set[State]):
-    for _, node2 in TOTAL_STATES[node]:
+    for _, _, node2 in TOTAL_STATES[node]:
         if node2 not in already_checked:
             already_checked.add(node2)
             check_connection(node2, already_checked)
@@ -333,7 +341,7 @@ for i, v in enumerate(CONNECTED_COMPONENTS):
     print(f"nodes in servospace{i+1}: {len(v)}")
 for i, STATES in enumerate(SEPARATED_TOTAL_STATES):
     for v in STATES.values():
-        for w, node in v:
+        for w, a, node in v:
             if node not in STATES:
                 print(f"{node} not in SEPARATED_TOTAL_STATES[{i}]")
 
@@ -345,37 +353,93 @@ print(f"-------------------------------------")
 ######                                                                                           ######
 ######                                                                                           ######
 #######################################################################################################
-def Dijkstra(source: State, graph_dict: dict[State, list[float, State]]):
-    distances = {key: np.inf for key in graph_dict.keys()}
-    distances[source] = 0
-    parents = {source: None}
-    l = len(list(graph_dict.keys()))
-    priority_queue_nodes = [source]
-    for i in graph_dict.keys(): 
-        if i != source: priority_queue_nodes.append(i)
-    priority_queue_nums = [0]
-    for i in graph_dict.keys(): 
-        if i != source: priority_queue_nums.append(distances[i])
-    for starting_index in range(l):
-        current_node = priority_queue_nodes[starting_index]
-        for weight, neighbor in graph_dict[current_node]:
-            dist = weight + distances[current_node]
-            if dist < distances[neighbor]:
-                p1 = priority_queue_nodes.index(neighbor)
-                p2 = bisect_left(priority_queue_nums, dist)
-                priority_queue_nodes.pop(p1)
-                priority_queue_nodes.insert(p2, neighbor)
-                priority_queue_nums.pop(p1)
-                priority_queue_nums.insert(p2, dist)
-                distances[neighbor] = dist
-                parents[neighbor] = current_node
-    return distances, parents
-def trace_path(state1: State, parents: dict[State, State], state2):
+@dataclass()
+class MinHeapNode:
+    state: State
+    distance: float
+    action: float
+    parent: State
+    index: int
+class MinHeap:
+    def left_child_index(index):
+        return (2*index)+1
+    def right_child_index(index):
+        return 2*(index+1)
+    def parent_ind(index):
+        return (index-1)//2
+    def __init__(self):
+        self.heap: list[State] = []
+        self.map: dict[State, MinHeapNode] = {}
+    def bubble_down_root(self):
+        curr_node = self.heap[0]
+        curr_index = 0
+        left_child_ind = 1
+        right_child_ind = 2
+        while (left_child_ind < len(self.heap)):
+            smaller_child_ind = left_child_ind
+            if (right_child_ind < len(self.heap) and self.map[self.heap[right_child_ind]].distance < self.map[self.heap[left_child_ind]].distance):
+                smaller_child_ind = right_child_ind
+            if (self.map[self.heap[smaller_child_ind]].distance >= self.map[curr_node].distance):
+                break
+            self.map[self.heap[smaller_child_ind]].index = curr_index
+            self.heap[curr_index] = self.heap[smaller_child_ind]
+            curr_index = smaller_child_ind
+            left_child_ind = MinHeap.left_child_index(curr_index)
+            right_child_ind = MinHeap.right_child_index(curr_index)
+        self.heap[curr_index] = curr_node
+        self.map[curr_node].index = curr_index
+    def heap_pop(self) -> State:
+        if (len(self.heap) == 0): return None
+        minnode = self.heap[0]
+        self.heap[0] = self.heap[-1]
+        self.map[self.heap[0]].index = 0
+        self.heap.pop()
+        if (self.heap): self.bubble_down_root()
+        return minnode
+    def bubble_up(self, curr_index):
+        this_node = self.heap[curr_index]
+        this_distance = self.map[this_node].distance
+        while (curr_index > 0):
+            parent_ind = MinHeap.parent_ind(curr_index)
+            if (self.map[self.heap[parent_ind]].distance <= this_distance): break
+            self.map[self.heap[parent_ind]].index = curr_index
+            self.heap[curr_index] = self.heap[parent_ind]
+            curr_index = parent_ind
+        self.map[this_node].index = curr_index
+        self.heap[curr_index] = this_node
+    def update_key(self, state, distance, action, parent):
+        #print(f"({parent} -> {state}): (dist:{distance}, action:{action})")
+        if state not in self.map:
+            self.map[state] = MinHeapNode(state, distance, action, parent, len(self.heap))
+            self.heap.append(state)
+            #print("\t state was new, bubbling up now")
+            self.bubble_up(self.map[state].index)
+        elif self.map[state].distance > distance or (self.map[state].distance == distance and self.map[state].action > action):
+            if (self.map[state].index == 0 and self.heap[0] != state): print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            self.map[state].distance = distance
+            self.map[state].action = action
+            self.map[state].parent = parent
+            #print("\t state was not new, bubbling up now")
+            self.bubble_up(self.map[state].index)
+
+def Dijkstra_minheap(source, graph_dict):
+    minheap = MinHeap()
+    minheap.update_key(source, 0, 0, None)
+    while ((current_node := minheap.heap_pop()) is not None):
+        for distance, action, neighbor in graph_dict[current_node]:
+            minheap.update_key(
+                neighbor, 
+                minheap.map[current_node].distance + distance, 
+                minheap.map[current_node].action + action, 
+                current_node
+            )
+    return minheap.map
+def trace_path(state1: State, minheapmap: dict[State, State], state2):
     e = []
-    parent = parents[state2]
+    parent = minheapmap[state2].parent
     while parent != state1: 
         e.append(parent)
-        parent = parents[parent]
+        parent = minheapmap[parent].parent
     return [state1] + e[::-1] + [state2]
 
 
@@ -388,14 +452,14 @@ def Dijkstra_to_all_MOVE_STATES(startStates: State, paths):
             if startState in Connected_graph:
                 graph = Connected_graph
                 break
-        _, parents = Dijkstra(startState, graph)
+        minheapmap = Dijkstra_minheap(startState, graph)
         count += 1
         print(f"\rDijkstra finished! {count}/{len(ROBOT_MOVE_STATES)}", end='', flush=True)
         for persp, Rstate2 in product(ALLPERSPS, ROBOT_MOVE_STATES):
             endState = State(persp, Rstate2)
             if endState == startState: continue
             if endState not in graph: continue
-            paths.append(tuple(trace_path(startState, parents, endState)))
+            paths.append(tuple(trace_path(startState, minheapmap, endState)))
     print()
 
 
