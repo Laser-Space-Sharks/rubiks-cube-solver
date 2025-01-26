@@ -945,14 +945,14 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
         }
         current_node = MinHeap_pluck_min(minheap);
     } free(stateAfterMove_arr);
-    MinHeapNode* new_node = NULL;
-    do {
+    MinHeapNode* new_node = MinHeap_pluck_min(minheap);
+    while (new_node->distance == current_node->distance) {
         if (new_node && new_node->action < current_node->action && 
             new_node->algorithm_index == numAlgSecs-1 && 
             !(new_node->isBefore)
         ) current_node = new_node;
         new_node = MinHeap_pluck_min(minheap);
-    } while (new_node->distance == current_node->distance);
+    }
     *EndNode = current_node; //printf("\tline 860\n");
 }
 DijkstraPath_s Form_DijkstraPath_from_EndNode(MinHeapNode* EndNode) {
