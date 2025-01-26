@@ -59,7 +59,7 @@ Tips and Tricks for getting everything set up:
   - On lining up the camera, libcamera-still can be used to see what the robot will see while it is scanning. Use this to test if the camera can see the cube, and make sure the camera is not titled, which will cause some pieces to be larger than others. 
 
 ## Cube Representations
-You do not need to understand how the solver represents cubes internally in order to build or use the robot. This section is for the mildly curious, or chronically bored. For convenience when thinking about colors on the cube, we associate U, R, F, L, B, and D with Yellow, Red, Blue, Orange, Green, and White respectively. 
+You do not need to understand how the solver represents cubes internally in order to build or use the robot. This section is for the mildly curious, or chronically bored. To help think about colorblind notation, the standard convention we have used is to associate U, R, F, L, B, and D with Yellow, Red, Blue, Orange, Green, and White, respectively. However, the robot may take the cube in any orientation and this will not affect the solve. 
 
 ### ShiftCube
 The ShiftCube is a way of representing the faces of the cube with 6 32-bit unsigned integers. Each piece is represented with a nibble that corresponds to the face that that piece should belong to when the cube is solved. The ShiftCube is colorblind, so we represent the faces by orientation. In this notation Up/U = 0, Right/R = 1, Front/F = 2, Left/L = 3, Back/B = 4, Down/D = 5. The order the pieces are stored in is depicted below. Note the center is redundant information because we know the center based on what face it is on. 
@@ -73,9 +73,9 @@ represent the order of the pieces as they are stored in the ShiftCube.
 ```
 
 ### Cube18B
-The Cube18B is way of representating where each piece on the cube is, including piece orientation. There are 20 pieces on the cube, but because of parity and collisions, you only need to store 18 of them to uniquely represent any rubiks cube.
+The Cube18B is way of representing where each piece on the cube is, including piece orientation. There are 20 pieces on the cube, but because of parity and collisions, you only need to store 18 of them to uniquely represent any rubiks cube.
 
-Every cubie we define as a position and an orientation of a piece on the cube, and there are 48 cubies. Originally, we represented every cubie as a tuple of which colors are on which faces, and every piece was represented as a solved cubie (the colors match the faces). So say the piece (F, R, D) was at cubie (F, R, D), that means the blue, red, and white piece is exactly where it would be on a solved cube. If however, that same (F, R, D) piece was instead at cubie (B, U, L), then the blue facelet would be on the B face, the red facelet would be on the U face, and the white facelet would be on L face. This completely encodes the position and orientation of the (F, R, D) piece on the cube. For performance and simplicity when coding however, the cubies are instead defined in a 48-long enum s.t. you can also index an array with a cubie.
+Every cubie we define as a position and an orientation of a piece on the cube, and there are 48 cubies. Originally, we represented every cubie as a tuple of which colors are on which faces, and every piece was represented as a solved cubie (the colors match the faces). So say the piece (F, R, D) was at cubie (F, R, D), that means the blue, red, and white piece is exactly where it would be on a solved cube. If however, that same (F, R, D) piece was instead at cubie (B, U, L), then the blue facelet would be on the B face, the red facelet would be on the U face, and the white facelet would be on L face. This completely encodes the position and orientation of the (F, R, D) piece on the cube. For performance and simplicity when coding, however, the cubies are instead defined in a 48-long enum s.t. you can also index an array with a cubie.
 
 With this practice, since every cubie is less than 48, every cubie is a byte. The thusly named Cube18B is thus represented as an 18-long uint8_t array where every index is associated with a piece and every value is a cubie. 
 
