@@ -949,8 +949,8 @@ void servoCode_compiler_Dijkstra(MinHeap* minheap, MovePair* alg_sections, uint8
         MinHeapNode* new_node = MinHeap_pluck_min(minheap);
         if (new_node->distance == current_node->distance) {
             if (new_node->action < current_node->action && 
-                current_node->algorithm_index == numAlgSecs-1 && 
-                !(current_node->isBefore)
+                new_node->algorithm_index == numAlgSecs-1 && 
+                !(new_node->isBefore)
             ) current_node = new_node;
         } else break;
     } *EndNode = current_node; //printf("\tline 860\n");
