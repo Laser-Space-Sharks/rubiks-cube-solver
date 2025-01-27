@@ -1,11 +1,10 @@
 # Rubik's Cube Solver
 
-## Introduction
-<dl>
-<img align="right" src="https://github.com/Laser-Space-Sharks/rubiks-cube-solver/blob/main/extras/RUBIKS.gif" width="250" alt="RUBIKS in the middle of solving a scramble." >
-</dl>
+<img align="right" src="https://github.com/Laser-Space-Sharks/rubiks-cube-solver/blob/main/extras/RUBIKS.gif" width="200" height="250" alt="RUBIKS in the middle of solving a scramble."/>
 
-This repository contains the code for a Rubik's cube-solving robot that can be run on a Raspberry Pi. It includes code for scanning the cube, finding a solution to the scramble, and commanding the servos in our robot to execute the solution. Primarily written in Python with a solver written in C, our robot finds near-optimal solutions in a short amount of time that can be quickly executed by the machine. On our raspberry pi1, this means on average each solve execute cycle takes around a minute with an average of 30.22 moves.
+This repository contains the code for a Rubik's Cube solving robot that can be run on a Raspberry Pi. It includes code for scanning the cube, finding a solution to the scramble, and commanding the servos in our robot to execute the solution. Most of the code--including our early cube-solving programs--are written in Python, though our main solver is written in C. Our solvers find near-optimal solutions using the CFOP method of solving, which is widely used in the speedcubing community. The C code is highly optimized to produce solutions in just a few seconds on the limited hardware of an old Raspberry Pi 1B+, with which we observe the average solve generation -> execute cycle to be around a minute with an average solution length of 30.22 moves in the half-turn metric.
+
+<br clear="right"/>
 
 ## Supplies Needed
 - A raspberry pi
