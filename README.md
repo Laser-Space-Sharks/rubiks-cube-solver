@@ -1,8 +1,11 @@
 # Rubik's Cube Solver
 
-This repository contains the code for a Rubik's cube-solving robot that can be run on a Raspberry Pi. It includes code for scanning the cube, finding a solution to the scramble, and commanding the servos in our robot to execute the solution. Primarily written in Python with a solver written in C, our robot finds near-optimal solutions in a short amount of time that can be quickly executed by the machine. On our raspberry pi1, this means on average each solve execute cycle takes around a minute with an average of 30.22 moves.
+## Introduction
+<dl>
+<img align="right" src="https://github.com/Laser-Space-Sharks/rubiks-cube-solver/blob/main/extras/RUBIKS.gif" width="250" alt="RUBIKS in the middle of solving a scramble." >
+</dl>
 
-![image](https://github.com/Laser-Space-Sharks/rubiks-cube-solver/blob/9e9ca0116e895638713f12545bb8dc9f1969c2a7/extras/RUBIKS.gif) 
+This repository contains the code for a Rubik's cube-solving robot that can be run on a Raspberry Pi. It includes code for scanning the cube, finding a solution to the scramble, and commanding the servos in our robot to execute the solution. Primarily written in Python with a solver written in C, our robot finds near-optimal solutions in a short amount of time that can be quickly executed by the machine. On our raspberry pi1, this means on average each solve execute cycle takes around a minute with an average of 30.22 moves.
 
 ## Supplies Needed
 - A raspberry pi
@@ -12,7 +15,7 @@ This repository contains the code for a Rubik's cube-solving robot that can be r
 - An LED and a button 
 - breadboard, wires, cords, and the human spirit
   - you probably have these lying in a drawer somewhere
- 
+
 ## Dependencies
 Python Packages:
   - RPi.GPIO
