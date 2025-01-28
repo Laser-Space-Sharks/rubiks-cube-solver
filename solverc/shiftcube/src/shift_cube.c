@@ -368,47 +368,18 @@ void apply_move(shift_cube_s *c, move_e m) {
             break;
     }
 
-//    switch (m.turns) {
-//        case 1:
-//            // U <-> R => L <-> U => D <-> L
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_U]]), &(c->state[side_faces[m.face][SIDE_R]]),
-//                       side_faces[m.face][SIDE_U], side_faces[m.face][SIDE_R],
-//                       move_sfaces[m.face][SIDE_U], move_sfaces[m.face][SIDE_R]);
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_L]]), &(c->state[side_faces[m.face][SIDE_U]]),
-//                       side_faces[m.face][SIDE_L], side_faces[m.face][SIDE_U],
-//                       move_sfaces[m.face][SIDE_L], move_sfaces[m.face][SIDE_U]);
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_D]]), &(c->state[side_faces[m.face][SIDE_L]]),
-//                       side_faces[m.face][SIDE_D], side_faces[m.face][SIDE_L],
-//                       move_sfaces[m.face][SIDE_D], move_sfaces[m.face][SIDE_L]);
-//            break;
-//        case 2:
-//            // U <-> D => R <-> L
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_U]]), &(c->state[side_faces[m.face][SIDE_D]]),
-//                       side_faces[m.face][SIDE_U], side_faces[m.face][SIDE_D],
-//                       move_sfaces[m.face][SIDE_U], move_sfaces[m.face][SIDE_D]);
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_R]]), &(c->state[side_faces[m.face][SIDE_L]]),
-//                       side_faces[m.face][SIDE_R], side_faces[m.face][SIDE_L],
-//                       move_sfaces[m.face][SIDE_R], move_sfaces[m.face][SIDE_L]);
-//            break;
-//        case 3:
-//            // R <-> U => D <-> R => L <-> D
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_R]]), &(c->state[side_faces[m.face][SIDE_U]]),
-//                       side_faces[m.face][SIDE_R], side_faces[m.face][SIDE_U],
-//                       move_sfaces[m.face][SIDE_R], move_sfaces[m.face][SIDE_U]);
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_D]]), &(c->state[side_faces[m.face][SIDE_R]]),
-//                       side_faces[m.face][SIDE_D], side_faces[m.face][SIDE_R],
-//                       move_sfaces[m.face][SIDE_D], move_sfaces[m.face][SIDE_R]);
-//            swap_sides(&(c->state[side_faces[m.face][SIDE_L]]), &(c->state[side_faces[m.face][SIDE_D]]),
-//                       side_faces[m.face][SIDE_L], side_faces[m.face][SIDE_D],
-//                       move_sfaces[m.face][SIDE_L], move_sfaces[m.face][SIDE_D]);
-//            break;
-//    }
 }
 
 // Apply all the moves from a move_list on a cube
 void apply_alg(shift_cube_s *cube, const alg_s *alg) {
     for (size_t i = 0; i < alg->length; i++) {
         apply_move(cube, alg->moves[i]);
+    }
+}
+
+void apply_alg_inverted(shift_cube_s *cube, const alg_s *alg) {
+    for (int i = alg->length - 1; i >= 0; i--) {
+        apply_move(cube, move_inverted[alg->moves[i]]);
     }
 }
 

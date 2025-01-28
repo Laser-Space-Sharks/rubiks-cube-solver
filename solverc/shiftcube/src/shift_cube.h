@@ -81,6 +81,7 @@ void init_move_bitrolls();
 void old_apply_move(shift_cube_s *c, move_s m);
 void apply_move(shift_cube_s *c, move_e m);
 void apply_alg(shift_cube_s *cube, const alg_s *alg);
+void apply_alg_inverted(shift_cube_s *cube, const alg_s *alg);
 
 void print_face(uint32_t face);
 

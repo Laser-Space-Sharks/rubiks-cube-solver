@@ -348,9 +348,7 @@ cube_alg_table_s* gen_last_layer_table() {
 
     for (size_t i = 0; i < ll_algs->num_algs; i++) {
         shift_cube_s cube = SOLVED_SHIFTCUBE;
-        alg_invert(&ll_algs->list[i]);
-        apply_alg(&cube, &ll_algs->list[i]);
-        alg_invert(&ll_algs->list[i]);
+        apply_alg_inverted(&cube, &ll_algs->list[i]);
         cube_alg_table_overwrite(ll_table, &cube, &ll_algs->list[i]);
     }
 
@@ -368,14 +366,12 @@ cube_table_s* gen_f2l_table() {
     for (size_t i = 0; i < f2l_algs->num_algs; i++) {
         for (uint8_t y_turns = 0; y_turns < 4; y_turns++) {
             shift_cube_s cube = solved_f2l_bits;
-            alg_invert(&f2l_algs->list[i]);
-            apply_alg(&cube, &f2l_algs->list[i]);
+            apply_alg_inverted(&cube, &f2l_algs->list[i]);
 
             // a y_turn, as a rotation about U, goes in the opposite direction
             // of the f2l pairs, so to get the f2l_pair an algorithm is associated
             // with, take the negative of y_turns to get that slot
             cube = get_f2l_pair(&cube, mod4(-y_turns));
-            alg_invert(&f2l_algs->list[i]);
             cube_table_insert(f2l_table, &cube, &f2l_algs->list[i]);
 
             // rotate the algorithm forward for the next iteration
