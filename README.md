@@ -77,11 +77,11 @@ represent the order of the pieces as they are stored in the ShiftCube.
 ```
 
 ### Cube18B
-The Cube18B is way of representing where each piece on the cube is, including piece orientation. There are 20 pieces on the cube, but because of parity and collisions, you only need to store 18 of them to uniquely represent any rubiks cube.
+The Cube18B is way of representing where each piece on the cube is, including piece orientation. There are 20 pieces on the cube, but because of parity and collisions, you only need to store 18 of them to uniquely represent any rubiks cube. We willfully forget 1 edge and 1 corner from the top layer of the cube. 1LLL allows us to avoid the consequences of doing such.
 
-Every cubie we define as a position and an orientation of a piece on the cube, and there are 48 cubies. Originally, we represented every cubie as a tuple of which colors are on which faces, and every piece was represented as a solved cubie (the colors match the faces). So say the piece (F, R, D) was at cubie (F, R, D), that means the blue, red, and white piece is exactly where it would be on a solved cube. If however, that same (F, R, D) piece was instead at cubie (B, U, L), then the blue facelet would be on the B face, the red facelet would be on the U face, and the white facelet would be on L face. This completely encodes the position and orientation of the (F, R, D) piece on the cube. For performance and simplicity when coding, however, the cubies are instead defined in a 48-long enum s.t. you can also index an array with a cubie.
+Every cubie we define as a position and an orientation of a piece on the cube, and there are 48 cubies. Originally, we represented every cubie as a tuple of which colors are on which faces, and every piece was represented as a solved cubie (the colors match the faces). So say the piece (F, R, D) was at cubie (F, R, D), that means the blue, red, and white piece is exactly where it would be on a solved cube. If however, that same (F, R, D) piece was instead at cubie (B, U, L), then the blue, red, and white facelets would be on the B, U, and L faces respectively. This completely encodes the position and orientation of the (F, R, D) piece on the cube. For performance and simplicity when coding, however, the cubies are instead defined in a 48-long enum s.t. you can also index an array with a cubie.
 
-With this practice, since every cubie is less than 48, every cubie is a byte. The thusly named Cube18B is thus represented as an 18-long uint8_t array where every index is associated with a piece and every value is a cubie. 
+With this practice, since every cubie is less than 48, every cubie is a byte. The thusly named Cube18B is represented as an 18-long uint8_t array where every index is associated with a piece and every value is a cubie. 
 
 The Solved Cube18B in our code:
 ```c
@@ -94,4 +94,16 @@ static const cube18B_s SOLVED_CUBE18B = {
     }
 };
 ```
-Breaking the pieces up also allows you to apply moves and cube algorithms to pieces individually and out-of-order. When recognizing cases in CFOP, it is much more useful to know where piece x is than to know what piece is at x.
+This cube representation was made with the idea of wanting to find pieces rather than to see pieces, in order to recognize CFOP cases faster.
+Cube18B brings further power though. To apply a move to Cube18B, you simply apply that move to all cubies individually.
+You can take subsets of the set of cubies that is Cube18B, and you can apply moves on those and recognize cases with those. So Cube18B is completely modular.
+In our code, Cube18B is ordered so that Cross, F2L, and 1LLL are neatly partitioned.
+You can apply moves to cubies in any order. You could delay applying entire algorithms to certain parts of the cube in order to do less work.
+But even better, that Cube18B hints at, is every move to a cubie is simply a vector to another possible cubie, of which there are 48.
+So, you could have alongside algorithms, what they do to the 48 possible cubies. And then applying an algorithm to the cube is O(1) with respect to the number of moves in that algorithm.
+And these tables of 48 cubies, interact with each other very nicely. These tables, may even represent cubes.
+
+But alas, not Cube18B, nor its ideas, are used in the final product.
+The xcross subset of Cube18B, turns slightly faster than ShiftCube on some computers, but the feable attempts at hashing it, made everything slower.
+It did not get the optimization that it deserved. There was no time, and it broke too many heads.
+Perhaps it shall be a next step.
