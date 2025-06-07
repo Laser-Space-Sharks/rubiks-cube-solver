@@ -180,7 +180,7 @@ So in C, we derive neighbors of states in the graph on the fly, when Dijkstra as
 
 The reason we are getting semi-optimal solutions for robot movements even though we are using Dijkstra's algorithm, is because the micro-manuevers themselves do not concatenate nicely.
 Because half turns, quarter turns, extensions and retractions, take different amount of time. And multiple servos are doing things simultaneously.
-So if one has a sequence of 3 states where each immediately leads to the next in 1 micro-manuever, there is some pipelining that can be done between micro-manuevers. 
+So if one has a sequence of 3 states where each immediately leads to the next in 1 micro-manuever, there may be some pipelining that can be done between the 2 micro-manuevers. 
 We have not solved how to optimize with this new advantage, and if we did, it would completely change how servo code looked.
 
 That said, funnily enough the robot would randomly move servos unnecessarily within its micro-manuevers, because the maximum duration of the micro-manuever would not be affected by said servo.
