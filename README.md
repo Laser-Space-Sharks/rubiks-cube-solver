@@ -63,7 +63,7 @@ Tips and Tricks for getting everything set up:
   - On lining up the camera, libcamera-still can be used to see what the robot will see while it is scanning. Use this to test if the camera can see the cube, and make sure the camera is not titled, which will cause some pieces to be larger than others. 
 
 ## Cube Representations
-You do not need to understand how the solver represents cubes internally in order to build or use the robot. This section is for the mildly curious, or chronically bored. To help think about colorblind notation, the standard convention we have used is to associate U, R, F, L, B, and D with Yellow, Red, Blue, Orange, Green, and White, respectively. However, the robot may take the cube in any orientation and this will not affect the solve. 
+You do not need to understand how the solver represents cubes internally in order to build or use the robot. Everything from here and onward is for the mildly curious, or chronically bored. To help think about colorblind notation, the standard convention we have used is to associate U, R, F, L, B, and D with Yellow, Red, Blue, Orange, Green, and White, respectively. However, the robot may take the cube in any orientation and this will not affect the solve. 
 
 ### ShiftCube
 The ShiftCube is a way of representing the faces of the cube with 6 32-bit unsigned integers. Each piece is represented with a nibble that corresponds to the face that that piece should belong to when the cube is solved. The ShiftCube is colorblind, so we represent the faces by orientation. In this notation Up/U = 0, Right/R = 1, Front/F = 2, Left/L = 3, Back/B = 4, Down/D = 5. The order the pieces are stored in is depicted below. Note the center is redundant information because we know the center based on what face it is on. 
@@ -104,7 +104,56 @@ But even better, that Cube18B hints at, is every move to a cubie is simply a vec
 So, you could have alongside algorithms, what they do to the 48 possible cubies. And then applying an algorithm to the cube is O(1) with respect to the number of moves in that algorithm.
 And these tables of 48 cubies, interact with each other very nicely. These tables, may even represent cubes.
 
-But alas, not Cube18B, nor its ideas, are used in the final product.
-The xcross subset of Cube18B, turns slightly faster than ShiftCube on some computers, but the feable attempts at hashing it, made everything slower.
+But alas, not Cube18B, nor its ideas, are used in the final product. The code is there, collecting dust.
+The xcross subset of Cube18B, turns slightly faster than ShiftCube on some computers, but the feable attempts at hashing it made everything slower.
 It did not get the optimization that it deserved. There was no time, and it broke too many heads.
 Perhaps it shall be a next step.
+
+## Cube Algorithms
+The robot cannot do slice turns. So we use the face-turn metric. The robot can almost always do moves on opposite faces simultaneously whenever it can turn faces at all. 
+But that would be a very different metric. The software would cry.
+
+The solver is employing bidirectional search to find 1 xcross solution. It is then applying F2L and then it is applying 1LLL to solve the cube. 
+Lastly, it is simplifying the concatenation of these algorithms.
+
+To find algorithms, we originally looked online. However, algorithms online bring us problems.
+Some of them use slice turns. Some of them use wide turns. Algorithms from different sources often have different move counts. Some algorithms from some sources, may not actually work.
+The same is especially true for 'advanced' algorithms.
+
+### F2L
+We made a google sheet of all of the F2L cases on a per-pair basis.
+The spreadsheet was used to collect algorithms from the internet. Ever improving algorithms with lesser and lesser move counts.
+However, in order to reach optimality in a feasible amount of time, we computed our own F2L algorithms. 
+The solver uses this F2L set. It does a search on all orderings to do the remaining 3 F2L pairs after xcross.
+Since different algorithms that solve the same pair case, may have different effects on other unsolved pieces, the solver is also doing a search on all algorithms to use for each pair.
+
+The spreadsheet now holds all of the FTM-optimal F2L algorithms for all of the 384 per-pair cases. 
+We have a bot that can overwrite the F2L algorithms into the spreadsheet flawlessly should any damage be done.
+God's Number for F2L pairs is 9. Experimentally, we find that there is almost always a way to use these F2L pair algorithms for an OLL and/or PLL skip.
+Here is the spreadsheet:
+https://docs.google.com/spreadsheets/d/1Agk1NxfVrzhe9LeRBR53sa6CxJYjCEaP81ebzhv8AHk/edit?usp=sharing
+
+### 1LLL
+The end of the solve is important. 
+Not only does it take a large portion of the moves, but knowing the end of the solve means you don't have to apply those moves for any checking. 
+That makes the software faster.
+
+We went with 1LLL because it should have roughly half of the move count that OLL+PLL does, while also letting us know the rest of the solve sooner.
+Originally, we used an OCR model to scan the 1LLL algorithms from a publicly available pdf. 
+Of course, reformating them to have the types of moves that we tolerate, and fixing some minor errors like the OCR model reading 2 different algorithms in side-by-side cells as 1 jumbo algorithm.
+All we would do is apply the inverse of those algorithms to associate them with cubes.
+However, given that we want to know the end of the solve before we get there, it is crucial that we do not tolerate free spins of the top face at the end.
+To expand 1LLL in full, 3916 algorithms became 62208. Using symmetry reduction and algorithm inversion, 62208 condenses into 4623.
+
+However, we found that some 1LLL cases have 22 moves. That is larger than God's Number for the whole cube (20).
+So we began a campaign to optimize 1LLL like we optimized F2L. Except we would just save the first algorithm we found, and we kept any algorithms that were already optimal.
+Our 1LLL set is not in a nice human-readable format like F2L is. God's Number for 1LLL is 16.
+Some statistics are here:
+https://docs.google.com/spreadsheets/d/1Z_2Ahn18KJi1kAY5Obq5xqCyFUNY0ABMmeS0H8bgFF4/edit?usp=sharing
+
+### Simplification
+We do some basic simplification. 
+"D D'" becomes "".
+"D D2", becomes "D'".
+And if we find a sequence of moves like "U D' U2", where 2 moves of the same face are separated by a move of the opposite face, then swapping moves of opposite faces gives us an opportunity to simplify.
+So "U D' U2" becomes either "U' D'" or "D' U'".
