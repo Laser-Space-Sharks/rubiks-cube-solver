@@ -102,7 +102,7 @@ In our code, Cube18B is ordered so that Cross, F2L, and 1LLL are neatly partitio
 You can apply moves to cubies in any order. You could delay applying entire algorithms to certain parts of the cube in order to do less work.
 But even better, that Cube18B hints at, is every move to a cubie is simply a vector to another possible cubie, of which there are 48.
 So, you could have alongside algorithms, what they do to the 48 possible cubies. And then applying an algorithm to the cube is O(1) with respect to the number of moves in that algorithm.
-And these tables of 48 cubies, interact with each other very nicely. These tables, may even represent cubes.
+And these tables of 48 cubies, interact with each other very nicely. These tables, may even represent cubes...
 
 But alas, not Cube18B, nor its ideas, are used in the final product. The code is there, collecting dust.
 The xcross subset of Cube18B, turns slightly faster than ShiftCube on some computers, but the feable attempts at hashing it made everything slower.
