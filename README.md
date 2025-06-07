@@ -135,7 +135,7 @@ https://docs.google.com/spreadsheets/d/1Agk1NxfVrzhe9LeRBR53sa6CxJYjCEaP81ebzhv8
 
 ### 1LLL
 The end of the solve is important. 
-Not only does it take a large portion of the moves, but knowing the end of the solve means you don't have to apply those moves for any checking. 
+Not only does it take a large portion of the total solution, but knowing the end of the solve means you don't have to apply those moves for any checking. 
 That makes the software faster.
 
 We went with 1LLL because it should have roughly half of the move count that OLL+PLL does, while also letting us know the rest of the solve sooner.
