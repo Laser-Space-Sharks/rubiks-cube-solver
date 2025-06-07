@@ -173,7 +173,7 @@ This is the robot reposturing space. Few states are immediately ready to turn fa
 
 If you take from that graph, the states in which the camera can freely take a picture of a face, and then find the shortest paths between all of them, you can find a semi-optimal way to scan a cube.
 If you take from that graph, the states that are immediately ready to turn faces, and then find the shortest paths between all of them, you can find a semi-optimal way to perform an algorithm.
-The graph between states that can turn faces is FAR larger than the graph between states that are ready for pictures. Too large for the Raspberry Pi to hold in memory.
+The graph that is built to perform algorithms semi-optimally is FAR larger than the graph between states that are ready for pictures. Too large for the Raspberry Pi to hold in memory.
 
 But, you can do Dijkstra's algorithm by describing a graph piece by piece rather than giving it the whole graph at once, and you need not store the full graph to address all orientations of the cube.
 So in C, we derive neighbors of states in the graph on the fly, when Dijkstra asks for them. This is a very messy process, and we may not explain it here.
