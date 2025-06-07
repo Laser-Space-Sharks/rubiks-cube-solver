@@ -129,7 +129,7 @@ Since different algorithms that solve the same pair case, may have different eff
 
 The spreadsheet now holds all of the FTM-optimal F2L algorithms for all of the 384 per-pair cases. 
 We have a bot that can overwrite the F2L algorithms into the spreadsheet flawlessly should any damage be done.
-God's Number for F2L pairs is 9. Experimentally, we find that there is almost always a way to use these F2L pair algorithms for an OLL and/or PLL skip.
+God's Number for F2L pairs is 9. Experimentally, we find that an OLL and/or PLL skip is almost always achievable.
 Here is the spreadsheet:
 https://docs.google.com/spreadsheets/d/1Agk1NxfVrzhe9LeRBR53sa6CxJYjCEaP81ebzhv8AHk/edit?usp=sharing
 
