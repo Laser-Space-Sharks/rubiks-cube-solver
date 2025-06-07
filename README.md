@@ -98,6 +98,7 @@ This cube representation was made with the idea of wanting to find pieces rather
 Cube18B brings further power though. To apply a move to Cube18B, you simply apply that move to all cubies individually.
 You can take subsets of the set of cubies that is Cube18B, and you can apply moves on those and recognize cases with those. So Cube18B is completely modular.
 In our code, Cube18B is ordered so that Cross, F2L, and 1LLL are neatly partitioned.
+
 You can apply moves to cubies in any order. You could delay applying entire algorithms to certain parts of the cube in order to do less work.
 But even better, that Cube18B hints at, is every move to a cubie is simply a vector to another possible cubie, of which there are 48.
 So, you could have alongside algorithms, what they do to the 48 possible cubies. And then applying an algorithm to the cube is O(1) with respect to the number of moves in that algorithm.
