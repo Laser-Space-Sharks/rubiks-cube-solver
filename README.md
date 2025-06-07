@@ -147,7 +147,7 @@ To expand 1LLL in full, 3916 algorithms became 62208. Using symmetry reduction a
 
 However, we found that some 1LLL cases have 22 moves. That is larger than God's Number for the whole cube (20).
 So we began a campaign to optimize 1LLL like we optimized F2L. Except we would just save the first algorithm we found, and we kept any algorithms that were already optimal.
-Our 1LLL set is not in a nice human-readable format like F2L is. God's Number for 1LLL is 16.
+Our 1LLL set is completely FTM-optimal and is not in a nice human-readable format like F2L is. God's Number for 1LLL is 16.
 Some statistics are here:
 https://docs.google.com/spreadsheets/d/1Z_2Ahn18KJi1kAY5Obq5xqCyFUNY0ABMmeS0H8bgFF4/edit?usp=sharing
 
@@ -157,3 +157,31 @@ We do some basic simplification.
 "D D2", becomes "D'".
 And if we find a sequence of moves like "U D' U2", where 2 moves of the same face are separated by a move of the opposite face, then swapping moves of opposite faces gives us an opportunity to simplify.
 So "U D' U2" becomes either "U' D'" or "D' U'".
+
+
+## Servo Code
+After the solver has found the best solution that it can, that algorithm has to be translated into instructions for the servos to execute that would result in the robot performing that algorithm on the cube.
+The robot has 4 arms, each with 2 servos, 1 for extending and retracting, and 1 for turning faces. The wrist of each arm only has 180 degrees of freedom. The hands of the robot are 3d printed brackets that can't pinch.
+If the robot's hands collide with each other or their cube faces, game over.
+If the robot drops the cube before the cube is solved, game over.
+If the robot turns a face while it is still scanning the cube, game over.
+We call the instructions for the robot to execute "servo code", and crafting servo code is very difficult because of the finnickiness explained above.
+
+Well it turns out, you can make and store a set of all of the valid states that the robot and cube orientation can be in. Then you can define what states can lead to other states in 1 valid micro-manuever.
+The graph that is created of this (if you don't allow actual turning of faces), has ~300,000 edges and the graph is actually 3 equally-sized connected components.
+This is the robot reposturing space. Few states are immediately ready to turn faces.
+
+If you take from that graph, the states in which the camera can freely take a picture of a face, and then find the shortest paths between all of them, you can find a semi-optimal way to scan a cube.
+If you take from that graph, the states that are immediately ready to turn faces, and then find the shortest paths between all of them, you can find a semi-optimal way to perform an algorithm.
+The graph between states that can turn faces is FAR larger than the graph between states that are ready for pictures. Too large for the Raspberry Pi to hold in memory.
+
+But, you can do Dijkstra's algorithm by describing a graph piece by piece rather than giving it the whole graph at once, and you need not store the full graph to address all orientations of the cube.
+So in C, we derive neighbors of states in the graph on the fly, when Dijkstra asks for them. This is a very messy process, and we may not explain it here.
+
+The reason we are getting semi-optimal solutions for robot movements even though we are using Dijkstra's algorithm, is because the micro-manuevers themselves do not concatenate nicely.
+Because half turns, quarter turns, extensions and retractions, take different amount of time. And multiple servos are doing things simultaneously.
+So if one has a sequence of 3 states where each immediately leads to the next in 1 micro-manuever, there is some pipelining that can be done between micro-manuevers. 
+We have not solved how to optimize with this new advantage, and if we did, it would completely change how servo code looked.
+
+That said, funnily enough the robot would randomly move servos unnecessarily within its micro-manuevers, because the maximum duration of the micro-manuever would not be affected by said servo.
+So we had to add in another metric that Dijkstra would optimize on after execution time, and we call that 'action'. That is, the amount of stuff that happens ever. We weigh the action of each servo moving by the duration of said move, and the action of a micro-manuever is the sum of all of the actions of the servos moving in that manuever. This led to a far calmer robot.
