@@ -17,6 +17,9 @@ Here's a video of it in action!
   - you probably have these lying in a drawer somewhere
 <br clear="right"/>
 
+## CAD Model using onshape
+https://cad.onshape.com/documents/1c348fb31aa18743606d6b49/w/a1499ed67b1c85e28716231f/e/649e04c12a081a5e5eb7dc61?renderMode=0&uiState=6861a2a00d7b32586aca8b0a
+
 ## Dependencies
 Python Packages:
   - RPi.GPIO
